@@ -1,0 +1,78 @@
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+<script src="js/appwrite.js"></script>
+<script src="js/constants.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log("🔵 Página login carregada");
+
+    try {
+        const user = await account.get();
+	console.log("🟢 Sessão já ativa:", user);
+
+        if (user) {
+            await redirectByRole(user);
+            return;
+        }
+    } catch  (e){ 
+	console.log("🔴 Nenhuma sessão ativa");
+}
+
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+
+        console.log("🟡 Tentando login...");
+	try {
+
+            await account.createEmailSession(
+                document.getElementById("email").value,
+                document.getElementById("password").value
+            );
+  	    console.log("🟢 Sessão criada");
+
+            const user = await account.get();
+ 		console.log("🟢 Usuário:", user);
+
+            await redirectByRole(user);
+
+        } catch (error) {
+            document.getElementById("error").innerText = error.message;
+        }
+
+    });
+
+});
+
+async function redirectByRole(user) {
+
+    const profiles = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_PROFILES
+    );
+
+    const profile = profiles.documents.find(
+        p => p.$id === user.$id
+    );
+
+    if (!profile) {
+        alert("Perfil não encontrado.");
+        return;
+    }
+
+    const role = profile.role.toLowerCase();
+
+    if (role === "admin") {
+        window.location.href = "admin.html";
+    }
+    else if (role === "seller") {
+        window.location.href = "seller.html";
+    }
+    else if (role === "client") {
+        window.location.href = "cliente.html";
+    }
+    else {
+        alert("Perfil desconhecido: " + role);
+    }
+}
+
+</script>
