@@ -2,35 +2,54 @@ document.addEventListener("DOMContentLoaded", initSeller);
 
 async function initSeller() {
 
-   	console.log("🟡 Iniciando painel do vendedor");
-	try {
+    console.log("🟡 Iniciando painel do vendedor");
+
+    try {
 
         const user = await account.get();
-	console.log("🟡 Iniciando painel do vendedor");
-   	console.log("🟢 Usuário autenticado:", user);
+        console.log("🟢 Usuário autenticado:", user);
 
-        const profiles = await databases.listDocuments(
+        // 🔥 BUSCA PROFILE CORRETO USANDO user_id
+        const response = await databases.listDocuments(
             DATABASE_ID,
-            COLLECTION_PROFILES
+            COLLECTION_PROFILES,
+            [
+                Appwrite.Query.equal("user_id", user.$id)
+            ]
         );
 
-        const profile = profiles.documents.find(
-            p => p.$id === user.$id
-        );
- 	console.log("📦 Buscando profiles...");
-      console.log("🎯 Profile do usuário:", profile);
+        const profile = response.documents[0];
+
+        console.log("📦 Profile encontrado:", profile);
+
+        if (!profile) {
+            console.error("❌ Perfil não encontrado.");
+            alert("Perfil não encontrado.");
+            return;
+        }
+
+        if (profile.role !== "seller") {
+            console.warn("⚠ Usuário não é vendedor.");
+            alert("Acesso não autorizado.");
+            return;
+        }
 
         window.currentUser = user;
 
         loadDashboard();
 
     } catch (error) {
-  	console.error("❌ Erro no initSeller:", error);
+
+        console.error("❌ Erro no initSeller:", error);
+
+        // 🔥 Só redireciona se realmente não houver sessão
         window.location.href = "login.html";
     }
 }
 
 async function loadDashboard() {
+
+    console.log("📊 Carregando dashboard...");
 
     const orders = await databases.listDocuments(
         DATABASE_ID,
