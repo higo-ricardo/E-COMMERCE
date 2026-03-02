@@ -3,12 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Administrativo - HIVERCAR</title>
+<title>Painel Gerente - HIVERCAR</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
+/* ============================= */
+/* VARIÁVEIS */
+/* ============================= */
+:root {
+    --primary: #5cb85c;  		/* VERDE */
+    --secondary:#fb1230;	/* VERMELHO*/
+    --success: #26fd71;		/* VERDE NEON */		
+    --darkness:#201D24; 			/* PRETO SIDERAL */
+    --dark:#2d2c2b; 			/* PRETO*/ 
+    --light: #f5f5f5;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 * {
     margin:0;
     padding:0;
@@ -18,14 +37,14 @@
 
 body {
     display:flex;
-    background:#f4f6f9;
+    background:var(--light);
 }
 
 /* SIDEBAR */
 .sidebar {
     width:250px;
-    background:#1e1e1e;
-    color:#fff;
+    background:var(--darkness);
+    color:var(--light);
     min-height:100vh;
     padding:20px;
 }
@@ -36,14 +55,14 @@ body {
 
 .sidebar a {
     display:block;
-    color:#ccc;
+    color:var(--light);
     text-decoration:none;
     margin-bottom:15px;
     transition:0.3s;
 }
 
 .sidebar a:hover {
-    color:#26fd71;
+    color:var(--success);
 }
 
 /* MAIN */
@@ -60,7 +79,7 @@ body {
 }
 
 .card {
-    background:#fff;
+    background:var(--light);
     padding:20px;
     border-radius:10px;
     box-shadow:0 5px 15px rgba(0,0,0,0.05);
@@ -70,20 +89,20 @@ button {
     padding:8px 12px;
     border:none;
     border-radius:5px;
-    background:#1e1e1e;
-    color:#fff;
+    background:var(--darkness);
+    color:var(--light);
     cursor:pointer;
 }
 
 button:hover {
-    background:#26fd71;
-    color:#000;
+    background:var(--success);
+    color:var(--dark);
 }
 
 table {
     width:100%;
     border-collapse:collapse;
-    background:#fff;
+    background:var(--light);
     border-radius:10px;
     overflow:hidden;
 }
@@ -94,8 +113,8 @@ th, td {
 }
 
 th {
-    background:#1e1e1e;
-    color:#fff;
+    background:var(--darkness);
+    color:var(--light);
 }
 
 input, select, textarea {
@@ -111,7 +130,7 @@ input, select, textarea {
 
 <div class="sidebar">
     <h2>HIVERCAR</h2>
-    <a href="#" onclick="loadDashboard()"><i class="fas fa-chart-line"></i> Dashboard</a>
+    <a href="#" onclick="loadDashboard()"><i class="fas fa-chart-line"></i>DASHBOARD</a>
     <a href="#" onclick="loadProducts()"><i class="fas fa-box"></i> Produtos</a>
     <a href="#" onclick="loadCategorias()"><i class="fas fa-tags"></i> Categorias</a>
     <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
@@ -121,11 +140,13 @@ input, select, textarea {
     <div id="content"></div>
 </div>
 
-<!-- SDK -->
-<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-<script src="js/appwrite.js"></script>
-<script src="js/constants.js"></script>
-<script src="js/admin.js"></script>
+<!-- APPWRITER -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script><!-- SDK -->
+
+<script src="js/appwrite.js"></script>     <!-- cria client, account, databases -->
+<script src="js/constants.js"></script>    <!-- DATABASE_ID, COLLECTIONS -->
+<script src="js/auth.js"></script>         <!-- middleware usa account + databases -->
+<script src="js/admin.js"></script>        <!-- usa protectRoute() -->
 
 </body>
 </html>

@@ -72,7 +72,7 @@ h1, h2, h3 {
 }
 
 .nav-logo {
-    color: #fff;
+    color: var(--light);
     font-weight: bold;
     font-size: 18px;
     text-decoration: none;
@@ -84,7 +84,7 @@ h1, h2, h3 {
 }
 
 .nav-links a {
-    color: #fff;
+    color: var(--light);
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
@@ -121,7 +121,7 @@ h1, h2, h3 {
 
 .nav-login:hover {
     background: var(--secondary);
-    color: #fff !important;
+    color: var(--light) !important;
 }
 
 /* Espaço para compensar navbar fixa */
@@ -147,7 +147,7 @@ header, .hero {
 background-position: center;
 background-size: cover;
 
-    color: #fff;
+    color: var(--light);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -187,7 +187,7 @@ background-size: cover;
 /* ============================= */
 
 .benefits {
-    background: linear-gradient(135deg, #f8f8f8, #ececec);
+    background: linear-gradient(135deg, var(--light), var(--dark));
     padding: 100px 8%;
     text-align: center;
 }
@@ -222,7 +222,7 @@ font-style: italic;
 }
 
 .benefit-card {
-    background: #fff;
+    background: var(--light);
     padding: 40px 25px;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.06);
@@ -260,7 +260,7 @@ font-style: italic;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #fff;
+    color: var(--light);
     overflow: hidden;
 }
 
@@ -319,7 +319,7 @@ font-style: italic;
 
 .btn-primary {
     background: var(--success);
-    color: #000;
+    color: var(--dark);
     padding: 15px 35px;
     border-radius: 40px;
     font-weight: bold;
@@ -434,7 +434,7 @@ width: 100%
 
 .testimonial-card {
     min-width: 100%;
-    background: #fff;
+    background: var(--light);
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
@@ -447,7 +447,7 @@ width: 100%
     gap: 8px;
     margin-bottom: 15px;
     font-size: 14px;
-    color: #555;
+    color: var(--dark);
 }
 
 .google-logo {
@@ -515,8 +515,8 @@ width: 100%
 /* RODAPÉ */
 /* ============================= */
 footer {
-    background: linear-gradient(135deg, #1e1d1c, #2b2927);
-    color: #e0e0e0;
+    background: linear-gradient(135deg, var(--darkness), var(--dark));
+    color: var(--light);
     padding: 25px 8% 40px 8%;
 }
 
@@ -548,13 +548,13 @@ footer {
 .footer-col a:hover {
     color: var(--success);
     transform: translateX(4px);
-text-align: justify;
+    text-align: justify;
 }
 
 .footer-logo {
     width: 160px;
     margin-bottom: 15px;
-  border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .social-icons a {
@@ -603,7 +603,7 @@ text-align: justify;
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: #fff;
+    background: var(--light);
     padding: 20px;
     border-top: 3px solid var(--secondary);
     display: none;
@@ -631,6 +631,7 @@ text-align: justify;
     .banner h1 {
         font-size: 28px;
     }
+}
 </style>
 
 <!-- ============================= -->
@@ -663,10 +664,11 @@ text-align: justify;
     </a>
 
     <div class="nav-links">
-        <a href="loja.html">Loja</a>
-        <a href="blog.html">Blog</a>
+        <a href="loja.html">LOJA</a>
+        <a href="servicos.html">SERVIÇOS</a>
+        <a href="blog.html">BLOG</a>
         <a href="login.html" class="nav-login">
-            <i class="fas fa-user"></i> Login
+            <i class="fas fa-user"></i> LOGIN
         </a>
     </div>
 </nav>
@@ -713,14 +715,14 @@ text-align: justify;
   <h3>Bateria Júpiter Prata 60A</h3>
 <p><span class="price">R$ 280,00</span>&nbspno Pix</p>
 
-<span style="color:red;font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Preço promocional para doador da bateria substituida</span>
+<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Preço promocional para doador da bateria substituida</span>
 
         </div>
         <div class="card">
                 <img src="img/filtro-ar-tecfill.png" loading="lazy" alt="">
   <h3>Filtro de Ar Tecfil</h3>
 <p><span class="price">R$ 50,00</span>&nbspno Pix</p>
-<span style="color:red;font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
+<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
 
 
         </div>
@@ -728,7 +730,7 @@ text-align: justify;
                     <img src="img/oleo5w30-acdelco.png" loading="lazy" alt="">
   <h3>Bateria Alcalina 2032</h3>
 <p><span class="price">R$ 44,00</span>&nbspno Pix</p>
-<span style="color:red;font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
+<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
 
 
         </div>
