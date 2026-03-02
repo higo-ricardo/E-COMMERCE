@@ -8,18 +8,11 @@
 
 <style>
 :root {
-<<<<<<< HEAD
-  --primary: #6c63ff;
-  --dark: #111827;
-  --light: #ffffff;
-=======
   --primary: #5cb85c;  		/* VERDE */
     --secondary:#fb1230;	/* VERMELHO*/
     --success: #26fd71;		/* VERDE NEON */		
-  /*  --dark:#201D24; 			/* PRETO SIDERAL */ */
-  --dark:#2d2c2b; 			/* PRETO*/ 
-    --light: #f5f5f5;
->>>>>>> 89975c8 (first commit via Git)
+  --darkness:#201D24; 			/* PRETO SIDERAL */
+  --dark:#2d2c2b; 			/* PRETO*/     --light: #f5f5f5;
   --gray: #1f2937;
 }
 
@@ -31,11 +24,7 @@
 }
 
 body {
-<<<<<<< HEAD
-  background: linear-gradient(135deg, #6c63ff, #00c9ff);
-=======
   background: linear-gradient(120deg, var(--primary), var(--success));
->>>>>>> 89975c8 (first commit via Git)
   color: white;
 }
 
@@ -63,7 +52,7 @@ header {
   position: absolute;
   top: -8px;
   right: -10px;
-  background: red;
+  background: var(--primary);
   font-size: 0.7rem;
   padding: 3px 7px;
   border-radius: 50%;
@@ -103,7 +92,7 @@ header {
   border: none;
   padding: 10px 20px;
   border-radius: 25px;
-  color: white;
+  color: var(--light);
   cursor: pointer;
   margin-top: 10px;
   transition: 0.3s;
@@ -120,7 +109,7 @@ header {
   right: -400px;
   width: 350px;
   height: 100%;
-  background: var(--dark);
+  background: var(--darkness);
   padding: 20px;
   transition: 0.4s;
   overflow-y: auto;
@@ -141,9 +130,9 @@ header {
 }
 
 .cart-item button {
-  background: red;
+  background: var(--secondary);
   border: none;
-  color: white;
+  color: var(--light);
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
@@ -161,7 +150,7 @@ header {
   padding: 12px;
   background: var(--primary);
   border: none;
-  color: white;
+  color: var(--light);
   border-radius: 8px;
   cursor: pointer;
 }
@@ -176,11 +165,7 @@ header {
 <body>
 
 <header>
-<<<<<<< HEAD
-  <div class="logo">Minha Loja</div>
-=======
-  <div class="logo">HIVERCAR AUTOPEÇAS</div>
->>>>>>> 89975c8 (first commit via Git)
+  <div class="logo">🚗 HiveCar</div>
   <div class="cart-icon" id="cartIcon">
     🛒
     <span class="cart-count" id="cartCount">0</span>
@@ -197,42 +182,37 @@ header {
   <button class="checkout-btn">Finalizar Compra</button>
 </div>
 
-<<<<<<< HEAD
-<script>
-const products = [
-  { id: 1, name: "Camiseta Premium", price: 89.90, image: "https://picsum.photos/300?1" },
-  { id: 2, name: "Tênis Moderno", price: 249.90, image: "https://picsum.photos/300?2" },
-  { id: 3, name: "Relógio Elegante", price: 399.90, image: "https://picsum.photos/300?3" },
-  { id: 4, name: "Mochila Estilosa", price: 159.90, image: "https://picsum.photos/300?4" }
-];
-
-=======
 <!-- APPWRITE SDK -->
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+
 <script>
-/* ============================= */
+/* ================================================= */
 /* CONFIGURAÇÃO APPWRITE */
-/* ============================= */
+/* ================================================= */
 
 const { Client, Databases } = Appwrite;
 
 const client = new Client()
-  .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-  .setProject("69a0c93200084defefe1");
+    .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+    .setProject("69a0c93200084defefe1");
 
 const databases = new Databases(client);
 
 const DATABASE_ID = "69a0ebc70034fa76feff";
-const COLLECTION_PRODUCTS = "produtos";
+const COLLECTION_PRODUCTS = "products";
 
-/* ============================= */
+/* ================================================= */
 /* ESTADO GLOBAL */
-/* ============================= */
+/* ================================================= */
 
 let products = [];
->>>>>>> 89975c8 (first commit via Git)
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* ================================================= */
+/* ELEMENTOS DOM */
+/* ================================================= */
 
 const productList = document.getElementById("productList");
 const cartElement = document.getElementById("cart");
@@ -241,161 +221,135 @@ const cartItems = document.getElementById("cartItems");
 const cartCount = document.getElementById("cartCount");
 const cartTotal = document.getElementById("cartTotal");
 
-<<<<<<< HEAD
-function renderProducts() {
-  productList.innerHTML = "";
-  products.forEach(product => {
-    productList.innerHTML += `
-      <div class="product">
-        <img src="${product.image}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>R$ ${product.price.toFixed(2)}</p>
-        <button onclick="addToCart(${product.id})">Adicionar</button>
-=======
-/* ============================= */
-/* CARREGAR PRODUTOS DO BANCO */
-/* ============================= */
+/* ================================================= */
+/* INICIALIZAÇÃO */
+/* ================================================= */
 
-document.addEventListener("DOMContentLoaded", loadProducts);
+document.addEventListener("DOMContentLoaded", initStore);
+
+async function initStore() {
+    console.log("🔵 Inicializando loja...");
+    await loadProducts();
+    renderCart();
+}
+
+/* ================================================= */
+/* CARREGAR PRODUTOS DO BANCO */
+/* ================================================= */
 
 async function loadProducts() {
 
-  console.log("🔵 Carregando produtos do Appwrite...");
+    console.log("📦 Buscando produtos no Appwrite...");
 
-  try {
+    try {
 
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_PRODUCTS
-    );
+        const response = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTION_PRODUCTS
+        );
 
-    console.log("🟢 Produtos recebidos:", response.documents);
+        products = response.documents;
 
-    products = response.documents;
+        console.log("🟢 Produtos carregados:", products);
 
-    renderProducts();
-    renderCart();
+        renderProducts();
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error("❌ Erro ao carregar produtos:", error);
-    productList.innerHTML = "<p>Erro ao carregar produtos.</p>";
-  }
+        console.error("❌ Erro ao carregar produtos:", error);
+        productList.innerHTML = "<p>Erro ao carregar produtos.</p>";
+    }
 }
 
-/* ============================= */
-/* RENDERIZAÇÃO */
-/* ============================= */
+/* ================================================= */
+/* RENDERIZAÇÃO PRODUTOS */
+/* ================================================= */
 
 function renderProducts() {
 
-  productList.innerHTML = "";
+    productList.innerHTML = "";
 
-  if (products.length === 0) {
-    productList.innerHTML = "<p>Nenhum produto encontrado.</p>";
-    return;
-  }
+    if (products.length === 0) {
+        productList.innerHTML = "<p>Nenhum produto disponível.</p>";
+        return;
+    }
 
-  products.forEach(product => {
+    products.forEach(product => {
 
-    productList.innerHTML += `
-      <div class="product">
-        <img src="${product.image || 'https://picsum.photos/300'}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>R$ ${Number(product.price).toFixed(2)}</p>
-        <button onclick="addToCart('${product.$id}')">Adicionar</button>
->>>>>>> 89975c8 (first commit via Git)
-      </div>
-    `;
-  });
+        productList.innerHTML += `
+            <div class="product">
+                <img src="${product.image || 'https://picsum.photos/300'}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>R$ ${Number(product.price).toFixed(2)}</p>
+                <button onclick="addToCart('${product.$id}')">
+                    Adicionar
+                </button>
+            </div>
+        `;
+    });
 }
 
-<<<<<<< HEAD
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-=======
-/* ============================= */
+/* ================================================= */
 /* CARRINHO */
-/* ============================= */
+/* ================================================= */
 
-function addToCart(id) {
+function addToCart(productId) {
 
-  const product = products.find(p => p.$id === id);
+    const product = products.find(p => p.$id === productId);
 
-  if (!product) {
-    console.warn("Produto não encontrado:", id);
-    return;
-  }
+    if (!product) {
+        console.warn("Produto não encontrado:", productId);
+        return;
+    }
 
->>>>>>> 89975c8 (first commit via Git)
-  cart.push(product);
-  saveCart();
-  renderCart();
+    cart.push(product);
+    saveCart();
+    renderCart();
 }
 
 function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart();
-  renderCart();
+
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
 }
 
 function renderCart() {
-<<<<<<< HEAD
-=======
 
->>>>>>> 89975c8 (first commit via Git)
-  cartItems.innerHTML = "";
-  let total = 0;
+    cartItems.innerHTML = "";
 
-  cart.forEach((item, index) => {
-<<<<<<< HEAD
-    total += item.price;
-=======
+    let total = 0;
 
-    total += Number(item.price);
+    cart.forEach((item, index) => {
 
->>>>>>> 89975c8 (first commit via Git)
-    cartItems.innerHTML += `
-      <div class="cart-item">
-        <span>${item.name}</span>
-        <div>
-<<<<<<< HEAD
-          R$ ${item.price.toFixed(2)}
-=======
-          R$ ${Number(item.price).toFixed(2)}
->>>>>>> 89975c8 (first commit via Git)
-          <button onclick="removeFromCart(${index})">X</button>
-        </div>
-      </div>
-    `;
-  });
+        total += Number(item.price);
 
-  cartTotal.textContent = "Total: R$ " + total.toFixed(2);
-  cartCount.textContent = cart.length;
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <div>
+                    R$ ${Number(item.price).toFixed(2)}
+                    <button onclick="removeFromCart(${index})">X</button>
+                </div>
+            </div>
+        `;
+    });
+
+    cartTotal.textContent = "Total: R$ " + total.toFixed(2);
+    cartCount.textContent = cart.length;
 }
 
 function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-<<<<<<< HEAD
-cartIcon.addEventListener("click", () => {
-  cartElement.classList.toggle("active");
-});
-
-renderProducts();
-renderCart();
-</script>
-
-=======
-/* ============================= */
-/* ABRIR/FECHAR CARRINHO */
-/* ============================= */
+/* ================================================= */
+/* ABRIR / FECHAR CARRINHO */
+/* ================================================= */
 
 cartIcon.addEventListener("click", () => {
-  cartElement.classList.toggle("active");
+    cartElement.classList.toggle("active");
 });
 </script>
->>>>>>> 89975c8 (first commit via Git)
 </body>
 </html>

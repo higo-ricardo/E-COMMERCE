@@ -12,7 +12,7 @@ async function initAdmin() {
         );
 
         const profile = profiles.documents.find(
-            p => p.$id === user.$id
+            p => p.user_id === user.$id
         );
 
         if (!profile || profile.role.toLowerCase() !== "admin") {

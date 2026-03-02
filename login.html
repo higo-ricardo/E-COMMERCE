@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-<script src="js/appwrite.js"></script>
-<script src="js/constants.js"></script>
-
-<script>
-
-document.addEventListener("DOMContentLoaded", async () => {
-    console.log("🔵 Página login carregada");
-
-    try {
-        const user = await account.get();
-	console.log("🟢 Sessão já ativa:", user);
-=======
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -49,7 +35,7 @@ body {
 }
 
 .login-box {
-    background:var (--light);
+    background:var(--light);
     padding:40px;
     border-radius:12px;
     width:100%;
@@ -167,45 +153,11 @@ async function initLogin() {
 
         const user = await account.get();
         console.log("🟢 Sessão já ativa:", user);
->>>>>>> 89975c8 (first commit via Git)
 
         if (user) {
             await redirectByRole(user);
             return;
         }
-<<<<<<< HEAD
-    } catch  (e){ 
-	console.log("🔴 Nenhuma sessão ativa");
-}
-
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-
-        console.log("🟡 Tentando login...");
-	try {
-
-            await account.createEmailSession(
-                document.getElementById("email").value,
-                document.getElementById("password").value
-            );
-  	    console.log("🟢 Sessão criada");
-
-            const user = await account.get();
- 		console.log("🟢 Usuário:", user);
-
-            await redirectByRole(user);
-
-        } catch (error) {
-            document.getElementById("error").innerText = error.message;
-        }
-
-    });
-
-});
-
-async function redirectByRole(user) {
-
-    const profiles = await databases.listDocuments(
-=======
 
     } catch (error) {
         console.log("🔴 Nenhuma sessão ativa.");
@@ -273,34 +225,21 @@ async function redirectByRole(user) {
     console.log("🔎 Buscando perfil no banco...");
 
     const response = await databases.listDocuments(
->>>>>>> 89975c8 (first commit via Git)
         DATABASE_ID,
         COLLECTION_PROFILES
     );
 
-<<<<<<< HEAD
-    const profile = profiles.documents.find(
-        p => p.$id === user.$id
-    );
-
-    if (!profile) {
-        alert("Perfil não encontrado.");
-=======
     const profile = response.documents.find(
         p => p.user_id === user.$id
     );
 
     if (!profile) {
         console.error("Desculpe, não há perfil definido. Contate o suporte.");
->>>>>>> 89975c8 (first commit via Git)
         return;
     }
 
     const role = profile.role.toLowerCase();
-<<<<<<< HEAD
-=======
     console.log("🎯 Perfil encontrado, carregando o dashboard!", role);
->>>>>>> 89975c8 (first commit via Git)
 
     if (role === "admin") {
         window.location.href = "admin.html";
@@ -312,13 +251,6 @@ async function redirectByRole(user) {
         window.location.href = "cliente.html";
     }
     else {
-<<<<<<< HEAD
-        alert("Perfil desconhecido: " + role);
-    }
-}
-
-</script>
-=======
         alert("Você é " + role + ", mas não tem acesso a nenhum dashboard. Contate o suporte.");
     }
 }
@@ -326,4 +258,3 @@ async function redirectByRole(user) {
 
 </body>
 </html>
->>>>>>> 89975c8 (first commit via Git)
