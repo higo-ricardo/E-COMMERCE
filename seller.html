@@ -3,101 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Vendedor - HIVERCAR</title>
-<!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    
-<style>
-
-/* ============================= */
-/* VARIÁVEIS */
-/* ============================= */
-:root {
-    --primary: #5cb85c;  		/* VERDE */
-    --secondary:#fb1230;	/* VERMELHO*/
-    --success: #26fd71;		/* VERDE NEON */		
-    --darkness:#201D24; 			/* PRETO SIDERAL */ 
-    --dark:#2d2c2b; 			/* PRETO*/ 
-    --light: #f5f5f5;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-* { margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
-
-body { display:flex; background:var(--light); }
-
-.sidebar {
-    width:220px;
-    background:var(--dark);
-    color:var(--light);
-    min-height:100vh;
-    padding:20px;
-}
-
-.sidebar a {
-    display:block;
-    color:var(--light);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-
-.sidebar a:hover { color:var(--success); }
-
-.main {
-    flex:1;
-    padding:30px;
-}
-
-.card {
-    background:var(--light);
-    padding:20px;
-    border-radius:8px;
-    margin-bottom:20px;
-}
-
-button {
-    padding:8px 12px;
-    background:var(--darkness);
-    color:var(--light);
-    border:none;
-    cursor:pointer;
-}
-
-button:hover {
-    background:var(--success);
-    color:#000;
-}
-
-</style>
+<title>Painel Vendedor — HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="dashboard.css">
 </head>
-
 <body>
 
-<div class="sidebar">
-    <h3>Vendedor</h3>
-    <a href="#" onclick="loadDashboard()">DASHBOARD</a>
-    <a href="#" onclick="loadPedidos()">Meus Pedidos</a>
-    <a href="#" onclick="showCreatePedido()">Novo Pedido</a>
-    <a href="#" onclick="logout()">Sair</a>
-</div>
+<div class="grid-bg"></div>
 
+<!-- ════════════════════════════════ SIDEBAR ══════════════════════════════ -->
+<aside class="sidebar">
+
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVERCAR</span>
+  </a>
+
+  <div class="sidebar-role-tag">Painel Vendedor</div>
+
+  <nav>
+    <a href="#" onclick="loadDashboard()" id="nav-dashboard" class="active">
+      <i class="fas fa-gauge-high"></i> <span>Dashboard</span>
+    </a>
+    <a href="#" onclick="loadPedidos()" id="nav-pedidos">
+      <i class="fas fa-clipboard-list"></i> <span>Meus Pedidos</span>
+    </a>
+    <a href="#" onclick="showCreatePedido()" id="nav-novo">
+      <i class="fas fa-plus-circle"></i> <span>Novo Pedido</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <a href="#" onclick="logout()">
+      <i class="fas fa-right-from-bracket"></i> <span>Sair</span>
+    </a>
+  </div>
+
+</aside>
+
+<!-- ════════════════════════════════ MAIN ════════════════════════════════ -->
 <div class="main">
+
+  <div class="topbar">
+    <span class="topbar-title" id="topbar-title">DASHBOARD</span>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+        <span id="topbar-user-name">Vendedor</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-area">
     <div id="content"></div>
+  </div>
+
 </div>
 
-<!-- APPWRITER -->
-<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script><!-- SDK -->
-
-<script src="js/appwrite.js"></script>     <!-- cria client, account, databases -->
-<script src="js/constants.js"></script>    <!-- DATABASE_ID, COLLECTIONS -->
-<script src="js/auth.js"></script>         <!-- middleware usa account + databases -->
+<!-- ════════════════════════════════ SCRIPTS ═════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+<script src="js/appwrite.js"></script>
+<script src="js/constants.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/seller.js"></script>
 
+<script>
+/* ── Highlight active nav link ── */
+function setActiveNav(id) {
+  document.querySelectorAll(".sidebar nav a").forEach(a => a.classList.remove("active"));
+  const el = document.getElementById("nav-" + id);
+  if (el) el.classList.add("active");
+}
+
+/* ── Update topbar title ── */
+function setTopbarTitle(title) {
+  const el = document.getElementById("topbar-title");
+  if (el) el.textContent = title;
+}
+
+/* ── Ripple ── */
+document.addEventListener("click", e => {
+  const r = document.createElement("div");
+  r.className = "ripple";
+  r.style.left = e.clientX + "px";
+  r.style.top  = e.clientY + "px";
+  document.body.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+});
+</script>
 </body>
 </html>

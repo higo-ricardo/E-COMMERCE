@@ -3,355 +3,439 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HIVERCAR AUTOPEÇAS</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    
-
+<title>Loja — HIVERCAR AUTOPEÇAS</title>
+<meta name="description" content="Peças automotivas de qualidade. Compre online com entrega rápida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="store.css">
 <style>
-:root {
-  --primary: #5cb85c;  		/* VERDE */
-    --secondary:#fb1230;	/* VERMELHO*/
-    --success: #26fd71;		/* VERDE NEON */		
-  --darkness:#201D24; 			/* PRETO SIDERAL */
-  --dark:#2d2c2b; 			/* PRETO*/    
-  --light: #f5f5f5;
-  --gray: #1f2937;
+/* ── layout específico da loja ── */
+.store-wrap {
+  position:relative; z-index:10;
+  padding:40px 0 80px;
+}
+.store-grid {
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:28px;
+  align-items:start;
+}
+@media(max-width:900px){ .store-grid{ grid-template-columns:1fr; } .filters{ display:none; } }
+
+/* Filters sidebar */
+.filters {
+  position:sticky; top:80px;
+}
+.filter-panel {
+  background:var(--panel); border:1px solid var(--border);
+  padding:20px; margin-bottom:16px;
+}
+.filter-panel h3 {
+  font-family:'Bebas Neue',sans-serif; font-size:14px;
+  letter-spacing:0.18em; color:var(--white);
+  margin-bottom:14px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:8px;
+}
+.filter-panel h3::before {
+  content:''; width:3px; height:12px;
+  background:var(--green); box-shadow:0 0 6px var(--glow-g);
+}
+.filter-option {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 0; font-size:13px; color:var(--muted);
+  cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.03);
+  transition:color 0.2s; user-select:none;
+}
+.filter-option:last-child{ border-bottom:none; }
+.filter-option:hover, .filter-option.active { color:var(--white); }
+.filter-option.active::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--green); box-shadow:0 0 6px var(--glow-g);
+  flex-shrink:0;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+/* Search */
+.search-bar {
+  display:flex; gap:0; margin-bottom:24px;
+}
+.search-bar input {
+  flex:1; padding:11px 16px;
+  background:var(--panel); border:1px solid var(--border);
+  border-right:none; color:var(--white);
+  font-family:'Barlow',sans-serif; font-size:14px;
+  outline:none; transition:border-color 0.2s;
+}
+.search-bar input:focus { border-color:var(--green); }
+.search-bar input::placeholder { color:var(--muted); }
+.search-bar button {
+  padding:0 18px; background:var(--green); color:var(--black);
+  border:none; cursor:pointer; transition:box-shadow 0.2s;
+}
+.search-bar button:hover { box-shadow:0 0 16px var(--glow-g); }
+
+/* Products grid */
+.products-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:16px;
 }
 
-body {
-  background: linear-gradient(120deg, var(--primary), var(--success));
-  color: white;
+/* Cart drawer */
+.cart-drawer {
+  position:fixed; top:0; right:-400px;
+  width:360px; height:100vh;
+  background:var(--dark); border-left:1px solid var(--border);
+  z-index:1000; transition:right 0.35s cubic-bezier(0.16,1,0.3,1);
+  display:flex; flex-direction:column;
 }
+.cart-drawer.open { right:0; }
 
-/* HEADER */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  backdrop-filter: blur(10px);
+.cart-drawer-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px; border-bottom:1px solid var(--border); flex-shrink:0;
 }
+.cart-drawer-header h2 {
+  font-family:'Bebas Neue',sans-serif; font-size:18px;
+  letter-spacing:0.12em; color:var(--white);
+  display:flex; align-items:center; gap:10px;
+}
+.cart-drawer-header h2 i { color:var(--green); }
+.cart-close {
+  width:30px; height:30px; background:none;
+  border:1px solid var(--border); color:var(--muted);
+  cursor:pointer; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.cart-close:hover { border-color:var(--red); color:var(--red); }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
+.cart-drawer-items { flex:1; overflow-y:auto; padding:16px 20px; }
+.cart-drawer-footer {
+  padding:20px; border-top:1px solid var(--border); flex-shrink:0;
 }
+.cart-total-row {
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'Bebas Neue',sans-serif; font-size:20px;
+  margin-bottom:14px;
+}
+.cart-total-row .total-val { color:var(--green); text-shadow:0 0 14px var(--glow-g); }
 
-.cart-icon {
-  position: relative;
-  cursor: pointer;
-  font-size: 1.5rem;
+.cart-overlay {
+  display:none; position:fixed; inset:0; z-index:999;
+  background:rgba(0,0,0,0.5);
 }
+.cart-overlay.show { display:block; }
 
-.cart-count {
-  position: absolute;
-  top: -8px;
-  right: -10px;
-  background: var(--primary);
-  font-size: 0.7rem;
-  padding: 3px 7px;
-  border-radius: 50%;
-}
-
-/* PRODUCTS */
-.products {
-  padding: 60px 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-}
-
-.product {
-  background: var(--gray);
-  padding: 20px;
-  border-radius: 15px;
-  text-align: center;
-  transition: 0.3s;
-}
-
-.product:hover {
-  transform: translateY(-8px);
-}
-
-.product img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.product h3 {
-  margin: 15px 0 10px;
-}
-
-.product button {
-  background: var(--primary);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
-  color: var(--light);
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
-}
-
-.product button:hover {
-  opacity: 0.8;
-}
-
-/* CART SIDEBAR */
-.cart {
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 350px;
-  height: 100%;
-  background: var(--darkness);
-  padding: 20px;
-  transition: 0.4s;
-  overflow-y: auto;
-}
-
-.cart.active {
-  right: 0;
-}
-
-.cart h2 {
-  margin-bottom: 20px;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.cart-item button {
-  background: var(--secondary);
-  border: none;
-  color: var(--light);
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.cart-total {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.checkout-btn {
-  margin-top: 15px;
-  width: 100%;
-  padding: 12px;
-  background: var(--primary);
-  border: none;
-  color: var(--light);
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-@media(max-width: 500px) {
-  .cart {
-    width: 100%;
-  }
-}
+@media(max-width:480px){ .cart-drawer{ width:100%; right:-100%; } }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">🚗 HiveCar</div>
-  <div class="cart-icon" id="cartIcon">
-    🛒
-    <span class="cart-count" id="cartCount">0</span>
+<div class="grid-bg"></div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p>Usamos cookies para melhorar sua experiência. Ao continuar, você concorda com nossa <a href="privacidade.html">Política de Privacidade</a>.</p>
+    <div class="cookie-btns">
+      <button id="acceptCookies" class="btn btn-primary btn-small">Aceitar</button>
+      <button id="rejectCookies" class="btn btn-outline btn-small">Recusar</button>
+    </div>
   </div>
-</header>
-
-<section class="products" id="productList"></section>
-
-<!-- CART -->
-<div class="cart" id="cart">
-  <h2>Seu Carrinho</h2>
-  <div id="cartItems"></div>
-  <div class="cart-total" id="cartTotal">Total: R$ 0</div>
-  <button class="checkout-btn">Finalizar Compra</button>
 </div>
 
-<!-- APPWRITE SDK -->
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-dot"></div>
+      <span class="navbar-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
+    </a>
+    <button class="navbar-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+    <div class="navbar-nav" id="navMenu">
+      <a href="index.html" class="nav-link"><i class="fas fa-house"></i> Home</a>
+      <a href="loja.html" class="nav-link active"><i class="fas fa-store"></i> Loja</a>
+      <a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login</a>
+      <a href="cart.html" class="nav-cart" id="navCart">
+        <i class="fas fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero" style="position:relative;z-index:10">
+  <div class="container">
+    <div class="page-label"><span>Catálogo</span></div>
+    <h1>NOSSA <em>LOJA</em></h1>
+    <p class="page-hero-sub">Peças automotivas com qualidade e entrega rápida para todo o Brasil.</p>
+  </div>
+</div>
+
+<!-- STORE -->
+<div class="store-wrap">
+  <div class="container">
+    <div class="store-grid">
+
+      <!-- FILTERS -->
+      <aside class="filters">
+        <div class="filter-panel">
+          <h3>Categorias</h3>
+          <div class="filter-option active" data-cat="all">Todos os produtos</div>
+          <div class="filter-option" data-cat="motor">Motor</div>
+          <div class="filter-option" data-cat="freios">Freios</div>
+          <div class="filter-option" data-cat="suspensao">Suspensão</div>
+          <div class="filter-option" data-cat="eletrica">Elétrica</div>
+          <div class="filter-option" data-cat="filtros">Filtros</div>
+        </div>
+        <div class="filter-panel">
+          <h3>Ordenar</h3>
+          <div class="filter-option active" data-sort="default">Relevância</div>
+          <div class="filter-option" data-sort="price_asc">Menor preço</div>
+          <div class="filter-option" data-sort="price_desc">Maior preço</div>
+          <div class="filter-option" data-sort="name">Nome A-Z</div>
+        </div>
+      </aside>
+
+      <!-- PRODUCTS -->
+      <main>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Buscar peças...">
+          <button type="button" id="searchBtn"><i class="fas fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="section-header">
+          <h2><i class="fas fa-box-open"></i> Produtos</h2>
+          <span class="badge badge-muted" id="productCount">Carregando...</span>
+        </div>
+
+        <div class="products-grid" id="productList">
+          <div class="loading-wrap" style="grid-column:1/-1">
+            <div class="spinner"></div> Carregando produtos...
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</div>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <h2><i class="fas fa-cart-shopping"></i> Carrinho</h2>
+    <button class="cart-close" id="cartClose"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="cart-drawer-items" id="cartItems">
+    <div class="empty-state">
+      <i class="fas fa-cart-shopping"></i>
+      <h3>Carrinho vazio</h3>
+      <p>Adicione produtos para continuar.</p>
+    </div>
+  </div>
+  <div class="cart-drawer-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span class="total-val" id="cartTotal">R$ 0,00</span>
+    </div>
+    <a href="cart.html" class="btn btn-primary btn-block btn-large">
+      <i class="fas fa-lock"></i> Finalizar Compra
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:10">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>HIVERCAR AUTOPEÇAS</h3>
+        <p>Peças automotivas de qualidade com entrega rápida.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/5598981168787" class="social-link"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Loja</h3>
+        <a href="index.html">Início</a>
+        <a href="loja.html">Catálogo</a>
+        <a href="cart.html">Carrinho</a>
+        <a href="login.html">Minha Conta</a>
+      </div>
+      <div class="footer-col">
+        <h3>Informações</h3>
+        <a href="frete.html">Entrega &amp; Frete</a>
+        <a href="garantia.html">Trocas &amp; Garantia</a>
+        <a href="privacidade.html">Privacidade</a>
+        <a href="termos-uso.html">Termos de Uso</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contato</h3>
+        <p><i class="fab fa-whatsapp"></i> (98) 98116-8787</p>
+        <p><i class="fas fa-envelope"></i> hivercarautopeças@gmail.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> Av. Ataliba Vieira, 1357 — Chapadinha</p>
+        <div class="footer-pay">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fas fa-barcode"></i>
+          <i class="fas fa-qrcode"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HIVERCAR AUTOPEÇAS LTDA</span>
+      <span>Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
-
 <script>
-/* ================================================= */
-/* CONFIGURAÇÃO APPWRITE */
-/* ================================================= */
+/* ── Ripple ── */
+document.addEventListener("click", e => {
+  const r = document.createElement("div"); r.className="ripple";
+  r.style.left=e.clientX+"px"; r.style.top=e.clientY+"px";
+  document.body.appendChild(r); setTimeout(()=>r.remove(),600);
+});
 
+/* ── Cookie ── */
+if (!localStorage.getItem("cookieAccepted")) document.getElementById("cookieBanner").classList.add("show");
+document.getElementById("acceptCookies").onclick = () => { localStorage.setItem("cookieAccepted","1"); document.getElementById("cookieBanner").classList.remove("show"); };
+document.getElementById("rejectCookies").onclick  = () => document.getElementById("cookieBanner").classList.remove("show");
+
+/* ── Navbar toggle ── */
+document.getElementById("navToggle").onclick = () => document.getElementById("navMenu").classList.toggle("open");
+
+/* ── Cart drawer ── */
+const cartDrawer  = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+function openCart()  { cartDrawer.classList.add("open");  cartOverlay.classList.add("show"); }
+function closeCart() { cartDrawer.classList.remove("open"); cartOverlay.classList.remove("show"); }
+document.getElementById("navCart").addEventListener("click", e => { e.preventDefault(); openCart(); });
+document.getElementById("cartClose").onclick  = closeCart;
+cartOverlay.onclick = closeCart;
+
+/* ── Appwrite ── */
 const { Client, Databases } = Appwrite;
-
-const client = new Client()
-    .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-    .setProject("69a0c93200084defefe1");
-
+const client    = new Client().setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("69a0c93200084defefe1");
 const databases = new Databases(client);
-
-const DATABASE_ID = "69a0ebc70034fa76feff";
+const DATABASE_ID       = "69a0ebc70034fa76feff";
 const COLLECTION_PRODUCTS = "produtos";
 
-/* ================================================= */
-/* ESTADO GLOBAL */
-/* ================================================= */
-
 let products = [];
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("hiverCart")) || [];
 
-/* ================================================= */
-/* ELEMENTOS DOM */
-/* ================================================= */
-
-const productList = document.getElementById("productList");
-const cartElement = document.getElementById("cart");
-const cartIcon = document.getElementById("cartIcon");
-const cartItems = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-
-/* ================================================= */
-/* INICIALIZAÇÃO */
-/* ================================================= */
-
-document.addEventListener("DOMContentLoaded", initStore);
-
-async function initStore() {
-    console.log("🔵 Inicializando loja...");
-    await loadProducts();
-    renderCart();
-}
-
-/* ================================================= */
-/* CARREGAR PRODUTOS DO BANCO */
-/* ================================================= */
-
-async function loadProducts() {
-
-    console.log("📦 Buscando produtos no Appwrite...");
-
-    try {
-
-        const response = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTION_PRODUCTS
-        );
-
-        products = response.documents;
-
-        console.log("🟢 Produtos carregados:", products);
-
-        renderProducts();
-
-    } catch (error) {
-
-        console.error("❌ Erro ao carregar produtos:", error);
-        productList.innerHTML = "<p>Erro ao carregar produtos.</p>";
-    }
-}
-
-/* ================================================= */
-/* RENDERIZAÇÃO PRODUTOS */
-/* ================================================= */
-
-function renderProducts() {
-
-    productList.innerHTML = "";
-
-    if (products.length === 0) {
-        productList.innerHTML = "<p>Nenhum produto disponível.</p>";
-        return;
-    }
-
-    products.forEach(product => {
-
-        productList.innerHTML += `
-            <div class="product">
-                <img src="${product.image || 'https://picsum.photos/300'}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p>R$ ${Number(product.price).toFixed(2)}</p>
-                <button onclick="addToCart('${product.$id}')">
-                    Adicionar
-                </button>
-            </div>
-        `;
-    });
-}
-
-/* ================================================= */
-/* CARRINHO */
-/* ================================================= */
-
-function addToCart(productId) {
-
-    const product = products.find(p => p.$id === productId);
-
-    if (!product) {
-        console.warn("Produto não encontrado:", productId);
-        return;
-    }
-
-    cart.push(product);
-    saveCart();
-    renderCart();
-}
-
-function removeFromCart(index) {
-
-    cart.splice(index, 1);
-    saveCart();
-    renderCart();
-}
-
+/* ── Render cart ── */
 function renderCart() {
+  const items  = document.getElementById("cartItems");
+  const footer = document.getElementById("cartFooter");
+  const badge  = document.getElementById("cartBadge");
+  badge.textContent = cart.length;
 
-    cartItems.innerHTML = "";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-
-        total += Number(item.price);
-
-        cartItems.innerHTML += `
-            <div class="cart-item">
-                <span>${item.name}</span>
-                <div>
-                    R$ ${Number(item.price).toFixed(2)}
-                    <button onclick="removeFromCart(${index})">X</button>
-                </div>
-            </div>
-        `;
-    });
-
-    cartTotal.textContent = "Total: R$ " + total.toFixed(2);
-    cartCount.textContent = cart.length;
+  if (cart.length === 0) {
+    items.innerHTML = `<div class="empty-state"><i class="fas fa-cart-shopping"></i><h3>Carrinho vazio</h3><p>Adicione produtos para continuar.</p></div>`;
+    footer.style.display = "none"; return;
+  }
+  footer.style.display = "block";
+  let total = 0;
+  items.innerHTML = cart.map((item, i) => {
+    total += Number(item.price);
+    return `<div class="cart-item-row">
+      <div class="cart-item-img"><img src="${item.image||'https://picsum.photos/64'}" alt="${item.name}"></div>
+      <div>
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">R$ ${Number(item.price).toFixed(2)}</div>
+      </div>
+      <button class="qty-btn" onclick="removeFromCart(${i})" title="Remover"><i class="fas fa-xmark"></i></button>
+    </div>`;
+  }).join("");
+  document.getElementById("cartTotal").textContent = "R$ " + total.toFixed(2);
 }
 
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
+function addToCart(id) {
+  const p = products.find(x => x.$id === id);
+  if (!p) return;
+  cart.push(p);
+  localStorage.setItem("hiverCart", JSON.stringify(cart));
+  renderCart(); openCart();
 }
 
-/* ================================================= */
-/* ABRIR / FECHAR CARRINHO */
-/* ================================================= */
+function removeFromCart(i) {
+  cart.splice(i, 1);
+  localStorage.setItem("hiverCart", JSON.stringify(cart));
+  renderCart();
+}
 
-cartIcon.addEventListener("click", () => {
-    cartElement.classList.toggle("active");
+/* ── Render products ── */
+function renderProducts(list) {
+  const el = document.getElementById("productList");
+  document.getElementById("productCount").textContent = list.length + " produtos";
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-box-open"></i><h3>Nenhum produto</h3><p>Tente outro filtro ou busca.</p></div>`; return;
+  }
+  el.innerHTML = list.map(p => `
+    <div class="product-card">
+      <div class="product-card-img">
+        <img src="${p.image||'https://picsum.photos/seed/'+p.$id+'/300'}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-price">R$ <span>${Number(p.price).toFixed(2)}</span></div>
+        <button class="btn btn-primary" onclick="addToCart('${p.$id}')">
+          <i class="fas fa-cart-plus"></i> Adicionar
+        </button>
+      </div>
+    </div>`).join("");
+}
+
+/* ── Load products ── */
+async function loadProducts() {
+  try {
+    const res = await databases.listDocuments(DATABASE_ID, COLLECTION_PRODUCTS);
+    products = res.documents;
+    renderProducts(products);
+  } catch(e) {
+    document.getElementById("productList").innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-triangle-exclamation"></i><h3>Erro ao carregar</h3><p>${e.message}</p></div>`;
+  }
+}
+
+/* ── Search ── */
+document.getElementById("searchBtn").onclick =
+document.getElementById("searchInput").addEventListener("input", () => {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  renderProducts(products.filter(p => p.name.toLowerCase().includes(q)));
 });
+
+/* ── Filters ── */
+document.querySelectorAll(".filter-option[data-cat]").forEach(el => {
+  el.onclick = () => {
+    document.querySelectorAll(".filter-option[data-cat]").forEach(x=>x.classList.remove("active"));
+    el.classList.add("active");
+    const cat = el.dataset.cat;
+    renderProducts(cat==="all" ? products : products.filter(p=>(p.category||"").toLowerCase()===cat));
+  };
+});
+
+document.querySelectorAll(".filter-option[data-sort]").forEach(el => {
+  el.onclick = () => {
+    document.querySelectorAll(".filter-option[data-sort]").forEach(x=>x.classList.remove("active"));
+    el.classList.add("active");
+    let sorted = [...products];
+    if (el.dataset.sort==="price_asc")  sorted.sort((a,b)=>a.price-b.price);
+    if (el.dataset.sort==="price_desc") sorted.sort((a,b)=>b.price-a.price);
+    if (el.dataset.sort==="name")       sorted.sort((a,b)=>a.name.localeCompare(b.name));
+    renderProducts(sorted);
+  };
+});
+
+renderCart();
+loadProducts();
 </script>
 </body>
 </html>

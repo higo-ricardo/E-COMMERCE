@@ -3,260 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - HIVERCAR</title>
-<!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-
-<style>
-/* ============================= */
-/* VARIÁVEIS */
-/* ============================= */
-:root {
-    --primary: #5cb85c;  		/* VERDE */
-    --secondary:#fb1230;	/* VERMELHO*/
-    --success: #26fd71;		/* VERDE NEON */		
-    --darkness:#201D24; 			/* PRETO SIDERAL */ 
-    --dark:#2d2c2b; 			/* PRETO*/ 
-    --light: #f5f5f5;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,var(--darkness),var(--dark));
-}
-
-.login-box {
-    background:var(--light);
-    padding:40px;
-    border-radius:12px;
-    width:100%;
-    max-width:400px;
-    box-shadow:0 20px 40px rgba(0,0,0,0.3);
-}
-
-.login-box h2 {
-    text-align:center;
-    margin-bottom:25px;
-}
-
-input {
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid var(--light);
-    font-size:14px;
-}
-
-button {
-    width:100%;
-    padding:12px;
-    background:var(--success);
-    border:none;
-    border-radius:6px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover {
-    background:#1e1e1e;
-    color:var(--light);
-}
-
-button:disabled {
-    background:#aaa;
-    cursor:not-allowed;
-}
-
-#error {
-    margin-top:10px;
-    color:var(--secondary);
-    text-align:center;
-    font-size:14px;
-}
-</style>
+<title>Login — HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
 </head>
-
 <body>
 
-<div class="login-box">
-    <h2>Login HIVERCAR</h2>
+<canvas id="canvas"></canvas>
+<div class="grid-bg"></div>
 
-    <input type="email" id="email" placeholder="Digite seu email">
-    <input type="password" id="password" placeholder="Digite sua senha">
+<div class="auth-box">
 
-    <!-- IMPORTANTE: type="button" evita submit automático -->
-    <button type="button" id="btnLogin">ENTRAR</button>
+  <a href="index.html" class="auth-brand">
+    <div class="auth-brand-dot"></div>
+    <span class="auth-brand-name">HIVERCAR AUTOPEÇAS</span>
+  </a>
 
-    <div id="error"></div>
+  <h1>ACESSO <em>RESTRITO</em></h1>
+  <p class="auth-subtitle">Informe suas credenciais para continuar.</p>
+
+  <div class="field">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
+  </div>
+
+  <div class="field">
+    <label for="password">Senha</label>
+    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+  </div>
+
+  <button type="button" id="btnLogin" class="btn-submit">ENTRAR</button>
+
+  <div id="error"></div>
+
+  <div class="auth-footer">
+    Problemas com acesso?
+    <a href="https://wa.me/5598981168787" target="_blank">Fale com o suporte</a>
+  </div>
+
 </div>
 
-<!-- SDK APPWRITE -->
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+<script src="js/appwrite.js"></script>
+<script src="js/constants.js"></script>
 
 <script>
-/* =============================== */
-/* CONFIGURAÇÃO APPWRITE */
-/* =============================== */
+/* ── PARTICLES ── */
+const canvas = document.getElementById("canvas"), ctx = canvas.getContext("2d");
+let W, H, pts = [];
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+resize(); addEventListener("resize", resize);
+class P { constructor(){ this.x=Math.random()*W; this.y=Math.random()*H; this.vx=(Math.random()-.5)*.3; this.vy=(Math.random()-.5)*.3; this.s=Math.random()*1.4+.3; this.a=Math.random()*.35+.05; this.c=Math.random()>.7?"#26fd71":"#fb1230"; } update(){ this.x+=this.vx; this.y+=this.vy; if(this.x<0)this.x=W; if(this.x>W)this.x=0; if(this.y<0)this.y=H; if(this.y>H)this.y=0; } draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fillStyle=this.c; ctx.globalAlpha=this.a; ctx.fill(); } }
+for(let i=0;i<70;i++) pts.push(new P());
+(function loop(){ ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.update();p.draw();}); for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){ const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y); if(d<110){ ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.strokeStyle="#26fd71"; ctx.globalAlpha=(1-d/110)*.04; ctx.lineWidth=.5; ctx.stroke(); }} ctx.globalAlpha=1; requestAnimationFrame(loop); })();
+document.addEventListener("click", e=>{ const r=document.createElement("div"); r.className="ripple"; r.style.left=e.clientX+"px"; r.style.top=e.clientY+"px"; document.body.appendChild(r); setTimeout(()=>r.remove(),600); });
 
+/* ── APPWRITE ── */
 const { Client, Account, Databases } = Appwrite;
-
-const client = new Client()
-    .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-    .setProject("69a0c93200084defefe1");
-
+const client = new Client().setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("69a0c93200084defefe1");
 const account = new Account(client);
 const databases = new Databases(client);
-
-/* =============================== */
-/* CONSTANTES */
-/* =============================== */
-
 const DATABASE_ID = "69a0ebc70034fa76feff";
 const COLLECTION_PROFILES = "profiles";
 
-/* =============================== */
-/* CONTROLE DE ESTADO */
-/* =============================== */
-
 let loginInProgress = false;
 
-/* =============================== */
-/* INICIALIZAÇÃO */
-/* =============================== */
-
-document.addEventListener("DOMContentLoaded", initLogin);
-
-async function initLogin() {
-
-    console.log("🔵 Página de login carregada");
-
-    const btn = document.getElementById("btnLogin");
-
-    if (!btn) {
-        console.error("❌ Botão não encontrado.");
-        return;
-    }
-
-    // Verifica se já existe sessão ativa
-    try {
-
-        const user = await account.get();
-        console.log("🟢 Sessão já ativa:", user);
-
-        if (user) {
-            await redirectByRole(user);
-            return;
-        }
-
-    } catch (error) {
-        console.log("🔴 Nenhuma sessão ativa.");
-    }
-
-    btn.addEventListener("click", handleLogin);
-}
-
-/* ========= LOGIN ========== */
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const user = await account.get();
+    if (user) await redirectByRole(user);
+  } catch(e) { /* sem sessão */ }
+  document.getElementById("btnLogin").addEventListener("click", handleLogin);
+  document.getElementById("password").addEventListener("keydown", e => { if(e.key==="Enter") handleLogin(); });
+});
 
 async function handleLogin() {
+  if (loginInProgress) return;
+  loginInProgress = true;
+  const btn = document.getElementById("btnLogin");
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorBox = document.getElementById("error");
+  btn.disabled = true;
+  errorBox.textContent = "";
+  errorBox.className = "";
 
-    if (loginInProgress) {
-        console.warn("⚠ Login em andamento...");
-        return;
-    }
+  if (!email || !password) {
+    errorBox.className = "error"; errorBox.textContent = "Preencha todos os campos.";
+    btn.disabled = false; loginInProgress = false; return;
+  }
 
-    loginInProgress = true;
-
-    const btn = document.getElementById("btnLogin");
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const errorBox = document.getElementById("error");
-
-    btn.disabled = true;
-    errorBox.innerText = "";
-
-    if (!email || !password) {
-        errorBox.innerText = "Preencha todos os campos para prosseguir com o login.";
-        btn.disabled = false;
-        loginInProgress = false;
-        return;
-    }
-
-    try {
-
-        console.log("🟡 Tentando criar sessão...");
-
-        await account.createEmailSession(email, password);
-
-        console.log("🟢 Sessão criada com sucesso.");
-
-        const user = await account.get();
-        console.log("🟢 Usuário logado:", user);
-
-        await redirectByRole(user);
-
-    } catch (error) {
-
-        console.error("❌ Erro no login:", error);
-        errorBox.innerText = error.message;
-
-    } finally {
-        btn.disabled = false;
-        loginInProgress = false;
-    }
+  try {
+    await account.createEmailSession(email, password);
+    const user = await account.get();
+    await redirectByRole(user);
+  } catch(err) {
+    errorBox.className = "error";
+    errorBox.textContent = err.code === 401 ? "Email ou senha incorretos." : err.message;
+  } finally {
+    btn.disabled = false; loginInProgress = false;
+  }
 }
-
-/* =============================== */
-/* REDIRECIONAMENTO */
-/* =============================== */
 
 async function redirectByRole(user) {
-
-    console.log("🔎 Buscando perfil no banco...");
-
-    const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTION_PROFILES
-    );
-
-    const profile = response.documents.find(
-        p => p.user_id === user.$id
-    );
-
-    if (!profile) {
-        console.error("Desculpe, não há perfil definido. Contate o suporte.");
-        return;
-    }
-
-    const role = profile.role.toLowerCase();
-    console.log("🎯 Perfil encontrado, carregando o dashboard!", role);
-
-    if (role === "admin") {
-        window.location.href = "admin.html";
-    }
-    else if (role === "seller") {
-        window.location.href = "seller.html";
-    }
-    else if (role === "client") {
-        window.location.href = "cliente.html";
-    }
-    else {
-        alert("Você é " + role + ", mas não tem acesso a nenhum dashboard. Contate o suporte.");
-    }
+  const response = await databases.listDocuments(DATABASE_ID, COLLECTION_PROFILES);
+  const profile = response.documents.find(p => p.user_id === user.$id);
+  if (!profile) { document.getElementById("error").className="error"; document.getElementById("error").textContent="Perfil não encontrado. Contate o suporte."; return; }
+  const role = profile.role.toLowerCase();
+  if (role === "admin")   window.location.href = "admin.html";
+  else if (role === "seller") window.location.href = "seller.html";
+  else if (role === "client") window.location.href = "cliente.html";
+  else alert("Sem dashboard para o perfil: " + role);
 }
 </script>
-
 </body>
 </html>

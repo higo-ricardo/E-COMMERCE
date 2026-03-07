@@ -1,162 +1,213 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Troca e Devolução | HIVERCAR AUTOPEÇAS</title>
-
 <meta name="description" content="Política de Troca e Devolução da HIVERCAR AUTOPEÇAS LTDA conforme Código de Defesa do Consumidor.">
-<!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-
-/* ============================= */
-/* ESTILO BASE */
-/* ============================= */
 :root {
-    --primary: #6e726f;
-    --secondary: #26fd71;
-    --dark: #111;
+  --black:  #0a0a0a; --dark: #111214; --panel: #161819;
+  --border: #252729; --red: #fb1230; --green: #26fd71;
+  --white:  #f0f0ee; --muted: #545658;
+  --glow-r: rgba(251,18,48,0.35); --glow-g: rgba(38,253,113,0.25);
 }
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    background: #fff;
-    color: var(--primary);
-    line-height: 1.7;
-}
-
-header {
-    background: var(--primary);
-    color: #fff;
-    padding: 40px 8%;
-}
-
-header h1 {
-    font-size: 28px;
-}
-
-section {
-    padding: 50px 8%;
-    max-width: 1000px;
-    margin: auto;
-}
-
-h2 {
-    margin-top: 30px;
-    margin-bottom: 15px;
-}
-
-p {
-    margin-bottom: 15px;
-}
-
-ul {
-    margin-bottom: 20px;
-    padding-left: 20px;
-}
-
-footer {
-    background: var(--dark);
-    color: #aaa;
-    text-align: center;
-    padding: 30px;
-    font-size: 14px;
-}
-
-.back-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 25px;
-    background: var(--secondary);
-    color: #000;
-    text-decoration: none;
-    border-radius: 30px;
-    font-weight: bold;
-}
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    header {
-        padding: 30px 5%;
-    }
-
-    section {
-        padding: 30px 5%;
-    }
-}
-
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--black); color:var(--white); font-family:'Barlow', sans-serif; font-size:15px; line-height:1.75; min-height:100vh; }
+body::before { content:''; position:fixed; inset:0; z-index:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:0.03; pointer-events:none; }
+body::after { content:''; position:fixed; inset:0; z-index:1; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px); pointer-events:none; }
+canvas#canvas { position:fixed; inset:0; z-index:0; }
+.grid-bg { position:fixed; inset:0; z-index:0; background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px); background-size:60px 60px; }
+.top-bar { position:sticky; top:0; z-index:100; background:rgba(10,10,10,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 8%; height:60px; }
+.brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.brand-dot { width:7px; height:7px; background:var(--green); border-radius:50%; box-shadow:0 0 10px var(--green); animation:pulse-green 2s infinite; }
+.brand-name { font-weight:600; font-size:12px; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); }
+.back-link { display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:0.1em; transition:color 0.2s; }
+.back-link:hover { color:var(--white); }
+.back-link:hover svg { transform:translateX(-4px); }
+.back-link svg { transition:transform 0.2s; }
+.hero { position:relative; z-index:10; padding:80px 8% 50px; border-bottom:1px solid var(--border); animation:fadeUp 0.6s 0.1s ease both; }
+.page-label { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.page-label::before { content:''; display:block; width:36px; height:1px; background:var(--green); box-shadow:0 0 8px var(--glow-g); }
+.page-label span { font-size:11px; font-weight:600; letter-spacing:0.3em; text-transform:uppercase; color:var(--green); }
+.hero h1 { font-family:'Bebas Neue', sans-serif; font-size:clamp(38px,5vw,64px); line-height:1.0; letter-spacing:0.02em; color:var(--white); }
+.hero h1 em { font-style:normal; color:var(--green); text-shadow:0 0 30px var(--glow-g); }
+.hero-sub { margin-top:14px; font-size:14px; font-weight:300; font-style:italic; color:var(--muted); max-width:480px; }
+.page-wrap { position:relative; z-index:10; display:grid; grid-template-columns:1fr 280px; gap:0; max-width:1200px; margin:0 auto; padding:60px 8% 100px; }
+@media(max-width:900px){ .page-wrap { grid-template-columns:1fr; } .sidebar { order:2; } .content { padding-right:0; } }
+.content { padding-right:60px; }
+.section-block { margin-bottom:48px; animation:fadeUp 0.5s ease both; }
+.section-block h2 { font-family:'Bebas Neue', sans-serif; font-size:22px; letter-spacing:0.08em; color:var(--white); display:flex; align-items:center; gap:14px; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.section-block h2::before { content:''; display:inline-block; width:4px; height:18px; background:var(--green); box-shadow:0 0 8px var(--glow-g); flex-shrink:0; }
+.section-block p { color:var(--muted); margin-bottom:12px; font-weight:300; }
+.section-block ul { list-style:none; padding:0; color:var(--muted); }
+.section-block ul li { padding:6px 0 6px 20px; position:relative; font-weight:300; border-bottom:1px solid rgba(255,255,255,0.03); }
+.section-block ul li::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:6px; height:6px; border-radius:50%; background:var(--green); opacity:0.7; }
+.section-block ul.no-go li::before { background:var(--red); }
+strong { color:var(--white); font-weight:600; }
+.sidebar { display:flex; flex-direction:column; gap:24px; }
+.sidebar-panel { background:var(--panel); border:1px solid var(--border); padding:24px; }
+.sidebar-panel h3 { font-family:'Bebas Neue', sans-serif; font-size:17px; letter-spacing:0.1em; color:var(--white); margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px; }
+.info-row { display:flex; flex-direction:column; gap:4px; margin-bottom:14px; }
+.info-label { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+.info-val { font-size:13px; color:var(--white); font-weight:300; }
+.info-val.green { color:var(--green); }
+.info-val.red { color:var(--red); }
+.cta-btn { display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; background:var(--green); color:var(--black); text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.15em; text-transform:uppercase; transition:box-shadow 0.3s; margin-top:4px; }
+.cta-btn:hover { box-shadow:0 0 24px var(--glow-g); }
+.nav-links { display:flex; flex-direction:column; gap:2px; }
+.nav-links a { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; color:var(--muted); text-decoration:none; font-size:13px; border:1px solid transparent; transition:all 0.2s; }
+.nav-links a:hover { color:var(--white); border-color:var(--border); background:rgba(255,255,255,0.02); }
+.nav-links a.active { color:var(--green); border-color:var(--border); background:rgba(38,253,113,0.04); }
+.bottom-bar { position:relative; z-index:10; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:16px 8%; flex-wrap:wrap; gap:10px; }
+.bottom-links { display:flex; gap:24px; flex-wrap:wrap; }
+.bottom-links a { color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:0.05em; transition:color 0.2s; }
+.bottom-links a:hover { color:var(--white); }
+.bottom-right { font-size:12px; color:var(--muted); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse-green { 0%,100% { box-shadow:0 0 6px var(--green); opacity:1; } 50% { box-shadow:0 0 20px var(--green); opacity:0.7; } }
+.ripple { position:fixed; pointer-events:none; border-radius:50%; border:1px solid rgba(38,253,113,0.4); width:20px; height:20px; margin:-10px 0 0 -10px; animation:rippleOut 0.6s ease-out forwards; z-index:999; }
+@keyframes rippleOut { to { width:60px; height:60px; margin:-30px 0 0 -30px; opacity:0; } }
+@media(max-width:768px){ .hero { padding:60px 5% 36px; } .page-wrap { padding:40px 5% 80px; } .top-bar,.bottom-bar { padding-left:5%; padding-right:5%; } }
 </style>
 </head>
-
 <body>
+<canvas id="canvas"></canvas>
+<div class="grid-bg"></div>
 
-<header>
-    <h1>Política de Troca e Devolução</h1>
-    <p>HIVERCAR AUTOPEÇAS LTDA</p>
+<header class="top-bar">
+  <a href="index.html" class="brand">
+    <div class="brand-dot"></div>
+    <span class="brand-name">HIVERCAR AUTOPEÇAS</span>
+  </a>
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+    Voltar ao Início
+  </a>
 </header>
 
-<section>
+<div class="hero">
+  <div class="page-label"><span>Informações Legais</span></div>
+  <h1>TROCA, DEVOLUÇÃO<br><em>&amp; GARANTIA</em></h1>
+  <p class="hero-sub">Em conformidade com o Código de Defesa do Consumidor — Lei nº 8.078/1990.</p>
+</div>
 
-<p>A HIVERCAR AUTOPEÇAS LTDA preza pela transparência e pelo respeito ao consumidor. Esta Política de Troca e Devolução está em conformidade com o Código de Defesa do Consumidor (Lei nº 8.078/1990).</p>
+<div class="page-wrap">
+  <main class="content">
 
-<h2>1. Troca por Defeito de Fabricação</h2>
-<p>Em caso de defeito de fabricação, o cliente poderá solicitar a troca no prazo de até 30 (trinta) dias para produtos não duráveis e até 90 (noventa) dias para produtos duráveis, contados a partir da data da compra.</p>
-<p>O produto passará por análise técnica para verificação do defeito informado.</p>
+    <div class="section-block" style="animation-delay:0.1s">
+      <p>A HIVERCAR AUTOPEÇAS LTDA preza pela transparência e pelo respeito ao consumidor. Esta Política de Troca e Devolução está em conformidade com o Código de Defesa do Consumidor (Lei nº 8.078/1990).</p>
+    </div>
 
-<h2>2. Produto com Avaria ou Incorreto</h2>
-<p>Caso o cliente receba produto com avaria ou diferente do solicitado, deverá comunicar a empresa no prazo máximo de 7 (sete) dias corridos após o recebimento.</p>
+    <div class="section-block" style="animation-delay:0.15s">
+      <h2>1. Troca por Defeito de Fabricação</h2>
+      <p>Em caso de defeito de fabricação, o cliente poderá solicitar a troca no prazo de até <strong>30 dias</strong> para produtos não duráveis e até <strong>90 dias</strong> para produtos duráveis, contados a partir da data da compra.</p>
+      <p>O produto passará por análise técnica para verificação do defeito informado.</p>
+    </div>
 
-<h2>3. Direito de Arrependimento</h2>
-<p>Para compras realizadas fora do estabelecimento físico (como via WhatsApp ou online), o cliente poderá exercer o direito de arrependimento no prazo de até 7 (sete) dias corridos após o recebimento do produto, conforme art. 49 do Código de Defesa do Consumidor.</p>
+    <div class="section-block" style="animation-delay:0.2s">
+      <h2>2. Produto com Avaria ou Incorreto</h2>
+      <p>Caso o cliente receba produto com avaria ou diferente do solicitado, deverá comunicar a empresa no prazo máximo de <strong>7 dias corridos</strong> após o recebimento.</p>
+    </div>
 
-<h2>4. Condições para Troca ou Devolução</h2>
-<p>Para que a troca ou devolução seja aceita, é necessário:</p>
-<ul>
-    <li>Produto sem sinais de uso indevido;</li>
-    <li>Produto na embalagem original;</li>
-    <li>Apresentação da nota fiscal ou comprovante de compra;</li>
-    <li>Todos os acessórios e manuais inclusos.</li>
-</ul>
+    <div class="section-block" style="animation-delay:0.25s">
+      <h2>3. Direito de Arrependimento</h2>
+      <p>Para compras realizadas fora do estabelecimento físico (como via WhatsApp ou online), o cliente poderá exercer o direito de arrependimento no prazo de até <strong>7 dias corridos</strong> após o recebimento do produto, conforme art. 49 do CDC.</p>
+    </div>
 
-<h2>5. Produtos que Não Podem Ser Trocados</h2>
-<p>Não serão aceitas trocas nos seguintes casos:</p>
-<ul>
-    <li>Peças com indícios de instalação inadequada;</li>
-    <li>Produtos danificados por mau uso;</li>
-    <li>Peças elétricas instaladas sem teste prévio adequado;</li>
-    <li>Itens adquiridos sob encomenda específica.</li>
-</ul>
+    <div class="section-block" style="animation-delay:0.3s">
+      <h2>4. Condições para Troca ou Devolução</h2>
+      <p>Para que a troca ou devolução seja aceita, é necessário:</p>
+      <ul>
+        <li>Produto sem sinais de uso indevido;</li>
+        <li>Produto na embalagem original;</li>
+        <li>Apresentação da nota fiscal ou comprovante de compra;</li>
+        <li>Todos os acessórios e manuais inclusos.</li>
+      </ul>
+    </div>
 
-<h2>6. Reembolso</h2>
-<p>O reembolso será realizado após a análise e aprovação da devolução, utilizando o mesmo meio de pagamento da compra ou outro acordado entre as partes.</p>
+    <div class="section-block" style="animation-delay:0.35s">
+      <h2>5. Produtos que Não Podem Ser Trocados</h2>
+      <p>Não serão aceitas trocas nos seguintes casos:</p>
+      <ul class="no-go">
+        <li>Peças com indícios de instalação inadequada;</li>
+        <li>Produtos danificados por mau uso;</li>
+        <li>Peças elétricas instaladas sem teste prévio adequado;</li>
+        <li>Itens adquiridos sob encomenda específica.</li>
+      </ul>
+    </div>
 
-<h2>7. Prazo de Análise</h2>
-<p>O prazo para análise do produto devolvido é de até 10 (dez) dias úteis após o recebimento pela empresa.</p>
+    <div class="section-block" style="animation-delay:0.4s">
+      <h2>6. Reembolso</h2>
+      <p>O reembolso será realizado após a análise e aprovação da devolução, utilizando o mesmo meio de pagamento da compra ou outro acordado entre as partes.</p>
+    </div>
 
-<h2>8. Contato para Solicitação</h2>
-<p>Para solicitar troca ou devolução, entre em contato:</p>
+    <div class="section-block" style="animation-delay:0.45s">
+      <h2>7. Prazo de Análise</h2>
+      <p>O prazo para análise do produto devolvido é de até <strong>10 dias úteis</strong> após o recebimento pela empresa.</p>
+    </div>
 
-<p><strong>HIVERCAR AUTOPEÇAS LTDA</strong><br>
-Endereço: Avenida Ataliba Vieira, nº 1357, Centro, Chapadinha<br>
-Email: hivercarautopeças@gmail.com<br>
-Telefone/WhatsApp: (98) 98116-8787</p>
+    <div class="section-block" style="animation-delay:0.5s">
+      <h2>8. Contato para Solicitação</h2>
+      <p>Para solicitar troca ou devolução, entre em contato:</p>
+      <p><strong>HIVERCAR AUTOPEÇAS LTDA</strong><br>
+      Endereço: Avenida Ataliba Vieira, nº 1357, Centro, Chapadinha<br>
+      Email: hivercarautopeças@gmail.com<br>
+      Telefone/WhatsApp: (98) 98116-8787</p>
+    </div>
 
-<a href="index.html" class="back-btn">Voltar ao Site</a>
+  </main>
 
-</section>
+  <aside class="sidebar">
+    <div class="sidebar-panel">
+      <h3>Prazos de Garantia</h3>
+      <div class="info-row">
+        <span class="info-label">Produto não durável</span>
+        <span class="info-val green">Até 30 dias</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Produto durável</span>
+        <span class="info-val green">Até 90 dias</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Arrependimento (online)</span>
+        <span class="info-val green">Até 7 dias</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Avaria no recebimento</span>
+        <span class="info-val green">Até 7 dias</span>
+      </div>
+      <a href="https://wa.me/5598981168787" class="cta-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Solicitar Troca / Devolução
+      </a>
+    </div>
+    <div class="sidebar-panel">
+      <h3>Páginas Legais</h3>
+      <nav class="nav-links">
+        <a href="frete.html">Frete &amp; Entrega <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a href="garantia.html" class="active">Trocas &amp; Garantia <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a href="privacidade.html">Privacidade <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a href="termos-uso.html">Termos de Uso <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </nav>
+    </div>
+  </aside>
+</div>
 
-<footer>
-    © 2026 HIVERCAR AUTOPEÇAS LTDA - Todos os direitos reservados.
+<footer class="bottom-bar">
+  <div class="bottom-links">
+    <a href="index.html">Início</a><a href="loja.html">Loja</a><a href="login.html">Login</a><a href="https://wa.me/5598981168787">Suporte</a>
+  </div>
+  <div class="bottom-right">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
 </footer>
 
+<script>
+const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");let W,H,particles=[];function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}resize();window.addEventListener("resize",resize);class Particle{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-0.5)*0.3;this.vy=(Math.random()-0.5)*0.3;this.size=Math.random()*1.5+0.3;this.alpha=Math.random()*0.4+0.05;this.color=Math.random()>0.7?"#26fd71":"#fb1230";}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0)this.x=W;if(this.x>W)this.x=0;if(this.y<0)this.y=H;if(this.y>H)this.y=0;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=this.color;ctx.globalAlpha=this.alpha;ctx.fill();}}
+for(let i=0;i<80;i++)particles.push(new Particle());function loop(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle="#26fd71";ctx.globalAlpha=(1-dist/120)*0.04;ctx.lineWidth=0.5;ctx.stroke();}}}ctx.globalAlpha=1;requestAnimationFrame(loop);}loop();
+document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),600);});
+</script>
 </body>
 </html>

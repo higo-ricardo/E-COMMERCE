@@ -25,6 +25,7 @@
 <!-- CSS -->
  <link rel="stylesheet" href="css/styles.css">
  <link rel="stylesheet" href="css/index.css">
+ <link rel="stylesheet" href="css/anime.css">
  
 
 <!-- ============================= -->
@@ -80,18 +81,18 @@
 <div class="hero-overlay"></div>
 
     <div class="hero-content">
-        <span class="hero-badge">Desde 1998, servindo a você!</span>
+        <span class="hero-badge">Desde 1998, proporcionando satisfação e segurança para a você!</span>
 
-        <h1>Peças Novas com <span>Preço Baixo</span> e Garantia!</h1>
+        <h1>Vendemos Peças Novas com <span>Preço Baixo</span> e <span>Garantia de qualidade.</span></h1>
 
         <p>Atendemos mecânicos, oficinas e proprietários de veículos na loja e no WhatsApp.</p>
 
         <div class="hero-buttons">
             <a href="https://wa.me/5598981168787" class="btn-primary">
-                Solicitar Orçamento
+                Pedir Orçamento
             </a>
 
-            <a href="#products" class="btn-contrast">
+            <a href="loja.html" class="btn-contrast">
                 Ver Produtos
             </a>
         </div>
@@ -105,16 +106,17 @@
                 <div class="carousel-content">
                     <h1>⏰ ÚLTIMAS UNIDADES!</h1>
                     <p class="carousel-text">Corra antes que acabe! Desconto especial por tempo limitado 🔥</p>
-                    <a href="loja.html?filter=promo" class="btn btn-secondary btn-large">VER OFERTAS 🚀</a>
+                    <a href="loja.html?filter=promo" class="btn btn-primary btn-large">VER OFERTAS 🚀</a>
                 </div>
                 <div class="carousel-overlay"></div>
             </div>
             
             <div class="carousel-slide">
                 <div class="carousel-content">
-                    <h1>🏆 10 ANOS NO MERCADO</h1>
-                    <p class="carousel-text">Qualidade e confiança que você conhece! Mais de 50.000 clientes satisfeitos ✅</p>
-                    <a href="#destaques" class="btn btn-primary btn-large">CONHEÇA NOSSOS PRODUTOS 👇</a>
+                    <h1>🏆 28 ANOS NO MERCADO</h1>
+                    <p class="carousel-text">Proporcionando qualidade e confiança que você merece!</p>
+                   
+                    <a href="#destaques" class="btn btn-primary btn-large">CONHEÇA NOSSOS CATALOGO</a>
                 </div>
                 <div class="carousel-overlay"></div>
             </div>
@@ -123,7 +125,7 @@
                 <div class="carousel-content">
                     <h1>⚡ OFERTA RELÂMPAGO</h1>
                     <p class="carousel-text">Compre a sua bateria conosco e ganhe instalação grátis da bateria nova no seu carro!</p>
-                    <a href="loja.html" class="btn btn-success btn-large">COMPRAR AGORA 💰</a>
+                    <a href="loja.html" class="btn btn-primary btn-large">COMPRAR AGORA 💰</a>
                 </div>
                 <div class="carousel-overlay"></div>
             </div>
@@ -183,18 +185,58 @@
     </div>
 
 </section>
+<!--SEÇÃO CONTATO/WHATSAPP-->
+    <section class="contato-section">
+        <div class="container">
+            <div class="contato-card">
+                <div class="contato-header">
+                    <h2><i class="fas fa-headset fa-2x"></i> FALE COM NOSSOS ESPECIALISTAS!</h2>
+                    <p>Dúvidas sobre peças?<br> Precisa de orçamento? Estamos aqui para ajudar! 💬</p>
+                </div>
+                
+                <div class="contato-form">
+                    <div class="form-group">
+                        <label for="contatoNome" class="form-label">NOME:</label>
+                        <input type="text" id="contatoNome" class="form-control" placeholder="Digite seu nome">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contatoProduto" class="form-label">ASSUNTO:</label>
+                        <select id="contatoProduto" class="form-control">
+                            <option value="">Selecione um assunto...</option>
+                            <option value="Filtro de Óleo"> Filtros</option>
+                            <option value="Filtro de Óleo"> Oleos e lubrificantes</option>
+                            <option value="Pastilha de Freio"> Pastilhas de Freio</option>
+                            <option value="Bateria Automotiva"> Baterias</option>
+                            <option value="Amortecedor"> Amortecedores</option>
+                            <option value="Outro"> Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contatoVeiculo" class="form-label">Veículo:</label>
+                        <input type="text" id="contatoVeiculo" class="form-control" placeholder="Ex: Gol 2020 1.5">
+                    </div>
+                    
+                    <button id="whatsappButton" class="btn btn-success btn-small">ENVIAR</button>
+                    
+                    <p class="form-text mt-2">
+                        <i class="fas fa-shield-alt"></i> Os dados são protegidos por criptografia conforme a <a href="privacidade.html">LGPD</a>. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
-<!-- RODAPÉ ATUALIZADO -->
+<!-- RODAPÉ -->
 
 <footer>
 
     <div class="footer-grid">
-
         <div class="footer-col">
-            <img src="img/hivercar_dark.png" class="footer-logo">
-            <p>Somos uma empresa focada 100% em nosso cliente, com mais de 25 anos de mercado, tentamos transformar o processo de compra de um produto automotivo em uma experiência simples e agradável.</p>
-         
+            <img src="img/hivercar100bg.png" class="footer-logo">
+            <p>Somos uma empresa focada 100% em nosso cliente, com mais de 28 anos de mercado, tentamos transformar o processo de compra de um produto automotivo em uma experiência simples e agradável.</p>
         </div>
 
         <div class="footer-col">
@@ -221,18 +263,14 @@
                 </iframe>
             </div>
         </div>
-
     </div>
 
     <div style="text-align:center; margin-top:30px;" class="social-icons">
-<h3>Siga-nos</h3>  
-    <a href="#"><i class="fab fa-tiktok"></i></a>
-  
+        <h3>Siga-nos</h3>  
+        <a href="page404.html"><i class="fab fa-tiktok"></i></a>
         <a href="#"><i class="fab fa-instagram"></i>
-</a><a href="#"><i class="fab fa-youtube"></i></a>
-    <a href="#"><i class="fab fa-telegram"></i></a>
-
-
+        </a><a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="page404.html"><i class="fab fa-telegram"></i></a>
     </div>
 
     <div class="footer-bottom">
@@ -259,7 +297,9 @@ function rejectCookies() {
 }
 </script><!-- WHATSAPP FIXO -->
 <div class="social-icons">
-<a href="https://wa.me/5598981168787" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/5598981168787" class="btn-whatsapp"><i class="fab fa-whatsapp fa-2x"></i></a>
 </div>
+<script src="js/index.js"></script>
+<script src="js/utils.js"></script>
 </body>
 </html>

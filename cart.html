@@ -1,284 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🛒 Carrinho - HIVERCAR AUTOPEÇAS</title>
-    <meta name="description" content="Revise seus itens antes de finalizar a compra. Verifique produtos, quantidades e preços. 🧾">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/carrinho.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrinho — HIVERCAR AUTOPEÇAS</title>
+<meta name="description" content="Revise seus itens antes de finalizar a compra.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="store.css">
+<style>
+.cart-wrap {
+  position:relative; z-index:10;
+  padding:40px 0 80px;
+}
+.cart-layout {
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:24px;
+  align-items:start;
+}
+@media(max-width:900px){ .cart-layout{ grid-template-columns:1fr; } }
+
+.items-panel {
+  background:var(--panel); border:1px solid var(--border);
+  padding:24px;
+}
+
+.cart-actions {
+  display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;
+}
+
+/* Recommended */
+.recom-section { margin-top:40px; }
+.recom-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+  gap:14px;
+}
+</style>
 </head>
 <body>
-    <!-- 🍪 Banner de Cookies -->
-    <div id="cookieBanner" class="cookie-banner">
-        <div class="cookie-content">
-            <p>🍪 Usamos cookies para melhorar sua experiência! Ao continuar navegando, você concorda com nossa <a href="politica-privacidade.html">Política de Privacidade</a>.</p>
-            <div class="cookie-buttons">
-                <button id="acceptCookies" class="btn btn-success btn-small">Aceitar ✅</button>
-                <button id="rejectCookies" class="btn btn-outline btn-small">Recusar ❌</button>
-            </div>
-        </div>
+
+<div class="grid-bg"></div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p>Usamos cookies para melhorar sua experiência. <a href="privacidade.html">Política de Privacidade</a>.</p>
+    <div class="cookie-btns">
+      <button id="acceptCookies" class="btn btn-primary btn-small">Aceitar</button>
+      <button id="rejectCookies" class="btn btn-outline btn-small">Recusar</button>
     </div>
+  </div>
+</div>
 
-    <!-- 🔝 NAVBAR -->
-    <nav class="navbar">
-        <div class="container">
-            <!-- Logo -->
-            <a href="index.html" class="navbar-brand">
-                <span class="logo-icon">🏎️</span>
-                <span class="logo-text">HIVERCAR <span class="logo-highlight">AUTOPEÇAS</span></span>
-            </a>
-            
-            <!-- Menu Mobile Toggle -->
-            <button class="navbar-toggle" id="navbarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <!-- Menu Principal -->
-            <div class="navbar-menu" id="navbarMenu">
-                <a href="index.html" class="nav-link">🏠 HOME</a>
-                <a href="loja.html" class="nav-link">🛒 LOJA</a>
-                <a href="#blog" class="nav-link">📚 BLOG</a>
-                <a href="login.html" class="nav-link">👤 LOGIN</a>
-                
-                <!-- Carrinho com badge -->
-                <a href="carrinho.html" class="nav-link cart-link active">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cartCount" class="cart-badge">0</span>
-                </a>
-            </div>
-        </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-dot"></div>
+      <span class="navbar-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
+    </a>
+    <button class="navbar-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+    <div class="navbar-nav" id="navMenu">
+      <a href="index.html" class="nav-link"><i class="fas fa-house"></i> Home</a>
+      <a href="loja.html" class="nav-link"><i class="fas fa-store"></i> Loja</a>
+      <a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login</a>
+      <a href="cart.html" class="nav-cart active">
+        <i class="fas fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero" style="position:relative;z-index:10">
+  <div class="container">
+    <div class="page-label"><span>Compra</span></div>
+    <h1>SEU <em>CARRINHO</em></h1>
+    <nav class="breadcrumb" style="margin-top:10px">
+      <a href="index.html">Home</a>
+      <span class="sep">›</span>
+      <a href="loja.html">Loja</a>
+      <span class="sep">›</span>
+      <span class="current">Carrinho</span>
     </nav>
+  </div>
+</div>
 
-    <!-- 🎯 HEADER DO CARRINHO -->
-    <header class="carrinho-header">
-        <div class="container">
-            <div class="header-content">
-                <h1><i class="fas fa-shopping-cart"></i> SEU CARRINHO</h1>
-                <p class="subtitle">Revise seus itens antes de finalizar a compra 🧾</p>
-                
-                <!-- Breadcrumb -->
-                <nav class="breadcrumb">
-                    <a href="index.html">Home</a>
-                    <span class="separator">›</span>
-                    <a href="loja.html">Loja</a>
-                    <span class="separator">›</span>
-                    <span class="current">Carrinho</span>
-                </nav>
+<!-- CART CONTENT -->
+<div class="cart-wrap">
+  <div class="container">
+    <div class="cart-layout">
+
+      <!-- ITEMS -->
+      <div>
+        <div class="items-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-boxes-stacked"></i> Itens no Carrinho</h2>
+            <span class="badge badge-muted" id="itemCount">0 itens</span>
+          </div>
+
+          <!-- Empty -->
+          <div id="emptyState" class="empty-state" style="display:none">
+            <i class="fas fa-cart-shopping"></i>
+            <h3>Seu carrinho está vazio</h3>
+            <p>Adicione produtos para continuar comprando.</p>
+            <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Ir para a Loja</a>
+          </div>
+
+          <!-- List -->
+          <div id="itemsList">
+            <div class="loading-wrap">
+              <div class="spinner"></div> Carregando itens...
             </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="cart-actions" id="cartActions" style="display:none">
+            <a href="loja.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Continuar Comprando</a>
+            <button id="clearCart" class="btn btn-danger"><i class="fas fa-trash"></i> Limpar Carrinho</button>
+          </div>
         </div>
-    </header>
 
-    <main class="carrinho-main">
-        <div class="container">
-            <div class="carrinho-grid">
-                <!-- 📦 LISTA DE ITENS -->
-                <section class="itens-carrinho">
-                    <div class="section-header">
-                        <h2><i class="fas fa-boxes"></i> ITENS NO CARRINHO</h2>
-                        <span id="itemCount" class="badge badge-primary">0 itens</span>
-                    </div>
-                    
-                    <!-- Mensagem carrinho vazio -->
-                    <div class="carrinho-vazio" id="carrinhoVazio">
-                        <div class="empty-content">
-                            <i class="fas fa-shopping-cart fa-3x"></i>
-                            <h3>Seu carrinho está vazio 😕</h3>
-                            <p>Adicione produtos incríveis para ver eles aqui!</p>
-                            <a href="loja.html" class="btn btn-primary btn-large">
-                                <i class="fas fa-store"></i> CONTINUAR COMPRANDO
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Lista de itens -->
-                    <div class="itens-lista" id="itensLista">
-                        <!-- Itens serão carregados via JS -->
-                        <div class="loading-items">
-                            <div class="loading"></div>
-                            <p>Carregando seus itens... ⚙️</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Ações do carrinho -->
-                    <div class="carrinho-actions" id="carrinhoActions" style="display: none;">
-                        <div class="actions-grid">
-                            <a href="loja.html" class="btn btn-outline">
-                                <i class="fas fa-arrow-left"></i> CONTINUAR COMPRANDO
-                            </a>
-                            <button id="limparCarrinho" class="btn btn-secondary">
-                                <i class="fas fa-trash"></i> LIMPAR CARRINHO
-                            </button>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- 💰 RESUMO DO PEDIDO -->
-                <aside class="resumo-pedido">
-                    <div class="resumo-card">
-                        <div class="resumo-header">
-                            <h2><i class="fas fa-receipt"></i> RESUMO DO PEDIDO</h2>
-                        </div>
-                        
-                        <div class="resumo-content">
-                            <!-- Subtotal -->
-                            <div class="resumo-item">
-                                <span>Subtotal</span>
-                                <span id="subtotal">R$ 0,00</span>
-                            </div>
-                            
-                            <!-- Impostos (CBS) -->
-                            <div class="resumo-item">
-                                <span>Impostos (CBS 12%)</span>
-                                <span id="impostos">R$ 0,00</span>
-                            </div>
-                            
-                            <!-- Frete -->
-                            <div class="resumo-item">
-                                <span>Frete</span>
-                                <div class="frete-options">
-                                    <select id="freteSelect" class="form-control">
-                                        <option value="0">Calcular frete</option>
-                                        <option value="15">Sedex: R$ 15,00 (3-5 dias)</option>
-                                        <option value="25">Expresso: R$ 25,00 (1-2 dias)</option>
-                                        <option value="0">Retirar na loja: Grátis</option>
-                                    </select>
-                                    <button id="calcularFrete" class="btn btn-small btn-outline">Calcular</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Descontos -->
-                            <div class="resumo-item discount">
-                                <span>Descontos</span>
-                                <span id="descontos">- R$ 0,00</span>
-                            </div>
-                            
-                            <!-- Total -->
-                            <div class="resumo-total">
-                                <span>TOTAL</span>
-                                <span id="total">R$ 0,00</span>
-                            </div>
-                            
-                            <!-- Cupom -->
-                            <div class="cupom-section">
-                                <div class="cupom-input">
-                                    <input type="text" id="cupomInput" placeholder="Código do cupom">
-                                    <button id="aplicarCupom" class="btn btn-small btn-primary">Aplicar</button>
-                                </div>
-                                <div id="cupomMessage" class="cupom-message"></div>
-                            </div>
-                            
-                            <!-- Botão Finalizar -->
-                            <button id="finalizarCompra" class="btn btn-success btn-large btn-block" disabled>
-                                <i class="fas fa-lock"></i> FINALIZAR COMPRA
-                            </button>
-                            
-                            <!-- Métodos de pagamento -->
-                            <div class="payment-methods">
-                                <p><i class="fas fa-shield-alt"></i> Compra 100% segura</p>
-                                <div class="payment-icons">
-                                    <i class="fab fa-cc-visa" title="Visa"></i>
-                                    <i class="fab fa-cc-mastercard" title="Mastercard"></i>
-                                    <i class="fab fa-cc-amex" title="American Express"></i>
-                                    <i class="fas fa-barcode" title="Boleto"></i>
-                                    <i class="fas fa-qrcode" title="PIX"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Informações importantes -->
-                    <div class="info-card">
-                        <h3><i class="fas fa-info-circle"></i> INFORMAÇÕES IMPORTANTES</h3>
-                        <ul class="info-list">
-                            <li><i class="fas fa-shipping-fast"></i> Frete grátis para compras acima de R$ 300</li>
-                            <li><i class="fas fa-undo"></i> 30 dias para troca ou devolução</li>
-                            <li><i class="fas fa-shield-alt"></i> Compra protegida pela LGPD</li>
-                            <li><i class="fas fa-headset"></i> Suporte: (11) 99999-9999</li>
-                        </ul>
-                    </div>
-                </aside>
-            </div>
-            
-            <!-- 🎁 PRODUTOS RECOMENDADOS -->
-            <section class="recomendados-section" id="recomendadosSection" style="display: none;">
-                <div class="section-header">
-                    <h2><i class="fas fa-gift"></i> VOCÊ TAMBÉM PODE GOSTAR</h2>
-                    <p>Complete seu pedido com estes produtos 🎯</p>
-                </div>
-                
-                <div class="recomendados-grid" id="recomendadosGrid">
-                    <!-- Produtos recomendados serão carregados via JS -->
-                </div>
-            </section>
+        <!-- Recommended -->
+        <div class="recom-section" id="recomSection" style="display:none">
+          <div class="section-header">
+            <h2><i class="fas fa-bolt"></i> Você Também Pode Gostar</h2>
+          </div>
+          <div class="recom-grid" id="recomGrid"></div>
         </div>
-    </main>
+      </div>
 
-    <!-- 👣 FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>🏎️ HIVERCAR AUTOPEÇAS</h3>
-                    <p>Há 10 anos fornecendo peças automotivas de qualidade.</p>
-                    <div class="footer-social">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>🔗 LINKS RÁPIDOS</h3>
-                    <a href="index.html">🏠 Página Inicial</a>
-                    <a href="loja.html">🛒 Nossa Loja</a>
-                    <a href="politica-troca-devolucao.html">🔄 Troca e Devolução</a>
-                    <a href="termos-de-uso.html">📑 Termos de Uso</a>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>📞 CONTATO</h3>
-                    <p><i class="fas fa-phone"></i> (11) 99999-9999</p>
-                    <p><i class="fab fa-whatsapp"></i> WhatsApp: +55 11 99999-9999</p>
-                    <p><i class="fas fa-envelope"></i> contato@hivercar.com</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>💳 PAGAMENTO SEGURO</h3>
-                    <div class="payment-methods">
-                        <span>💳 Cartão</span>
-                        <span>💱 PIX</span>
-                        <span>📄 Boleto</span>
-                    </div>
-                    <div class="security-seal">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Site 100% Seguro</span>
-                    </div>
-                </div>
+      <!-- RESUMO -->
+      <aside>
+        <div class="resumo-card">
+          <div class="resumo-header">
+            <h2><i class="fas fa-receipt"></i> Resumo do Pedido</h2>
+          </div>
+          <div class="resumo-content">
+            <div class="resumo-item">
+              <span>Subtotal</span>
+              <span id="subtotal">R$ 0,00</span>
             </div>
-            
-            <div class="footer-bottom">
-                <p>© 2024 HIVERCAR AUTOPEÇAS. Todos os direitos reservados.</p>
+            <div class="resumo-item">
+              <span>Impostos (CBS 12%)</span>
+              <span id="impostos">R$ 0,00</span>
             </div>
+            <div class="resumo-item">
+              <span>Frete</span>
+              <div>
+                <select id="freteSelect" class="form-control" style="width:auto;padding:6px 10px;font-size:12px;margin-bottom:6px">
+                  <option value="0">Calcular frete</option>
+                  <option value="15">Sedex — R$ 15,00 (3-5 dias)</option>
+                  <option value="25">Expresso — R$ 25,00 (1-2 dias)</option>
+                  <option value="0">Retirar na loja — Grátis</option>
+                </select>
+              </div>
+            </div>
+            <div class="resumo-item discount">
+              <span>Descontos</span>
+              <span id="descontos">− R$ 0,00</span>
+            </div>
+            <div class="resumo-total">
+              <span>Total</span>
+              <span class="total-price" id="total">R$ 0,00</span>
+            </div>
+
+            <!-- Cupom -->
+            <div class="cupom-row">
+              <input type="text" id="cupomInput" placeholder="Código do cupom">
+              <button id="aplicarCupom" class="btn btn-primary btn-small">Aplicar</button>
+            </div>
+            <div class="cupom-msg" id="cupomMsg"></div>
+
+            <button id="finalizarBtn" class="btn btn-primary btn-block btn-large" style="margin-top:16px" disabled>
+              <i class="fas fa-lock"></i> Finalizar Compra
+            </button>
+
+            <div class="security-note" style="justify-content:center;margin-top:14px">
+              <i class="fas fa-shield-halved"></i> Compra 100% segura
+            </div>
+            <div class="pay-icons" style="justify-content:center">
+              <i class="fab fa-cc-visa"></i>
+              <i class="fab fa-cc-mastercard"></i>
+              <i class="fab fa-cc-amex"></i>
+              <i class="fas fa-barcode"></i>
+              <i class="fas fa-qrcode"></i>
+            </div>
+          </div>
         </div>
-    </footer>
 
-    <!-- JavaScript -->
-    <script src="js/utils.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/carrinho.js"></script>
-    
-    <!-- Debug -->
-    <script>
-        console.log("🛒 carrinho.html carregado com sucesso!");
-    </script>
+        <div class="info-card">
+          <h3><i class="fas fa-circle-info"></i> Informações</h3>
+          <ul class="info-list">
+            <li><i class="fas fa-shipping-fast"></i> Frete grátis acima de R$ 300</li>
+            <li><i class="fas fa-rotate-left"></i> 30 dias para troca ou devolução</li>
+            <li><i class="fas fa-shield-halved"></i> Compra protegida pela LGPD</li>
+            <li><i class="fab fa-whatsapp"></i> Suporte: (98) 98116-8787</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="position:relative;z-index:10">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>HIVERCAR AUTOPEÇAS</h3>
+        <p>Peças automotivas de qualidade.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/5598981168787" class="social-link"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Loja</h3>
+        <a href="index.html">Início</a>
+        <a href="loja.html">Catálogo</a>
+        <a href="cart.html">Carrinho</a>
+      </div>
+      <div class="footer-col">
+        <h3>Informações</h3>
+        <a href="frete.html">Entrega &amp; Frete</a>
+        <a href="garantia.html">Trocas &amp; Garantia</a>
+        <a href="privacidade.html">Privacidade</a>
+        <a href="termos-uso.html">Termos de Uso</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contato</h3>
+        <p><i class="fab fa-whatsapp"></i> (98) 98116-8787</p>
+        <p><i class="fas fa-envelope"></i> hivercarautopeças@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HIVERCAR AUTOPEÇAS LTDA</span>
+      <span>Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Ripple ── */
+document.addEventListener("click", e => {
+  const r=document.createElement("div"); r.className="ripple";
+  r.style.left=e.clientX+"px"; r.style.top=e.clientY+"px";
+  document.body.appendChild(r); setTimeout(()=>r.remove(),600);
+});
+
+/* ── Cookie ── */
+if (!localStorage.getItem("cookieAccepted")) document.getElementById("cookieBanner").classList.add("show");
+document.getElementById("acceptCookies").onclick = () => { localStorage.setItem("cookieAccepted","1"); document.getElementById("cookieBanner").classList.remove("show"); };
+document.getElementById("rejectCookies").onclick  = () => document.getElementById("cookieBanner").classList.remove("show");
+
+/* ── Navbar ── */
+document.getElementById("navToggle").onclick = () => document.getElementById("navMenu").classList.toggle("open");
+
+/* ── Cupons disponíveis ── */
+const CUPONS = { "HIVERCAR10": 10, "FRETE0": 0 };
+let discount = 0;
+
+document.getElementById("aplicarCupom").onclick = () => {
+  const code = document.getElementById("cupomInput").value.trim().toUpperCase();
+  const msg  = document.getElementById("cupomMsg");
+  if (CUPONS[code] !== undefined) {
+    discount = CUPONS[code];
+    msg.className = "cupom-msg ok"; msg.textContent = "✓ Cupom aplicado! −R$ " + discount.toFixed(2);
+  } else {
+    discount = 0;
+    msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido.";
+  }
+  updateTotals();
+};
+
+/* ── Cart state ── */
+let cart = JSON.parse(localStorage.getItem("hiverCart")) || [];
+
+function saveCart() { localStorage.setItem("hiverCart", JSON.stringify(cart)); }
+
+function updateTotals() {
+  const sub    = cart.reduce((s, i) => s + Number(i.price) * (i.qty||1), 0);
+  const taxes  = sub * 0.12;
+  const frete  = Number(document.getElementById("freteSelect").value) || 0;
+  const total  = Math.max(0, sub + taxes + frete - discount);
+
+  document.getElementById("subtotal").textContent  = "R$ " + sub.toFixed(2);
+  document.getElementById("impostos").textContent  = "R$ " + taxes.toFixed(2);
+  document.getElementById("descontos").textContent = "− R$ " + discount.toFixed(2);
+  document.getElementById("total").textContent     = "R$ " + total.toFixed(2);
+  document.getElementById("cartBadge").textContent  = cart.reduce((s,i)=>s+(i.qty||1),0);
+  document.getElementById("finalizarBtn").disabled  = cart.length === 0;
+}
+
+document.getElementById("freteSelect").onchange = updateTotals;
+
+function removeItem(idx) {
+  cart.splice(idx, 1); saveCart(); renderCart();
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty = Math.max(1, (cart[idx].qty||1) + delta);
+  saveCart(); renderCart();
+}
+
+function renderCart() {
+  const list    = document.getElementById("itemsList");
+  const empty   = document.getElementById("emptyState");
+  const actions = document.getElementById("cartActions");
+  const count   = document.getElementById("itemCount");
+
+  const total = cart.reduce((s,i)=>s+(i.qty||1),0);
+  count.textContent = total + (total===1?" item":" itens");
+
+  if (cart.length === 0) {
+    list.innerHTML = ""; empty.style.display="block";
+    actions.style.display="none";
+  } else {
+    empty.style.display = "none"; actions.style.display="flex";
+    list.innerHTML = cart.map((item, i) => `
+      <div class="cart-item-row">
+        <div class="cart-item-img"><img src="${item.image||'https://picsum.photos/64'}" alt="${item.name}"></div>
+        <div>
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">R$ ${Number(item.price).toFixed(2)}</div>
+          <div class="cart-item-sub">Subtotal: R$ ${(Number(item.price)*(item.qty||1)).toFixed(2)}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+            <span class="qty-val">${item.qty||1}</span>
+            <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+          </div>
+          <button class="btn btn-danger btn-small" onclick="removeItem(${i})">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>`).join("");
+  }
+  updateTotals();
+}
+
+document.getElementById("clearCart").onclick = () => { cart=[]; saveCart(); renderCart(); };
+document.getElementById("finalizarBtn").onclick = () => { window.location.href="checkout.html"; };
+
+renderCart();
+</script>
 </body>
 </html>

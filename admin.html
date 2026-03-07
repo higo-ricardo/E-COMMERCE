@@ -3,200 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Gerente - HIVERCAR</title>
-
+<title>Painel Gerencial — HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-
-
-<style>
-
-/* ============================= */
-/* VARIÁVEIS */
-/* ============================= */
-:root {
-    --primary: #5cb85c;  		/* VERDE */
-    --secondary:#fb1230;	/* VERMELHO*/
-    --success: #26fd71;		/* VERDE NEON */		
-    --darkness:#201D24; 			/* PRETO SIDERAL */
-    --dark:#2d2c2b; 			/* PRETO*/ 
-    --light: #f5f5f5;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-* {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    display:flex;
-    background:var(--light);
-}
-
-/* SIDEBAR */
-.sidebar {
-    width:250px;
-    background:var(--darkness);
-    color:var(--light);
-    min-height:100vh;
-    padding:20px;
-}
-
-.sidebar h2 {
-    margin-bottom:30px;
-}
-
-.sidebar a {
-    display:block;
-    color:var(--light);
-    text-decoration:none;
-    margin-bottom:15px;
-    transition:0.3s;
-}
-
-.sidebar a:hover {
-    color:var(--success);
-}
-
-/* MAIN */
-.main {
-    flex:1;
-    padding:30px;
-}
-
-.card-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-    margin-bottom:30px;
-}
-
-.card {
-    background:var(--light);
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.05);
-}
-
-button {
-    padding:8px 12px;
-    border:none;
-    border-radius:5px;
-    background:var(--darkness);
-    color:var(--light);
-    cursor:pointer;
-}
-
-button:hover {
-    background:var(--success);
-    color:var(--dark);
-}
-
-table {
-    width:100%;
-    border-collapse:collapse;
-    background:var(--light);
-    border-radius:10px;
-    overflow:hidden;
-}
-
-th, td {
-    padding:12px;
-    text-align:left;
-}
-
-th {
-    background:var(--darkness);
-    color:var(--light);
-}
-
-input, select, textarea {
-    width:100%;
-    padding:8px;
-    margin-bottom:10px;
-}
-.dashboard-card{
-
-cursor:pointer;
-text-align:center;
-transition:.3s;
-}
-
-.dashboard-card i{
-
-font-size:28px;
-margin-bottom:10px;
-color:var(--primary);
-
-}
-
-.dashboard-card:hover{
-
-transform:translateY(-5px);
-box-shadow:0 10px 20px rgba(0,0,0,0.15);
-
-}
-</style>
+<link rel="stylesheet" href="dashboard.css">
 </head>
-
 <body>
 
-<div class="sidebar">
-    
-    <h2>HIVERCAR</h2>
+<div class="grid-bg"></div>
 
-    <a href="#" onclick="loadDashboard()">
-        <i class="fas fa-home"></i> Dashboard
-    </a>
+<!-- ════════════════════════════════ SIDEBAR ══════════════════════════════ -->
+<aside class="sidebar">
 
-    <a href="#" onclick="loadServices()">
-        <i class="fas fa-wrench"></i> Serviços
-    </a>
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVERCAR</span>
+  </a>
 
-    <a href="#" onclick="loadInventory()">
-        <i class="fas fa-box"></i> Inventário
-    </a>
+  <div class="sidebar-role-tag">Painel Admin</div>
 
-    <a href="#" onclick="loadBilling()">
-        <i class="fas fa-chart-line"></i> Faturamento
+  <nav>
+    <a href="#" onclick="loadDashboard()" id="nav-dashboard" class="active">
+      <i class="fas fa-gauge-high"></i> <span>Dashboard</span>
     </a>
+    <a href="#" onclick="loadServices()" id="nav-services">
+      <i class="fas fa-wrench"></i> <span>Serviços</span>
+    </a>
+    <a href="#" onclick="loadInventory()" id="nav-inventory">
+      <i class="fas fa-box"></i> <span>Inventário</span>
+    </a>
+    <a href="#" onclick="loadBilling()" id="nav-billing">
+      <i class="fas fa-chart-line"></i> <span>Faturamento</span>
+    </a>
+    <a href="#" onclick="loadSellers()" id="nav-sellers">
+      <i class="fas fa-users"></i> <span>Vendedores</span>
+    </a>
+    <a href="#" onclick="loadLowStock()" id="nav-lowstock">
+      <i class="fas fa-triangle-exclamation"></i> <span>Estoque Baixo</span>
+    </a>
+  </nav>
 
-    <a href="#" onclick="loadSellers()">
-        <i class="fas fa-users"></i> Vendedores
-    </a>
-
-    <a href="#" onclick="loadLowStock()">
-    <i class="fas fa-exclamation-triangle"></i>
-    Estoque Baixo
-    </a>
-    
+  <div class="sidebar-bottom">
     <a href="#" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Sair
+      <i class="fas fa-right-from-bracket"></i> <span>Sair</span>
     </a>
-    
-</div>
+  </div>
 
+</aside>
+
+<!-- ════════════════════════════════ MAIN ════════════════════════════════ -->
 <div class="main">
+
+  <div class="topbar">
+    <span class="topbar-title" id="topbar-title">DASHBOARD</span>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fas fa-user-shield"></i></div>
+        <span id="topbar-user-name">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-area">
     <div id="content"></div>
+  </div>
+
 </div>
 
-<!-- APPWRITER -->
-<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script><!-- SDK -->
+<!-- ════════════════════════════════ SCRIPTS ═════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+<script src="js/appwrite.js"></script>
+<script src="js/constants.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/utils.js"></script>
 
-<script src="js/appwrite.js"></script>     <!-- cria client, account, databases -->
-<script src="js/constants.js"></script>    <!-- DATABASE_ID, COLLECTIONS -->
-<script src="js/auth.js"></script>         <!-- middleware usa account + databases -->
-<script src="js/admin.js"></script>        <!-- usa protectRoute() -->
+<script>
+/* ── Highlight active nav link ── */
+function setActiveNav(id) {
+  document.querySelectorAll(".sidebar nav a").forEach(a => a.classList.remove("active"));
+  const el = document.getElementById("nav-" + id);
+  if (el) el.classList.add("active");
+}
 
+/* ── Update topbar title ── */
+function setTopbarTitle(title) {
+  const el = document.getElementById("topbar-title");
+  if (el) el.textContent = title;
+}
+
+/* ── Ripple ── */
+document.addEventListener("click", e => {
+  const r = document.createElement("div");
+  r.className = "ripple";
+  r.style.left = e.clientX + "px";
+  r.style.top  = e.clientY + "px";
+  document.body.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+});
+</script>
 </body>
 </html>
