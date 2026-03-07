@@ -6,12 +6,12 @@
 <meta name="robots" content="index, follow">
 <meta name="author" content="HIVERCAR AUTOPEÇAS">
 <meta property="og:title" content="HIVERCAR AUTOPEÇAS">
-<meta property="og:description" content="Peças automotivas com preço baixo e estoque imediato">
+<meta property="og:description" content="Peças e acessórios automotivos de grandes marcas. Pronta entrega e garantia!">
 <meta property="og:type" content="website">
 <meta property="og:image" content="logomarca.png">
-<title>HIVERCAR AUTOPEÇAS | Peças com Preço Baixo</title>
-
+<title>HIVERCAR AUTOPEÇAS | Peças de Alta Perfomance</title>
 <meta name="description" content="Peças automotivas com preço baixo, pagamento facilitado e estoque disponível. Fale agora no WhatsApp.">
+
 <!-- Open Graph -->
 <meta property="og:title" content="HIVERCAR Autopeças - Chapadinha">
 <meta property="og:description" content="Peças automotivas com preço baixo e pronta entrega.">
@@ -19,620 +19,13 @@
 <meta property="og:image" content="logomarca.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
-
-/* ============================= */
-/* VARIÁVEIS */
-/* ============================= */
-:root {
-    --primary: #5cb85c;  		/* VERDE */
-    --secondary:#fb1230;	/* VERMELHO*/
-    --success: #26fd71;		/* VERDE NEON */		
-  /*  --dark:#201D24; 			/* PRETO SIDERAL */ */
-  --dark:#2d2c2b; 			/* PRETO*/ 
-    --light: #f5f5f5;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    
-    line-height: 1.6;
-}
-
-section {
-    padding: 90px 8%;
-}
-
-h1, h2, h3 {
-    margin-bottom: 20px;
-	
-}
-/* ============================= */
-/* NAVBAR */
-/* ============================= */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(30,29,28,0.95);
-    backdrop-filter: blur(8px);
-    padding: 15px 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 9999;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-.nav-logo {
-    color: var(--light);
-    font-weight: bold;
-    font-size: 18px;
-    text-decoration: none;
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px;
-}
-
-.nav-links a {
-    color: var(--light);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    position: relative;
-    transition: 0.3s;
-}
-
-.nav-links a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    width: 0;
-    height: 2px;
-    background: var(--success);
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--success);
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-/* Botão destaque */
-.nav-login {
-    background: var(--success);
-    color: #000 !important;
-    padding: 8px 18px;
-    border-radius: 20px;
-}
-
-.nav-login:hover {
-    background: var(--secondary);
-    color: var(--light) !important;
-}
-
-/* Espaço para compensar navbar fixa */
-header, .hero {
-    margin-top: 80px;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    .nav-links {
-        gap: 15px;
-        font-size: 12px;
-    }
-}
-/* ============================= */
-/* BANNER */
-/* ============================= */
-.banner {
-    height: 65vh;
-   /* background: linear-gradient(0.1turn, #3f87a6, var(--primary), var(--secondary) ); */
- background-image: url("img/logomarca2.png");
-  background-repeat: no-repeat;
-background-position: center;
-background-size: cover;
-
-    color: var(--light);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.banner h1 {
-    font-size: 42px;
-    max-width: 800px;
-    }
-
-.banner p {
-    max-width: 600px;
-    margin-bottom: 30px;
-    opacity: 0.9;
-}
-
-.btn {
-    background: var(--success);
-    color: var(--light);
-    padding: 15px 45px;
-    border-radius: 40px;
-   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
- animation: pulse 2s infinite;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    transform: translateY(-4px);
-}
-
-/* ============================= */
-/* BENEFÍCIOS */
-/* ============================= */
-
-.benefits {
-    background: linear-gradient(135deg, var(--light), var(--dark));
-    padding: 100px 8%;
-    text-align: center;
-}
-
-.benefits-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.benefits h2 {
-    font-size: 34px;
-    margin-bottom: 15px;
-color: var(--primary);
-}
-
-.benefits h2 span {
-    color: var(--secondary);
-}
-
-.benefits-subtitle {
-    max-width: 700px;
-    margin: 0 auto 60px;
-    color: var(--secondary);
-font-style: italic;
-
-}
-
-.benefit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-
-.benefit-card {
-    background: var(--light);
-    padding: 40px 25px;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
-    transition: 0.3s ease;
-}
-
-.benefit-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
-}
-
-.benefit-icon {
-    font-size: 35px;
-    color: var(--primary);
-    margin-bottom: 20px;
-}
-
-.benefit-card h3 {
-    margin-bottom: 15px;
-    color: var(--primary);
-}
-
-.benefit-card p {
-    color: var(--primary);
-    font-size: 14px;
-}
-/* ============================= */
-/* HERO */
-/* ============================= */
-
-.hero {
-    position: relative;
-       background: var(--danger);
-      display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--light);
-    overflow: hidden;
-}
-
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(45,44,43,0.85));
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 900px;
-    padding: 20px;
-}
-
-.hero-badge {
-       
-  
-   
-    font-size: 13px;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 20px;
- border: 2px solid var(--secondary);
-    padding: 14px 30px;
-    border-radius: 40px;
-    text-decoration: none;
-    color: var(--secondary);
-    transition: 0.3s;
-
-}
-
-.hero h1 {
-    font-size: 44px;
-    line-height: 1.2;
-    margin-bottom: 20px;
-}
-
-.hero h1 span {
-    color: var(--success);
-}
-
-.hero p {
-    font-size: 18px;
-    margin-bottom: 35px;
-    opacity: 0.9;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.btn-primary {
-    background: var(--success);
-    color: var(--dark);
-    padding: 15px 35px;
-    border-radius: 40px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.btn-primary:hover, .btn-secondary:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-.btn-secondary {
-    border: 2px solid var(--light);
-    padding: 14px 30px;
-    border-radius: 40px;
-    text-decoration: none;
-   color: var(--light);
-    transition: 0.3s;
-}
-
-.hero-features {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-top: 40px;
-    font-size: 14px;
-    opacity: 0.9;
-    flex-wrap: wrap;
-}
-
-.hero-features div {
-    background: rgba(255,255,255,0.1);
-    padding: 8px 15px;
-    border-radius: 20px;
-}
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-
-    .hero {
-        height: 95vh;
-    }
-
-    .hero h1 {
-        font-size: 28px;
-    }
-
-    .hero p {
-        font-size: 16px;
-    }
-}
-/* ============================= */
-/* PRODUTOS */
-/* ============================= */
-.products {
- }
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-}
-
-.card {
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-color: var(--dark);
-text-align: center;
-}
-
-.card img {
-width: 100%
-}
-.price {
-    color: var(--success);
-    font-weight: bold;
-}
-.card h2, .card h3{color: var(--dark);
-}
-/* ============================= */
-/* DEPOIMENTOS */
-/* ============================= */
-* ============================= */
-/* DEPOIMENTOS SLIDER GOOGLE */
-/* ============================= */
-
-.testimonials {
-    background: linear-gradient(135deg,#f8f8f8,#ececec);
-    padding: 100px 8%;
-    text-align: center;
-    overflow: hidden;
-}
-
-.testimonials h2, .products h2  {
-    font-size: 30px;
-    margin-bottom: 60px;
-    color: var(--secondary);
-}
-
-.testimonial-slider {
-    position: relative;
-    max-width: 800px;
-    margin: auto;
-}
-
-.testimonial-track {
-    display: flex;
-    transition: transform 0.6s ease-in-out;
-}
-
-.testimonial-card {
-    min-width: 100%;
-    background: var(--light);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-}
-
-.google-style {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: var(--dark);
-}
-
-.google-logo {
-    background: #4285F4;
-    color: #fff;
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 5px;
-}
-
-.stars {
-    color: #ffc107;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.testimonial-card p {
-    font-style: italic;
-    margin-bottom: 25px;
-    color: #555;
-}
-
-.client strong {
-    display: block;
-    color: var(--dark);
-}
-
-.client span {
-    font-size: 13px;
-    color: #777;
-}
-
-/* DOTS */
-.slider-dots {
-    margin-top: 25px;
-}
-
-.slider-dots span {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
-    background: #ccc;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.slider-dots .active {
-    background: var(--success);
-}
-
-/* ANIMAÇÃO REVEAL */
-.reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: 1s ease;
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-/* ============================= */
-/* RODAPÉ */
-/* ============================= */
-footer {
-    background: linear-gradient(135deg, var(--darkness), var(--dark));
-    color: var(--light);
-    padding: 25px 8% 40px 8%;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-}
-
-.footer-col h4 {
-    margin-bottom: 20px;
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--light);
-
-}
-
-.footer-col a,
-.footer-col p {
-    font-size: 14px;
-    color: var(--light);
-    text-decoration: none;
-    margin-bottom: 8px;
-    display: block;
-    transition: 0.3s;
-}
-
-.footer-col a:hover {
-    color: var(--success);
-    transform: translateX(4px);
-    text-align: justify;
-}
-
-.footer-logo {
-    width: 160px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.social-icons a {
-    display: inline-block;
-    margin-right: 12px;
-    color: var(--light);
-    font-size: 35px;
-    transition: 0.3s;
-}
-
-.social-icons a:hover {
-    color: var(--success);
-    transform: translateY(-3px);
-}
-
-
-.map-container iframe {
-    width: 100%;
-    height: 200px;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 13px;
-    color: #999;
-}
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .banner h1 { font-size: 28px; }
-}
-
-/* WHATSAPP FIXO */
-.whatsapp {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
-/* ============================= */
-/* COOKIE */
-/* ============================= */
-.cookie-banner {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: var(--light);
-    padding: 20px;
-    border-top: 3px solid var(--secondary);
-    display: none;
-    font-size: 14px;
-}
-
-.cookie-buttons {
-    margin-top: 10px;
-}
-
-.cookie-buttons button {
-    margin-right: 10px;
-    padding: 8px 18px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.accept { background: var(--primary); color: var(--light); }
-.reject { background: var(--secondary); color: var(--light); }
-
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .banner h1 {
-        font-size: 28px;
-    }
-}
-</style>
+<!-- Font Awesome (para ícones) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- CSS -->
+ <link rel="stylesheet" href="css/styles.css">
+ <link rel="stylesheet" href="css/index.css">
+ 
 
 <!-- ============================= -->
 <!-- STRUCTURED DATA SEO LOCAL -->
@@ -653,27 +46,33 @@ footer {
  "telephone": "+55-98-98116-8787"
 }
 </script>
-
 </head>
 
 <body>
+   
+
+<header class="">
+     <!-- COOKIE -->
+<div class="cookie-banner" id="cookieBanner">
+    <p> Utilizamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com a nossa <a href="privacidade.html">Política de Privacidade</a>.</p>
+    <div class="cookie-buttons">
+        <button class="accept" onclick="acceptCookies()">Aceitar</button>
+        <button class="reject" onclick="rejectCookies()">Recusar</button>
+    </div>
+</div>
 <!-- NAVBAR -->
 <nav class="navbar">
     <a href="index.html" class="nav-logo">
-        HIVERCAR AUTOPEÇAS
+        <img src="img/hivercar100bg.png" alt="Logomarca HIVERCAR" height="35px">
     </a>
 
     <div class="nav-links">
-        <a href="loja.html">LOJA</a>
-        <a href="servicos.html">SERVIÇOS</a>
-        <a href="blog.html">BLOG</a>
-        <a href="login.html" class="nav-login">
-            <i class="fas fa-user"></i> LOGIN
-        </a>
+        <a href="index.html"> <i class="fa-solid fa-shop fa-2x"></i></a>
+        <a href="loja.html"><i class="fa-solid fa-screwdriver-wrench fa-2x"></i></a>
+        <a href="blog.html"><i class="fa-solid fa-blog fa-2x"></i></a>
+        <a href="login.html" class="nav-login"><i class="fas fa-user fa-2x"></i></a>
     </div>
 </nav>
-<!-- BANNER -->
-<header class="banner">
 </header>
 
 <main>
@@ -683,7 +82,7 @@ footer {
     <div class="hero-content">
         <span class="hero-badge">Desde 1998, servindo a você!</span>
 
-        <h1>Peças Automotivas com <span>Preço Baixo</span> e Pagamento Facilitado</h1>
+        <h1>Peças Novas com <span>Preço Baixo</span> e Garantia!</h1>
 
         <p>Atendemos mecânicos, oficinas e proprietários de veículos na loja e no WhatsApp.</p>
 
@@ -692,106 +91,55 @@ footer {
                 Solicitar Orçamento
             </a>
 
-            <a href="#products" class="btn-secondary">
+            <a href="#products" class="btn-contrast">
                 Ver Produtos
             </a>
         </div>
 
-        <div class="hero-features">
-            <div>Produtos Novos</div>
- <div>Veículos leves</div>
-            <div>Atendimento especializado</div>
-           
-        </div>
     </div>
 </section>
-<!-- PRODUTOS -->
-<section class="products">
-    <h2>MAIS VENDIDOS</h2>
-    <div class="product-grid">
-        <div class="card">
-          
-            <img src="img/bateria-jupiter.png" loading="lazy" alt="">
-  <h3>Bateria Júpiter Prata 60A</h3>
-<p><span class="price">R$ 280,00</span>&nbspno Pix</p>
-
-<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Preço promocional para doador da bateria substituida</span>
-
-        </div>
-        <div class="card">
-                <img src="img/filtro-ar-tecfill.png" loading="lazy" alt="">
-  <h3>Filtro de Ar Tecfil</h3>
-<p><span class="price">R$ 50,00</span>&nbspno Pix</p>
-<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
-
-
-        </div>
-        <div class="card">
-                    <img src="img/oleo5w30-acdelco.png" loading="lazy" alt="">
-  <h3>Bateria Alcalina 2032</h3>
-<p><span class="price">R$ 44,00</span>&nbspno Pix</p>
-<span style="color:var(--secondary);font-size:11px;text-transform: uppercase; font-style: italic;font-weight: bold;"> Promoção por tempo limitado</span>
-
-
-        </div>
-    </div>
-</section>
-
-
-<!-- PROVA SOCIAL -->
-<section class="testimonials">
-    <h2>DEPOIMENTOS</h2>
-
-    <div class="testimonial-slider">
-
-        <div class="testimonial-track">
-
-            <div class="testimonial-card reveal">
-                <div class="google-style">
-                    <span class="google-logo">G</span>
-                    <span>Google Review</span>
+ <!-- 🎪 HERO CAROUSEL (Atenção) -->
+    <section class="hero-section">
+        <div class="carousel-container">
+            <div class="carousel-slide active">
+                <div class="carousel-content">
+                    <h1>⏰ ÚLTIMAS UNIDADES!</h1>
+                    <p class="carousel-text">Corra antes que acabe! Desconto especial por tempo limitado 🔥</p>
+                    <a href="loja.html?filter=promo" class="btn btn-secondary btn-large">VER OFERTAS 🚀</a>
                 </div>
-                <div class="stars">★★★★★</div>
-                <p>"Sempre encontro o que preciso. Atendimento rápido e peças de qualidade."</p>
-                <div class="client">
-                    <strong>Carlos Silva</strong>
-                    <span>Mecânico</span>
-                </div>
+                <div class="carousel-overlay"></div>
             </div>
-
-            <div class="testimonial-card reveal">
-                <div class="google-style">
-                    <span class="google-logo">G</span>
-                    <span>Google Review</span>
+            
+            <div class="carousel-slide">
+                <div class="carousel-content">
+                    <h1>🏆 10 ANOS NO MERCADO</h1>
+                    <p class="carousel-text">Qualidade e confiança que você conhece! Mais de 50.000 clientes satisfeitos ✅</p>
+                    <a href="#destaques" class="btn btn-primary btn-large">CONHEÇA NOSSOS PRODUTOS 👇</a>
                 </div>
-                <div class="stars">★★★★★</div>
-                <p>"Preço justo, entrega ágil e ótimo atendimento. Recomendo para qualquer oficina."</p>
-                <div class="client">
-                    <strong>João Damasceno</strong>
-                    <span>Mecânico</span>
-                </div>
+                <div class="carousel-overlay"></div>
             </div>
-
-            <div class="testimonial-card reveal">
-                <div class="google-style">
-                    <span class="google-logo">G</span>
-                    <span>Google Review</span>
+            
+            <div class="carousel-slide">
+                <div class="carousel-content">
+                    <h1>⚡ OFERTA RELÂMPAGO</h1>
+                    <p class="carousel-text">Compre a sua bateria conosco e ganhe instalação grátis da bateria nova no seu carro!</p>
+                    <a href="loja.html" class="btn btn-success btn-large">COMPRAR AGORA 💰</a>
                 </div>
-                <div class="stars">★★★★★</div>
-                <p>"Atendimento excelente. Peças sempre disponíveis no estoque."</p>
-                <div class="client">
-                    <strong>Marcos Lima</strong>
-                    <span>Oficina Automotiva</span>
-                </div>
+                <div class="carousel-overlay"></div>
             </div>
-
+            
+            <!-- Controles do Carousel -->
+            <button class="carousel-prev">‹</button>
+            <button class="carousel-next">›</button>
+            
+            <!-- Indicadores -->
+            <div class="carousel-indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+            </div>
         </div>
-
-        <div class="slider-dots"></div>
-
-    </div>
-</section>
-
+    </section>
 
 <!-- BENEFÍCIOS -->
 <section class="benefits">
@@ -858,10 +206,10 @@ footer {
 
         <div class="footer-col">
             <h4>INSTITUCIONAL</h4>
-            <a href="Termos_de_Uso.html">Termos de Uso</a>
-            <a href="Politica_de_Privacidade.html">Política de Privacidade</a>
-            <a href="Politica_de_Troca_e_Devolução.html">Política de Troca e Devolução</a>
-            <a href="Politica_de_Frete.html">Política de Frete</a>
+            <a href="termos-uso.html">Termos de Uso</a>
+            <a href="privacidade.html">Política de Privacidade</a>
+            <a href="garantia.html">Política de Troca e Devolução</a>
+            <a href="frete.html">Política de Frete</a>
         </div>
 
         <div class="footer-col">
@@ -892,66 +240,7 @@ footer {
     </div>
 
 </footer>
-<!-- COOKIE -->
-<div class="cookie-banner" id="cookieBanner">
-    Utilizamos cookies para melhorar sua experiência. Leia nossa Política de Privacidade.
-    <div class="cookie-buttons">
-        <button class="accept" onclick="acceptCookies()">Aceitar</button>
-        <button class="reject" onclick="rejectCookies()">Recusar</button>
-    </div>
-</div>
-<script>
-const track = document.querySelector('.testimonial-track');
-const cards = document.querySelectorAll('.testimonial-card');
-const dotsContainer = document.querySelector('.slider-dots');
 
-let index = 0;
-
-/* Criar dots */
-cards.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.addEventListener('click', () => moveToSlide(i));
-    dotsContainer.appendChild(dot);
-});
-
-const dots = document.querySelectorAll('.slider-dots span');
-
-function updateDots() {
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[index].classList.add('active');
-}
-
-function moveToSlide(i) {
-    index = i;
-    track.style.transform = `translateX(-${index * 100}%)`;
-    updateDots();
-}
-
-function autoSlide() {
-    index++;
-    if(index >= cards.length) index = 0;
-    moveToSlide(index);
-}
-
-setInterval(autoSlide, 4000);
-updateDots();
-
-/* REVEAL AO ROLAR */
-function revealOnScroll() {
-    const reveals = document.querySelectorAll('.reveal');
-    const windowHeight = window.innerHeight;
-
-    reveals.forEach(el => {
-        const elementTop = el.getBoundingClientRect().top;
-        if (elementTop < windowHeight - 100) {
-            el.classList.add('active');
-        }
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);
-</script>
 <script>
 const banner = document.getElementById("cookieBanner");
 

@@ -24,7 +24,7 @@ async function initAdmin(){
     }
 
 }
-const LOW_STOCK_LIMIT = 4;
+const LOW_STOCK_LIMIT = 3;
 
 function loadDashboard(){
 console.log("Abrindo dashboard");
