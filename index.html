@@ -1,305 +1,200 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="index, follow">
-<meta name="author" content="HIVERCAR AUTOPEÇAS">
-<meta property="og:title" content="HIVERCAR AUTOPEÇAS">
-<meta property="og:description" content="Peças e acessórios automotivos de grandes marcas. Pronta entrega e garantia!">
-<meta property="og:type" content="website">
-<meta property="og:image" content="logomarca.png">
-<title>HIVERCAR AUTOPEÇAS | Peças de Alta Perfomance</title>
-<meta name="description" content="Peças automotivas com preço baixo, pagamento facilitado e estoque disponível. Fale agora no WhatsApp.">
-
-<!-- Open Graph -->
-<meta property="og:title" content="HIVERCAR Autopeças - Chapadinha">
-<meta property="og:description" content="Peças automotivas com preço baixo e pronta entrega.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="logomarca.png">
+<title>HIVERCAR AUTOPEÇAS — Peças Novas e Originais</title>
+<meta name="description" content="Autopeças novas e originais para seu veículo. Entrega rápida, qualidade garantida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- Font Awesome (para ícones) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- CSS -->
- <link rel="stylesheet" href="css/styles.css">
- <link rel="stylesheet" href="css/index.css">
- <link rel="stylesheet" href="css/anime.css">
- 
-
-<!-- ============================= -->
-<!-- STRUCTURED DATA SEO LOCAL -->
-<!-- ============================= -->
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "AutoPartsStore",
- "name": "HIVERCAR AUTOPEÇAS LTDA",
- "image": "logomarca.png",
- "address": {
-   "@type": "PostalAddress",
-   "streetAddress": "Avenida Ataliba Vieira, 1357",
-   "addressLocality": "Chapadinha",
-   "addressRegion": "MA",
-   "addressCountry": "BR"
- },
- "telephone": "+55-98-98116-8787"
-}
-</script>
+<link rel="stylesheet" href="loja.css">
+<link rel="stylesheet" href="index.css">
 </head>
-
 <body>
-   
+<canvas id="canvas"></canvas>
+<div class="grid-bg"></div>
 
-<header class="">
-     <!-- COOKIE -->
-<div class="cookie-banner" id="cookieBanner">
-    <p> Utilizamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com a nossa <a href="privacidade.html">Política de Privacidade</a>.</p>
-    <div class="cookie-buttons">
-        <button class="accept" onclick="acceptCookies()">Aceitar</button>
-        <button class="reject" onclick="rejectCookies()">Recusar</button>
-    </div>
-</div>
 <!-- NAVBAR -->
 <nav class="navbar">
-    <a href="index.html" class="nav-logo">
-        <img src="img/hivercar100bg.png" alt="Logomarca HIVERCAR" height="35px">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-dot"></div>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
-
-    <div class="nav-links">
-        <a href="index.html"> <i class="fa-solid fa-shop fa-2x"></i></a>
-        <a href="loja.html"><i class="fa-solid fa-screwdriver-wrench fa-2x"></i></a>
-        <a href="blog.html"><i class="fa-solid fa-blog fa-2x"></i></a>
-        <a href="login.html" class="nav-login"><i class="fas fa-user fa-2x"></i></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <div class="nav-links" id="navMenu">
+      <a href="index.html" class="nav-link active"><i class="fas fa-house"></i> Home</a>
+      <a href="loja.html"  class="nav-link"><i class="fas fa-store"></i> Loja</a>
+      <a href="cart.html"  class="nav-cart">
+        <i class="fas fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
     </div>
+  </div>
 </nav>
-</header>
 
-<main>
+<!-- HERO -->
 <section class="hero">
-<div class="hero-overlay"></div>
-
+  <div class="hero-bg-text" aria-hidden="true">HIVERCAR</div>
+  <div class="container">
     <div class="hero-content">
-        <span class="hero-badge">Desde 1998, proporcionando satisfação e segurança para a você!</span>
-
-        <h1>Vendemos Peças Novas com <span>Preço Baixo</span> e <span>Garantia de qualidade.</span></h1>
-
-        <p>Atendemos mecânicos, oficinas e proprietários de veículos na loja e no WhatsApp.</p>
-
-        <div class="hero-buttons">
-            <a href="https://wa.me/5598981168787" class="btn-primary">
-                Pedir Orçamento
-            </a>
-
-            <a href="loja.html" class="btn-contrast">
-                Ver Produtos
-            </a>
+      <div class="hero-eyebrow"><span>CHAPADINHA — Maranhão</span></div>
+      <h1>
+        PREÇO BAIXO,<br>
+        <span class="line-accent">CARRO SEGURO!</span>
+      </h1>
+      <p class="hero-desc">
+        <strong>Peças novas e originais,</strong> mais confiança a cada quilômetro rodado.
+      </p>
+      <div class="hero-cta">
+        <a href="loja.html" class="btn btn-primary btn-lg">
+          <i class="fas fa-store fa-2x"></i> Ver Catálogo
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val" id="statProd">—</div>
+          <div class="hero-stat-label">Produtos</div>
         </div>
-
+        <div>
+          <div class="hero-stat-val" id="statOrders">—</div>
+          <div class="hero-stat-label">Pedidos</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">Originais</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">12h</div>
+          <div class="hero-stat-label">Resposta</div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
- <!-- 🎪 HERO CAROUSEL (Atenção) -->
-    <section class="hero-section">
-        <div class="carousel-container">
-            <div class="carousel-slide active">
-                <div class="carousel-content">
-                    <h1>⏰ ÚLTIMAS UNIDADES!</h1>
-                    <p class="carousel-text">Corra antes que acabe! Desconto especial por tempo limitado 🔥</p>
-                    <a href="loja.html?filter=promo" class="btn btn-primary btn-large">VER OFERTAS 🚀</a>
-                </div>
-                <div class="carousel-overlay"></div>
-            </div>
-            
-            <div class="carousel-slide">
-                <div class="carousel-content">
-                    <h1>🏆 28 ANOS NO MERCADO</h1>
-                    <p class="carousel-text">Proporcionando qualidade e confiança que você merece!</p>
-                   
-                    <a href="#destaques" class="btn btn-primary btn-large">CONHEÇA NOSSOS CATALOGO</a>
-                </div>
-                <div class="carousel-overlay"></div>
-            </div>
-            
-            <div class="carousel-slide">
-                <div class="carousel-content">
-                    <h1>⚡ OFERTA RELÂMPAGO</h1>
-                    <p class="carousel-text">Compre a sua bateria conosco e ganhe instalação grátis da bateria nova no seu carro!</p>
-                    <a href="loja.html" class="btn btn-primary btn-large">COMPRAR AGORA 💰</a>
-                </div>
-                <div class="carousel-overlay"></div>
-            </div>
-            
-            <!-- Controles do Carousel -->
-            <button class="carousel-prev">‹</button>
-            <button class="carousel-next">›</button>
-            
-            <!-- Indicadores -->
-            <div class="carousel-indicators">
-                <span class="indicator active" data-slide="0"></span>
-                <span class="indicator" data-slide="1"></span>
-                <span class="indicator" data-slide="2"></span>
-            </div>
-        </div>
-    </section>
 
-<!-- BENEFÍCIOS -->
-<section class="benefits">
-
-    <div class="benefits-container">
-
-        <h2>Por que escolher a <span>HIVERCAR</span>?</h2>
-        <p class="benefits-subtitle">
-            Somos referência em peças automotivas em Chapadinha,
-            oferecendo qualidade, agilidade e preço justo.
-        </p>
-
-        <div class="benefit-grid">
-
-            <div class="benefit-card">
-                <div class="benefit-icon">
-                    <i class="fas fa-box-open"></i>
-                </div>
-                <h3>Estoque Imediato</h3>
-                <p>Grande variedade de peças disponíveis para retirada ou envio rápido.</p>
-            </div>
-
-            <div class="benefit-card">
-                <div class="benefit-icon">
-                    <i class="fas fa-tags"></i>
-                </div>
-                <h3>Preço Competitivo</h3>
-                <p>Valores acessíveis e condições especiais para mecânicos e oficinas.</p>
-            </div>
-
-            <div class="benefit-card">
-                <div class="benefit-icon">
-                    <i class="fas fa-credit-card"></i>
-                </div>
-                <h3>Pagamento Facilitado</h3>
-                <p>Opções flexíveis para facilitar sua compra com segurança.</p>
-            </div>
-
-        </div>
-
+<!-- DESTAQUES -->
+<section class="destaques-section">
+  <div class="container">
+    <div class="section-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div>
+        <div class="section-label"><span>Mais vendidos</span></div>
+        <h2>EM DESTAQUE</h2>
+      </div>
+      <a href="loja.html" class="btn btn-ghost btn-sm">Ver todos <i class="fas fa-arrow-right"></i></a>
     </div>
-
+    <div class="products-grid" id="products">
+      <div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Carregando produtos...</div>
+    </div>
+  </div>
 </section>
-<!--SEÇÃO CONTATO/WHATSAPP-->
-    <section class="contato-section">
-        <div class="container">
-            <div class="contato-card">
-                <div class="contato-header">
-                    <h2><i class="fas fa-headset fa-2x"></i> FALE COM NOSSOS ESPECIALISTAS!</h2>
-                    <p>Dúvidas sobre peças?<br> Precisa de orçamento? Estamos aqui para ajudar! 💬</p>
-                </div>
-                
-                <div class="contato-form">
-                    <div class="form-group">
-                        <label for="contatoNome" class="form-label">NOME:</label>
-                        <input type="text" id="contatoNome" class="form-control" placeholder="Digite seu nome">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contatoProduto" class="form-label">ASSUNTO:</label>
-                        <select id="contatoProduto" class="form-control">
-                            <option value="">Selecione um assunto...</option>
-                            <option value="Filtro de Óleo"> Filtros</option>
-                            <option value="Filtro de Óleo"> Oleos e lubrificantes</option>
-                            <option value="Pastilha de Freio"> Pastilhas de Freio</option>
-                            <option value="Bateria Automotiva"> Baterias</option>
-                            <option value="Amortecedor"> Amortecedores</option>
-                            <option value="Outro"> Outro</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contatoVeiculo" class="form-label">Veículo:</label>
-                        <input type="text" id="contatoVeiculo" class="form-control" placeholder="Ex: Gol 2020 1.5">
-                    </div>
-                    
-                    <button id="whatsappButton" class="btn btn-success btn-small">ENVIAR</button>
-                    
-                    <p class="form-text mt-2">
-                        <i class="fas fa-shield-alt"></i> Os dados são protegidos por criptografia conforme a <a href="privacidade.html">LGPD</a>. 
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
 
-<!-- RODAPÉ -->
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>MOTOR</span><span class="accent">FREIOS</span><span>SUSPENSÃO</span>
+    <span class="accent">ELÉTRICA</span><span>FILTROS</span><span class="accent">TRANSMISSÃO</span>
+    <span>ARREFECIMENTO</span><span class="accent">ILUMINAÇÃO</span><span>ACESSÓRIOS</span>
+    <span class="accent">ESTÉTICA</span><span>MOTOR</span><span class="accent">FREIOS</span>
+    <span>SUSPENSÃO</span><span class="accent">ELÉTRICA</span><span>FILTROS</span>
+  </div>
+</div>
 
+<!-- CATEGORIAS -->
+<section class="cats-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label"><span>Navegue por categoria</span></div>
+    </div>
+    <div class="cats-grid">
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-gear"></i></div><div class="cat-name">Motor</div><div class="cat-count">Pistões, juntas, virabrequim</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-circle-dot"></i></div><div class="cat-name">Freios</div><div class="cat-count">Pastilhas, discos, cilindros</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-car-side"></i></div><div class="cat-name">Suspensão</div><div class="cat-count">Amortecedores, molas, buchas</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-bolt"></i></div><div class="cat-name">Elétrica</div><div class="cat-count">Alternadores, velas, sensores</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-droplet"></i></div><div class="cat-name">Filtros & Óleos</div><div class="cat-count">Ar, óleo, combustível</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-arrows-rotate"></i></div><div class="cat-name">Transmissão</div><div class="cat-count">Embreagem, câmbio, diferencial</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-temperature-half"></i></div><div class="cat-name">Arrefecimento</div><div class="cat-count">Radiadores, termostatos</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-lightbulb"></i></div><div class="cat-name">Iluminação</div><div class="cat-count">Faróis, lanternas, LEDs</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-star"></i></div><div class="cat-name">Acessórios</div><div class="cat-count">Calotas, tapetes, frisos</div></a>
+      <a href="loja.html" class="cat-card"><div class="cat-icon"><i class="fas fa-spray-can-sparkles"></i></div><div class="cat-name">Estética</div><div class="cat-count">Ceras, selantes, desengraxantes</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label"><span>Por que escolher a Hivercar?</span></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="feature-title">Garantia de Fábrica</div>
+        <p class="feature-desc">Todas as peças acompanham a garantia do fabricante. Problemas? Resolvemos sem burocracia.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+        <div class="feature-title">Suporte Técnico</div>
+        <p class="feature-desc">Mecânicos e atendentes especializados prontos para tirar dúvidas antes e depois da compra.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+        <div class="feature-title">Compra Segura</div>
+        <p class="feature-desc">Pagamento via PIX, cartão de crédito ou boleto. Site com SSL e dados protegidos por criptografia.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-rotate-left"></i></div>
+        <div class="feature-title">Troca Facilitada</div>
+        <p class="feature-desc">Recebeu errado ou incompatível? Trocamos em até 7 dias sem custo para você.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="cta-banner-lines"></div>
+  <div class="container">
+    <div class="cta-content">
+      <div class="cta-left">
+        <div class="section-label"><span>Oficina parceira</span></div>
+        <h2>TRAGA SEU<br><em>VEÍCULO</em></h2>
+        <p>Não sabe com quem instalar? <br>Agende seu horário na oficina parceira diretamente pelo WhatsApp.</p>
+      </div>
+      <div class="cta-right">
+        <a href="https://wa.me/5598981168787?text=Olá,%20gostaria%20de%20agendar%20um%20serviço!" target="_blank" class="btn btn-primary btn-lg">
+          <i class="fa-brands fa-whatsapp"></i> Agendar Serviço
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-
-    <div class="footer-grid">
-        <div class="footer-col">
-            <img src="img/hivercar100bg.png" class="footer-logo">
-            <p>Somos uma empresa focada 100% em nosso cliente, com mais de 28 anos de mercado, tentamos transformar o processo de compra de um produto automotivo em uma experiência simples e agradável.</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>CENTRAL DE ATENDIMENTO</h4>
-            <p><strong>WhatsApp:</strong> (98) 98116-8787</p>
-            <p><strong>Email:</strong> hivercarautopecas@gmail.com</p>
-            <p><strong>CNPJ:</strong> 00.000.000/0001-00</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>INSTITUCIONAL</h4>
-            <a href="termos-uso.html">Termos de Uso</a>
-            <a href="privacidade.html">Política de Privacidade</a>
-            <a href="garantia.html">Política de Troca e Devolução</a>
-            <a href="frete.html">Política de Frete</a>
-        </div>
-
-        <div class="footer-col">
-            <h4>LOCALIZAÇÃO</h4>
-            <div class="map-container">
-                <iframe 
-                src="https://www.google.com/maps?q=Avenida%20Ataliba%20Vieira%201357%20Chapadinha&output=embed"
-                loading="lazy">
-                </iframe>
-            </div>
-        </div>
+  <div class="bottom-bar" style="margin-top:0">
+    <div class="bottom-links">
+      <a href="page404.html" aria-label="Instagram"><i class="fa-brands fa-square-instagram fa-2x"></i></a>
+      <a href="page404.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
+      <a href="page404.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
     </div>
-
-    <div style="text-align:center; margin-top:30px;" class="social-icons">
-        <h3>Siga-nos</h3>  
-        <a href="page404.html"><i class="fab fa-tiktok"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i>
-        </a><a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="page404.html"><i class="fab fa-telegram"></i></a>
+    <div style="font-size:12px;color:var(--muted);text-align:center;line-height:1.8">
+      Av. Ataliba Vieira, 1357 — São Luís, MA<br>
+      <a href="tel:+5598981168787" style="color:var(--green);text-decoration:none">(98) 98116-8787</a>
     </div>
-
-    <div class="footer-bottom">
-        © 2026 HIVERCAR AUTOPEÇAS LTDA - Todos os direitos reservados.
-    </div>
-
+    <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
+  </div>
 </footer>
 
-<script>
-const banner = document.getElementById("cookieBanner");
+<!-- WhatsApp flutuante -->
+<a href="https://wa.me/5598981168787" target="_blank" class="wa-float" title="Fale conosco">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
 
-if (!localStorage.getItem("cookieConsent")) {
-    banner.style.display = "block";
-}
-
-function acceptCookies() {
-    localStorage.setItem("cookieConsent", "accepted");
-    banner.style.display = "none";
-}
-
-function rejectCookies() {
-    localStorage.setItem("cookieConsent", "rejected");
-    banner.style.display = "none";
-}
-</script><!-- WHATSAPP FIXO -->
-<div class="social-icons">
-<a href="https://wa.me/5598981168787" class="btn-whatsapp"><i class="fab fa-whatsapp fa-2x"></i></a>
-</div>
-<script src="js/index.js"></script>
-<script src="js/utils.js"></script>
+<!-- ÚNICO script — index.js usa os serviços da camada domain -->
+<script type="module" src="index.js"></script>
 </body>
 </html>

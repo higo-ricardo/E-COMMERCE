@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro — HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="loja.css">
+<style>
+html, body { background: var(--black); min-height: 100%; }
+body { display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px; }
+
+.reg-wrap {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 560px;
+}
+
+/* ── Card ── */
+.auth-box {
+  position: relative; background: var(--panel); border: 1px solid var(--border);
+  padding: 40px 36px;
+}
+.auth-box::before,.auth-box::after {
+  content:''; position:absolute; width:16px; height:16px;
+  border-color:var(--green); border-style:solid; opacity:.5;
+}
+.auth-box::before { top:-1px; left:-1px; border-width:2px 0 0 2px; }
+.auth-box::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+.auth-brand { display:flex; align-items:center; gap:10px; margin-bottom:24px; text-decoration:none; }
+.auth-brand-name { font-size:11px; font-weight:600; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
+
+.auth-box h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:28px;
+  letter-spacing:.06em; color:var(--white); margin-bottom:4px;
+}
+.auth-box h1 em { font-style:normal; color:var(--green); text-shadow:0 0 24px var(--glow-g); }
+.auth-sub2 { font-size:12px; color:var(--muted); margin-bottom:20px; }
+
+/* ── Seção ── */
+.section-label {
+  font-size:10px; font-weight:600; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--red); margin:20px 0 10px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── Grid de campos ── */
+.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.field-grid .full { grid-column:1/-1; }
+
+/* ── Força da senha ── */
+.pass-strength { margin-top:6px; }
+.strength-bar { display:flex; gap:3px; margin-bottom:4px; }
+.strength-seg { flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s; }
+.strength-seg.weak   { background:var(--red); }
+.strength-seg.medium { background:var(--danger); }
+.strength-seg.strong { background:var(--green); }
+.strength-txt { font-size:11px; color:var(--muted); }
+
+/* ── Feedback ── */
+#msgBox {
+  margin-top:14px; font-size:13px; text-align:center;
+  min-height:20px; line-height:1.5;
+}
+#msgBox.error   { color:var(--red); }
+#msgBox.success { color:var(--green); }
+#msgBox.warning { color:var(--danger); }
+
+.auth-footer-links {
+  margin-top:18px; text-align:center;
+  font-size:12px; color:var(--muted);
+}
+.auth-footer-links a { color:var(--green); text-decoration:none; }
+
+/* ── Termos ── */
+.checkbox-row {
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:12px; color:var(--muted); margin-top:10px;
+}
+.checkbox-row input[type="checkbox"] { margin-top:2px; accent-color:var(--green); }
+.checkbox-row a { color:var(--green); text-decoration:none; }
+
+@media(max-width:500px) {
+  .field-grid { grid-template-columns:1fr; }
+  .field-grid .full { grid-column:1; }
+  .auth-box { padding:28px 20px; }
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="grid-bg"></div>
+
+<div class="reg-wrap">
+  <div class="auth-box">
+    <a href="index.html" class="auth-brand">
+      <div class="brand-dot"></div>
+      <span class="auth-brand-name">HIVERCAR AUTOPEÇAS</span>
+    </a>
+    <h1>CRIAR <em>CONTA</em></h1>
+    <p class="auth-sub2">Preencha os dados abaixo para se cadastrar.</p>
+
+    <!-- Dados pessoais -->
+    <div class="section-label"><i class="fas fa-user"></i> Dados pessoais</div>
+    <div class="field-grid">
+      <div class="field full">
+        <label for="name">Nome completo <span style="color:var(--red)">*</span></label>
+        <input type="text" id="name" placeholder="João da Silva" autocomplete="name">
+      </div>
+      <div class="field full">
+        <label for="email">E-mail <span style="color:var(--red)">*</span></label>
+        <input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
+      </div>
+      <div class="field">
+        <label for="mobile">Celular</label>
+        <input type="tel" id="mobile" placeholder="(98) 90000-0000" maxlength="15">
+      </div>
+      <div class="field">
+        <label for="dayBirth">Data de nascimento</label>
+        <input type="date" id="dayBirth">
+      </div>
+    </div>
+
+    <!-- Senha -->
+    <div class="section-label"><i class="fas fa-lock"></i> Senha</div>
+    <div class="field-grid">
+      <div class="field full">
+        <label for="password">Senha <span style="color:var(--red)">*</span></label>
+        <input type="password" id="password" placeholder="mínimo 8 chars, letras e números" autocomplete="new-password">
+        <div class="pass-strength">
+          <div class="strength-bar">
+            <div class="strength-seg" id="seg1"></div>
+            <div class="strength-seg" id="seg2"></div>
+            <div class="strength-seg" id="seg3"></div>
+          </div>
+          <div class="strength-txt" id="strengthTxt">Informe uma senha</div>
+        </div>
+      </div>
+      <div class="field full">
+        <label for="confirm">Confirmar senha <span style="color:var(--red)">*</span></label>
+        <input type="password" id="confirm" placeholder="repita a senha" autocomplete="new-password">
+      </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="section-label"><i class="fas fa-map-marker-alt"></i> Endereço</div>
+    <div class="field-grid">
+      <div class="field full">
+        <label for="address">Logradouro</label>
+        <input type="text" id="address" placeholder="Rua, Avenida...">
+      </div>
+      <div class="field">
+        <label for="number">Número</label>
+        <input type="number" id="number" placeholder="123" min="1" max="10000">
+      </div>
+      <div class="field">
+        <label for="district">Bairro</label>
+        <input type="text" id="district" placeholder="Centro" value="CENTRO">
+      </div>
+      <div class="field">
+        <label for="complement">Complemento</label>
+        <input type="text" id="complement" placeholder="Apt, Bloco...">
+      </div>
+      <div class="field">
+        <label for="city">Cidade</label>
+        <input type="text" id="city" placeholder="Chapadinha" value="CHAPADINHA">
+      </div>
+      <div class="field">
+        <label for="state">Estado</label>
+        <select id="state">
+          <option value="MA" selected>MA</option>
+          <option value="PA">PA</option>
+          <option value="PI">PI</option>
+          <option value="CE">CE</option>
+          <option value="SP">SP</option>
+          <option value="RJ">RJ</option>
+          <option value="MG">MG</option>
+          <option value="BA">BA</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" placeholder="65500-000" maxlength="9">
+      </div>
+    </div>
+
+    <!-- Termos -->
+    <label class="checkbox-row">
+      <input type="checkbox" id="chkTermos">
+      <span>Li e aceito os <a href="termos-uso.html" target="_blank">Termos de Uso</a> e a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.</span>
+    </label>
+
+    <button type="button" id="btnCadastrar" class="btn btn-primary btn-block btn-lg" style="margin-top:18px">
+      <i class="fas fa-user-plus"></i> CRIAR CONTA
+    </button>
+
+    <div id="msgBox"></div>
+
+    <div class="auth-footer-links">
+      Já tem conta? <a href="login.html">Entrar</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { Client, Account, Databases, Query, ID }
+  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+
+// ── Config inline ──────────────────────────────────────────────────────────────
+const CFG = {
+  ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
+  PROJECT_ID: "69a0c93200084defefe1",
+  DB:         "69a0ebc70034fa76feff",
+  USERS:      "users",
+}
+
+// ── Appwrite ──────────────────────────────────────────────────────────────────
+const client    = new Client().setEndpoint(CFG.ENDPOINT).setProject(CFG.PROJECT_ID)
+const account   = new Account(client)
+const databases = new Databases(client)
+
+// ── Partículas ────────────────────────────────────────────────────────────────
+;(function() {
+  const cv = document.getElementById("canvas"); if (!cv) return
+  const ctx = cv.getContext("2d"); let W, H
+  const r = () => { W = cv.width = innerWidth; H = cv.height = innerHeight }
+  r(); addEventListener("resize", r)
+  const pts = Array.from({length:40}, () => ({
+    x:Math.random()*2000, y:Math.random()*2000,
+    vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+    r:Math.random()*1.2+.3, a:Math.random()*.4+.1
+  }));
+  (function loop() {
+    ctx.clearRect(0,0,W,H)
+    pts.forEach(p => {
+      p.x+=p.vx; p.y+=p.vy
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+      ctx.fillStyle=`rgba(38,253,113,${p.a})`; ctx.fill()
+    }); requestAnimationFrame(loop)
+  })()
+})()
+
+// ── DOM ────────────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id)
+const msgBox = $("msgBox")
+
+const setMsg = (txt, cls="error") => {
+  msgBox.textContent = txt; msgBox.className = cls
+  msgBox.scrollIntoView({ behavior: "smooth", block: "nearest" })
+}
+
+// ── Validadores ───────────────────────────────────────────────────────────────
+const isEmail = e  => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)
+const normEmail = e => e.trim().toLowerCase()
+
+function validatePass(p) {
+  if (p.length < 8)         return { ok:false, msg:"Mínimo 8 caracteres." }
+  if (!/[a-zA-Z]/.test(p)) return { ok:false, msg:"Deve conter letras." }
+  if (!/[0-9]/.test(p))    return { ok:false, msg:"Deve conter números." }
+  return { ok:true }
+}
+
+function passStrength(p) {
+  let score = 0
+  if (p.length >= 8)  score++
+  if (p.length >= 12) score++
+  if (/[A-Z]/.test(p) && /[0-9]/.test(p)) score++
+  if (/[^a-zA-Z0-9]/.test(p)) score++
+  return score
+}
+
+// ── Barra de força ────────────────────────────────────────────────────────────
+$("password").addEventListener("input", () => {
+  const val = $("password").value
+  const score = passStrength(val)
+  const labels = ["", "Fraca", "Razoável", "Boa", "Forte"]
+  const cls    = ["", "weak",  "medium",   "strong", "strong"]
+  const active = Math.min(score, 3)
+  ;[1,2,3].forEach(i => {
+    const seg = $("seg"+i)
+    seg.className = "strength-seg" + (i <= active && val.length > 0 ? " " + cls[score] : "")
+  })
+  $("strengthTxt").textContent = val.length === 0 ? "Informe uma senha" : (labels[score] || "Fraca")
+})
+
+// ── Máscara CPF ────────────────────────────────────────────────────────────────
+$("cpf").addEventListener("input", e => {
+  let v = e.target.value.replace(/\D/g,"").slice(0,11)
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4")
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d+)/,"$1.$2.$3")
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/,"$1.$2")
+  e.target.value = v
+})
+
+// ── Máscara celular ────────────────────────────────────────────────────────────
+$("mobile").addEventListener("input", e => {
+  let v = e.target.value.replace(/\D/g,"").slice(0,11)
+  if (v.length > 7) v = v.replace(/(\d{2})(\d{5})(\d+)/,"($1) $2-$3")
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/,"($1) $2")
+  e.target.value = v
+})
+
+// ── Máscara CEP ────────────────────────────────────────────────────────────────
+$("cep").addEventListener("input", e => {
+  let v = e.target.value.replace(/\D/g,"").slice(0,8)
+  if (v.length > 5) v = v.replace(/(\d{5})(\d+)/,"$1-$2")
+  e.target.value = v
+})
+
+// ── Verificar e-mail existente no Mirror ──────────────────────────────────────
+async function emailExists(email) {
+  try {
+    const r = await databases.listDocuments(CFG.DB, CFG.USERS, [
+      Query.equal("email", normEmail(email)),
+      Query.limit(1),
+    ])
+    return r.total > 0
+  } catch { return false }
+}
+
+// ── CADASTRO ───────────────────────────────────────────────────────────────────
+let busy = false
+
+async function doCadastro() {
+  if (busy) return
+  busy = true
+
+  const btn = $("btnCadastrar")
+  setMsg("")
+  btn.disabled = true
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...'
+
+  // Coleta valores
+  const name      = $("name").value.trim()
+  const email     = normEmail($("email").value)
+  const password  = $("password").value
+  const confirm   = $("confirm").value
+  const cpfRaw    = $("cpf").value.replace(/\D/g,"")
+  const mobileRaw = $("mobile").value.replace(/\D/g,"")
+  const dayBirth  = $("dayBirth").value || null
+  const address   = $("address").value.trim() || null
+  const number    = parseInt($("number").value) || null
+  const district  = $("district").value.trim() || "CENTRO"
+  const complement= $("complement").value.trim() || null
+  const city      = $("city").value.trim() || "CHAPADINHA"
+  const state     = $("state").value || "MA"
+  const cepRaw    = $("cep").value.replace(/\D/g,"")
+  const termos    = $("chkTermos").checked
+
+  // ── Validações ──────────────────────────────────────────────────────────────
+  if (!name) {
+    setMsg("Nome é obrigatório."); reset(); return
+  }
+  if (!isEmail(email)) {
+    setMsg("E-mail com formato inválido."); reset(); return
+  }
+  const passCheck = validatePass(password)
+  if (!passCheck.ok) {
+    setMsg("Senha inválida: " + passCheck.msg); reset(); return
+  }
+  if (password !== confirm) {
+    setMsg("As senhas não coincidem."); reset(); return
+  }
+  if (!termos) {
+    setMsg("Você deve aceitar os Termos de Uso."); reset(); return
+  }
+
+  // ── Verifica e-mail duplicado ───────────────────────────────────────────────
+  if (await emailExists(email)) {
+    setMsg("Este e-mail já está cadastrado. Tente fazer login."); reset(); return
+  }
+
+  // ── Gera ID único compartilhado entre Mirror e Auth ───────────────────────
+  const authId = ID.unique()
+
+  // ── PASSO 1: Salva Mirror (collection USERS) ──────────────────────────────
+  try {
+    await databases.createDocument(CFG.DB, CFG.USERS, authId, {
+      name,
+      email,
+      cpf:          cpfRaw   ? parseInt(cpfRaw)   : null,
+      mobile:       mobileRaw ? parseInt(mobileRaw) : null,
+      dayBirth:     dayBirth ?? null,
+      passwordHash: "(managed-by-auth)",
+      isActive:     true,
+      isVerified:   false,
+      role:         "cliente",
+      company:      null,
+      lastLogin:    null,
+      loginCounter: 0,
+      lastIP:       null,
+      address,
+      district,
+      number,
+      complement,
+      city,
+      state,
+      country:      "BRASIL",
+      cep:          cepRaw ? parseInt(cepRaw) : 65500000,
+      failedLogin:  0,
+      blockedUntil: null,
+      createdAt:    new Date().toISOString(),
+    })
+  } catch (err) {
+    console.error("Mirror create error:", err)
+    setMsg("Erro ao salvar dados: " + (err.message ?? "verifique os campos e tente novamente."))
+    reset(); return
+  }
+
+  // ── PASSO 2: Cria usuário no Auth ─────────────────────────────────────────
+  try {
+    await account.create(authId, email, password, name)
+  } catch (err) {
+    // Rollback: remove o Mirror para evitar órfão
+    try { await databases.deleteDocument(CFG.DB, CFG.USERS, authId) } catch {}
+    console.error("Auth create error:", err)
+    if (err.code === 409) {
+      setMsg("Este e-mail já está registrado no sistema.")
+    } else {
+      setMsg("Erro ao criar conta: " + (err.message ?? "tente novamente."))
+    }
+    reset(); return
+  }
+
+  // ── Sucesso ────────────────────────────────────────────────────────────────
+  setMsg("✓ Conta criada com sucesso! Redirecionando para o login...", "success")
+  btn.innerHTML = '<i class="fas fa-check"></i> CADASTRADO!'
+
+  setTimeout(() => { window.location.href = "login.html" }, 1800)
+}
+
+function reset() {
+  const btn = $("btnCadastrar")
+  btn.disabled  = false
+  btn.innerHTML = '<i class="fas fa-user-plus"></i> CRIAR CONTA'
+  busy = false
+}
+
+$("btnCadastrar").onclick = doCadastro
+$("confirm").onkeydown = e => { if (e.key === "Enter") doCadastro() }
+</script>
+</body>
+</html>

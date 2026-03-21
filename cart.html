@@ -4,70 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carrinho — HIVERCAR AUTOPEÇAS</title>
-<meta name="description" content="Revise seus itens antes de finalizar a compra.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="store.css">
+<link rel="stylesheet" href="loja.css">
+<link rel="stylesheet" href="cart.css">
 <style>
-.cart-wrap {
-  position:relative; z-index:10;
-  padding:40px 0 80px;
-}
-.cart-layout {
-  display:grid;
-  grid-template-columns:1fr 320px;
-  gap:24px;
-  align-items:start;
-}
-@media(max-width:900px){ .cart-layout{ grid-template-columns:1fr; } }
+.cart-wrap  { position:relative; z-index:10; padding:40px 0 80px; }
+.cart-layout { display:grid; grid-template-columns:1fr 300px; gap:1px; background:var(--border); align-items:start; }
+@media(max-width:900px) { .cart-layout { grid-template-columns:1fr; } }
+.cart-main  { background:var(--panel); padding:28px; }
+.cart-aside { background:var(--panel); padding:28px; position:sticky; top:80px; }
 
-.items-panel {
-  background:var(--panel); border:1px solid var(--border);
-  padding:24px;
-}
+.cart-item  { display:grid; grid-template-columns:72px 1fr auto; gap:16px; align-items:center; padding:18px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.cart-item:last-child { border-bottom:none; }
+.item-img   { width:72px; height:72px; background:var(--dark); border:1px solid var(--border); overflow:hidden; }
+.item-img img { width:100%; height:100%; object-fit:cover; }
+.item-name  { font-size:14px; font-weight:600; color:var(--white); margin-bottom:4px; }
+.item-price { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--green); }
+.item-sub   { font-size:11px; color:var(--muted); margin-top:2px; }
 
-.cart-actions {
-  display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;
-}
+.qty-ctrl { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.qty-btn  { width:28px; height:28px; background:var(--dark); border:1px solid var(--border); color:var(--white); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.qty-btn:hover { border-color:var(--green); color:var(--green); }
+.qty-val  { font-size:14px; min-width:20px; text-align:center; }
 
-/* Recommended */
-.recom-section { margin-top:40px; }
-.recom-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
-  gap:14px;
-}
+.resumo-row   { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:13px; color:var(--muted); }
+.resumo-total { display:flex; justify-content:space-between; align-items:center; padding:14px 0 0; border-top:1px solid var(--border); margin-top:4px; }
+.resumo-total span:first-child { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--white); }
+.total-val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--green); }
+
+.cupom-row { display:flex; margin:14px 0 6px; }
+.cupom-row input { flex:1; padding:10px 12px; background:var(--dark); border:1px solid var(--border); border-right:none; color:var(--white); font-family:'Barlow',sans-serif; font-size:13px; outline:none; }
+.cupom-row input:focus { border-color:var(--green); }
+.cupom-row input::placeholder { color:var(--muted); }
+.cupom-msg { font-size:11px; margin-bottom:6px; min-height:14px; }
+.cupom-msg.ok  { color:var(--green); }
+.cupom-msg.err { color:var(--red); }
+
+.empty-state { text-align:center; padding:70px 20px; }
+.empty-state i { font-size:40px; color:var(--muted); opacity:.3; display:block; margin-bottom:16px; }
+.empty-state h3 { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--white); margin-bottom:8px; }
+.empty-state p  { font-size:13px; color:var(--muted); margin-bottom:24px; }
+
+.aside-label { font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.aside-label::before { content:''; display:block; width:3px; height:12px; background:var(--green); }
 </style>
 </head>
 <body>
-
+<canvas id="canvas"></canvas>
 <div class="grid-bg"></div>
 
-<!-- COOKIE BANNER -->
-<div class="cookie-banner" id="cookieBanner">
-  <div class="cookie-inner">
-    <p>Usamos cookies para melhorar sua experiência. <a href="privacidade.html">Política de Privacidade</a>.</p>
-    <div class="cookie-btns">
-      <button id="acceptCookies" class="btn btn-primary btn-small">Aceitar</button>
-      <button id="rejectCookies" class="btn btn-outline btn-small">Recusar</button>
-    </div>
-  </div>
-</div>
-
-<!-- NAVBAR -->
 <nav class="navbar">
   <div class="container">
-    <a href="index.html" class="navbar-brand">
+    <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="navbar-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
-    <button class="navbar-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
-    <div class="navbar-nav" id="navMenu">
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <div class="nav-links" id="navMenu">
       <a href="index.html" class="nav-link"><i class="fas fa-house"></i> Home</a>
-      <a href="loja.html" class="nav-link"><i class="fas fa-store"></i> Loja</a>
-      <a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login</a>
-      <a href="cart.html" class="nav-cart active">
+      <a href="loja.html"  class="nav-link"><i class="fas fa-store"></i> Loja</a>
+      <a href="cart.html"  class="nav-cart active">
         <i class="fas fa-cart-shopping"></i>
         <span class="cart-badge" id="cartBadge">0</span>
       </a>
@@ -75,132 +73,59 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="page-hero" style="position:relative;z-index:10">
+<div class="page-hero">
   <div class="container">
     <div class="page-label"><span>Compra</span></div>
     <h1>SEU <em>CARRINHO</em></h1>
-    <nav class="breadcrumb" style="margin-top:10px">
-      <a href="index.html">Home</a>
-      <span class="sep">›</span>
-      <a href="loja.html">Loja</a>
-      <span class="sep">›</span>
-      <span class="current">Carrinho</span>
-    </nav>
   </div>
 </div>
 
-<!-- CART CONTENT -->
 <div class="cart-wrap">
   <div class="container">
     <div class="cart-layout">
 
-      <!-- ITEMS -->
-      <div>
-        <div class="items-panel">
-          <div class="section-header">
-            <h2><i class="fas fa-boxes-stacked"></i> Itens no Carrinho</h2>
-            <span class="badge badge-muted" id="itemCount">0 itens</span>
-          </div>
-
-          <!-- Empty -->
-          <div id="emptyState" class="empty-state" style="display:none">
-            <i class="fas fa-cart-shopping"></i>
-            <h3>Seu carrinho está vazio</h3>
-            <p>Adicione produtos para continuar comprando.</p>
-            <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Ir para a Loja</a>
-          </div>
-
-          <!-- List -->
-          <div id="itemsList">
-            <div class="loading-wrap">
-              <div class="spinner"></div> Carregando itens...
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="cart-actions" id="cartActions" style="display:none">
-            <a href="loja.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Continuar Comprando</a>
-            <button id="clearCart" class="btn btn-danger"><i class="fas fa-trash"></i> Limpar Carrinho</button>
-          </div>
+      <div class="cart-main">
+        <div class="section-label" style="margin-bottom:20px">
+          <span id="itemCount">0 itens</span>
         </div>
-
-        <!-- Recommended -->
-        <div class="recom-section" id="recomSection" style="display:none">
-          <div class="section-header">
-            <h2><i class="fas fa-bolt"></i> Você Também Pode Gostar</h2>
-          </div>
-          <div class="recom-grid" id="recomGrid"></div>
+        <div id="emptyState" class="empty-state" style="display:none">
+          <i class="fas fa-cart-shopping"></i>
+          <h3>Carrinho Vazio</h3>
+          <p>Adicione produtos para continuar.</p>
+          <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Ir para a Loja</a>
+        </div>
+        <div id="itemsList"></div>
+        <div id="cartActions" style="display:none;margin-top:20px;gap:10px;flex-wrap:wrap">
+          <a href="loja.html" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i> Continuar</a>
+          <button id="clearBtn" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Limpar</button>
         </div>
       </div>
 
-      <!-- RESUMO -->
-      <aside>
-        <div class="resumo-card">
-          <div class="resumo-header">
-            <h2><i class="fas fa-receipt"></i> Resumo do Pedido</h2>
-          </div>
-          <div class="resumo-content">
-            <div class="resumo-item">
-              <span>Subtotal</span>
-              <span id="subtotal">R$ 0,00</span>
-            </div>
-            <div class="resumo-item">
-              <span>Impostos (CBS 12%)</span>
-              <span id="impostos">R$ 0,00</span>
-            </div>
-            <div class="resumo-item">
-              <span>Frete</span>
-              <div>
-                <select id="freteSelect" class="form-control" style="width:auto;padding:6px 10px;font-size:12px;margin-bottom:6px">
-                  <option value="0">Calcular frete</option>
-                  <option value="15">Sedex — R$ 15,00 (3-5 dias)</option>
-                  <option value="25">Expresso — R$ 25,00 (1-2 dias)</option>
-                  <option value="0">Retirar na loja — Grátis</option>
-                </select>
-              </div>
-            </div>
-            <div class="resumo-item discount">
-              <span>Descontos</span>
-              <span id="descontos">− R$ 0,00</span>
-            </div>
-            <div class="resumo-total">
-              <span>Total</span>
-              <span class="total-price" id="total">R$ 0,00</span>
-            </div>
-
-            <!-- Cupom -->
-            <div class="cupom-row">
-              <input type="text" id="cupomInput" placeholder="Código do cupom">
-              <button id="aplicarCupom" class="btn btn-primary btn-small">Aplicar</button>
-            </div>
-            <div class="cupom-msg" id="cupomMsg"></div>
-
-            <button id="finalizarBtn" class="btn btn-primary btn-block btn-large" style="margin-top:16px" disabled>
-              <i class="fas fa-lock"></i> Finalizar Compra
-            </button>
-
-            <div class="security-note" style="justify-content:center;margin-top:14px">
-              <i class="fas fa-shield-halved"></i> Compra 100% segura
-            </div>
-            <div class="pay-icons" style="justify-content:center">
-              <i class="fab fa-cc-visa"></i>
-              <i class="fab fa-cc-mastercard"></i>
-              <i class="fab fa-cc-amex"></i>
-              <i class="fas fa-barcode"></i>
-              <i class="fas fa-qrcode"></i>
-            </div>
-          </div>
+      <aside class="cart-aside">
+        <div class="aside-label"><span>Resumo do Pedido</span></div>
+        <div class="resumo-row"><span>Subtotal</span><span id="rSub">R$ 0,00</span></div>
+        <div class="resumo-row"><span>Impostos (CBS 12%)</span><span id="rTax">R$ 0,00</span></div>
+        <div class="resumo-row">
+          <span>Frete</span>
+          <select id="freteSelect" style="background:var(--dark);border:1px solid var(--border);color:var(--white);padding:6px 10px;font-size:12px;outline:none">
+            <option value="0">Calcular frete</option>
+            <option value="15">Sedex — R$ 15,00</option>
+            <option value="25">Expresso — R$ 25,00</option>
+            <option value="0">Retirada grátis</option>
+          </select>
         </div>
-
-        <div class="info-card">
-          <h3><i class="fas fa-circle-info"></i> Informações</h3>
-          <ul class="info-list">
-            <li><i class="fas fa-shipping-fast"></i> Frete grátis acima de R$ 300</li>
-            <li><i class="fas fa-rotate-left"></i> 30 dias para troca ou devolução</li>
-            <li><i class="fas fa-shield-halved"></i> Compra protegida pela LGPD</li>
-            <li><i class="fab fa-whatsapp"></i> Suporte: (98) 98116-8787</li>
-          </ul>
+        <div class="resumo-row" style="color:var(--green)"><span>Desconto</span><span id="rDisc">− R$ 0,00</span></div>
+        <div class="resumo-total"><span>TOTAL</span><span class="total-val" id="rTotal">R$ 0,00</span></div>
+        <div class="cupom-row">
+          <input type="text" id="cupomInput" placeholder="Código do cupom">
+          <button id="cupomBtn" class="btn btn-ghost btn-sm">Aplicar</button>
+        </div>
+        <div class="cupom-msg" id="cupomMsg"></div>
+        <a href="checkout.html" class="btn btn-primary btn-block btn-lg" id="finalizarBtn" style="margin-top:16px;pointer-events:none;opacity:.4">
+          <i class="fas fa-lock"></i> Finalizar Compra
+        </a>
+        <div style="margin-top:16px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;justify-content:center">
+          <i class="fas fa-shield-halved" style="color:var(--green)"></i> Compra 100% segura
         </div>
       </aside>
 
@@ -208,149 +133,114 @@
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer class="footer" style="position:relative;z-index:10">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h3>HIVERCAR AUTOPEÇAS</h3>
-        <p>Peças automotivas de qualidade.</p>
-        <div class="footer-social">
-          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-          <a href="https://wa.me/5598981168787" class="social-link"><i class="fab fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h3>Loja</h3>
-        <a href="index.html">Início</a>
-        <a href="loja.html">Catálogo</a>
-        <a href="cart.html">Carrinho</a>
-      </div>
-      <div class="footer-col">
-        <h3>Informações</h3>
-        <a href="frete.html">Entrega &amp; Frete</a>
-        <a href="garantia.html">Trocas &amp; Garantia</a>
-        <a href="privacidade.html">Privacidade</a>
-        <a href="termos-uso.html">Termos de Uso</a>
-      </div>
-      <div class="footer-col">
-        <h3>Contato</h3>
-        <p><i class="fab fa-whatsapp"></i> (98) 98116-8787</p>
-        <p><i class="fas fa-envelope"></i> hivercarautopeças@gmail.com</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 HIVERCAR AUTOPEÇAS LTDA</span>
-      <span>Todos os direitos reservados</span>
-    </div>
+<div class="bottom-bar">
+  <div class="bottom-links">
+    <a href="index.html">Home</a>
+    <a href="loja.html">Loja</a>
+    <a href="https://wa.me/5598981168787">Suporte</a>
   </div>
-</footer>
+  <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
+</div>
 
-<script>
-/* ── Ripple ── */
-document.addEventListener("click", e => {
-  const r=document.createElement("div"); r.className="ripple";
-  r.style.left=e.clientX+"px"; r.style.top=e.clientY+"px";
-  document.body.appendChild(r); setTimeout(()=>r.remove(),600);
-});
+<script type="module">
+import { CartService }                               from "./cartService.js"
+import { fmt, initParticles, initNavToggle }         from "./utils.js"
 
-/* ── Cookie ── */
-if (!localStorage.getItem("cookieAccepted")) document.getElementById("cookieBanner").classList.add("show");
-document.getElementById("acceptCookies").onclick = () => { localStorage.setItem("cookieAccepted","1"); document.getElementById("cookieBanner").classList.remove("show"); };
-document.getElementById("rejectCookies").onclick  = () => document.getElementById("cookieBanner").classList.remove("show");
+// ── CUPONS válidos ────────────────────────────────────────────────────────────
+const CUPONS = { "HIVERCAR10": 10, "FRETE0": 0 }
+let discount = 0
 
-/* ── Navbar ── */
-document.getElementById("navToggle").onclick = () => document.getElementById("navMenu").classList.toggle("open");
+// ── INIT ──────────────────────────────────────────────────────────────────────
+initParticles()
+initNavToggle()
 
-/* ── Cupons disponíveis ── */
-const CUPONS = { "HIVERCAR10": 10, "FRETE0": 0 };
-let discount = 0;
+// ── UTILITÁRIO ────────────────────────────────────────────────────────────────
+const fmtBRL = v => "R$ " + Number(v).toFixed(2).replace(".", ",")
 
-document.getElementById("aplicarCupom").onclick = () => {
-  const code = document.getElementById("cupomInput").value.trim().toUpperCase();
-  const msg  = document.getElementById("cupomMsg");
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render() {
+  const cart    = CartService.get()
+  const empty   = document.getElementById("emptyState")
+  const list    = document.getElementById("itemsList")
+  const actions = document.getElementById("cartActions")
+  const count   = cart.reduce((s, i) => s + (i.qty || 1), 0)
+
+  document.getElementById("itemCount").textContent = count + (count === 1 ? " item" : " itens")
+  document.getElementById("cartBadge").textContent = count
+
+  const fin = document.getElementById("finalizarBtn")
+  fin.style.opacity      = cart.length ? "1" : ".4"
+  fin.style.pointerEvents = cart.length ? "auto" : "none"
+
+  if (!cart.length) {
+    list.innerHTML = ""; empty.style.display = "block"; actions.style.display = "none"
+    updateTotals(0); return
+  }
+  empty.style.display = "none"; actions.style.display = "flex"
+
+  list.innerHTML = cart.map((item, i) => `
+    <div class="cart-item">
+      <div class="item-img">
+        <img src="${item.image || "https://placehold.co/72/111214/26fd71?text=?"}" alt="${item.name}" loading="lazy">
+      </div>
+      <div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-price">${fmtBRL(item.price)}</div>
+        <div class="item-sub">Subtotal: ${fmtBRL(Number(item.price) * (item.qty || 1))}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="qty-ctrl">
+          <button class="qty-btn" data-action="dec" data-i="${i}">−</button>
+          <span class="qty-val">${item.qty || 1}</span>
+          <button class="qty-btn" data-action="inc" data-i="${i}">+</button>
+        </div>
+        <button class="btn btn-danger btn-sm" data-action="rm" data-i="${i}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>`).join("")
+
+  list.onclick = e => {
+    const b = e.target.closest("[data-action]"); if (!b) return
+    const i = Number(b.dataset.i)
+    if (b.dataset.action === "rm")  CartService.remove(i)
+    if (b.dataset.action === "inc") CartService.setQty(i, (CartService.get()[i]?.qty || 1) + 1)
+    if (b.dataset.action === "dec") CartService.setQty(i, (CartService.get()[i]?.qty || 1) - 1)
+    render()
+  }
+
+  updateTotals(CartService.total())
+}
+
+function updateTotals(sub) {
+  const tax   = sub * 0.12
+  const frete = Number(document.getElementById("freteSelect").value) || 0
+  const total = Math.max(0, sub + tax + frete - discount)
+  document.getElementById("rSub").textContent   = fmtBRL(sub)
+  document.getElementById("rTax").textContent   = fmtBRL(tax)
+  document.getElementById("rDisc").textContent  = "− " + fmtBRL(discount)
+  document.getElementById("rTotal").textContent = fmtBRL(total)
+}
+
+// ── EVENTOS ───────────────────────────────────────────────────────────────────
+document.getElementById("freteSelect").onchange = () => updateTotals(CartService.total())
+
+document.getElementById("clearBtn").onclick = () => { CartService.clear(); render() }
+
+document.getElementById("cupomBtn").onclick = () => {
+  const code = document.getElementById("cupomInput").value.trim().toUpperCase()
+  const msg  = document.getElementById("cupomMsg")
   if (CUPONS[code] !== undefined) {
-    discount = CUPONS[code];
-    msg.className = "cupom-msg ok"; msg.textContent = "✓ Cupom aplicado! −R$ " + discount.toFixed(2);
+    discount = CUPONS[code]
+    msg.className = "cupom-msg ok"; msg.textContent = "✓ Cupom aplicado!"
   } else {
-    discount = 0;
-    msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido.";
+    discount = 0
+    msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido."
   }
-  updateTotals();
-};
-
-/* ── Cart state ── */
-let cart = JSON.parse(localStorage.getItem("hiverCart")) || [];
-
-function saveCart() { localStorage.setItem("hiverCart", JSON.stringify(cart)); }
-
-function updateTotals() {
-  const sub    = cart.reduce((s, i) => s + Number(i.price) * (i.qty||1), 0);
-  const taxes  = sub * 0.12;
-  const frete  = Number(document.getElementById("freteSelect").value) || 0;
-  const total  = Math.max(0, sub + taxes + frete - discount);
-
-  document.getElementById("subtotal").textContent  = "R$ " + sub.toFixed(2);
-  document.getElementById("impostos").textContent  = "R$ " + taxes.toFixed(2);
-  document.getElementById("descontos").textContent = "− R$ " + discount.toFixed(2);
-  document.getElementById("total").textContent     = "R$ " + total.toFixed(2);
-  document.getElementById("cartBadge").textContent  = cart.reduce((s,i)=>s+(i.qty||1),0);
-  document.getElementById("finalizarBtn").disabled  = cart.length === 0;
+  updateTotals(CartService.total())
 }
 
-document.getElementById("freteSelect").onchange = updateTotals;
-
-function removeItem(idx) {
-  cart.splice(idx, 1); saveCart(); renderCart();
-}
-
-function changeQty(idx, delta) {
-  cart[idx].qty = Math.max(1, (cart[idx].qty||1) + delta);
-  saveCart(); renderCart();
-}
-
-function renderCart() {
-  const list    = document.getElementById("itemsList");
-  const empty   = document.getElementById("emptyState");
-  const actions = document.getElementById("cartActions");
-  const count   = document.getElementById("itemCount");
-
-  const total = cart.reduce((s,i)=>s+(i.qty||1),0);
-  count.textContent = total + (total===1?" item":" itens");
-
-  if (cart.length === 0) {
-    list.innerHTML = ""; empty.style.display="block";
-    actions.style.display="none";
-  } else {
-    empty.style.display = "none"; actions.style.display="flex";
-    list.innerHTML = cart.map((item, i) => `
-      <div class="cart-item-row">
-        <div class="cart-item-img"><img src="${item.image||'https://picsum.photos/64'}" alt="${item.name}"></div>
-        <div>
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-price">R$ ${Number(item.price).toFixed(2)}</div>
-          <div class="cart-item-sub">Subtotal: R$ ${(Number(item.price)*(item.qty||1)).toFixed(2)}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <div class="qty-ctrl">
-            <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
-            <span class="qty-val">${item.qty||1}</span>
-            <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-          </div>
-          <button class="btn btn-danger btn-small" onclick="removeItem(${i})">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </div>`).join("");
-  }
-  updateTotals();
-}
-
-document.getElementById("clearCart").onclick = () => { cart=[]; saveCart(); renderCart(); };
-document.getElementById("finalizarBtn").onclick = () => { window.location.href="checkout.html"; };
-
-renderCart();
+render()
 </script>
 </body>
 </html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — HIVERCAR ERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="loja.css">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<aside class="sidebar">
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
+  </a>
+  <div class="sidebar-role">Administrador</div>
+  <nav>
+    <a href="dashboard.html"    class="active"><i class="fas fa-gauge-high"></i>   Dashboard</a>
+    <a href="admin-produtos.html">             <i class="fas fa-box-open"></i>     Produtos</a>
+    <a href="admin-estoque.html">              <i class="fas fa-warehouse"></i>    Estoque</a>
+    <a href="admin-os.html">                   <i class="fas fa-wrench"></i>       O. de Serviço</a>
+    <a href="customers.html">                  <i class="fas fa-users"></i>        Clientes</a>
+    <a href="loja.html">                       <i class="fas fa-store"></i>        Loja</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title">DASHBOARD</span>
+    <div class="topbar-user">
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+      <span id="userName">Admin</span>
+      <div class="status-dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Alerta estoque crítico -->
+    <div id="stockAlert" style="display:none;margin-bottom:20px;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;align-items:center;gap:12px;">
+      <i class="fas fa-triangle-exclamation"></i>
+      <span id="stockAlertMsg"></span>
+      <a href="admin-estoque.html" style="color:var(--red);margin-left:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-decoration:underline">Gerenciar →</a>
+    </div>
+
+    <!-- Métricas principais -->
+    <div class="metrics-grid" style="margin-bottom:1px">
+      <div class="metric-card">
+        <div class="metric-value" id="mSalesToday">—</div>
+        <div class="metric-label">Vendas Hoje</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mOrders">—</div>
+        <div class="metric-label">Pedidos Total</div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-value" id="mStock">—</div>
+        <div class="metric-label">Estoque Crítico</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mOS">—</div>
+        <div class="metric-label">OS Abertas</div>
+      </div>
+    </div>
+
+    <!-- Ações rápidas -->
+    <div style="display:flex;gap:8px;margin:16px 0;flex-wrap:wrap">
+      <a href="admin-produtos.html" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i> Novo Produto</a>
+      <a href="admin-estoque.html"  class="btn btn-ghost btn-sm"><i class="fas fa-warehouse"></i> Estoque</a>
+      <a href="admin-os.html"       class="btn btn-ghost btn-sm"><i class="fas fa-wrench"></i> Nova OS</a>
+      <a href="customers.html"      class="btn btn-ghost btn-sm"><i class="fas fa-users"></i> Clientes</a>
+    </div>
+
+    <!-- Tabelas -->
+    <div class="panels-row">
+      <div class="panel-wrap">
+        <div class="section-title">Pedidos Recentes</div>
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
+          <tbody id="ordersTable">
+            <tr><td colspan="4" style="color:var(--muted);padding:20px">Carregando…</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px">
+          <a href="painel-vendas.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+            Ver todos os pedidos →
+          </a>
+        </div>
+      </div>
+      <div class="panel-wrap">
+        <div class="section-title">Estoque Baixo</div>
+        <table class="data-table">
+          <thead><tr><th>Produto</th><th>Qtd</th></tr></thead>
+          <tbody id="stockTable">
+            <tr><td colspan="2" style="color:var(--muted);padding:20px">Carregando…</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px">
+          <a href="admin-estoque.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+            Gerenciar estoque →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1px">
+      <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border);padding:24px">
+        <div class="section-title">Ordens de Serviço Abertas</div>
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Cliente</th><th>Veículo</th><th>Técnico</th><th>Status</th></tr></thead>
+          <tbody id="osTable">
+            <tr><td colspan="5" style="color:var(--muted);padding:20px">Carregando…</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px">
+          <a href="admin-os.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+            Ver todas as OS →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { AuthService }  from "./authService.js"
+import { AdminService } from "./adminService.js"
+import { fmt }          from "./utils.js"
+
+// ── AUTH GUARD ────────────────────────────────────────────────────────────────
+const user = await AuthService.getUser()
+if (!user) { window.location.href = "login.html" }
+else document.getElementById("userName").textContent = user.name || user.email
+
+document.getElementById("logoutBtn").onclick = async e => {
+  e.preventDefault()
+  await AuthService.logout()
+  window.location.href = "login.html"
+}
+
+// ── STATUS BADGE ──────────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const map = {
+    novo:       "badge-green",
+    confirmado: "badge-green",
+    cancelado:  "badge-red",
+    entregue:   "badge-muted",
+    aberta:     "badge-red",
+    em_andamento:"badge-green",
+    concluida:  "badge-muted",
+  }
+  return `<span class="badge ${map[s] || 'badge-muted'}">${s || "—"}</span>`
+}
+
+function fmtDate(iso) {
+  if (!iso) return "—"
+  return new Date(iso).toLocaleDateString("pt-BR")
+}
+
+// ── LOAD ──────────────────────────────────────────────────────────────────────
+async function load() {
+  try {
+    const m = await AdminService.getMetrics()
+
+    // Métricas
+    document.getElementById("mSalesToday").textContent = fmt(m.salesToday)
+    document.getElementById("mOrders").textContent     = m.orders
+    document.getElementById("mStock").textContent      = m.lowStock
+    document.getElementById("mOS").textContent         = m.serviceOrders
+
+    // Alerta estoque crítico
+    if (m.lowStock > 0) {
+      const el  = document.getElementById("stockAlert")
+      const msg = document.getElementById("stockAlertMsg")
+      msg.textContent = `${m.lowStock} produto(s) com estoque crítico (< 5 unidades).`
+      el.style.display = "flex"
+    }
+
+    // Tabela de pedidos
+    document.getElementById("ordersTable").innerHTML = m.recentOrders.length
+      ? m.recentOrders.map(o => `<tr>
+          <td style="font-family:monospace;font-size:11px;color:var(--muted)">${o.$id.slice(-6)}</td>
+          <td>${fmt(o.total || 0)}</td>
+          <td>${statusBadge(o.status)}</td>
+          <td style="color:var(--muted);font-size:12px">${fmtDate(o.$createdAt)}</td>
+        </tr>`).join("")
+      : `<tr><td colspan="4" style="color:var(--muted)">Nenhum pedido ainda.</td></tr>`
+
+    // Tabela de estoque baixo
+    document.getElementById("stockTable").innerHTML = m.lowStockProducts.length
+      ? m.lowStockProducts.map(p => `<tr>
+          <td>${p.name}</td>
+          <td><span class="badge badge-red">${p.stock ?? 0}</span></td>
+        </tr>`).join("")
+      : `<tr><td colspan="2" style="color:var(--green)">Tudo em ordem ✓</td></tr>`
+
+    // Tabela OS
+    document.getElementById("osTable").innerHTML = m.recentOS.length
+      ? m.recentOS.map(o => `<tr>
+          <td style="font-family:monospace;font-size:11px;color:var(--muted)">${o.$id.slice(-6).toUpperCase()}</td>
+          <td>${o.displayName}</td>
+          <td>${o.displayVehicle}</td>
+          <td style="color:var(--muted)">${o.tecnico || "—"}</td>
+          <td>${statusBadge(o.status)}</td>
+        </tr>`).join("")
+      : `<tr><td colspan="5" style="color:var(--muted)">Nenhuma OS em aberto.</td></tr>`
+
+  } catch (e) {
+    console.error("Dashboard error:", e)
+  }
+}
+
+load()
+</script>
+</body>
+</html>
