@@ -3,6 +3,8 @@
 //
 // Ambiente jsdom (global) para todos os testes — necessário porque cartService.js
 // usa localStorage. Serviços que não precisam de DOM não são afetados por isso.
+//
+// Sprint 05: + taxEngine.js (US-44), + nfService.js (US-43)
 
 import { defineConfig } from "vitest/config"
 
@@ -47,6 +49,10 @@ export default defineConfig({
         "orderRepository.js",
         "productRepository.js",
         "adminService.js",
+        // Sprint 05
+        "taxEngine.js",          // US-44: Motor Tributário
+        "nfService.js",          // US-43: Emissão NF-e
+        "fiscalReportService.js",// US-45: Relatórios Fiscais
       ],
 
       // Excluídos da contagem
@@ -61,3 +67,4 @@ export default defineConfig({
     },
   },
 })
+

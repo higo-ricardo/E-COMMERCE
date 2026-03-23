@@ -1,0 +1,10 @@
+{
+  "name": "hivercar-emit-nfe",
+  "version": "1.0.0",
+  "description": "US-43: Emissão de NFC-e via integrador",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "node-appwrite": "^12.0.0"
+  }
+}

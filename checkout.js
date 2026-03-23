@@ -12,10 +12,12 @@
 // US-24: Catch silenciosos substituídos por ErrorService
 // US-29: Integração PIX via PaymentService (QR Code + polling de status)
 // US-30: Cálculo de frete real via PaymentService.calcularFrete (ViaCEP + tabela)
+// US-44: TaxEngine substituiu TAX_RATE fixo de 12% no cálculo do resumo
 
 import { OrderService }       from "./orderService.js"
 import { CartService }        from "./cartService.js"
 import { PaymentService }     from "./paymentService.js"
+import { TaxEngine }          from "./taxEngine.js"
 import { fmt, initParticles } from "./utils.js"
 import { ErrorService }       from "./errorService.js"
 
@@ -180,7 +182,14 @@ syncConfirmarBtn()
 function renderResumo() {
   const cart  = CartService.get()
   const sub   = CartService.total()
-  const tax   = sub * 0.12
+
+  // US-44: usar TaxEngine para calcular impostos reais por NCM e UF destino
+  const ufDestino = document.getElementById("estado")?.value || "MA"
+  const taxResult = TaxEngine.calculateCart(
+    cart.map(i => ({ ncm: i.ncm || null, price: i.price, qty: i.qty || 1 })),
+    { ufDestino }
+  )
+  const tax   = taxResult.totalImpostos
   const total = sub + tax + selectedFrete
 
   const resumoItens = document.getElementById("resumoItens")
@@ -458,7 +467,13 @@ const gerarPixBtn = document.getElementById("gerarPixBtn")
 if (gerarPixBtn) {
   gerarPixBtn.addEventListener("click", async () => {
     const email = document.getElementById("email")?.value.trim()
-    const total = CartService.total() * (1 + 0.12) + selectedFrete
+    const uf    = document.getElementById("estado")?.value || "MA"
+    const cart  = CartService.get()
+    const taxResult = TaxEngine.calculateCart(
+      cart.map(i => ({ ncm: i.ncm || null, price: i.price, qty: i.qty || 1 })),
+      { ufDestino: uf }
+    )
+    const total = CartService.total() + taxResult.totalImpostos + selectedFrete
 
     if (!email) { ErrorService.toastWarn("Informe o e-mail antes de gerar o QR Code."); return }
     if (total <= 0) { ErrorService.toastWarn("Carrinho vazio."); return }

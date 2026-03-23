@@ -6,6 +6,11 @@
 //   US-20: + COL.STOCK_HISTORY   ("stock_history")
 //   US-21: + COL.OS_HISTORY       ("os_history")
 //   US-36: + STOCK_MIN_DEFAULT, + STORE.SEARCH_FULLTEXT_FIELDS
+//
+// Sprint 05 — alterações:
+//   US-44: + COL.TAX_RULES, + COL.NFE_DOCUMENTS, TAX_RATE → LEGADO (usar TaxEngine)
+//   US-43: + FUNCTIONS.EMIT_NFE, FUNCTIONS.CANCEL_NFE
+//   US-45: + COL.FISCAL_REPORTS
 
 export const CONFIG = {
   ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
@@ -23,6 +28,9 @@ export const CONFIG = {
     ORDER_HISTORY:  "order_history",   // ← US-09: audit log de status de pedidos
     STOCK_HISTORY:  "stock_history",   // ← US-20: movimentações de estoque
     OS_HISTORY:     "os_history",      // ← US-21: histórico de status das OS
+    TAX_RULES:      "tax_rules",       // ← US-44: regras tributárias por NCM
+    NFE_DOCUMENTS:  "nfe_documents",   // ← US-43: NF-e emitidas (chave, XML, PDF)
+    FISCAL_REPORTS: "fiscal_reports",  // ← US-45: relatórios fiscais mensais
   },
 
   STORE: {
@@ -31,9 +39,33 @@ export const CONFIG = {
     CART_KEY:  "hiverCart",
   },
 
-  TAX_RATE: 0.12,
+  // ── TAX_RATE legado ────────────────────────────────────────────────────────
+  // ATENÇÃO: TAX_RATE (12% fixo) foi substituído pelo TaxEngine (US-44).
+  // Mantido aqui apenas para compatibilidade com testes antigos.
+  // NÃO usar em novos módulos — importar TaxEngine.calculate() em vez disso.
+  TAX_RATE: 0.12,   // @deprecated — use TaxEngine.calculate()
 
   WHATSAPP: "5598981168787",
+
+  // ── Appwrite Functions ────────────────────────────────────────────────────
+  // US-43: IDs das functions de NF-e (preencher após criar no Appwrite Console)
+  FUNCTIONS: {
+    EMIT_NFE:   "emit-nfe",           // ← function de emissão de NFC-e
+    CANCEL_NFE: "cancel-nfe",         // ← function de cancelamento de NF-e
+    CREATE_PIX: "create-pix-payment", // ← US-29: pagamento PIX
+    CHECK_PIX:  "check-payment-status",
+  },
+
+  // ── Fiscal ────────────────────────────────────────────────────────────────
+  // US-44: configurações do módulo fiscal
+  FISCAL: {
+    REGIME:      "lucro_presumido",   // simples_nacional | lucro_presumido | lucro_real
+    UF_ORIGEM:   "MA",               // UF da empresa emissora
+    CNPJ:        "00.000.000/0001-00", // substituir pelo CNPJ real
+    RAZAO_SOCIAL:"HIVERCAR AUTOPEÇAS LTDA",
+    SERIE_NFE:   "001",              // série da NF-e
+    AMBIENTE:    "homologacao",       // homologacao | producao
+  },
 
   // ── Estoque ───────────────────────────────────────────────────────────────
   // US-36: valor padrão de stockMin quando o produto não tem um definido
