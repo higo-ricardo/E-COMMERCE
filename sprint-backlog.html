@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint Backlog S01–S05 — HIVERCAR</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#090909;--dark:#0f1012;--panel:#131517;--border:#1c1f21;--border2:#252a2e;--red:#fb1230;--green:#26fd71;--amber:#f59e0b;--blue:#3b82f6;--cyan:#06b6d4;--purple:#a855f7;--white:#eeecea;--muted:#454a4e;--muted2:#6b7280;--glow-g:rgba(38,253,113,0.18);--glow-a:rgba(245,158,11,0.18);--glow-r:rgba(251,18,48,0.15);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--black);color:var(--white);min-height:100vh;font-size:13px;line-height:1.6;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.009) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.009) 1px,transparent 1px);background-size:44px 44px;}
+.hdr{position:relative;z-index:10;border-bottom:1px solid var(--border);padding:0 40px;background:rgba(9,9,9,.97);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.2em;display:flex;align-items:center;gap:10px;}
+.brand em{color:var(--green);font-style:normal;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hright{display:flex;align-items:center;gap:12px;}
+.dlabel{font-size:10px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;padding:4px 10px;border:1px solid;}
+.dl-green{color:var(--green);border-color:rgba(38,253,113,.3);background:rgba(38,253,113,.06);}
+.dmeta{font-size:11px;color:var(--muted2);display:flex;gap:16px;}
+.hero{position:relative;z-index:10;padding:44px 40px 24px;border-bottom:1px solid var(--border);}
+.hl{font-size:10px;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.hl::before{content:'';width:32px;height:1px;background:var(--green);}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:.03em;margin-bottom:8px;}
+.hero h1 em{color:var(--green);font-style:normal;}
+.hsub{color:var(--muted2);font-size:14px;max-width:700px;border-left:2px solid var(--border2);padding-left:14px;margin-top:10px;}
+.vbar{position:relative;z-index:10;display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border);}
+.vc{padding:16px 22px;border-right:1px solid var(--border);}
+.vc:last-child{border-right:none;}
+.vn{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;}
+.vn.g{color:var(--green);}
+.vn.a{color:var(--amber);}
+.vn.r{color:var(--red);}
+.vn.b{color:var(--blue);}
+.vn.c{color:var(--cyan);}
+.vl{font-size:9px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+.dod{position:relative;z-index:10;margin:20px 40px;background:rgba(38,253,113,.03);border:1px solid rgba(38,253,113,.15);padding:18px 22px;}
+.dod-title{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
+.dod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.dod-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--muted2);}
+.dod-ck{width:14px;height:14px;flex-shrink:0;border:1px solid rgba(38,253,113,.4);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:9px;background:rgba(38,253,113,.06);margin-top:1px;}
+.snav{position:sticky;top:0;z-index:100;padding:8px 40px;background:rgba(9,9,9,.98);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);display:flex;gap:4px;align-items:center;overflow-x:auto;}
+.stab{padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Barlow',sans-serif;flex-shrink:0;}
+.stab:hover{color:var(--white);}
+.stab.on{color:var(--amber);border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.06);}
+.stab.s5.on{color:var(--red);border-color:rgba(251,18,48,.4);background:rgba(251,18,48,.06);}
+.main{position:relative;z-index:10;padding:28px 40px 80px;}
+.ss{display:none;}
+.ss.on{display:block;}
+/* Sprint Header */
+.sh{display:flex;align-items:flex-start;gap:22px;padding:22px 26px;margin-bottom:18px;background:var(--panel);border:1px solid var(--border);position:relative;overflow:hidden;}
+.sh::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--amber),transparent);}
+.sh.green::after{background:linear-gradient(90deg,var(--green),transparent);}
+.sh.red::after{background:linear-gradient(90deg,var(--red),transparent);}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:60px;line-height:1;color:var(--border2);flex-shrink:0;user-select:none;}
+.si{flex:1;}
+.sname{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em;margin-bottom:4px;}
+.smeta{display:flex;flex-wrap:wrap;gap:10px;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;}
+.sgoal{font-size:13px;color:var(--muted2);font-style:italic;border-left:2px solid var(--border2);padding-left:12px;line-height:1.5;}
+.sstats{display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:160px;}
+.spts{font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1;color:var(--amber);text-align:right;}
+.spts.g{color:var(--green);}
+.spts.r{color:var(--red);}
+.spl{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+.pb{width:150px;height:3px;background:var(--border2);}
+.pf{height:100%;background:var(--green);}
+/* Sections */
+.sec-lbl{font-size:9px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding:7px 0 5px;margin-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.sec-lbl::before{content:'';width:18px;height:1px;background:var(--amber);}
+/* US list */
+.ul{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-bottom:22px;}
+.uc{background:var(--panel);transition:background .15s;}
+.uc:hover{background:#181a1c;}
+.uh{display:flex;align-items:center;padding:13px 20px;cursor:pointer;gap:0;}
+.ustrip{width:3px;flex-shrink:0;align-self:stretch;margin-right:13px;}
+.s-done .ustrip{background:var(--green);}
+.s-impl .ustrip{background:var(--amber);}
+.s-block .ustrip{background:var(--red);}
+.s-debt .ustrip{background:var(--amber);}
+.uid{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--muted2);white-space:nowrap;margin-right:13px;}
+.utit{font-size:13px;font-weight:600;color:var(--white);flex:1;}
+.ubadges{display:flex;align-items:center;gap:5px;margin-left:10px;flex-wrap:wrap;justify-content:flex-end;}
+.ucaret{margin-left:8px;color:var(--muted);font-size:10px;transition:transform .25s;flex-shrink:0;}
+.uc.exp .ucaret{transform:rotate(90deg);}
+.ubody{display:none;padding:0 20px 16px 36px;border-top:1px solid var(--border);}
+.uc.exp .ubody{display:block;}
+.udesc{font-size:12px;color:var(--muted2);margin:12px 0 10px;padding-left:12px;border-left:2px solid var(--border2);font-style:italic;line-height:1.6;}
+/* Badges */
+.b{display:inline-flex;align-items:center;padding:2px 7px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid;}
+.b-done{color:var(--green);border-color:rgba(38,253,113,.3);background:rgba(38,253,113,.06);}
+.b-impl{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06);}
+.b-block{color:var(--red);border-color:rgba(251,18,48,.3);background:rgba(251,18,48,.06);}
+.b-debt{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06);}
+.b-pts{color:var(--white);border-color:var(--border2);background:rgba(255,255,255,.04);}
+.b-dom{color:var(--cyan);border-color:rgba(6,182,212,.25);background:rgba(6,182,212,.06);}
+.b-crit{color:var(--red);border-color:rgba(251,18,48,.4);background:rgba(251,18,48,.08);}
+.b-dep{color:var(--purple);border-color:rgba(168,85,247,.3);background:rgba(168,85,247,.06);}
+/* Tasks */
+.tl{display:flex;flex-direction:column;gap:3px;margin:8px 0;}
+.tr{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted2);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);}
+.tr:last-child{border:none;}
+.tc{width:15px;height:15px;flex-shrink:0;border:1px solid;display:flex;align-items:center;justify-content:center;font-size:9px;margin-top:1px;}
+.tc.done{border-color:var(--green);color:var(--green);background:rgba(38,253,113,.1);}
+.tc.open{border-color:var(--border2);color:transparent;}
+.tc.bl{border-color:var(--red);color:var(--red);}
+/* Files */
+.fslbl{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:10px 0 5px;}
+.flist{display:flex;flex-wrap:wrap;gap:4px;}
+.ft{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border:1px solid var(--border2);color:var(--muted2);background:rgba(255,255,255,.02);}
+.ft.n{border-color:rgba(38,253,113,.25);color:var(--green);}
+.ft.m{border-color:rgba(245,158,11,.25);color:var(--amber);}
+/* Impediments */
+.imp{background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.2);padding:14px 18px;margin-bottom:14px;}
+.imp-t{font-size:9px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;}
+.imp-l{display:flex;flex-direction:column;gap:5px;}
+.imp-i{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted2);}
+.impi{color:var(--amber);flex-shrink:0;}
+/* Blocker */
+.blocker-banner{background:rgba(251,18,48,.04);border-bottom:2px solid rgba(251,18,48,.3);padding:14px 40px;display:flex;align-items:flex-start;gap:14px;position:relative;z-index:10;}
+.blocker-t{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:4px;}
+.blocker-txt{font-size:12px;color:var(--muted2);line-height:1.6;}
+.blocker-txt strong{color:var(--white);}
+/* Checklist */
+.bcklist{background:rgba(251,18,48,.04);border:1px solid rgba(251,18,48,.2);padding:18px 22px;margin-bottom:18px;}
+.bc-t{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:14px;}
+.bc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.bc-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid rgba(251,18,48,.1);background:rgba(0,0,0,.2);cursor:pointer;transition:all .2s;}
+.bc-item:hover{background:rgba(251,18,48,.06);}
+.bc-item.ck{border-color:rgba(38,253,113,.3);background:rgba(38,253,113,.04);}
+.bc-box{width:18px;height:18px;flex-shrink:0;border:1px solid rgba(251,18,48,.4);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;background:rgba(251,18,48,.06);transition:all .2s;}
+.bc-item.ck .bc-box{border-color:rgba(38,253,113,.5);color:var(--green);background:rgba(38,253,113,.1);}
+.bc-name{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px;}
+.bc-item.ck .bc-name{color:var(--muted2);}
+.bc-detail{font-size:11px;color:var(--muted2);}
+.bc-prog-wrap{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(251,18,48,.1);}
+.bc-bar{flex:1;height:4px;background:var(--border2);position:relative;overflow:hidden;}
+.bc-fill{position:absolute;left:0;top:0;height:100%;background:var(--red);transition:width .4s ease;}
+.bc-fill.all{background:var(--green);}
+.bc-lbl{font-size:10px;font-weight:700;color:var(--muted2);white-space:nowrap;}
+.unlock{display:none;font-size:11px;color:var(--green);font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.unlock.show{display:block;}
+/* Retro */
+.retro{background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.15);padding:14px 18px;margin-top:10px;}
+.retro-t{font-size:9px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.retro-l{display:flex;flex-direction:column;gap:4px;}
+.retro-i{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted2);}
+/* Footer */
+.leg{position:relative;z-index:10;display:flex;gap:18px;padding:14px 40px;border-top:1px solid var(--border);background:var(--dark);flex-wrap:wrap;align-items:center;}
+.li{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);}
+.ld{width:10px;height:10px;border:2px solid;}
+.ld.done{border-color:var(--green);background:rgba(38,253,113,.15);}
+.ld.impl{border-color:var(--amber);background:rgba(245,158,11,.15);}
+.ld.block{border-color:var(--red);background:rgba(251,18,48,.15);}
+.ld.debt{border-color:var(--amber);background:rgba(245,158,11,.12);}
+@media(max-width:800px){.hdr,.hero,.main,.leg,.dod,.blocker-banner,.snav{padding-left:16px;padding-right:16px;}.vbar{grid-template-columns:repeat(3,1fr);}.dod-grid{grid-template-columns:1fr;}.sh{flex-direction:column;}.sstats{align-items:flex-start;}.bc-grid{grid-template-columns:1fr;}.ubadges{display:none;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="brand"><div class="dot"></div>HIVER<em>CAR</em></div>
+  <div class="hright">
+    <div class="dlabel dl-green">Sprint Backlog · S01–S05</div>
+    <div class="dmeta"><span>v6.0</span><span>Março 2026</span></div>
+  </div>
+</header>
+<div class="hero">
+  <div class="hl">Planejamento Ágil</div>
+  <h1>SPRINT <em>BACKLOG</em></h1>
+  <p class="hsub">
+    <strong style="color:var(--green)">5 Sprints — 234 pts entregues</strong> ·
+    S01 ✅ S02 ✅ S03 ✅ S04 ✅ S05 ⚡ (implementada, aguarda desbloqueio fiscal)
+  </p>
+</div>
+<div class="vbar">
+  <div class="vc"><div class="vn g">5</div><div class="vl">Sprints</div></div>
+  <div class="vc"><div class="vn g">234</div><div class="vl">Pts Entregues</div></div>
+  <div class="vc"><div class="vn a">33</div><div class="vl">US Concluídas</div></div>
+  <div class="vc"><div class="vn c">190+</div><div class="vl">Testes</div></div>
+  <div class="vc"><div class="vn b">74</div><div class="vl">Arquivos</div></div>
+  <div class="vc"><div class="vn r">4</div><div class="vl">Bloqueadores</div></div>
+</div>
+<div class="dod">
+  <div class="dod-title">✦ Definition of Done — Global</div>
+  <div class="dod-grid">
+    <div class="dod-item"><div class="dod-ck">✓</div>Código sem erros no console em todos os fluxos principais</div>
+    <div class="dod-item"><div class="dod-ck">✓</div>Testado manualmente: Chrome, Firefox e Safari mobile</div>
+    <div class="dod-item"><div class="dod-ck">✓</div>PR revisado e sem conflitos com branch main</div>
+    <div class="dod-item"><div class="dod-ck">✓</div>Catch silenciosos substituídos por tratamento explícito</div>
+    <div class="dod-item"><div class="dod-ck">✓</div>Funcionalidade documentada no README/SETUP</div>
+    <div class="dod-item"><div class="dod-ck">✓</div>Testes unitários adicionados (coverage ≥70% mantido)</div>
+  </div>
+</div>
+<div class="blocker-banner">
+  <span style="font-size:22px">⊘</span>
+  <div>
+    <div class="blocker-t">Sprint 05 — Aguarda Desbloqueio Fiscal (EC 132/2023)</div>
+    <div class="blocker-txt">Código <strong>100% implementado</strong>. Go-live em produção requer: <strong>Certificado A1</strong> · <strong>SEFAZ Homologação</strong> · <strong>Integrador NF-e contratado</strong> · <strong>Alíquotas validadas por contador</strong>. Ver checklist interativo na aba Sprint 05.</div>
+  </div>
+</div>
+<nav class="snav">
+  <button class="stab on" onclick="showS('s1',this)">✅ Sprint 01</button>
+  <button class="stab" onclick="showS('s2',this)">✅ Sprint 02</button>
+  <button class="stab" onclick="showS('s3',this)">✅ Sprint 03</button>
+  <button class="stab" onclick="showS('s4',this)">✅ Sprint 04</button>
+  <button class="stab s5" onclick="showS('s5',this)">⚡ Sprint 05</button>
+</nav>
+<main class="main">
+<div class="ss on" id="s1">
+<div class="sh green">
+<div class="snum">01</div>
+<div class="si"><div class="sname">FUNDAÇÃO — AUTH, LOJA E DESIGN SYSTEM</div>
+<div class="smeta"><span>✅ Concluída</span><span>Jan–Fev 2026</span><span>Velocity Ref: Velocity inicial</span></div>
+<div class="sgoal">"Colocar a loja no ar com autenticação real, design dark-tech e dashboard admin básico."</div></div>
+<div class="sstats"><div><div class="spts g">34</div><div class="spl">Story Points</div></div>
+<div class="pb"><div class="pf" style="width:100%"></div></div></div>
+</div>
+<div class="sec-lbl">Grupo 1 — Loja & Catálogo · 13 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-01</div>
+<div class="utit">Listagem de Produtos</div>
+<div class="ubadges"><span class="b b-dom">Catálogo</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero ver produtos com filtros, paginação e busca.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Grid responsivo 15/pág + paginação</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Filtros: categoria, marca, veículo</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Busca por nome com debounce 300ms</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Cache in-memory TTL 5min</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">loja.html</span><span class="ft n">loja.js</span><span class="ft n">productService.js</span><span class="ft n">productRepository.js</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-05</div>
+<div class="utit">Carrinho de Compras</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero adicionar/remover produtos e ver o total.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>add/remove/setQty/clear/total</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Persistência em localStorage</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Badge de contagem na navbar</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">cart.html</span><span class="ft n">cartService.js</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 2 — Auth & Clientes · 13 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-11</div>
+<div class="utit">Cadastro e Login — Auth Mirror Pattern</div>
+<div class="ubadges"><span class="b b-dom">Clientes</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como usuário, quero me cadastrar e fazer login com bloqueio progressivo.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Auth Mirror: collection users espelha Appwrite Auth</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Bloqueio: 5→30min, 10→1h, 15→desativado</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Redefinição de senha via e-mail</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Rollback automático se cadastro falhar</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">login.html</span><span class="ft n">cadastro.html</span><span class="ft n">authService.js</span><span class="ft n">userService.js</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 3 — ERP & Infra · 21 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-22</div>
+<div class="utit">Design System — Dark Tech UI</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como dev, quero um design system consistente com fontes, cores e componentes.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Bebas Neue + Barlow, #26fd71 e #fb1230</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Partículas canvas + grid-bg</span></div>
+<div class="tr"><div class="tc done">✓</div><span>CSS vars + animações padronizadas</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">loja.css</span><span class="ft n">dashboard.css</span><span class="ft n">index.css</span><span class="ft n">cart.css</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-25</div>
+<div class="utit">Dashboard Admin ERP</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero um dashboard com métricas e alertas.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Cards animados: pedidos, faturamento, clientes, OS</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Alerta de estoque crítico</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Sidebar com navegação para todos os módulos</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">dashboard.html</span><span class="ft n">adminService.js</span></div>
+</div></div>
+</div>
+</div>
+<div class="ss " id="s2">
+<div class="sh green">
+<div class="snum">02</div>
+<div class="si"><div class="sname">VENDAS, CLIENTES E SEGURANÇA</div>
+<div class="smeta"><span>✅ Concluída</span><span>Fev–Mar 2026</span><span>Velocity Ref: Ref: S01=34</span></div>
+<div class="sgoal">"Fechar o ciclo de compra com checkout completo, área do cliente, painel de vendas e segurança robusta."</div></div>
+<div class="sstats"><div><div class="spts g">47</div><div class="spl">Story Points</div></div>
+<div class="pb"><div class="pf" style="width:100%"></div></div></div>
+</div>
+<div class="imp"><div class="imp-t">⚠ Impedimentos e Dependências Externas</div><div class="imp-l">
+<div class="imp-i"><span class="impi">⚠</span>Appwrite Functions deve estar ativo no plano Cloud para e-mails transacionais</div>
+</div></div>
+<div class="sec-lbl">Grupo 1 — Checkout & Vendas · 21 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-06</div>
+<div class="utit">Checkout — 3 Steps + Validação Robusta</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero preencher dados, calcular frete e pagar com feedback visual em erros.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>CPF validado com algoritmo módulo 11</span></div>
+<div class="tr"><div class="tc done">✓</div><span>CEP auto-preenchido via ViaCEP</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Sem alert() — erros inline abaixo dos campos</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Modal PIX com QR Code + polling de confirmação</span></div>
+<div class="tr"><div class="tc done">✓</div><span>TaxEngine integrado (US-44, Sprint 05)</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">checkout.html</span><span class="ft n">checkout.js</span><span class="ft n">orderService.js</span><span class="ft n">orderRepository.js</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-09</div>
+<div class="utit">Gestão de Status de Pedidos + Audit Log</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero alterar status com rastreabilidade completa.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>ORDER_STATUS_FLOW — transições válidas</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Registro em order_history a cada mudança</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Timeline no modal de detalhes</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Bloqueia transições inválidas (ex: entregue→novo)</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">orderHistoryService.js</span><span class="ft n">painel-vendas.html</span><span class="ft n">functions/send-status-email/</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-09b</div>
+<div class="utit">Painel de Vendas — Vendedor</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero ver pedidos, filtrar e atualizar status.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Role vendedor — sidebar laranja</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Filtros: status, data, busca livre</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Alterar status com transição válida</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">painel-vendas.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 2 — Clientes & Auth · 16 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-12</div>
+<div class="utit">Minha Conta — Área do Cliente</div>
+<div class="ubadges"><span class="b b-dom">Clientes</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero ver pedidos, editar perfil, endereço e redefinir senha.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>4 painéis: Pedidos, Perfil, Endereço, Segurança</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Histórico de pedidos com status</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Atualizar perfil no Mirror</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">minha-conta.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-13</div>
+<div class="utit">Gestão de Clientes ERP</div>
+<div class="ubadges"><span class="b b-dom">Clientes</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero listar, filtrar e bloquear/desbloquear clientes.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Listagem paginada com busca</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Bloquear/desbloquear isActive</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Detalhes e histórico de pedidos</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">customers.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-23</div>
+<div class="utit">ErrorService — Erros Centralizados</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">3 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como dev, quero um serviço central de erros sem catch silenciosos.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>ErrorService.handle() com fallback visual</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Integração com Sentry</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">errorService.js</span><span class="ft n">page-error.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 3 — Débitos Técnicos · 10 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">DT-01</div>
+<div class="utit">Checkout — Validação Robusta</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Substituir alert() por validação inline, CPF algoritmo, e-mail regex.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Sem alert() em todo o checkout.js</span></div>
+<div class="tr"><div class="tc done">✓</div><span>CPF módulo 11</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Regex e-mail + disable/enable no botão</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Highlight vermelho + mensagem por campo</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">checkout.js</span><span class="ft m">checkout.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">DT-02</div>
+<div class="utit">Order History — Audit Log</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">3 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Timeline de status no modal de detalhes do pedido.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Registro ao alterar status</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Timeline no modal</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">orderHistoryService.js</span><span class="ft m">painel-vendas.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">DT-03</div>
+<div class="utit">Auth Mirror — Bloqueio Robusto</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">2 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">IP e timestamp registrados server-side no Mirror.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Bloqueio no userService</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Sem IP tracking client-side</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">userService.js</span><span class="ft m">authService.js</span></div>
+</div></div>
+</div>
+<div class="retro"><div class="retro-t">⟳ Notas da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>↑</span>Velocity subiu: S01=34 → S02=47 (+38%)</div>
+<div class="retro-i"><span>✓</span>Auth Mirror Pattern validado em produção</div>
+<div class="retro-i"><span>✓</span>Checkout sem alert() — 100% validação inline</div>
+</div></div>
+</div>
+<div class="ss " id="s3">
+<div class="sh green">
+<div class="snum">03</div>
+<div class="si"><div class="sname">ERP ADMIN + TESTES UNITÁRIOS</div>
+<div class="smeta"><span>✅ Concluída</span><span>Mar 2026</span><span>Velocity Ref: Ref: S02=47</span></div>
+<div class="sgoal">"Dar ao admin controle total sobre produtos, estoque e ordens de serviço. Estabelecer cobertura de testes ≥70%."</div></div>
+<div class="sstats"><div><div class="spts g">39</div><div class="spl">Story Points</div></div>
+<div class="pb"><div class="pf" style="width:100%"></div></div></div>
+</div>
+<div class="sec-lbl">Grupo 1 — ERP Admin · 24 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-19</div>
+<div class="utit">Admin Produtos — CRUD + Upload</div>
+<div class="ubadges"><span class="b b-dom">Catálogo</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero criar, editar e remover produtos com upload de imagem.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>CRUD completo no Appwrite</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Upload de imagem no Storage (bucket produtos_imgs)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Toggle isActive + stockMin configurável</span></div>
+<div class="tr"><div class="tc done">✓</div><span>invalidateCache() ao salvar</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">admin-produtos.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-20</div>
+<div class="utit">Admin Estoque — Reposição + Alertas</div>
+<div class="ubadges"><span class="b b-dom">Estoque</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero registrar entradas, ver histórico e receber alertas de estoque crítico.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Reposição manual com stock_history</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Inventário atual com filtro</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Alerta e-mail + WhatsApp quando stock < 3</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Importação CSV/XLSX (US-37 antecipada)</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">admin-estoque.html</span><span class="ft n">stockService.js</span><span class="ft n">functions/send-stock-alert/</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-21</div>
+<div class="utit">Admin OS — Ordens de Serviço</div>
+<div class="ubadges"><span class="b b-dom">Oficina</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero criar OS com veículo, técnico, peças e timeline de status.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Formulário completo: cliente, veículo, técnico</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Peças → baixa automática no estoque</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Timeline de status em os_history</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Impressão da OS</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Campo e-mail para notificações automáticas</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">admin-os.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 2 — Testes & Infra · 15 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-26</div>
+<div class="utit">Testes Unitários — 190+ testes, ≥70% cobertura</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como dev, quero testes unitários cobrindo todos os serviços Domain.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>9 arquivos de teste, 190+ testes</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Cobertura ≥70%: todos os serviços</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Sprint 05: + taxEngine.test.js (47) + nfService.test.js (30)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Vitest + jsdom, CI/CD integrado</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">tests/</span><span class="ft n">vitest.config.js</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-31</div>
+<div class="utit">Alerta de Estoque Crítico</div>
+<div class="ubadges"><span class="b b-dom">Estoque</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero receber alertas automáticos quando o estoque de um produto cair abaixo do mínimo.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Appwrite Function trigger na collection produtos</span></div>
+<div class="tr"><div class="tc done">✓</div><span>E-mail via Resend quando stock < 5</span></div>
+<div class="tr"><div class="tc done">✓</div><span>WhatsApp via Z-API quando stock < 3</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">functions/send-stock-alert/</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-27</div>
+<div class="utit">Gestão de Clientes + Bloqueio Admin</div>
+<div class="ubadges"><span class="b b-dom">Clientes</span><span class="b b-pts">2 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Bloquear/desbloquear clientes pelo admin com isActive no Mirror.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Toggle isActive no customers.html</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Usuário bloqueado não consegue fazer login</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">customers.html</span><span class="ft m">userService.js</span></div>
+</div></div>
+</div>
+<div class="retro"><div class="retro-t">⟳ Notas da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>✓</span>147→190+ testes após Sprint 05</div>
+<div class="retro-i"><span>✓</span>Admin completo: produtos, estoque, OS, clientes</div>
+<div class="retro-i"><span>✓</span>send-stock-alert em produção</div>
+</div></div>
+</div>
+<div class="ss " id="s4">
+<div class="sh green">
+<div class="snum">04</div>
+<div class="si"><div class="sname">CATÁLOGO, PAGAMENTOS, FRETE E NOTIFICAÇÕES</div>
+<div class="smeta"><span>✅ Concluída</span><span>Abr 2026</span><span>Velocity Ref: Ref: S03=39</span></div>
+<div class="sgoal">"Fechar o ciclo de produto: cliente vê detalhe, paga via PIX real, recebe confirmação. Admin importa estoque em lote. CI/CD rodando."</div></div>
+<div class="sstats"><div><div class="spts g">72</div><div class="spl">Story Points</div></div>
+<div class="pb"><div class="pf" style="width:100%"></div></div></div>
+</div>
+<div class="imp"><div class="imp-t">⚠ Impedimentos e Dependências Externas</div><div class="imp-l">
+<div class="imp-i"><span class="impi">⚠</span>Conta Mercado Pago PJ — necessária para PIX real</div>
+<div class="imp-i"><span class="impi">⚠</span>Melhor Envio / Correios API — frete real</div>
+<div class="imp-i"><span class="impi">⚠</span>Resend.com ativo — verificação e-mail</div>
+<div class="imp-i"><span class="impi">⚠</span>Z-API ativa — notificações WhatsApp</div>
+</div></div>
+<div class="sec-lbl">Grupo 1 — Catálogo & UX · 10 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-02</div>
+<div class="utit">Página de Detalhe do Produto</div>
+<div class="ubadges"><span class="b b-dom">Catálogo</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero ver a página completa do produto com zoom, veículos e produtos relacionados.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Hero com imagem + zoom modal</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Veículos compatíveis em tags</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Controle de quantidade + add-to-cart com animação</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Produtos relacionados (mesma categoria)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Breadcrumb + SEO dinâmico</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">produto.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-28</div>
+<div class="utit">Busca Full-Text com Highlight</div>
+<div class="ubadges"><span class="b b-dom">Catálogo</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero buscar por nome, NCM ou veículo com resultados destacados.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Busca por nome, NCM e veículo compatível</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Highlight em verde (regex replace)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>searchByNcm() no productRepository</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Debounce 300ms + contador de resultados</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">loja.js</span><span class="ft m">productRepository.js</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 2 — Pagamentos & Frete · 21 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-29</div>
+<div class="utit">PIX — QR Code + Polling de Confirmação</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">13 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero pagar via PIX com QR Code e confirmação em tempo real.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>QR Code exibido no modal de pagamento</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Polling a cada 5s — status automático</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Countdown 30min com expiração visual</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Modo mock em dev — sem chave real necessária</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Suporte Mercado Pago via Appwrite Function</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">paymentService.js</span><span class="ft m">checkout.html</span><span class="ft m">checkout.js</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-30</div>
+<div class="utit">Frete Real (ViaCEP + tabela por UF)</div>
+<div class="ubadges"><span class="b b-dom">Vendas</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero ver opções de PAC, SEDEX e retirada com valor e prazo.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>ViaCEP valida CEP e extrai UF</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Tabela de fretes por UF (27 estados)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Opções dinâmicas no checkout</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Extensível para Melhor Envio em prod</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">paymentService.js</span><span class="ft m">checkout.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 3 — Estoque · 13 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-36</div>
+<div class="utit">Estoque Mínimo Configurável (stockMin)</div>
+<div class="ubadges"><span class="b b-dom">Estoque</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero definir nível mínimo individual por produto.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Campo stockMin no formulário de produto</span></div>
+<div class="tr"><div class="tc done">✓</div><span>null = usa STOCK_MIN_DEFAULT (5)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>isStockCritical() usa stockMin individual</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">admin-produtos.html</span><span class="ft m">stockService.js</span><span class="ft m">config.js</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-37</div>
+<div class="utit">Importação de Estoque em Lote CSV/XLSX</div>
+<div class="ubadges"><span class="b b-dom">Estoque</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero enviar planilha para atualizar estoque de vários produtos de uma vez.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Upload drag-and-drop (.csv, .xlsx até 5MB)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Preview com validação linha a linha</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Confirmação em lote + resultado detalhado</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Modelo CSV para download</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">admin-estoque.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 4 — Oficina & Notificações · 10 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-39</div>
+<div class="utit">Notificação OS por WhatsApp (Z-API)</div>
+<div class="ubadges"><span class="b b-dom">Oficina</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como cliente, quero receber mensagem automática quando minha OS mudar de status.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Trigger: os_history → send-os-status</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Mensagem personalizada por status via Z-API</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Backup por e-mail via Resend</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">functions/send-os-status/</span><span class="ft m">admin-os.html</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-40</div>
+<div class="utit">Histórico de Veículo por Placa</div>
+<div class="ubadges"><span class="b b-dom">Oficina</span><span class="b b-pts">5 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como técnico, quero buscar todas as OS de um veículo pela placa.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Modal de busca por placa</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Lista OS com data, serviço, total</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Painel com dados do veículo</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">admin-os.html</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 5 — Clientes & Infra · 14 pts</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-33</div>
+<div class="utit">Verificação de E-mail no Cadastro</div>
+<div class="ubadges"><span class="b b-dom">Clientes</span><span class="b b-pts">3 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como novo cliente, quero receber e-mail de verificação após o cadastro.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Trigger: criação do Mirror → send-verification-email</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Template Resend com link seguro</span></div>
+<div class="tr"><div class="tc done">✓</div><span>package.json da function criado</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">functions/send-verification-email/</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-46</div>
+<div class="utit">CI/CD — GitHub Actions + Vercel</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como dev, quero pipeline automatizado com testes e deploy automático.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Job test: testes + cobertura + upload artifact</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Job deploy-preview: URL no comentário do PR</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Job deploy-production: apenas na main</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Concurrency cancel-in-progress</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">.github/workflows/ci.yml</span></div>
+</div></div>
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-47</div>
+<div class="utit">Monitoramento de Erros (Sentry)</div>
+<div class="ubadges"><span class="b b-dom">Infra</span><span class="b b-pts">3 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como dev, quero monitorar erros em produção com contexto do usuário.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>initSentry(dsn, release)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>captureError(err, context)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>addSentryContext / clearSentryContext no logout</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">utils.js</span></div>
+</div></div>
+</div>
+<div class="retro"><div class="retro-t">⟳ Notas da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>✓</span>Velocity S04=72 pts — recorde do projeto</div>
+<div class="retro-i"><span>✓</span>CI/CD ativo — deploy automático na main</div>
+<div class="retro-i"><span>✓</span>TaxEngine de S05 antecipado para checkout</div>
+</div></div>
+</div>
+<div class="ss " id="s5">
+<div class="sh red">
+<div class="snum">05</div>
+<div class="si"><div class="sname">MÓDULO FISCAL — NF-e, SEFAZ E MOTOR TRIBUTÁRIO</div>
+<div class="smeta"><span>⚡ Implementada</span><span>Mai 2026</span><span>Velocity Ref: Ref: S04=72</span></div>
+<div class="sgoal">"Sistema emite NFC-e com conformidade fiscal plena (EC 132/2023), calculando IPI, COFINS, CBS e IBS por NCM e UF. Código 100% implementado — aguarda desbloqueio."</div></div>
+<div class="sstats"><div><div class="spts r">42</div><div class="spl">Story Points</div></div>
+<div class="pb"><div class="pf" style="width:67%"></div></div></div>
+</div>
+<div class="bcklist">
+  <div class="bc-t">⊘ Checklist de Desbloqueio — marque o que foi resolvido</div>
+  <div class="bc-grid">
+    <div class="bc-item" onclick="toggleBC(this)"><div class="bc-box">✓</div><div><div class="bc-name">Certificado Digital A1 (e-CNPJ)</div><div class="bc-detail">Emitido por AC credenciada ICP-Brasil</div></div></div>
+    <div class="bc-item" onclick="toggleBC(this)"><div class="bc-box">✓</div><div><div class="bc-name">Credenciais SEFAZ Homologação</div><div class="bc-detail">Acesso ao ambiente de testes da SEFAZ-MA</div></div></div>
+    <div class="bc-item" onclick="toggleBC(this)"><div class="bc-box">✓</div><div><div class="bc-name">Integrador NF-e Contratado</div><div class="bc-detail">NFe.io, Focus NF-e ou Plugnotas com créditos</div></div></div>
+    <div class="bc-item" onclick="toggleBC(this)"><div class="bc-box">✓</div><div><div class="bc-name">Alíquotas Validadas por Contador</div><div class="bc-detail">Regras NCM cap.87 e regime tributário definido</div></div></div>
+  </div>
+  <div class="bc-prog-wrap">
+    <div class="bc-bar"><div class="bc-fill" id="bcFill" style="width:0%"></div></div>
+    <div class="bc-lbl" id="bcLbl">0 / 4 resolvidos</div>
+    <div class="unlock" id="bcUnlock">🟢 Sprint pode ir para produção!</div>
+  </div>
+</div>
+<div class="sec-lbl">Grupo 1 — Motor Tributário · 13 pts — PREREQUISITO</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-44</div>
+<div class="utit">Motor de Regras Tributárias por NCM (TaxEngine)</div>
+<div class="ubadges"><span class="b b-dom">Fiscal</span><span class="b b-pts">13 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero calcular impostos reais por NCM e UF, substituindo o TAX_RATE fixo de 12%.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>IPI, ICMS, PIS, COFINS, CBS, IBS por NCM</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Tabela ICMS interestadual (27 UFs)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Diferenciação B2C vs B2B (IPI zerado para B2C)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>EC 132/2023: transição PIS/COFINS → CBS/IBS</span></div>
+<div class="tr"><div class="tc done">✓</div><span>TAX_RATE 12% removido do orderService e checkout</span></div>
+<div class="tr"><div class="tc done">✓</div><span>47 testes unitários — taxEngine.test.js</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">taxEngine.js</span><span class="ft n">orderService.js</span><span class="ft m">checkout.js</span><span class="ft m">config.js</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 2 — Emissão NF-e · 21 pts — Dep: US-44</div>
+<div class="ul">
+<div class="uc s-impl">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-43</div>
+<div class="utit">Emissão de NFC-e via SEFAZ</div>
+<div class="ubadges"><span class="b b-dom">Fiscal</span><span class="b b-pts">21 pts</span><span class="b b-impl">⚡ Implementada</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como admin, quero que o sistema emita NFC-e automaticamente ao confirmar uma venda.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>NFService.emitir(pedido) — suporta NFe.io, Focus, Plugnotas</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Payload NF-e completo com todos os tributos do TaxEngine</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Armazena chave, XML e PDF no Appwrite (nfe_documents)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Envia PDF ao cliente por e-mail via Resend</span></div>
+<div class="tr"><div class="tc done">✓</div><span>NFService.cancelar(chave, motivo) com validação 15 chars</span></div>
+<div class="tr"><div class="tc done">✓</div><span>30 testes unitários — nfService.test.js</span></div>
+<div class="tr"><div class="tc bl">⊘</div><span>Aguarda: certificado A1, SEFAZ homologação, integrador NF-e</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">nfService.js</span><span class="ft n">functions/emit-nfe/</span><span class="ft m">orderService.js</span></div>
+</div></div>
+</div>
+<div class="sec-lbl">Grupo 3 — Relatório Fiscal · 8 pts — Dep: US-43</div>
+<div class="ul">
+<div class="uc s-done">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-45</div>
+<div class="utit">Relatório Fiscal Mensal e SPED</div>
+<div class="ubadges"><span class="b b-dom">Fiscal</span><span class="b b-pts">8 pts</span><span class="b b-done">✓ Concluída</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como contador, quero apuração mensal com NF-e emitidas, totais por imposto e exportação SPED.</div>
+<div class="tl">
+<div class="tr"><div class="tc done">✓</div><span>Dashboard: IPI, ICMS, PIS, COFINS, CBS, IBS por mês</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Evolução mensal (últimos 6 meses)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Exportação SPED EFD ICMS/IPI (TXT)</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Exportação CSV das NF-e emitidas</span></div>
+<div class="tr"><div class="tc done">✓</div><span>Impressão via window.print()</span></div>
+<div class="tr"><div class="tc done">✓</div><span>admin-fiscal.html com link na sidebar de todos os painéis</span></div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft n">admin-fiscal.html</span><span class="ft n">fiscalReportService.js</span></div>
+</div></div>
+</div>
+<div class="retro"><div class="retro-t">⟳ Notas da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>⚠</span>US-43 implementada mas precisa de certificado A1 para go-live</div>
+<div class="retro-i"><span>✓</span>TaxEngine integrado em checkout + orderService</div>
+<div class="retro-i"><span>✓</span>admin-fiscal.html com sidebar em todos os 6 painéis</div>
+</div></div>
+</div>
+</main>
+<div class="leg">
+  <div class="li"><div class="ld done"></div> Concluída</div>
+  <div class="li"><div class="ld impl"></div> Implementada</div>
+  <div class="li"><div class="ld block"></div> Bloqueada</div>
+  <div class="li"><div class="ld debt"></div> Débito Técnico</div>
+  <div style="margin-left:auto;font-size:10px;color:var(--muted)">HIVERCAR AUTOPEÇAS · Sprint Backlog S01–S05 · v6.0 · Março 2026</div>
+</div>
+<script>
+function showS(id, btn) {
+  document.querySelectorAll('.ss').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tog(el) { el.classList.toggle('exp'); }
+const bcState = [false,false,false,false];
+function toggleBC(el) {
+  const items = [...document.querySelectorAll('.bc-item')];
+  const idx = items.indexOf(el);
+  bcState[idx] = !bcState[idx];
+  el.classList.toggle('ck', bcState[idx]);
+  const done = bcState.filter(Boolean).length;
+  const pct = Math.round(done/4*100);
+  const fill = document.getElementById('bcFill');
+  fill.style.width = pct+'%';
+  fill.className = 'bc-fill'+(done===4?' all':'');
+  document.getElementById('bcLbl').textContent = done+' / 4 resolvidos';
+  document.getElementById('bcUnlock').classList.toggle('show', done===4);
+}
+</script>
+</body>
+</html>

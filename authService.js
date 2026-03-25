@@ -22,7 +22,11 @@ export const AuthService = {
    * Após chamar login(), sempre chame recordSuccessLogin() do userService.
    */
   async login(email, password) {
-    return account.createEmailPasswordSession(email, password)
+    // Compatibilidade SDK v14+/v16
+    if (typeof account.createEmailPasswordSession === 'function') {
+      return account.createEmailPasswordSession(email, password)
+    }
+    return account.createSession(email, password)
   },
 
   /** Encerra a sessão atual. */

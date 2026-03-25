@@ -452,7 +452,7 @@ async function loadProduto() {
 
     // ── Estoque ───────────────────────────────────────────────────────────
     const stock = p.stock ?? 0
-    const stockMin = p.stockMin ?? 5
+    const stockMin = p.stockGTO ?? p.stockMin ?? 5  // stockGTO = nome no DB, stockMin = legado
     let estoqueHtml
     if (!p.isActive || stock === 0) {
       estoqueHtml = `<span class="estoque-dot out"></span><span style="color:var(--red)">Fora de estoque</span>`
@@ -476,11 +476,13 @@ async function loadProduto() {
 
     // ── Especificações técnicas ───────────────────────────────────────────
     const specs = []
-    if (p.category) specs.push(["Categoria",  p.category])
-    if (p.brand)    specs.push(["Marca",       p.brand])
-    if (p.ncm)      specs.push(["NCM",         p.ncm])
-    specs.push(["Código",     productId.slice(-8).toUpperCase()])
-    specs.push(["Condição",   "Novo e Original"])
+    if (p.category) specs.push(["Categoria",         p.category])
+    if (p.brand)    specs.push(["Marca",              p.brand])
+    if (p.ncm)      specs.push(["NCM",                p.ncm])
+    if (p.barcode)  specs.push(["Cód. de Barras",     p.barcode])
+    if (p.weight)   specs.push(["Peso",               `${Number(p.weight).toFixed(3)} kg`])
+    specs.push(["Código Interno", productId.slice(-8).toUpperCase()])
+    specs.push(["Condição",       "Novo e Original"])
 
     document.getElementById("specsTable").innerHTML = specs.map(([k, v]) =>
       `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`

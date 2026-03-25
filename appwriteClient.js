@@ -3,7 +3,7 @@
 // Camada: Infrastructure — importado pelos repositories e authService.
 
 import { Client, Databases, Account, Query, ID }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+  from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
 
 import { CONFIG } from "./config.js"
 

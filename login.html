@@ -174,7 +174,7 @@ body { display: flex; align-items: center; justify-content: center; }
 
 <script type="module">
 import { Client, Account, Databases, Query }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+  from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const CFG = {
@@ -342,9 +342,14 @@ async function doLogin() {
 
   btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...'
 
-  // Consulta Mirror primeiro
-  const mirror = await getMirror(email)
-  const blk    = checkBlocked(mirror)
+  // Auth Mirror Pattern:
+  // 1. Tentar autenticar primeiro (evita 401 ao ler Mirror sem sessão)
+  // 2. Depois buscar Mirror para checar bloqueio e redirecionar por role
+
+  // Pré-verificação de bloqueio: tenta buscar Mirror antes do login
+  // (pode retornar null se collection exigir autenticação — tudo bem)
+  const mirrorPre = await getMirror(email)
+  const blk       = checkBlocked(mirrorPre)
   if (blk.blocked) {
     setMsg(blk.msg, "warning")
     btnLogin.innerHTML = '<i class="fas fa-lock"></i> BLOQUEADO'
@@ -355,9 +360,15 @@ async function doLogin() {
 
   // Tenta autenticação
   try {
-    await account.createEmailPasswordSession(email, pass)
+    // Compatibilidade: SDK v14+ usa createEmailPasswordSession; fallback para versões anteriores
+    if (typeof account.createEmailPasswordSession === 'function') {
+      await account.createEmailPasswordSession(email, pass)
+    } else {
+      await account.createSession(email, pass)
+    }
 
-    // Sucesso → atualiza Mirror
+    // Sucesso → buscar Mirror com sessão ativa (agora tem permissão)
+    const mirror = await getMirror(email) ?? mirrorPre
     if (mirror) await recordSuccess(mirror.$id)
 
     stAuth.className   = "ok"
@@ -370,12 +381,12 @@ async function doLogin() {
     }, 700)
 
   } catch (err) {
-    // Falha → registra no Mirror
+    // Falha → registra no Mirror (usa mirrorPre — disponível antes do login)
     uiTry = Math.min(uiTry + 1, 5); updateDots(uiTry)
     stAuth.className   = "err"
     stAuth.textContent = "[FAIL] autenticação recusada"
 
-    const updated = await recordFail(mirror)
+    const updated = await recordFail(mirrorPre)
     const newBlk  = checkBlocked(updated)
 
     if (newBlk.blocked) {

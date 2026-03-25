@@ -162,14 +162,18 @@ export async function getStockHistory(productId, limit = 30) {
 
 /**
  * Verifica se o estoque de um produto atingiu ou passou do nível mínimo.
- * Usa o campo stockMin do produto; se ausente, usa CONFIG.STOCK_MIN_DEFAULT.
+ * Usa o campo stockGTO do produto (nome no Appwrite DB);
+ * fallback para stockMin (legado) e depois CONFIG.STOCK_MIN_DEFAULT.
  *
- * @param {{ stock: number, stockMin?: number }} product
+ * @param {{ stock: number, stockGTO?: number, stockMin?: number }} product
  * @returns {{ critical: boolean, current: number, minimum: number }}
  */
 export function isStockCritical(product) {
   const current = Number(product.stock ?? 0)
-  const minimum = product.stockMin != null
+  // stockGTO é o nome oficial no DB; stockMin é o nome legado do código
+  const minimum = product.stockGTO != null
+    ? Number(product.stockGTO)
+    : product.stockMin != null
     ? Number(product.stockMin)
     : (CONFIG.STOCK_MIN_DEFAULT ?? 5)
   return { critical: current < minimum, current, minimum }

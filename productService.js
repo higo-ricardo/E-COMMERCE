@@ -2,10 +2,12 @@
 // Cache em memória + lógica de listagem/busca/filtros. Zero UI.
 // Camada: Domain / Service.
 //
-// US-25: Invalidação explícita após CRUD + log hit/miss (debug mode).
-//   - invalidateCache()     → limpa todo o cache (chamar após salvar/editar/excluir produto)
-//   - invalidateCacheKey()  → remove entrada específica
-//   - DEBUG_CACHE = true    → loga hits, misses e invalidações no console
+// Sprint 06 — alterações:
+//   + searchByBarcode(barcode) → busca produto por EAN-8/EAN-13
+//   + getCriticalStock()       → produtos abaixo do stockGTO individual
+//   + softDelete(id)           → delega soft-delete ao repository
+//   + restore(id)              → restaura produto excluído
+//   Cache atualizado para cobrir os novos filtros (isActive)
 
 import { ProductRepository } from "./productRepository.js"
 import { CONFIG }            from "./config.js"
@@ -14,7 +16,6 @@ const cache = new Map()
 const TTL   = CONFIG.STORE.CACHE_TTL
 
 // ── Debug mode ──────────────────────────────────────────────────────────────
-// Setar window.HIVERCAR_DEBUG = true no console do browser para ativar logs.
 const DEBUG = () => typeof window !== "undefined" && window.HIVERCAR_DEBUG === true
 
 function log(type, key) {
@@ -32,7 +33,6 @@ function log(type, key) {
 function cacheKey(prefix, term, page, filters) {
   return `${prefix}|${term}|${page}|${JSON.stringify(filters)}`
 }
-
 function cacheGet(key) {
   const entry = cache.get(key)
   if (!entry) { log("MISS", key); return null }
@@ -40,7 +40,6 @@ function cacheGet(key) {
   log("HIT", key)
   return entry.data
 }
-
 function cacheSet(key, data) {
   cache.set(key, { time: Date.now(), data })
   log("SET", key)
@@ -49,7 +48,11 @@ function cacheSet(key, data) {
 // ── Serviço ──────────────────────────────────────────────────────────────────
 export const ProductService = {
 
-  /** Lista paginada com filtros opcionais {category, brand, vehicle}. */
+  /**
+   * Lista paginada com filtros opcionais
+   * {category, brand, vehicle, isActive}.
+   * Nunca retorna produtos com deletedAt preenchido.
+   */
   async list(page = 1, filters = {}) {
     const key    = cacheKey("list", "", page, filters)
     const cached = cacheGet(key)
@@ -59,7 +62,9 @@ export const ProductService = {
     return result
   },
 
-  /** Busca por termo + filtros opcionais. */
+  /**
+   * Busca full-text por termo + filtros opcionais.
+   */
   async search(term, page = 1, filters = {}) {
     const trimmed = term.trim()
     if (!trimmed) return this.list(page, filters)
@@ -71,13 +76,51 @@ export const ProductService = {
     return result
   },
 
-  /** Opções de filtros (categorias e marcas). Cached separado. */
+  /**
+   * Busca produto por código de barras (EAN-8 ou EAN-13).
+   * Retorna o documento ou null. Não utiliza cache (leitura pontual).
+   */
+  async searchByBarcode(barcode) {
+    return ProductRepository.searchByBarcode(barcode)
+  },
+
+  /**
+   * Retorna produtos com estoque abaixo do stockGTO individual.
+   * Não utiliza cache (dados críticos — sempre frescos).
+   */
+  async getCriticalStock(limit = 100) {
+    return ProductRepository.getCriticalStock(limit)
+  },
+
+  /**
+   * Opções de filtros (categorias e marcas). Cached separado.
+   */
   async getFilterOptions() {
     const key    = "filter_options"
     const cached = cacheGet(key)
     if (cached) return cached
     const result = await ProductRepository.getFilterOptions()
     cacheSet(key, result)
+    return result
+  },
+
+  /**
+   * Soft-delete de um produto.
+   * Define deletedAt e desativa o produto. Invalida cache.
+   */
+  async softDelete(id) {
+    const result = await ProductRepository.softDelete(id)
+    this.invalidateCache()
+    return result
+  },
+
+  /**
+   * Restaura um produto excluído via soft-delete.
+   * Invalida cache.
+   */
+  async restore(id) {
+    const result = await ProductRepository.restore(id)
+    this.invalidateCache()
     return result
   },
 
@@ -94,10 +137,6 @@ export const ProductService = {
 
   /**
    * Invalida apenas uma entrada específica do cache (uso interno / avançado).
-   * @param {string} prefix  "list" | "search" | "filter_options"
-   * @param {string} term    termo de busca (vazio para listas)
-   * @param {number} page    página
-   * @param {object} filters filtros aplicados
    */
   invalidateCacheKey(prefix, term = "", page = 1, filters = {}) {
     const key = cacheKey(prefix, term, page, filters)
@@ -105,12 +144,14 @@ export const ProductService = {
     log("INVAL", key)
   },
 
-  /** Retorna estatísticas do cache (útil para debug). */
+  /**
+   * Retorna estatísticas do cache (útil para debug).
+   */
   cacheStats() {
     return {
-      entries:  cache.size,
-      keys:     [...cache.keys()],
-      debugOn:  DEBUG(),
+      entries: cache.size,
+      keys:    [...cache.keys()],
+      debugOn: DEBUG(),
     }
   },
 }
