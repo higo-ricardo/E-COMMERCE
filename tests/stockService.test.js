@@ -94,7 +94,7 @@ describe("checkStock()", () => {
   })
 
   it("trata estoque null como 0 (estoque undefined é zero)", async () => {
-    databases.getDocument.mockResolvedValue({ $id: "p1", name: "P1", stock: null })
+    databases.getDocument.mockResolvedValue({ $id: "p1", name: "P1", qtd: null })
     const items = [{ $id: "p1", name: "P1", qty: 1 }]
     await expect(checkStock(items)).rejects.toThrow(/insuficiente/i)
   })
@@ -120,7 +120,7 @@ describe("deductStock()", () => {
       expect.any(String), // DB
       expect.any(String), // COL.PRODUCTS
       "p1",
-      { stock: 7 }        // 10 - 3 = 7
+      { qtd: 7 }        // 10 - 3 = 7
     )
   })
 
@@ -193,7 +193,7 @@ describe("revertStock()", () => {
       expect.any(String),
       expect.any(String),
       "p1",
-      { stock: 8 }   // 3 + 5 = 8
+      { qtd: 8 }   // 3 + 5 = 8
     )
   })
 
@@ -234,7 +234,7 @@ describe("revertStock()", () => {
 
     // p2 deve ter sido atualizado mesmo com p1 falhando
     expect(databases.updateDocument).toHaveBeenCalledWith(
-      expect.any(String), expect.any(String), "p2", { stock: 5 }
+      expect.any(String), expect.any(String), "p2", { qtd: 5 }
     )
   })
 })

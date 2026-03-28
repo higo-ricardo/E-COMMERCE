@@ -181,7 +181,7 @@ export async function createMirror(data, authId) {
     passwordHash: "(managed-by-auth)",   // hash real fica no Appwrite Auth
     isActive:     true,
     isVerified:   false,
-    role:         data.role    ?? "cliente",
+    role:         data.role    ?? "USERS",
     company:      data.company ?? null,
     lastLogin:    null,
     loginCounter: 0,
@@ -211,10 +211,15 @@ export async function createMirror(data, authId) {
  * cliente  → minha-conta.html  (fallback: loja.html)
  */
 export function redirectByRole(role) {
+  const normalized = String(role ?? "").trim().toUpperCase()
   const map = {
+    ADMIN:    "dashboard.html",
+    SELLER:   "painel-vendas.html",
+    USERS:    "minha-conta.html",
+    // Compatibilidade legado
     admin:    "dashboard.html",
     vendedor: "painel-vendas.html",
     cliente:  "minha-conta.html",
   }
-  window.location.href = map[role] ?? "loja.html"
+  window.location.href = map[normalized] ?? map[role] ?? "loja.html"
 }

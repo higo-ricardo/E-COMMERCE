@@ -393,9 +393,9 @@
 <script type="module">
 // ── CONFIG ───────────────────────────────────────────────────────────────────
 const CONFIG = {
-  ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
-  PROJECT_ID: "69a0c93200084defefe1",
-  DB:         "69a0ebc70034fa76feff",
+  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
+  PROJECT_ID: "69c7e94a003a1c86b7ca",
+  DB:         "69c7e9af00296b17179e",
   COL_OS:           "service_orders",
   COL_OS_HISTORY:   "os_history",       // Nova collection — ver SETUP abaixo
   COL_PRODUCTS:     "produtos",
@@ -464,7 +464,7 @@ function statusBadge(s) {
 
 // ── LOAD ──────────────────────────────────────────────────────────────────────
 async function loadProducts() {
-  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_PRODUCTS, [
+  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [
     Query.limit(200), Query.orderAsc("name"),
   ])
   allProducts = res.documents
@@ -477,7 +477,7 @@ async function loadOS() {
   const queries = [Query.orderDesc("$createdAt"), Query.limit(100)]
   if (statusFilt) queries.push(Query.equal("status", statusFilt))
 
-  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_OS, queries)
+  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, queries)
   let docs  = res.documents
 
   if (osSearch) {
@@ -560,8 +560,8 @@ function renderTable(docs) {
 // ── PEÇAS UI ──────────────────────────────────────────────────────────────────
 function productOptions() {
   return allProducts.map(p =>
-    `<option value="${p.$id}" data-price="${p.price||0}" data-name="${esc(p.name)}" data-stock="${p.stock||0}">
-      ${esc(p.name)} — R$ ${Number(p.price||0).toFixed(2)} (Estoque: ${p.stock||0})
+    `<option value="${p.$id}" data-price="${p.price||0}" data-name="${esc(p.name)}" data-stock="${p.qtd||0}">
+      ${esc(p.name)} — R$ ${Number(p.price||0).toFixed(2)} (Estoque: ${p.qtd||0})
     </option>`
   ).join("")
 }
@@ -705,10 +705,10 @@ async function salvarOS() {
 
     let savedId
     if (editingOSId) {
-      await databases.updateDocument(CONFIG.DB, CONFIG.COL_OS, editingOSId, payload)
+      await databases.updateDocument(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, editingOSId, payload)
       savedId = editingOSId
     } else {
-      const saved = await databases.createDocument(CONFIG.DB, CONFIG.COL_OS, ID.unique(), payload)
+      const saved = await databases.createDocument(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, ID.unique(), payload)
       savedId = saved.$id
 
       // Registra status inicial no histórico
@@ -742,13 +742,13 @@ async function salvarOS() {
 async function deductStockPecas(pecas, osId) {
   await Promise.all(pecas.map(async peca => {
     try {
-      const product     = await databases.getDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, peca.productId)
-      const stockBefore = Number(product.stock ?? 0)
+      const product     = await databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, peca.productId)
+      const stockBefore = Number(product.qtd ?? 0)
       const qty         = Number(peca.qty ?? 1)
       const stockAfter  = Math.max(0, stockBefore - qty)
 
-      await databases.updateDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, peca.productId, { stock: stockAfter })
-      await databases.createDocument(CONFIG.DB, CONFIG.COL_STOCK_HISTORY, ID.unique(), {
+      await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, peca.productId, { qtd: stockAfter })
+      await databases.createDocument(CONFIG.DB, CONFIG.COL.STOCK_HISTORY, ID.unique(), {
         productId:   peca.productId,
         productName: peca.productName,
         qty:         -qty,
@@ -767,7 +767,7 @@ async function deductStockPecas(pecas, osId) {
 // ── HISTÓRICO STATUS OS ───────────────────────────────────────────────────────
 async function registrarHistoricoStatus(osId, statusAnterior, statusNovo) {
   try {
-    await databases.createDocument(CONFIG.DB, CONFIG.COL_OS_HISTORY, ID.unique(), {
+    await databases.createDocument(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, ID.unique(), {
       osId,
       statusAnterior: statusAnterior || null,
       statusNovo,
@@ -840,7 +840,7 @@ async function openDetalhe(os) {
 async function loadTimeline(osId) {
   const container = document.getElementById("detalheTimeline")
   try {
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_OS_HISTORY, [
+    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, [
       Query.equal("osId", osId),
       Query.orderAsc("changedAt"),
       Query.limit(50),
@@ -882,13 +882,13 @@ async function alterarStatus() {
   if (os?.status === novoStatus) { toast("Status já é " + novoStatus, "error"); return }
 
   try {
-    await databases.updateDocument(CONFIG.DB, CONFIG.COL_OS, detalheOSId, { status: novoStatus })
+    await databases.updateDocument(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, detalheOSId, { status: novoStatus })
     await registrarHistoricoStatus(detalheOSId, os?.status, novoStatus)
     toast("Status atualizado para: " + (STATUS_LABELS[novoStatus]?.label || novoStatus))
     await loadTimeline(detalheOSId)
     await loadOS()
     // Atualiza o badge no modal
-    const osAtual = await databases.getDocument(CONFIG.DB, CONFIG.COL_OS, detalheOSId)
+    const osAtual = await databases.getDocument(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, detalheOSId)
     openDetalhe(osAtual)
   } catch (e) {
     toast("Erro: " + e.message, "error")
@@ -984,7 +984,7 @@ async function buscarHistoricoVeiculo(placa) {
   container.innerHTML = `<div class="loading-state"><span class="spinner"></span> Buscando…</div>`
 
   try {
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_OS, [
+    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.SERVICE_ORDERS, [
       Query.equal("placa", placaClean),
       Query.orderDesc("$createdAt"),
       Query.limit(50),

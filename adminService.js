@@ -30,7 +30,7 @@ export const AdminService = {
     const os       = osRes.documents
 
     const ordersToday    = orders.filter(o => new Date(o.$createdAt) >= today)
-    const lowStockProds  = products.filter(p => Number(p.stock ?? 0) < 5 && p.isActive !== false)
+    const lowStockProds  = products.filter(p => Number(p.qtd ?? 0) < 5 && p.isActive !== false)
     const osAbertas      = os.filter(o => o.status === "aberta" || o.status === "em_andamento")
 
     return {
@@ -51,12 +51,22 @@ export const AdminService = {
   },
 
   async getCustomerList(limit = 50) {
-    const res = await databases.listDocuments(DB, COL.USERS, [
-      Query.equal("role", "cliente"),
-      Query.orderDesc("$createdAt"),
-      Query.limit(limit),
-    ])
-    return res.documents
+    // Compatível com schema novo (USERS) e legado (cliente)
+    try {
+      const res = await databases.listDocuments(DB, COL.USERS, [
+        Query.equal("role", "USERS"),
+        Query.orderDesc("$createdAt"),
+        Query.limit(limit),
+      ])
+      return res.documents
+    } catch {
+      const res = await databases.listDocuments(DB, COL.USERS, [
+        Query.equal("role", "cliente"),
+        Query.orderDesc("$createdAt"),
+        Query.limit(limit),
+      ])
+      return res.documents
+    }
   },
 
   async getCustomers() { return this.getCustomerList() },

@@ -414,16 +414,16 @@ async function loadProduto() {
     document.getElementById("pageDesc").content = p.description || `${p.name} - peça original HIVERCAR`
 
     // ── Imagem ────────────────────────────────────────────────────────────
-    if (p.imageUrl) {
+    if (p.imageURL) {
       const img = document.getElementById("prodImg")
-      img.src             = p.imageUrl
+      img.src             = p.imageURL
       img.alt             = p.name
       img.style.display   = "block"
       document.getElementById("imgPlaceholderIcon").style.display = "none"
       const btnZoom = document.getElementById("btnZoom")
       btnZoom.style.display = "flex"
       btnZoom.onclick = () => {
-        document.getElementById("zoomImg").src = p.imageUrl
+        document.getElementById("zoomImg").src = p.imageURL
         document.getElementById("zoomModal").classList.add("open")
       }
     }
@@ -431,7 +431,7 @@ async function loadProduto() {
     // ── Badges ────────────────────────────────────────────────────────────
     const badges = []
     if (!p.isActive) badges.push(`<span class="badge badge-red">INATIVO</span>`)
-    if (p.stock < 5) badges.push(`<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> Últimas unidades</span>`)
+    if (p.qtd < 5) badges.push(`<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> Últimas unidades</span>`)
     if (p.brand)     badges.push(`<span class="badge badge-muted">${esc(p.brand)}</span>`)
     document.getElementById("prodBadges").innerHTML = badges.join("")
 
@@ -451,8 +451,8 @@ async function loadProduto() {
     }
 
     // ── Estoque ───────────────────────────────────────────────────────────
-    const stock = p.stock ?? 0
-    const stockMin = p.stockGTO ?? p.stockMin ?? 5  // stockGTO = nome no DB, stockMin = legado
+    const stock = p.qtd ?? 0
+    const stockMin = p.minStock ?? 5  // minStock = nome real no DB
     let estoqueHtml
     if (!p.isActive || stock === 0) {
       estoqueHtml = `<span class="estoque-dot out"></span><span style="color:var(--red)">Fora de estoque</span>`
@@ -463,24 +463,16 @@ async function loadProduto() {
     }
     document.getElementById("estoqueInfo").innerHTML = estoqueHtml
 
-    // ── Veículos compatíveis ──────────────────────────────────────────────
-    if (p.vehicles) {
-      const veiculos = p.vehicles.split(/[,;]/).map(v => v.trim()).filter(Boolean)
-      if (veiculos.length) {
-        document.getElementById("veiculosSection").style.display = "block"
-        document.getElementById("veiculosList").innerHTML = veiculos.map(v =>
-          `<span class="veiculo-tag"><i class="fas fa-car"></i>${esc(v)}</span>`
-        ).join("")
-      }
-    }
+    // veiculosSection removida — campo 'vehicles' não existe na collection
 
     // ── Especificações técnicas ───────────────────────────────────────────
     const specs = []
-    if (p.category) specs.push(["Categoria",         p.category])
-    if (p.brand)    specs.push(["Marca",              p.brand])
-    if (p.ncm)      specs.push(["NCM",                p.ncm])
-    if (p.barcode)  specs.push(["Cód. de Barras",     p.barcode])
-    if (p.weight)   specs.push(["Peso",               `${Number(p.weight).toFixed(3)} kg`])
+    if (p.category) specs.push(["Categoria",      p.category])
+    if (p.brand)    specs.push(["Marca",           p.brand])
+    if (p.ncm)      specs.push(["NCM",             p.ncm])
+    if (p.barcode)  specs.push(["Cód. de Barras",  p.barcode])
+    if (p.weight)   specs.push(["Peso",            `${Number(p.weight).toFixed(3)} kg`])
+    if (p.sku)      specs.push(["SKU",             p.sku])
     specs.push(["Código Interno", productId.slice(-8).toUpperCase()])
     specs.push(["Condição",       "Novo e Original"])
 
@@ -495,7 +487,7 @@ async function loadProduto() {
       btnAdd.addEventListener("click", () => {
         const qty = parseInt(document.getElementById("qtyInput").value) || 1
         for (let i = 0; i < qty; i++) {
-          CartService.add({ $id: p.$id, name: p.name, price: p.price, image: p.imageUrl || "" })
+          CartService.add({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || "" })
         }
         if (badge) badge.textContent = CartService.count()
         toast(`✓ ${qty}x "${p.name}" adicionado ao carrinho!`)
@@ -557,13 +549,13 @@ async function loadRelacionados(category, currentId) {
     grid.innerHTML = others.map(p => `
       <div class="product-card" style="cursor:pointer" onclick="window.location='produto.html?id=${p.$id}'">
         <div class="product-img">
-          <img src="${esc(p.imageUrl || imgPlaceholder(p.name))}" alt="${esc(p.name)}" loading="lazy">
+          <img src="${esc(p.imageURL || imgPlaceholder(p.name))}" alt="${esc(p.name)}" loading="lazy">
         </div>
         <div class="product-body">
           <div class="product-name">${esc(p.name)}</div>
           <div class="product-price">${fmtBRL(p.price || 0)}</div>
           <button class="btn btn-primary btn-block add-btn"
-            data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.imageUrl || "" })}'>
+            data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || "" })}'>
             <i class="fas fa-cart-plus"></i> Adicionar
           </button>
         </div>

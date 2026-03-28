@@ -55,7 +55,14 @@ function showToast(message, level = "error", duration = 5000) {
     animation:hvToastIn .25s ease;
     line-height:1.4;
   `
-  toast.innerHTML = `<span style="margin-right:8px">${c.icon}</span>${message}`
+  // ✅ XSS FIX: Escapar message, usar textContent para conteúdo dinâmico
+  const iconSpan = document.createElement("span")
+  iconSpan.style.marginRight = "8px"
+  iconSpan.textContent = c.icon
+  const msgSpan = document.createElement("span")
+  msgSpan.textContent = message
+  toast.appendChild(iconSpan)
+  toast.appendChild(msgSpan)
 
   // Animação inline
   if (!document.getElementById("hv-toast-style")) {

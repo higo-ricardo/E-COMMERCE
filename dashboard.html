@@ -199,7 +199,7 @@ async function load() {
     document.getElementById("stockTable").innerHTML = m.lowStockProducts.length
       ? m.lowStockProducts.map(p => `<tr>
           <td>${p.name}</td>
-          <td><span class="badge badge-red">${p.stock ?? 0}</span></td>
+          <td><span class="badge badge-red">${p.qtd ?? 0}</span></td>
         </tr>`).join("")
       : `<tr><td colspan="2" style="color:var(--green)">Tudo em ordem ✓</td></tr>`
 

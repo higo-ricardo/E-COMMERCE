@@ -196,9 +196,9 @@
 
 <script type="module">
 const CONFIG = {
-  ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
-  PROJECT_ID: "69a0c93200084defefe1",
-  DB:         "69a0ebc70034fa76feff",
+  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
+  PROJECT_ID: "69c7e94a003a1c86b7ca",
+  DB:         "69c7e9af00296b17179e",
   COL_ORDERS:   "orders",
   COL_PRODUCTS: "produtos",
   COL_USERS:    "users",
@@ -254,7 +254,7 @@ async function loadOrders() {
   const queries = [Query.orderDesc("$createdAt"), Query.limit(100)]
   if (statusFilt) queries.push(Query.equal("status", statusFilt))
 
-  const res    = await databases.listDocuments(CONFIG.DB, CONFIG.COL_ORDERS, queries)
+  const res    = await databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, queries)
   let orders   = res.documents
 
   if (dataFilt) {
@@ -304,7 +304,7 @@ async function loadOrders() {
     sel.addEventListener("change", async () => {
       if (!sel.value) return
       try {
-        await databases.updateDocument(CONFIG.DB, CONFIG.COL_ORDERS, sel.dataset.id, {
+        await databases.updateDocument(CONFIG.DB, CONFIG.COL.ORDERS, sel.dataset.id, {
           status: sel.value, updatedAt: new Date().toISOString()
         })
         toast("Status atualizado: " + sel.value)
@@ -319,7 +319,7 @@ async function loadProducts(search="") {
   const queries = [Query.limit(100), Query.orderAsc("name")]
   if (search) queries.push(Query.search("name", search))
 
-  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_PRODUCTS, queries)
+  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, queries)
   allProducts = res.documents
 
   const tbody = document.getElementById("produtosTable")
@@ -331,7 +331,7 @@ async function loadProducts(search="") {
     <td style="font-weight:600">${esc(p.name)}</td>
     <td style="color:var(--muted)">${esc(p.category||"—")}</td>
     <td style="color:#f97316">${fmtBRL(p.price)}</td>
-    <td style="${(p.stock||0)<5?'color:var(--red);font-weight:700':'color:var(--green)'}">${p.stock??0}</td>
+    <td style="${(p.qtd||0)<5?'color:var(--red);font-weight:700':'color:var(--green)'}">${p.qtd??0}</td>
     <td>${p.isActive!==false?'<span class="badge badge-green">Ativo</span>':'<span class="badge badge-red">Inativo</span>'}</td>
   </tr>`).join("")
 }
@@ -409,7 +409,7 @@ async function confirmarPedido() {
   btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> Salvando…`
 
   try {
-    await databases.createDocument(CONFIG.DB, CONFIG.COL_ORDERS, ID.unique(), {
+    await databases.createDocument(CONFIG.DB, CONFIG.COL.ORDERS, ID.unique(), {
       name:      nome,
       email:     document.getElementById("npEmail").value.trim()||null,
       cpf:       document.getElementById("npCpf").value.trim()||null,

@@ -1,6 +1,6 @@
 // ─── HIVERCAR · stockService.js ──────────────────────────────────────────────
 // US-20: Gestão de estoque — baixa automática ao vender, verificação, reversão.
-// US-36: isStockCritical() verifica se estoque atingiu o stockMin individual.
+// US-36: isStockCritical() verifica se estoque atingiu o minStock individual.
 //
 // Responsabilidades:
 //   - checkStock(items)         → verifica se há estoque para todos os itens
@@ -48,7 +48,7 @@ export async function checkStock(items) {
       return
     }
 
-    const available = Number(product.stock ?? 0)
+    const available = Number(product.qtd ?? 0)
     const requested = Number(item.qty ?? 1)
 
     if (available < requested) {
@@ -77,12 +77,12 @@ export async function checkStock(items) {
 export async function deductStock(items, orderId) {
   await Promise.all(items.map(async item => {
     const product     = await databases.getDocument(DB, COL.PRODUCTS, item.$id)
-    const stockBefore = Number(product.stock ?? 0)
+    const stockBefore = Number(product.qtd ?? 0)
     const qty         = Number(item.qty ?? 1)
     const stockAfter  = Math.max(0, stockBefore - qty)
 
     // Atualiza estoque do produto
-    await databases.updateDocument(DB, COL.PRODUCTS, item.$id, { stock: stockAfter })
+    await databases.updateDocument(DB, COL.PRODUCTS, item.$id, { qtd: stockAfter })
 
     // Registra movimentação
     await databases.createDocument(DB, COL.STOCK_HISTORY, ID.unique(), {
@@ -118,11 +118,11 @@ export async function revertStock(items, orderId) {
       return
     }
 
-    const stockBefore = Number(product.stock ?? 0)
+    const stockBefore = Number(product.qtd ?? 0)
     const qty         = Number(item.qty ?? 1)
     const stockAfter  = stockBefore + qty
 
-    await databases.updateDocument(DB, COL.PRODUCTS, item.$id, { stock: stockAfter })
+    await databases.updateDocument(DB, COL.PRODUCTS, item.$id, { qtd: stockAfter })
 
     await databases.createDocument(DB, COL.STOCK_HISTORY, ID.unique(), {
       productId:   item.$id,
@@ -157,25 +157,23 @@ export async function getStockHistory(productId, limit = 30) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// US-36: VERIFICAR SE ESTOQUE É CRÍTICO (usa stockMin individual ou padrão)
+// US-36: VERIFICAR SE ESTOQUE É CRÍTICO (usa minStock individual ou STOCK_CRITICAL)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Verifica se o estoque de um produto atingiu ou passou do nível mínimo.
- * Usa o campo stockGTO do produto (nome no Appwrite DB);
- * fallback para stockMin (legado) e depois CONFIG.STOCK_MIN_DEFAULT.
+ * Usa o campo minStock do produto; se ausente, usa CONFIG.STOCK_CRITICAL.
  *
- * @param {{ stock: number, stockGTO?: number, stockMin?: number }} product
+ * @param {{ qtd: number, minStock?: number }} product
  * @returns {{ critical: boolean, current: number, minimum: number }}
  */
 export function isStockCritical(product) {
-  const current = Number(product.stock ?? 0)
-  // stockGTO é o nome oficial no DB; stockMin é o nome legado do código
-  const minimum = product.stockGTO != null
-    ? Number(product.stockGTO)
-    : product.stockMin != null
-    ? Number(product.stockMin)
-    : (CONFIG.STOCK_MIN_DEFAULT ?? 5)
+  const current = Number(product.qtd ?? 0)
+  // minStock é o nome real do atributo no Appwrite DB
+  // fallback: CONFIG.STOCK_CRITICAL (padrão do sistema)
+  const minimum = product.minStock != null
+    ? Number(product.minStock)
+    : (CONFIG.STOCK_CRITICAL ?? 5)
   return { critical: current < minimum, current, minimum }
 }
 
@@ -186,6 +184,7 @@ export function isStockCritical(product) {
 export async function getCriticalStockProducts(limit = 50) {
   const res = await databases.listDocuments(DB, COL.PRODUCTS, [
     Query.equal("isActive", true),
+    Query.isNull("deletedAt"),
     Query.limit(200),
   ])
   return res.documents

@@ -173,14 +173,12 @@ body { display: flex; align-items: center; justify-content: center; }
 </div>
 
 <script type="module">
-import { Client, Account, Databases, Query }
-  from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
+import { Client, Account, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
 
-// ── Config ────────────────────────────────────────────────────────────────────
 const CFG = {
-  ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
-  PROJECT_ID: "69a0c93200084defefe1",
-  DB:         "69a0ebc70034fa76feff",
+  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
+  PROJECT_ID: "69c7e94a003a1c86b7ca",
+  DB:         "69c7e9af00296b17179e",
   USERS:      "users",
   BLOCK_5:    30 * 60 * 1000,
   BLOCK_10:   60 * 60 * 1000,
@@ -188,48 +186,70 @@ const CFG = {
   UI_LOCK_MS: 15 * 60 * 1000,
 }
 
-// ── Appwrite ──────────────────────────────────────────────────────────────────
-const client    = new Client().setEndpoint(CFG.ENDPOINT).setProject(CFG.PROJECT_ID)
-const account   = new Account(client)
+const client = new Client().setEndpoint(CFG.ENDPOINT).setProject(CFG.PROJECT_ID)
+const account = new Account(client)
 const databases = new Databases(client)
 
-// ── Partículas ────────────────────────────────────────────────────────────────
-;(function() {
-  const cv = document.getElementById("canvas"); if (!cv) return
-  const ctx = cv.getContext("2d"); let W, H
-  const r = () => { W = cv.width = innerWidth; H = cv.height = innerHeight }
-  r(); addEventListener("resize", r)
-  const pts = Array.from({length:55}, () => ({
-    x:Math.random()*2000, y:Math.random()*2000,
-    vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
-    r:Math.random()*1.4+.4, a:Math.random()*.5+.1
-  }));
-  (function loop() {
-    ctx.clearRect(0,0,W,H)
+;(function () {
+  const cv = document.getElementById("canvas")
+  if (!cv) return
+  const ctx = cv.getContext("2d")
+  let W, H
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight }
+  resize()
+  addEventListener("resize", resize)
+
+  const pts = Array.from({ length: 55 }, () => ({
+    x: Math.random() * 2000,
+    y: Math.random() * 2000,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.4 + 0.4,
+    a: Math.random() * 0.5 + 0.1,
+  }))
+
+  ;(function loop() {
+    ctx.clearRect(0, 0, W, H)
     pts.forEach(p => {
-      p.x+=p.vx; p.y+=p.vy
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0
-      if(p.y<0)p.y=H; if(p.y>H)p.y=0
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
-      ctx.fillStyle=`rgba(38,253,113,${p.a})`; ctx.fill()
-    }); requestAnimationFrame(loop)
+      p.x += p.vx
+      p.y += p.vy
+      if (p.x < 0) p.x = W
+      if (p.x > W) p.x = 0
+      if (p.y < 0) p.y = H
+      if (p.y > H) p.y = 0
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(38,253,113,${p.a})`
+      ctx.fill()
+    })
+    requestAnimationFrame(loop)
   })()
 })()
 
-// ── DOM ───────────────────────────────────────────────────────────────────────
-const $        = id => document.getElementById(id)
-const btnLogin = $("btnLogin"), btnForgot  = $("btnForgot")
-const eEmail   = $("email"),    ePass      = $("password")
-const msgBox   = $("msgBox"),   cntdown    = $("countdown")
-const stAuth   = $("statusAuth"), stTry   = $("statusAttempts")
-const dots     = [1,2,3,4,5].map(n => $("d"+n))
-let busy = false, uiTry = 0, lockTimer = null
+const $ = id => document.getElementById(id)
+const btnLogin = $("btnLogin")
+const btnForgot = $("btnForgot")
+const eEmail = $("email")
+const ePass = $("password")
+const msgBox = $("msgBox")
+const cntdown = $("countdown")
+const stAuth = $("statusAuth")
+const stTry = $("statusAttempts")
+const dots = [1, 2, 3, 4, 5].map(n => $("d" + n))
 
-// ── UI helpers ────────────────────────────────────────────────────────────────
-const setMsg = (txt, cls="error") => { msgBox.textContent = txt; msgBox.className = cls }
+let busy = false
+let uiTry = 0
+let lockTimer = null
+
+const setMsg = (txt, cls = "error") => {
+  msgBox.textContent = txt
+  msgBox.className = cls
+}
 
 function updateDots(n) {
-  dots.forEach((d,i) => d.className = "attempt-dot" + (i < n ? (n>=5?" block":" used") : ""))
+  dots.forEach((d, i) => {
+    d.className = "attempt-dot" + (i < n ? (n >= 5 ? " block" : " used") : "")
+  })
   stTry.textContent = `[INFO] tentativas: ${n}/5`
 }
 
@@ -237,157 +257,223 @@ function lockUI(ms) {
   btnLogin.disabled = true
   const until = Date.now() + ms
   clearInterval(lockTimer)
+
   lockTimer = setInterval(() => {
     const left = until - Date.now()
     if (left <= 0) {
-      clearInterval(lockTimer); cntdown.textContent = ""
+      clearInterval(lockTimer)
+      cntdown.textContent = ""
       btnLogin.disabled = false
       btnLogin.innerHTML = '<i class="fas fa-right-to-bracket"></i> ENTRAR'
-      uiTry = 0; updateDots(0)
-    } else {
-      const m = Math.floor(left/60000), s = Math.floor((left%60000)/1000)
-      cntdown.textContent = `🔒 Aguarde ${m}:${String(s).padStart(2,"0")}`
+      uiTry = 0
+      updateDots(0)
+      return
     }
+
+    const m = Math.floor(left / 60000)
+    const s = Math.floor((left % 60000) / 1000)
+    cntdown.textContent = `Aguarde ${m}:${String(s).padStart(2, "0")}`
   }, 500)
 }
 
-// ── Mirror helpers ─────────────────────────────────────────────────────────────
 async function getMirror(email) {
   try {
     const r = await databases.listDocuments(CFG.DB, CFG.USERS, [
-      Query.equal("email", email.toLowerCase().trim()),
+      Query.equal("email", String(email).toLowerCase().trim()),
       Query.limit(1),
     ])
     return r.documents[0] ?? null
-  } catch { return null }
+  } catch {
+    return null
+  }
 }
 
-function checkBlocked(m) {
-  if (!m) return { blocked: false }
-  if (m.isActive === false)
-    return { blocked: true, msg: "Conta bloqueada temporariamente! Entre em contato com o suporte." }
-  if (m.blockedUntil) {
-    const until = new Date(m.blockedUntil)
+function checkBlocked(mirror) {
+  if (!mirror) return { blocked: false }
+
+  if (mirror.isActive === false) {
+    return { blocked: true, msg: "Conta bloqueada. Entre em contato com o suporte." }
+  }
+
+  if (mirror.blockedUntil) {
+    const until = new Date(mirror.blockedUntil)
     if (until > new Date()) {
       const mins = Math.ceil((until - new Date()) / 60000)
-      return { blocked: true, msg: `Conta bloqueada! Tente novamente em ${mins} min.` }
+      return { blocked: true, msg: `Conta bloqueada. Tente novamente em ${mins} min.` }
     }
   }
+
   return { blocked: false }
 }
 
-async function recordFail(m) {
-  if (!m) return null
-  const f = (m.failedLogin ?? 0) + 1
-  const p = { failedLogin: f }
-  if (f >= CFG.DISABLE_AT) {
-    p.isActive = false
-    p.blockedUntil = new Date(Date.now() + 99*365*24*3600000).toISOString()
-  } else if (f >= 10) {
-    p.blockedUntil = new Date(Date.now() + CFG.BLOCK_10).toISOString()
-  } else if (f >= 5) {
-    p.blockedUntil = new Date(Date.now() + CFG.BLOCK_5).toISOString()
+async function recordFail(mirror) {
+  if (!mirror) return null
+
+  const failed = (mirror.failedLogin ?? 0) + 1
+  const patch = { failedLogin: failed }
+
+  if (failed >= CFG.DISABLE_AT) {
+    patch.isActive = false
+    patch.blockedUntil = new Date(Date.now() + 99 * 365 * 24 * 3600000).toISOString()
+  } else if (failed >= 10) {
+    patch.blockedUntil = new Date(Date.now() + CFG.BLOCK_10).toISOString()
+  } else if (failed >= 5) {
+    patch.blockedUntil = new Date(Date.now() + CFG.BLOCK_5).toISOString()
   }
-  try { return await databases.updateDocument(CFG.DB, CFG.USERS, m.$id, p) }
-  catch { return m }
+
+  try {
+    return await databases.updateDocument(CFG.DB, CFG.USERS, mirror.$id, patch)
+  } catch {
+    return mirror
+  }
 }
 
 async function recordSuccess(docId) {
   try {
-    const m = await databases.getDocument(CFG.DB, CFG.USERS, docId)
-    if (!m) return
+    const mirror = await databases.getDocument(CFG.DB, CFG.USERS, docId)
+    if (!mirror) return
+
     await databases.updateDocument(CFG.DB, CFG.USERS, docId, {
-      lastLogin:    new Date().toISOString(),
-      lastIP:       "client-side",
-      loginCounter: (m.loginCounter ?? 0) + 1,
-      failedLogin:  0,
+      lastLogin: new Date().toISOString(),
+      lastIP: "client-side",
+      loginCounter: (mirror.loginCounter ?? 0) + 1,
+      failedLogin: 0,
       blockedUntil: null,
     })
-  } catch { /* mirror fail não impede login */ }
+  } catch {}
+}
+
+async function ensureMirrorForUser(authUser, mirrorHint = null) {
+  if (!authUser) return null
+  if (mirrorHint) return mirrorHint
+
+  const email = String(authUser.email || "").toLowerCase().trim()
+  let mirror = await getMirror(email)
+  if (mirror) return mirror
+
+  const fallbackName = String(authUser.name || email.split("@")[0] || "Usuario")
+
+  try {
+    await databases.createDocument(CFG.DB, CFG.USERS, authUser.$id, {
+      name: fallbackName,
+      email,
+      cpf: null,
+      mobile: null,
+      dayBirth: null,
+      isActive: true,
+      isVerified: !!authUser.emailVerification,
+      role: "USERS",
+      lastLogin: null,
+      loginCounter: 0,
+      lastIP: null,
+      failedLogin: 0,
+      blockedUntil: null,
+      address: null,
+      district: "CENTRO",
+      number: null,
+      complement: null,
+      city: "CHAPADINHA",
+      state: "MA",
+      cep: 65500000,
+    })
+  } catch (err) {
+    console.warn("[LOGIN AUTOREPAIR] nao foi possivel criar Mirror:", err?.message || err)
+  }
+
+  mirror = await getMirror(email)
+  return mirror ?? null
 }
 
 function redirectByRole(role) {
-  const map = { admin:"dashboard.html", vendedor:"painel-vendas.html", cliente:"minha-conta.html" }
-  window.location.href = map[role] ?? "loja.html"
+  const normalized = String(role ?? "").trim().toUpperCase()
+  const map = {
+    ADMIN: "dashboard.html",
+    SELLER: "painel-vendas.html",
+    USERS: "minha-conta.html",
+    admin: "dashboard.html",
+    vendedor: "painel-vendas.html",
+    cliente: "minha-conta.html",
+  }
+  window.location.href = map[normalized] ?? map[role] ?? "loja.html"
 }
 
-// ── Verificação de sessão ativa ────────────────────────────────────────────────
 ;(async () => {
   try {
     const user = await account.get()
     if (!user) return
-    const m = await getMirror(user.email)
-    if (m) redirectByRole(m.role)
-    else window.location.href = "dashboard.html"
-  } catch { /* sem sessão */ }
+
+    const mirror = await ensureMirrorForUser(user, await getMirror(user.email))
+    if (mirror) redirectByRole(mirror.role)
+    else window.location.href = "minha-conta.html"
+  } catch {}
 })()
 
-// ── LOGIN ─────────────────────────────────────────────────────────────────────
 async function doLogin() {
   if (busy || btnLogin.disabled) return
   busy = true
-  const email = eEmail.value.trim().toLowerCase()
-  const pass  = ePass.value
 
-  setMsg(""); cntdown.textContent = ""
+  const email = eEmail.value.trim().toLowerCase()
+  const pass = ePass.value
+
+  setMsg("")
+  cntdown.textContent = ""
   btnLogin.disabled = true
 
-  // Validação básica
   if (!email || !pass) {
-    setMsg("Preencha todos os campos."); btnLogin.disabled = false; busy = false; return
+    setMsg("Preencha todos os campos.")
+    btnLogin.disabled = false
+    busy = false
+    return
   }
+
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-    setMsg("E-mail com formato inválido."); btnLogin.disabled = false; busy = false; return
+    setMsg("E-mail com formato invalido.")
+    btnLogin.disabled = false
+    busy = false
+    return
   }
 
   btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...'
 
-  // Auth Mirror Pattern:
-  // 1. Tentar autenticar primeiro (evita 401 ao ler Mirror sem sessão)
-  // 2. Depois buscar Mirror para checar bloqueio e redirecionar por role
-
-  // Pré-verificação de bloqueio: tenta buscar Mirror antes do login
-  // (pode retornar null se collection exigir autenticação — tudo bem)
   const mirrorPre = await getMirror(email)
-  const blk       = checkBlocked(mirrorPre)
+  const blk = checkBlocked(mirrorPre)
   if (blk.blocked) {
     setMsg(blk.msg, "warning")
     btnLogin.innerHTML = '<i class="fas fa-lock"></i> BLOQUEADO'
-    stAuth.className   = "err"
+    stAuth.className = "err"
     stAuth.textContent = "[BLOCK] conta: bloqueada"
-    busy = false; return
+    busy = false
+    return
   }
 
-  // Tenta autenticação
   try {
-    // Compatibilidade: SDK v14+ usa createEmailPasswordSession; fallback para versões anteriores
-    if (typeof account.createEmailPasswordSession === 'function') {
+    if (typeof account.createEmailPasswordSession === "function") {
       await account.createEmailPasswordSession(email, pass)
     } else {
       await account.createSession(email, pass)
     }
 
-    // Sucesso → buscar Mirror com sessão ativa (agora tem permissão)
-    const mirror = await getMirror(email) ?? mirrorPre
+    const authUser = await account.get()
+    const mirror = await ensureMirrorForUser(authUser, mirrorPre)
     if (mirror) await recordSuccess(mirror.$id)
 
-    stAuth.className   = "ok"
-    stAuth.textContent = "[OK] sessão: autenticada"
-    setMsg("✓ Acesso autorizado. Redirecionando...", "success")
+    stAuth.className = "ok"
+    stAuth.textContent = "[OK] sessao: autenticada"
+    setMsg("Acesso autorizado. Redirecionando...", "success")
 
     setTimeout(() => {
       if (mirror) redirectByRole(mirror.role)
-      else window.location.href = "dashboard.html"
+      else window.location.href = "minha-conta.html"
     }, 700)
-
   } catch (err) {
-    // Falha → registra no Mirror (usa mirrorPre — disponível antes do login)
-    uiTry = Math.min(uiTry + 1, 5); updateDots(uiTry)
-    stAuth.className   = "err"
-    stAuth.textContent = "[FAIL] autenticação recusada"
+    uiTry = Math.min(uiTry + 1, 5)
+    updateDots(uiTry)
+
+    stAuth.className = "err"
+    stAuth.textContent = "[FAIL] autenticacao recusada"
 
     const updated = await recordFail(mirrorPre)
-    const newBlk  = checkBlocked(updated)
+    const newBlk = checkBlocked(updated)
 
     if (newBlk.blocked) {
       setMsg(newBlk.msg, "warning")
@@ -397,42 +483,42 @@ async function doLogin() {
       lockUI(CFG.UI_LOCK_MS)
     } else {
       const failed = updated?.failedLogin ?? uiTry
-      setMsg(
-        err.code === 401
-          ? `E-mail ou senha incorretos. (tentativa ${failed})`
-          : "Erro: " + (err.message ?? "desconhecido"),
-        "error"
-      )
+      setMsg(err.code === 401
+        ? `E-mail ou senha incorretos. (tentativa ${failed})`
+        : "Erro: " + (err.message ?? "desconhecido"), "error")
+
       btnLogin.innerHTML = '<i class="fas fa-right-to-bracket"></i> ENTRAR'
-      btnLogin.disabled  = false
+      btnLogin.disabled = false
     }
+
     busy = false
   }
 }
 
-// ── RECUPERAÇÃO DE SENHA ──────────────────────────────────────────────────────
 btnForgot.onclick = async e => {
   e.preventDefault()
   const email = eEmail.value.trim().toLowerCase()
+
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-    setMsg("Informe um e-mail válido no campo acima para recuperar a senha.", "warning"); return
+    setMsg("Informe um e-mail valido no campo acima para recuperar a senha.", "warning")
+    return
   }
+
   btnForgot.style.opacity = ".4"
   try {
     const redirectUrl = `${location.origin}/redefinir-senha.html`
     await account.createRecovery(email, redirectUrl)
-    setMsg("✓ E-mail de recuperação enviado! Verifique sua caixa de entrada.", "success")
+    setMsg("E-mail de recuperacao enviado! Verifique sua caixa de entrada.", "success")
   } catch (err) {
-    setMsg("Não foi possível enviar: " + (err.message ?? "erro desconhecido"), "error")
+    setMsg("Nao foi possivel enviar: " + (err.message ?? "erro desconhecido"), "error")
   } finally {
     btnForgot.style.opacity = "1"
   }
 }
 
-// ── Eventos ────────────────────────────────────────────────────────────────────
-btnLogin.onclick    = doLogin
-ePass.onkeydown     = e => { if (e.key === "Enter") doLogin() }
-eEmail.onkeydown    = e => { if (e.key === "Enter") ePass.focus() }
+btnLogin.onclick = doLogin
+ePass.onkeydown = e => { if (e.key === "Enter") doLogin() }
+eEmail.onkeydown = e => { if (e.key === "Enter") ePass.focus() }
 </script>
 </body>
 </html>

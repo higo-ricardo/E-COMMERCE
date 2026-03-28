@@ -62,8 +62,8 @@ import { ProductRepository } from "../productRepository.js"
 // ── Dados de exemplo ──────────────────────────────────────────────────────────
 const PAGE_RESULT = {
   products: [
-    { $id: "p1", name: "Pastilha Brembo", category: "Freios", brand: "Brembo", price: 89.90, stock: 10 },
-    { $id: "p2", name: "Filtro Mann",     category: "Motor",  brand: "Mann",   price: 35.50, stock: 3  },
+    { $id: "p1", name: "Pastilha Brembo", category: "Freios", brand: "Brembo", price: 89.90, qtd: 10 },
+    { $id: "p2", name: "Filtro Mann",     category: "Motor",  brand: "Mann",   price: 35.50, qtd: 3  },
   ],
   total: 2,
   pages: 1,

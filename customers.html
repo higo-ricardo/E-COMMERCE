@@ -163,9 +163,9 @@
 <script type="module">
 // ── CONFIG (inline) ───────────────────────────────────────────────────────────
 const CONFIG = {
-  ENDPOINT:   "https://nyc.cloud.appwrite.io/v1",
-  PROJECT_ID: "69a0c93200084defefe1",
-  DB:         "69a0ebc70034fa76feff",
+  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
+  PROJECT_ID: "69c7e94a003a1c86b7ca",
+  DB:         "69c7e9af00296b17179e",
   COL_USERS:  "users",
   PAGE_SIZE:  20,
 }
@@ -219,7 +219,7 @@ function fmtDateTime(iso) {
 // ── LOAD ──────────────────────────────────────────────────────────────────────
 async function loadCustomers() {
   try {
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_USERS, [
+    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.USERS, [
       Query.equal("role", "cliente"),
       Query.orderDesc("$createdAt"),
       Query.limit(200),
@@ -408,7 +408,7 @@ async function toggleBlock(id, isCurrentlyBlocked) {
       ? { isActive: true, blockedUntil: null, failedLogin: 0 }
       : { isActive: false, blockedUntil: new Date(Date.now() + 99*365*24*3600000).toISOString() }
 
-    await databases.updateDocument(CONFIG.DB, CONFIG.COL_USERS, id, patch)
+    await databases.updateDocument(CONFIG.DB, CONFIG.COL.USERS, id, patch)
     toast(isCurrentlyBlocked ? "Conta desbloqueada." : "Conta bloqueada.")
     await loadCustomers()
   } catch (e) {

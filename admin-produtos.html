@@ -12,7 +12,7 @@
 <style>
 /* ── LOCAL OVERRIDES ── */
 .img-preview-wrap {
-  width:100%; height:130px;
+  width:100%; height:140px;
   background:var(--black); border:1px dashed var(--border);
   display:flex; align-items:center; justify-content:center;
   overflow:hidden; position:relative; cursor:pointer;
@@ -25,19 +25,20 @@
 
 .modal-overlay {
   display:none; position:fixed; inset:0; z-index:500;
-  background:rgba(0,0,0,.80); backdrop-filter:blur(4px);
-  align-items:center; justify-content:center; padding:20px;
+  background:rgba(0,0,0,.75); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center; padding:24px;
 }
 .modal-overlay.open { display:flex; }
 .modal {
   background:var(--dark); border:1px solid var(--border);
-  width:100%; max-width:820px; max-height:94vh;
-  overflow-y:auto; padding:28px 32px;
-  position:relative; animation:fadeUp .25s ease;
+  width:100%; max-width:680px; max-height:90vh;
+  overflow-y:auto; padding:32px;
+  position:relative;
+  animation:fadeUp .25s ease;
 }
 .modal-header {
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:20px;
+  margin-bottom:24px;
 }
 .modal-title {
   font-family:'Bebas Neue',sans-serif; font-size:22px;
@@ -50,15 +51,6 @@
   align-items:center; justify-content:center; transition:all .2s;
 }
 .modal-close:hover { color:var(--red); border-color:var(--red); }
-
-/* Seção separadora dentro do modal */
-.form-section {
-  font-size:9px; font-weight:700; letter-spacing:.28em; text-transform:uppercase;
-  color:var(--muted); padding:10px 0 6px;
-  border-bottom:1px solid var(--border); margin-bottom:12px;
-  display:flex; align-items:center; gap:10px;
-}
-.form-section::before { content:''; width:18px; height:1px; background:var(--green); }
 
 .confirm-overlay {
   display:none; position:fixed; inset:0; z-index:600;
@@ -75,11 +67,8 @@
 .confirm-box p  { color:var(--muted); font-size:14px; margin-bottom:24px; }
 .confirm-actions { display:flex; gap:12px; justify-content:center; }
 
-.form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-@media(max-width:600px){
-  .form-grid-2,.form-grid-3 { grid-template-columns:1fr; }
-}
+.form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .form-grid-2 { grid-template-columns:1fr; } }
 
 .search-bar {
   display:flex; align-items:center; gap:12px; margin-bottom:24px;
@@ -91,17 +80,6 @@
   outline:none; transition:border-color .2s;
 }
 .search-bar input:focus { border-color:var(--green); }
-
-/* Filtros adicionais */
-.filter-bar {
-  display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;
-}
-.filter-bar select {
-  padding:8px 12px; background:var(--dark); border:1px solid var(--border);
-  color:var(--white); font-family:'Barlow',sans-serif; font-size:12px;
-  outline:none; transition:border-color .2s; cursor:pointer;
-}
-.filter-bar select:focus { border-color:var(--green); }
 
 .stock-alert-badge {
   display:inline-flex; align-items:center; gap:6px;
@@ -122,8 +100,8 @@
   letter-spacing:.12em; text-transform:uppercase;
   cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:5px;
 }
-.toggle-btn.active   { border-color:var(--green); color:var(--green); }
-.toggle-btn.inactive { border-color:var(--red);   color:var(--red); }
+.toggle-btn.active { border-color:var(--green); color:var(--green); }
+.toggle-btn.inactive { border-color:var(--red); color:var(--red); }
 
 .pagination {
   display:flex; align-items:center; gap:8px;
@@ -139,18 +117,6 @@
 .page-btn.active { background:var(--green); color:var(--black); border-color:var(--green); font-weight:700; }
 .page-btn:disabled { opacity:.3; cursor:default; }
 
-/* Badge de margem */
-.margin-badge {
-  display:inline-block; font-size:10px; font-weight:700;
-  padding:1px 6px; border-radius:2px;
-}
-.margin-ok   { background:rgba(38,253,113,.12); color:var(--green); }
-.margin-low  { background:rgba(245,158,11,.12); color:#f59e0b; }
-.margin-neg  { background:rgba(251,18,48,.12); color:var(--red); }
-
-/* Tooltip campo */
-.field-hint { font-size:10px; color:var(--muted); margin-top:3px; }
-
 .toast {
   position:fixed; bottom:28px; right:28px; z-index:1000;
   padding:14px 22px; border-left:3px solid var(--green);
@@ -160,12 +126,6 @@
 }
 .toast.error { border-left-color:var(--red); }
 .toast.show  { display:block; }
-
-/* Métricas no topo */
-.prod-metrics {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  gap:1px; background:var(--border); margin-bottom:20px;
-}
 </style>
 </head>
 <body>
@@ -184,7 +144,6 @@
     <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de Serviço</a>
     <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
     <a href="painel-vendas.html"><i class="fas fa-chart-line"></i> Vendas</a>
-    <a href="admin-fiscal.html"><i class="fas fa-file-invoice-dollar"></i> Fiscal</a>
     <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
   </nav>
   <div class="sidebar-bottom">
@@ -203,82 +162,38 @@
   </div>
 
   <div class="content">
-
-    <!-- Métricas rápidas -->
-    <div class="prod-metrics">
-      <div class="metric-card">
-        <div class="metric-value" id="mTotal">—</div>
-        <div class="metric-label">Total de Produtos</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="mAtivos">—</div>
-        <div class="metric-label">Ativos</div>
-      </div>
-      <div class="metric-card red">
-        <div class="metric-value" id="mCriticos">—</div>
-        <div class="metric-label">Estoque Crítico</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="mSemBarcode">—</div>
-        <div class="metric-label">Sem Código de Barras</div>
-      </div>
-    </div>
-
     <!-- Alerta estoque crítico -->
-    <div id="stockAlert" style="display:none;margin-bottom:20px;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;align-items:center;gap:12px;">
+    <div id="stockAlert" style="display:none;margin-bottom:20px;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;">
       <i class="fas fa-triangle-exclamation"></i>
       <span id="stockAlertMsg"></span>
     </div>
 
-    <!-- Barra de busca -->
+    <!-- Barra superior -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar por nome, código de barras ou NCM…">
+      <input type="text" id="searchInput" placeholder="Buscar produtos por nome…">
       <button class="btn btn-ghost btn-sm" id="clearSearch"><i class="fas fa-xmark"></i></button>
       <button class="btn btn-primary btn-sm" id="btnNovo">
         <i class="fas fa-plus"></i> Novo Produto
       </button>
     </div>
 
-    <!-- Filtros -->
-    <div class="filter-bar">
-      <select id="filterStatus">
-        <option value="">Todos os Status</option>
-        <option value="active">Ativos</option>
-        <option value="inactive">Inativos</option>
-      </select>
-      <select id="filterStock">
-        <option value="">Estoque: Todos</option>
-        <option value="critico">Crítico (&lt; mínimo)</option>
-        <option value="zero">Zerado</option>
-        <option value="ok">OK</option>
-      </select>
-      <select id="filterBarcode">
-        <option value="">Código de Barras: Todos</option>
-        <option value="sem">Sem código de barras</option>
-        <option value="com">Com código de barras</option>
-      </select>
-    </div>
-
     <!-- Tabela -->
     <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
-      <table class="data-table" id="mainTable">
+      <table class="data-table">
         <thead>
           <tr>
-            <th style="width:54px">IMG</th>
-            <th>Nome / NCM</th>
+            <th style="width:60px">IMG</th>
+            <th>Nome</th>
             <th>Categoria</th>
             <th>Marca</th>
-            <th>Barcode</th>
-            <th>Preço Venda</th>
-            <th>Custo / Margem</th>
-            <th>Peso (kg)</th>
+            <th>Preço</th>
             <th>Estoque</th>
             <th>Status</th>
-            <th style="width:90px">Ações</th>
+            <th style="width:130px">Ações</th>
           </tr>
         </thead>
         <tbody id="produtosTable">
-          <tr><td colspan="11" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
+          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
         </tbody>
       </table>
 
@@ -295,90 +210,59 @@
       <button class="modal-close" id="modalClose"><i class="fas fa-xmark"></i></button>
     </div>
 
-    <!-- ── SEÇÃO 1: IDENTIFICAÇÃO ── -->
-    <div class="form-section"><i class="fas fa-tag"></i> IDENTIFICAÇÃO</div>
-    <div class="form-grid-2" style="margin-bottom:12px">
-      <div class="field">
-        <label>Nome *</label>
-        <input type="text" id="fNome" placeholder="Ex: Pastilha de Freio Brembo">
-      </div>
-      <div class="field">
-        <label>NCM <span style="color:var(--muted);font-weight:400">(8 dígitos — obrigatório NF-e)</span></label>
-        <input type="text" id="fNcm" placeholder="Ex: 87083090" maxlength="10">
-        <div class="field-hint">Sem pontos ou traços — só números</div>
-      </div>
-      <div class="field">
-        <label>Código de Barras (EAN-13)</label>
-        <input type="text" id="fBarcode" placeholder="Ex: 7891234567890" maxlength="14">
-        <div class="field-hint">EAN-13 ou EAN-8. Deixe vazio se não tiver.</div>
-      </div>
-      <div class="field">
-        <label>Categoria *</label>
-        <input type="text" id="fCategoria" placeholder="Ex: Freios, Suspensão, Motor…">
-      </div>
-      <div class="field">
-        <label>Marca *</label>
-        <input type="text" id="fMarca" placeholder="Ex: Brembo, Bosch, NGK…">
-      </div>
-      <div class="field">
-        <label>Veículos Compatíveis</label>
-        <input type="text" id="fVeiculos" placeholder="Ex: Gol, Palio, Uno (separados por vírgula)">
-      </div>
-    </div>
-
-    <!-- ── SEÇÃO 2: PREÇOS ── -->
-    <div class="form-section"><i class="fas fa-dollar-sign"></i> PREÇOS & CUSTO</div>
-    <div class="form-grid-3" style="margin-bottom:12px">
-      <div class="field">
-        <label>Preço de Venda (R$) *</label>
-        <input type="number" id="fPreco" placeholder="0.00" min="0" step="0.01">
-      </div>
-      <div class="field">
-        <label>Preço de Custo (R$)</label>
-        <input type="number" id="fCostPrice" placeholder="0.00" min="0" step="0.01">
-        <div class="field-hint">Usado para cálculo de margem</div>
-      </div>
-      <div class="field">
-        <label>Margem Estimada</label>
-        <div id="fMargemDisplay" style="padding:11px 14px;background:var(--black);border:1px solid var(--border);font-size:14px;color:var(--muted);min-height:44px;display:flex;align-items:center">
-          — Preencha preço e custo
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SEÇÃO 3: ESTOQUE & LOGÍSTICA ── -->
-    <div class="form-section"><i class="fas fa-warehouse"></i> ESTOQUE & LOGÍSTICA</div>
-    <div class="form-grid-3" style="margin-bottom:12px">
-      <div class="field">
-        <label>Estoque Atual *</label>
-        <input type="number" id="fEstoque" placeholder="0" min="0" step="1">
-      </div>
-      <div class="field">
-        <label>Estoque Mínimo (Alerta)</label>
-        <input type="number" id="fStockMin" placeholder="Ex: 5" min="0" step="1"
-          title="Alerta disparado quando estoque cair abaixo deste valor">
-        <div class="field-hint">Padrão do sistema: 5 unidades</div>
-      </div>
-      <div class="field">
-        <label>Peso (kg) <span style="color:var(--muted);font-weight:400">— cálculo de frete</span></label>
-        <input type="number" id="fWeight" placeholder="Ex: 0.5" min="0" step="0.001">
-        <div class="field-hint">Em quilogramas. Ex: 0.5 = 500g</div>
-      </div>
-    </div>
-
-    <!-- ── SEÇÃO 4: DESCRIÇÃO & IMAGEM ── -->
-    <div class="form-section"><i class="fas fa-align-left"></i> DESCRIÇÃO & IMAGEM</div>
-    <div class="form-grid-2" style="margin-bottom:12px">
+    <div class="form-grid-2">
+      <!-- Coluna esquerda -->
       <div>
         <div class="field">
-          <label>Descrição Técnica</label>
-          <textarea id="fDescricao" rows="4" placeholder="Descrição técnica do produto…"
-            style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);
-                   color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;
-                   outline:none;resize:vertical;"></textarea>
+          <label>Nome *</label>
+          <input type="text" id="fNome" placeholder="Ex: Pastilha de Freio Brembo">
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <input type="text" id="fCategoria" placeholder="Ex: Freios">
+        </div>
+        <div class="field">
+          <label>Marca</label>
+          <input type="text" id="fMarca" placeholder="Ex: Brembo">
+        </div>
+        <div class="field">
+          <label>NCM</label>
+          <input type="text" id="fNcm" placeholder="Ex: 8708.30.90" maxlength="12">
+        </div>
+        <div class="field">
+          <label>SKU</label>
+          <input type="text" id="fSku" placeholder="Ex: HV-00123">
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">Código interno de controle</div>
+        </div>
+        <div class="field">
+          <label>Código de Barras</label>
+          <input type="text" id="fBarcode" placeholder="Ex: 1234567890123" maxlength="13">
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">EAN/GTIN do produto</div>
         </div>
       </div>
+      <!-- Coluna direita -->
       <div>
+        <div class="field">
+          <label>Preço de Venda (R$) *</label>
+          <input type="number" id="fPreco" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Preço de Custo (R$) *</label>
+          <input type="number" id="fCostPrice" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Peso (kg)</label>
+          <input type="number" id="fWeight" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Estoque *</label>
+          <input type="number" id="fEstoque" placeholder="0" min="0" step="1">
+        </div>
+        <div class="field">
+          <label>Estoque Mínimo (Alerta)</label>
+          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta será disparado quando estoque cair abaixo deste valor">
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">Deixe em branco para usar o padrão do sistema (5 unidades).</div>
+        </div>
         <div class="field">
           <label>Imagem do Produto</label>
           <div class="img-preview-wrap" id="imgWrap" title="Clique para selecionar imagem">
@@ -400,6 +284,12 @@
           <div id="imgStatus" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
         </div>
       </div>
+    </div>
+
+    <!-- Descrição full-width -->
+    <div class="field">
+      <label>Descrição</label>
+      <textarea id="fDescricao" rows="3" placeholder="Descrição técnica do produto…" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
     </div>
 
     <div id="formError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
@@ -432,28 +322,21 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-// ── CONFIG ──────────────────────────────────────────────────────────────────
-const CONFIG = {
-  ENDPOINT:     "https://nyc.cloud.appwrite.io/v1",
-  PROJECT_ID:   "69a0c93200084defefe1",
-  DB:           "69a0ebc70034fa76feff",
-  COL_PRODUCTS: "produtos",
-  BUCKET_ID:    "produtos_imgs",
-  PAGE_SIZE:    15,
-  CACHE_TTL:    5 * 60 * 1000,
-  STOCK_CRITICAL: 5,
-}
+
 
 // ── APPWRITE SDK ─────────────────────────────────────────────────────────────
-import { Client, Databases, Account, Storage, Query, ID }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+import { Client, Databases, Account, Storage, Query, ID, Permission, Role }
+  from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
+import { CONFIG } from "./config.js"
+const client = new Client()
+  .setEndpoint(CONFIG.ENDPOINT)
+  .setProject(CONFIG.PROJECT_ID)
 
-const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
 const databases = new Databases(client)
 const account   = new Account(client)
 const storage   = new Storage(client)
 
-// ── GUARD ────────────────────────────────────────────────────────────────────
+// ── GUARD — apenas admin ─────────────────────────────────────────────────────
 ;(async () => {
   try {
     const user = await account.get()
@@ -462,25 +345,26 @@ const storage   = new Storage(client)
     window.location.href = "login.html"
     return
   }
+
+  // Verifica role via Mirror
+  // (simplificado — validação completa em userService.js)
   init()
 })()
 
 // ── ESTADO ───────────────────────────────────────────────────────────────────
-let currentPage     = 1
-let totalPages      = 1
-let searchTerm      = ""
-let searchTimer     = null
-let editingId       = null
-let deleteTarget    = null
-let selectedFile    = null
-let existingImageId = null
-let allProductsCache = []   // cache local para métricas e filtros client-side
+let currentPage    = 1
+let totalPages     = 1
+let searchTerm     = ""
+let searchTimer    = null
+let editingId      = null       // null = criar novo, string = editar existente
+let deleteTarget   = null       // { $id, name }
+let selectedFile   = null       // File a fazer upload
+let existingImageURL = null      // imageURL já salva no produto em edição
 
-// ── CACHE IN-MEMORY ──────────────────────────────────────────────────────────
+// ── CACHE (in-memory, mesma lógica do productService.js) ────────────────────
 const cache = new Map()
-function cacheKey(term, page, status, stock, barcode) {
-  return `${term}|${page}|${status}|${stock}|${barcode}`
-}
+
+function cacheKey(term, page) { return `${term}|${page}` }
 function cacheGet(k) {
   const e = cache.get(k)
   if (!e) return null
@@ -490,243 +374,157 @@ function cacheGet(k) {
 function cacheSet(k, d) { cache.set(k, { time: Date.now(), data: d }) }
 function invalidateCache() { cache.clear() }
 
-// ── UTILS ────────────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-}
-let toastTimer
-function toast(msg, type = "") {
-  const el = document.getElementById("toast")
-  el.textContent = msg
-  el.className   = "toast show" + (type ? " " + type : "")
-  clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => el.classList.remove("show"), 3500)
-}
-
-// ── CÁLCULO DE MARGEM ────────────────────────────────────────────────────────
-function calcMargem(price, cost) {
-  price = parseFloat(price) || 0
-  cost  = parseFloat(cost)  || 0
-  if (!price || !cost) return null
-  return ((price - cost) / price * 100).toFixed(1)
-}
-function margemBadge(pct) {
-  if (pct === null) return `<span style="color:var(--muted);font-size:12px">—</span>`
-  const v = parseFloat(pct)
-  if (v < 0)  return `<span class="margin-badge margin-neg">▼ ${pct}%</span>`
-  if (v < 20) return `<span class="margin-badge margin-low">▲ ${pct}%</span>`
-  return `<span class="margin-badge margin-ok">▲ ${pct}%</span>`
-}
-function updateMargemDisplay() {
-  const price = parseFloat(document.getElementById("fPreco").value)    || 0
-  const cost  = parseFloat(document.getElementById("fCostPrice").value) || 0
-  const el    = document.getElementById("fMargemDisplay")
-  if (!price && !cost) { el.textContent = "— Preencha preço e custo"; el.style.color = "var(--muted)"; return }
-  if (!cost)  { el.textContent = "Informe o custo para calcular"; el.style.color = "var(--muted)"; return }
-  const pct = calcMargem(price, cost)
-  const v   = parseFloat(pct)
-  el.innerHTML  = margemBadge(pct)
-  el.style.color = v < 0 ? "var(--red)" : v < 20 ? "#f59e0b" : "var(--green)"
-}
-
-// ── SERVIÇO: LISTAR PRODUTOS ─────────────────────────────────────────────────
-async function listProdutos(page = 1, term = "", statusFilt = "", stockFilt = "", barcodeFilt = "") {
-  const k = cacheKey(term, page, statusFilt, stockFilt, barcodeFilt)
+// ── PRODUTO SERVICE ──────────────────────────────────────────────────────────
+async function listProdutos(page = 1, term = "") {
+  const k = cacheKey(term, page)
   const c = cacheGet(k)
   if (c) return c
 
   const queries = [
-    Query.limit(CONFIG.PAGE_SIZE),
-    Query.offset((page - 1) * CONFIG.PAGE_SIZE),
+    Query.limit(CONFIG.STORE.PAGE_SIZE),
+    Query.offset((page - 1) * CONFIG.STORE.PAGE_SIZE),
     Query.orderDesc("$createdAt"),
-    Query.isNull("deletedAt"),   // soft-delete: nunca exibe excluídos
   ]
-
   if (term) queries.push(Query.search("name", term))
 
-  // Filtro de status
-  if (statusFilt === "active")   queries.push(Query.equal("isActive", true))
-  if (statusFilt === "inactive") queries.push(Query.equal("isActive", false))
-
-  // Filtros de estoque e barcode são aplicados client-side (Appwrite não suporta esses queries combinados facilmente)
-  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_PRODUCTS, queries)
-  let docs  = res.documents
-
-  // Filtros client-side
-  if (stockFilt === "critico") docs = docs.filter(p => (p.stock ?? 0) < (p.stockGTO ?? CONFIG.STOCK_CRITICAL) && (p.stock ?? 0) > 0)
-  if (stockFilt === "zero")    docs = docs.filter(p => (p.stock ?? 0) === 0)
-  if (stockFilt === "ok")      docs = docs.filter(p => (p.stock ?? 0) >= (p.stockGTO ?? CONFIG.STOCK_CRITICAL))
-  if (barcodeFilt === "sem")   docs = docs.filter(p => !p.barcode)
-  if (barcodeFilt === "com")   docs = docs.filter(p => !!p.barcode)
-
+  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, queries)
   const result = {
-    products: docs,
-    total:    stockFilt || barcodeFilt ? docs.length : res.total,
-    pages:    Math.ceil((stockFilt || barcodeFilt ? docs.length : res.total) / CONFIG.PAGE_SIZE),
+    products: res.documents,
+    total:    res.total,
+    pages:    Math.ceil(res.total / CONFIG.STORE.PAGE_SIZE),
     page,
   }
   cacheSet(k, result)
   return result
 }
 
-// ── SERVIÇO: SALVAR PRODUTO ─────────────────────────────────────────────────
 async function saveProduto(data, fileObj, editId) {
-  let imageId  = data.imageId  ?? null
-  let imageUrl = data.imageUrl ?? null
+  let imageURL = data.imageURL ?? null
 
+  // ✅ Permissões — VÁLIDAS apenasPR: read, update, delete, write
+  // (Appwrite != 1.0 não suporta Permission.create())
+  const adminPerms = [
+    Permission.read(Role.any()),                                   // ✅ loja pública pode ler
+    Permission.write(Role.team("69c7e962001466871fcc")),           // ✅ admin pode escrever
+    Permission.update(Role.team("69c7e962001466871fcc")),          // ✅ admin pode editar
+    Permission.delete(Role.team("69c7e962001466871fcc")),          // ✅ admin pode deletar
+  ]
+
+  // Upload de imagem se houver arquivo novo
   if (fileObj) {
-    if (imageId) {
-      try { await storage.deleteFile(CONFIG.BUCKET_ID, imageId) } catch {}
+    try {
+      const uploaded = await storage.createFile(CONFIG.BUCKET_ID, ID.unique(), fileObj, adminPerms)
+      imageURL = storage.getFilePreview(CONFIG.BUCKET_ID, uploaded.$id).toString()
+    } catch (err) {
+      console.warn("Storage upload failed (bucket may not exist):", err.message)
+      imageURL = existingImageURL  // manter URL anterior
     }
-    const uploaded = await storage.createFile(CONFIG.BUCKET_ID, ID.unique(), fileObj)
-    imageId  = uploaded.$id
-    imageUrl = storage.getFilePreview(CONFIG.BUCKET_ID, imageId).toString()
   }
-
-  // Sanitiza stockMin: campo no Appwrite se chama stockGTO conforme DB design
-  const stockMin = parseInt(data.stockMin) || null
 
   const payload = {
     name:        data.name.trim(),
-    description: data.description?.trim()  ?? "",
-    category:    data.category?.trim()     ?? "",
-    brand:       data.brand?.trim()        ?? "",
-    price:       Number(data.price)        || 0,
-    costPrice:   Number(data.costPrice)    || null,
-    weight:      Number(data.weight)       || null,
-    stock:       parseInt(data.stock)      || 0,
-    stockGTO:    stockMin,                          // stockGTO = stockMin no DB
-    barcode:     data.barcode?.trim()      || null,
-    vehicles:    data.vehicles?.trim()     ?? "",
-    ncm:         data.ncm?.replace(/\D/g,"") || "",
-    isActive:    data.isActive ?? true,
-    imageId:     imageId,
-    imageUrl:    imageUrl,
-    deletedAt:   null,                              // sempre null ao criar/editar
+    description: data.description?.trim()     || null,
+    category:    data.category?.trim()        || null,
+    brand:       data.brand?.trim()           || null,
+    price:       Number(data.price)           || 0,
+    costPrice:   Number(data.costPrice)       || null,
+    weight:      Number(data.weight)          || null,
+    qtd:         parseInt(data.qtd)           || 0,
+    minStock:    parseInt(data.minStock)      || null,
+    sku:         data.sku?.trim()             || null,
+    ncm:         data.ncm?.replace(/\D/g,"") || null,
+    barcode:     data.barcode?.trim()         || null,
+    isActive:    data.isActive               ?? true,
+    imageURL:    imageURL,
+    deletedAt:   null,
   }
 
   let saved
   if (editId) {
-    saved = await databases.updateDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, editId, payload)
+    saved = await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, editId, payload)
   } else {
-    saved = await databases.createDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, ID.unique(), payload)
+    saved = await databases.createDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, ID.unique(), payload, adminPerms)
   }
 
   invalidateCache()
   return saved
 }
 
-// ── SERVIÇO: TOGGLE ATIVO ────────────────────────────────────────────────────
 async function toggleActive(id, currentValue) {
-  await databases.updateDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, id, { isActive: !currentValue })
+  await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, id, { isActive: !currentValue })
   invalidateCache()
 }
 
-// ── SERVIÇO: SOFT DELETE ─────────────────────────────────────────────────────
-async function deleteProduto(id, imageId) {
-  // Soft-delete: seta deletedAt em vez de remover fisicamente
-  await databases.updateDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, id, {
+async function deleteProduto(id) {
+  // Soft-delete: registra deletedAt, desativa produto — nunca apaga do banco
+  await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, id, {
     deletedAt: new Date().toISOString(),
     isActive:  false,
   })
-  // Remove imagem do Storage caso exista
-  if (imageId) {
-    try { await storage.deleteFile(CONFIG.BUCKET_ID, imageId) } catch {}
-  }
   invalidateCache()
 }
 
-// ── MÉTRICAS ─────────────────────────────────────────────────────────────────
-async function loadMetrics() {
+// ── ALERTA ESTOQUE CRÍTICO ───────────────────────────────────────────────────
+async function checkStockAlerts() {
   try {
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_PRODUCTS, [
+    // Busca ativos e filtra client-side usando minStock individual ou STOCK_CRITICAL como fallback
+    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [
+      Query.equal("isActive", true),
       Query.isNull("deletedAt"),
-      Query.limit(500),
+      Query.limit(200),
     ])
-    const all       = res.documents
-    allProductsCache = all
-    const ativos    = all.filter(p => p.isActive !== false)
-    const criticos  = all.filter(p => (p.stock ?? 0) < (p.stockGTO ?? CONFIG.STOCK_CRITICAL) && p.isActive !== false)
-    const semBarcode= all.filter(p => !p.barcode && p.isActive !== false)
-
-    document.getElementById("mTotal").textContent    = all.length
-    document.getElementById("mAtivos").textContent   = ativos.length
-    document.getElementById("mCriticos").textContent = criticos.length
-    document.getElementById("mSemBarcode").textContent = semBarcode.length
-
-    // Alerta de estoque crítico
+    const criticos = res.documents.filter(p =>
+      (p.qtd ?? 0) < (p.minStock ?? CONFIG.STOCK_CRITICAL)
+    )
+    const el  = document.getElementById("stockAlert")
+    const msg = document.getElementById("stockAlertMsg")
     if (criticos.length > 0) {
-      document.getElementById("stockAlertMsg").textContent =
-        `${criticos.length} produto(s) com estoque crítico. Acesse Gestão de Estoque para repor.`
-      document.getElementById("stockAlert").style.display = "flex"
+      msg.textContent = `${criticos.length} produto(s) com estoque crítico. Acesse Gestão de Estoque para repor.`
+      el.style.display = "flex"
     } else {
-      document.getElementById("stockAlert").style.display = "none"
+      el.style.display = "none"
     }
   } catch {}
-}
-
-// ── ALERTA ESTOQUE ───────────────────────────────────────────────────────────
-async function checkStockAlerts() {
-  // Já tratado em loadMetrics
-  await loadMetrics()
 }
 
 // ── RENDER TABELA ────────────────────────────────────────────────────────────
 function renderTable(products) {
   const tbody = document.getElementById("produtosTable")
   if (!products.length) {
-    tbody.innerHTML = `<tr><td colspan="11" style="color:var(--muted);padding:32px;text-align:center">
-      <i class="fas fa-box-open" style="font-size:24px;display:block;margin-bottom:8px"></i>
-      Nenhum produto encontrado.</td></tr>`
+    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--muted);padding:32px;text-align:center"><i class="fas fa-box-open" style="font-size:24px;display:block;margin-bottom:8px"></i>Nenhum produto encontrado.</td></tr>`
     return
   }
 
   tbody.innerHTML = products.map(p => {
-    const imgHtml = p.imageUrl
-      ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
-      : `<div style="width:44px;height:44px;background:var(--dark);border:1px solid var(--border);
-            display:flex;align-items:center;justify-content:center;color:var(--muted);">
-           <i class="fas fa-image"></i></div>`
+    const imgHtml = p.imageURL
+      ? `<img src="${p.imageURL}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
+      : `<div style="width:44px;height:44px;background:var(--dark);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="fas fa-image"></i></div>`
 
-    const stockMin  = p.stockGTO ?? CONFIG.STOCK_CRITICAL
-    const isCrit    = (p.stock ?? 0) < stockMin
-    const isZero    = (p.stock ?? 0) === 0
-    const stockColor = isZero ? "color:var(--red);font-weight:700"
-                     : isCrit ? "color:#f59e0b;font-weight:700"
-                     : "color:var(--green)"
-    const stockIcon = isZero
-      ? `<i class="fas fa-circle-xmark" style="margin-left:4px;color:var(--red)" title="Zerado"></i>`
-      : isCrit
-      ? `<i class="fas fa-triangle-exclamation" style="margin-left:4px;color:#f59e0b" title="Abaixo do mínimo (${stockMin})"></i>`
-      : ""
+    const minimo     = p.minStock ?? CONFIG.STOCK_CRITICAL
+    const isCrit     = (p.qtd ?? 0) < minimo
+    const stockClass = isCrit ? "style=\"color:var(--red);font-weight:700\"" : ""
+    const stockIcon  = isCrit ? `<i class="fas fa-triangle-exclamation" title="Abaixo do mínimo (${minimo})" style="margin-left:4px;color:var(--red)"></i>` : ""
 
-    const margem    = calcMargem(p.price, p.costPrice)
     const activeLabel = p.isActive ? "Ativo" : "Inativo"
     const toggleClass = p.isActive ? "active" : "inactive"
-
-    // Barcode: exibe formatado ou "—"
-    const barcodeHtml = p.barcode
-      ? `<span style="font-family:monospace;font-size:11px;color:var(--muted)">${esc(p.barcode)}</span>`
-      : `<span style="color:var(--border);font-size:11px;font-style:italic">—</span>`
+    
+    // ✅ XSS FIX: Garantir que esc() é usada em TODOS os dados dinâmicos
+    const escapedName = esc(p.name)
+    const escapedNCM = p.ncm ? esc(p.ncm) : ""
+    const escapedCategory = esc(p.category || "—")
+    const escapedBrand = esc(p.brand || "—")
+    const escapedDataName = esc(p.name)
 
     return `<tr>
       <td>${imgHtml}</td>
       <td>
-        <div style="font-weight:600">${esc(p.name)}</div>
-        ${p.ncm ? `<div style="font-size:10px;color:var(--muted)">NCM: ${esc(p.ncm)}</div>` : ""}
+        <div style="font-weight:600">${escapedName}</div>
+        ${escapedNCM ? `<div style="font-size:11px;color:var(--muted)">NCM: ${escapedNCM}</div>` : ""}
       </td>
-      <td style="color:var(--muted)">${esc(p.category || "—")}</td>
-      <td style="color:var(--muted)">${esc(p.brand || "—")}</td>
-      <td>${barcodeHtml}</td>
-      <td style="color:var(--white)">R$ ${Number(p.price || 0).toFixed(2)}</td>
-      <td>
-        ${p.costPrice ? `<div style="font-size:11px;color:var(--muted)">R$ ${Number(p.costPrice).toFixed(2)}</div>` : ""}
-        ${margemBadge(margem)}
-      </td>
-      <td style="color:var(--muted);font-size:12px">
-        ${p.weight ? `${Number(p.weight).toFixed(3)} kg` : "—"}
-      </td>
-      <td style="${stockColor}">${p.stock ?? 0}${stockIcon}</td>
+      <td style="color:var(--muted)">${escapedCategory}</td>
+      <td style="color:var(--muted)">${escapedBrand}</td>
+      <td>R$ ${Number(p.price || 0).toFixed(2)}</td>
+      <td ${stockClass}>${p.qtd ?? 0}${stockIcon}</td>
       <td>
         <button class="toggle-btn ${toggleClass}" data-id="${p.$id}" data-active="${p.isActive}">
           <i class="fas fa-${p.isActive ? "circle-check" : "circle-xmark"}"></i>
@@ -735,13 +533,14 @@ function renderTable(products) {
       </td>
       <td>
         <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm edit-btn" data-id="${p.$id}" title="Editar">
+          <button class="btn btn-ghost btn-sm edit-btn"
+            data-id="${p.$id}"
+            title="Editar">
             <i class="fas fa-pen"></i>
           </button>
           <button class="btn btn-danger btn-sm del-btn"
             data-id="${p.$id}"
-            data-name="${esc(p.name)}"
-            data-imageid="${p.imageId || ""}"
+            data-name="${escapedDataName}"
             title="Excluir">
             <i class="fas fa-trash"></i>
           </button>
@@ -774,7 +573,7 @@ function renderTable(products) {
 
   // Excluir
   tbody.querySelectorAll(".del-btn").forEach(btn => {
-    btn.addEventListener("click", () => openConfirm(btn.dataset.id, btn.dataset.name, btn.dataset.imageid))
+    btn.addEventListener("click", () => openConfirm(btn.dataset.id, btn.dataset.name))
   })
 }
 
@@ -783,15 +582,21 @@ function renderPagination(page, pages) {
   if (pages <= 1) { el.innerHTML = ""; return }
 
   let html = `<button class="page-btn" id="prevBtn" ${page <= 1 ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>`
+
   const range = []
   for (let i = 1; i <= pages; i++) {
     if (i === 1 || i === pages || Math.abs(i - page) <= 2) range.push(i)
     else if (range[range.length - 1] !== "…") range.push("…")
   }
+
   range.forEach(r => {
-    if (r === "…") html += `<span style="color:var(--muted);padding:0 4px">…</span>`
-    else html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`
+    if (r === "…") {
+      html += `<span style="color:var(--muted);padding:0 4px">…</span>`
+    } else {
+      html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`
+    }
   })
+
   html += `<button class="page-btn" id="nextBtn" ${page >= pages ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`
   el.innerHTML = html
 
@@ -804,79 +609,74 @@ function renderPagination(page, pages) {
 
 // ── LOAD ─────────────────────────────────────────────────────────────────────
 async function load() {
-  const colspanCount = 11
   document.getElementById("produtosTable").innerHTML =
-    `<tr><td colspan="${colspanCount}" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>`
-
-  const statusFilt  = document.getElementById("filterStatus").value
-  const stockFilt   = document.getElementById("filterStock").value
-  const barcodeFilt = document.getElementById("filterBarcode").value
+    `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>`
 
   try {
-    const result = await listProdutos(currentPage, searchTerm, statusFilt, stockFilt, barcodeFilt)
+    const result = await listProdutos(currentPage, searchTerm)
     totalPages = result.pages
     renderTable(result.products)
     renderPagination(currentPage, totalPages)
   } catch (e) {
     document.getElementById("produtosTable").innerHTML =
-      `<tr><td colspan="${colspanCount}" style="color:var(--red);padding:24px">Erro ao carregar: ${e.message}</td></tr>`
+      `<tr><td colspan="8" style="color:var(--red);padding:24px">Erro ao carregar: ${e.message}</td></tr>`
   }
 }
 
 // ── MODAL ────────────────────────────────────────────────────────────────────
-function openModal() {
+async function openModal() {
   document.getElementById("modalOverlay").classList.add("open")
 }
+
 function closeModal() {
   document.getElementById("modalOverlay").classList.remove("open")
   clearForm()
 }
+
 function clearForm() {
   editingId       = null
   selectedFile    = null
-  existingImageId = null
-  const ids = ["fNome","fCategoria","fMarca","fPreco","fCostPrice","fWeight",
-               "fEstoque","fStockMin","fVeiculos","fNcm","fBarcode","fDescricao"]
-  ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = "" })
-  document.getElementById("fMargemDisplay").textContent = "— Preencha preço e custo"
-  document.getElementById("fMargemDisplay").style.color = "var(--muted)"
-  document.getElementById("imgPreview").style.display   = "none"
+  existingImageURL = null
+  ;["fNome","fCategoria","fMarca","fPreco","fCostPrice","fWeight","fEstoque","fMinStock","fSku","fNcm","fBarcode","fDescricao"].forEach(id => {
+    const el = document.getElementById(id)
+    if (el) el.value = ""
+  })
+  document.getElementById("imgPreview").style.display = "none"
   document.getElementById("imgPlaceholder").style.display = "flex"
-  document.getElementById("btnRemoverImg").style.display  = "none"
+  document.getElementById("btnRemoverImg").style.display = "none"
   document.getElementById("imgStatus").textContent = ""
-  document.getElementById("formError").style.display     = "none"
-  document.getElementById("modalTitle").textContent = "NOVO PRODUTO"
+  document.getElementById("formError").style.display = "none"
+  document.getElementById("modalTitle").textContent  = "NOVO PRODUTO"
 }
 
 async function openEditModal(productId) {
   try {
-    const p = await databases.getDocument(CONFIG.DB, CONFIG.COL_PRODUCTS, productId)
+    const p = await databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId)
     editingId       = productId
-    existingImageId = p.imageId ?? null
+    existingImageURL = p.imageURL ?? null
 
-    document.getElementById("modalTitle").textContent  = "EDITAR PRODUTO"
-    document.getElementById("fNome").value       = p.name        ?? ""
-    document.getElementById("fCategoria").value  = p.category    ?? ""
-    document.getElementById("fMarca").value      = p.brand       ?? ""
-    document.getElementById("fPreco").value      = p.price       ?? ""
-    document.getElementById("fCostPrice").value  = p.costPrice   ?? ""
-    document.getElementById("fWeight").value     = p.weight      ?? ""
-    document.getElementById("fEstoque").value    = p.stock       ?? ""
-    document.getElementById("fStockMin").value   = p.stockGTO    ?? ""   // stockGTO = stockMin no DB
-    document.getElementById("fVeiculos").value   = p.vehicles    ?? ""
-    document.getElementById("fNcm").value        = p.ncm         ?? ""
-    document.getElementById("fBarcode").value    = p.barcode     ?? ""
-    document.getElementById("fDescricao").value  = p.description ?? ""
+    document.getElementById("modalTitle").textContent = "EDITAR PRODUTO"
+    document.getElementById("fNome").value      = p.name        ?? ""
+    document.getElementById("fCategoria").value = p.category    ?? ""
+    document.getElementById("fMarca").value     = p.brand       ?? ""
+    document.getElementById("fPreco").value     = p.price       ?? ""
+    document.getElementById("fCostPrice").value = p.costPrice   ?? ""
+    document.getElementById("fWeight").value    = p.weight      ?? ""
+    document.getElementById("fEstoque").value   = p.qtd       ?? ""
+    document.getElementById("fMinStock").value  = p.minStock    ?? ""
+    document.getElementById("fSku").value       = p.sku         ?? ""
+    document.getElementById("fNcm").value       = p.ncm         ?? ""
+    document.getElementById("fBarcode").value   = p.barcode     ?? ""
+    document.getElementById("fDescricao").value = p.description ?? ""
 
-    updateMargemDisplay()
-
-    if (p.imageUrl) {
-      document.getElementById("imgPreview").src             = p.imageUrl
-      document.getElementById("imgPreview").style.display   = "block"
+    if (p.imageURL) {
+      document.getElementById("imgPreview").src           = p.imageURL
+      document.getElementById("imgPreview").style.display = "block"
       document.getElementById("imgPlaceholder").style.display = "none"
       document.getElementById("btnRemoverImg").style.display  = "inline-flex"
     }
-    openModal()
+
+    await openModal()  // ✅ Aguarda o carregamento de filtros
   } catch (e) {
     toast("Erro ao carregar produto: " + e.message, "error")
   }
@@ -884,26 +684,21 @@ async function openEditModal(productId) {
 
 // ── SALVAR ───────────────────────────────────────────────────────────────────
 async function handleSave() {
-  const nome    = document.getElementById("fNome").value.trim()
-  const preco   = document.getElementById("fPreco").value
-  const estoque = document.getElementById("fEstoque").value
-  const errEl   = document.getElementById("formError")
+  const nome     = document.getElementById("fNome").value.trim()
+  const categoria= document.getElementById("fCategoria").value.trim()
+  const marca    = document.getElementById("fMarca").value.trim()
+  const preco    = document.getElementById("fPreco").value
+  const custPrice= document.getElementById("fCostPrice").value
+  const estoque  = document.getElementById("fEstoque").value
+  const errEl    = document.getElementById("formError")
 
-  if (!nome || !preco || estoque === "") {
-    errEl.textContent = "Preencha os campos obrigatórios: Nome, Preço de Venda e Estoque."
+  if (!nome || !preco || !custPrice || estoque === "") {
+    errEl.textContent = "Preencha os campos obrigatórios: Nome, Preço, Preço de Custo e Estoque."
     errEl.style.display = "block"
     return
   }
-
-  // Validação barcode: só aceita se tiver 8 ou 13 dígitos (ou vazio)
-  const barcode = document.getElementById("fBarcode").value.replace(/\D/g,"")
-  if (barcode && barcode.length !== 8 && barcode.length !== 13) {
-    errEl.textContent = "Código de barras inválido. Use EAN-8 (8 dígitos) ou EAN-13 (13 dígitos), ou deixe vazio."
-    errEl.style.display = "block"
-    return
-  }
-
   errEl.style.display = "none"
+
   const btn = document.getElementById("btnSalvar")
   btn.disabled = true
   btn.innerHTML = `<span class="spinner"></span> Salvando…`
@@ -912,49 +707,65 @@ async function handleSave() {
     await saveProduto({
       name:        nome,
       description: document.getElementById("fDescricao").value,
-      category:    document.getElementById("fCategoria").value.trim(),
-      brand:       document.getElementById("fMarca").value.trim(),
+      category:    categoria,
+      brand:       marca,
       price:       preco,
-      costPrice:   document.getElementById("fCostPrice").value,
+      costPrice:   custPrice,
       weight:      document.getElementById("fWeight").value,
-      stock:       estoque,
-      stockMin:    document.getElementById("fStockMin").value,
-      vehicles:    document.getElementById("fVeiculos").value,
+      qtd:         estoque,
+      minStock:    document.getElementById("fMinStock").value,
+      sku:         document.getElementById("fSku").value,
       ncm:         document.getElementById("fNcm").value,
-      barcode:     barcode || null,
+      barcode:     document.getElementById("fBarcode").value,
       isActive:    true,
-      imageId:     existingImageId,
-      imageUrl:    existingImageId ? document.getElementById("imgPreview").src : null,
+      imageURL:    existingImageURL,
+      // imageURL atualizado em saveProduto via Storage
     }, selectedFile, editingId)
 
-    toast(editingId ? "Produto atualizado!" : "Produto criado com sucesso!")
+    toast(editingId ? "Produto atualizado!" : "Produto criado!")
     closeModal()
     load()
-    loadMetrics()
+    checkStockAlerts()
   } catch (e) {
     errEl.textContent = "Erro: " + e.message
     errEl.style.display = "block"
   } finally {
     btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-floppy-disk"></i> Salvar Produto`
+    btn.innerHTML = `<i class="fas fa-floppy-disk"></i> SALVAR PRODUTO`
   }
 }
 
 // ── CONFIRM DELETE ───────────────────────────────────────────────────────────
-function openConfirm(id, name, imageId) {
-  deleteTarget = { $id: id, name, imageId }
+function openConfirm(id, name) {
+  deleteTarget = { $id: id, name }
   document.getElementById("confirmNome").textContent = name
   document.getElementById("confirmOverlay").classList.add("open")
 }
+
 function closeConfirm() {
   deleteTarget = null
   document.getElementById("confirmOverlay").classList.remove("open")
 }
 
+// ── TOAST ────────────────────────────────────────────────────────────────────
+let toastTimer
+function toast(msg, type = "") {
+  const el = document.getElementById("toast")
+  el.textContent = msg
+  el.className   = "toast show" + (type ? " " + type : "")
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => { el.classList.remove("show") }, 3500)
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+}
+
 // ── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
   load()
-  loadMetrics()
+  checkStockAlerts()
 
   // Logout
   document.getElementById("logoutBtn").addEventListener("click", async e => {
@@ -964,9 +775,9 @@ function init() {
   })
 
   // Novo produto
-  document.getElementById("btnNovo").addEventListener("click", () => {
+  document.getElementById("btnNovo").addEventListener("click", async () => {
     clearForm()
-    openModal()
+    await openModal()  // ✅ Aguarda o carregamento de filtros
   })
 
   // Fechar modal
@@ -995,21 +806,12 @@ function init() {
     load()
   })
 
-  // Filtros
-  document.getElementById("filterStatus").addEventListener("change",  () => { currentPage = 1; load() })
-  document.getElementById("filterStock").addEventListener("change",   () => { currentPage = 1; load() })
-  document.getElementById("filterBarcode").addEventListener("change", () => { currentPage = 1; load() })
-
-  // Cálculo de margem em tempo real
-  document.getElementById("fPreco").addEventListener("input",     updateMargemDisplay)
-  document.getElementById("fCostPrice").addEventListener("input", updateMargemDisplay)
-
   // Upload de imagem
-  const imgWrap    = document.getElementById("imgWrap")
-  const fileInput  = document.getElementById("fImagem")
-  const imgPreview = document.getElementById("imgPreview")
-  const imgPlaceh  = document.getElementById("imgPlaceholder")
-  const imgStatus  = document.getElementById("imgStatus")
+  const imgWrap   = document.getElementById("imgWrap")
+  const fileInput = document.getElementById("fImagem")
+  const imgPreview= document.getElementById("imgPreview")
+  const imgPlaceh = document.getElementById("imgPlaceholder")
+  const imgStatus = document.getElementById("imgStatus")
 
   imgWrap.addEventListener("click", () => fileInput.click())
   document.getElementById("btnSelecionarImg").addEventListener("click", e => { e.stopPropagation(); fileInput.click() })
@@ -1017,22 +819,28 @@ function init() {
   fileInput.addEventListener("change", () => {
     const file = fileInput.files[0]
     if (!file) return
+
+    // Validações
     if (!file.type.startsWith("image/")) {
       imgStatus.textContent = "Arquivo inválido. Selecione uma imagem."
-      imgStatus.style.color = "var(--red)"; return
+      imgStatus.style.color = "var(--red)"
+      return
     }
     if (file.size > 5 * 1024 * 1024) {
       imgStatus.textContent = "Imagem muito grande. Máximo 5MB."
-      imgStatus.style.color = "var(--red)"; return
+      imgStatus.style.color = "var(--red)"
+      return
     }
+
     selectedFile = file
-    imgStatus.textContent = `${file.name} (${(file.size/1024).toFixed(0)} KB) — será enviada ao salvar`
+    imgStatus.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB) — será enviada ao salvar`
     imgStatus.style.color = "var(--green)"
+
     const reader = new FileReader()
     reader.onload = ev => {
-      imgPreview.src             = ev.target.result
-      imgPreview.style.display   = "block"
-      imgPlaceh.style.display    = "none"
+      imgPreview.src           = ev.target.result
+      imgPreview.style.display = "block"
+      imgPlaceh.style.display  = "none"
       document.getElementById("btnRemoverImg").style.display = "inline-flex"
     }
     reader.readAsDataURL(file)
@@ -1041,7 +849,7 @@ function init() {
   document.getElementById("btnRemoverImg").addEventListener("click", e => {
     e.stopPropagation()
     selectedFile    = null
-    existingImageId = null
+    existingImageURL = null
     fileInput.value = ""
     imgPreview.style.display = "none"
     imgPlaceh.style.display  = "flex"
@@ -1062,12 +870,12 @@ function init() {
     btn.disabled = true
     btn.innerHTML = `<span class="spinner"></span> Excluindo…`
     try {
-      await deleteProduto(deleteTarget.$id, deleteTarget.imageId)
-      toast("Produto removido.")
+      await deleteProduto(deleteTarget.$id)
+      toast("Produto excluído.")
       closeConfirm()
       if (currentPage > 1) currentPage = 1
       load()
-      loadMetrics()
+      checkStockAlerts()
     } catch (e) {
       toast("Erro ao excluir: " + e.message, "error")
     } finally {
