@@ -1,13 +1,13 @@
 // ─── HIVERCAR · userService.js ───────────────────────────────────────────────
 // Auth Mirror Pattern: a collection USERS é o espelho dos dados do Auth.
-// REGRA: o sistema NUNCA lê dados do usuário direto do Auth após o login —
+// REGRA: o sistema NUNCA lê dados do usuário direto do Auth após o login -
 //        usa SEMPRE o Mirror (collection USERS).
 //
 // Fluxo de Cadastro:  validar → salvar USERS → Auth.createUser()
 // Fluxo de Login:     Auth.createSession() → Mirror.update(lastLogin, lastIP, loginCounter)
 // Fluxo de Bloqueio:  5 tentativas → 30min | 10 → 1h | 15 → isActive=false
 //
-// Camada: Domain / Service — importado por login.html e cadastro.html
+// Camada: Domain / Service - importado por login.html e cadastro.html
 
 import { databases, Query, ID } from "./appwriteClient.js"
 import { CONFIG }               from "./config.js"
@@ -37,7 +37,7 @@ export function normalizeEmail(email) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR — LEITURA
+// MIRROR - LEITURA
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -68,7 +68,7 @@ export async function getMirrorById(docId) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR — BLOQUEIO
+// MIRROR - BLOQUEIO
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -100,7 +100,7 @@ export function checkBlocked(mirror) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR — ATUALIZAÇÃO PÓS-LOGIN FALHO
+// MIRROR - ATUALIZAÇÃO PÓS-LOGIN FALHO
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -119,7 +119,7 @@ export async function recordFailedLogin(mirror) {
   const patch  = { failedLogin: failed }
 
   if (failed >= AUTH.DISABLE_AT) {
-    // Bloqueio permanente — admin precisa reativar
+    // Bloqueio permanente - admin precisa reativar
     patch.isActive     = false
     patch.blockedUntil = new Date(Date.now() + 99 * 365 * 24 * 3600000).toISOString()
   } else if (failed >= 10) {
@@ -136,7 +136,7 @@ export async function recordFailedLogin(mirror) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR — ATUALIZAÇÃO PÓS-LOGIN BEM-SUCEDIDO
+// MIRROR - ATUALIZAÇÃO PÓS-LOGIN BEM-SUCEDIDO
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -161,7 +161,7 @@ export async function recordSuccessLogin(docId, ip = "unknown") {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR — CRIAÇÃO (Cadastro)
+// MIRROR - CRIAÇÃO (Cadastro)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -211,7 +211,7 @@ export async function createMirror(data, authId) {
  * cliente  → minha-conta.html  (fallback: loja.html)
  */
 export function redirectByRole(role) {
-  const normalized = String(role ?? "").trim().toUpperCase()
+  const normalized = String(role ?? '').trim().toUpperCase()
   const map = {
     ADMIN:    "dashboard.html",
     SELLER:   "painel-vendas.html",

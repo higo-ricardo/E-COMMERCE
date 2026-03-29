@@ -1,5 +1,5 @@
 // ─── HIVERCAR · fiscalReportService.js ───────────────────────────────────────
-// US-45 · Sprint 05 — Relatórios Fiscais Mensais e Livro Fiscal (SPED)
+// US-45 · Sprint 05 - Relatórios Fiscais Mensais e Livro Fiscal (SPED)
 //
 // Responsabilidades:
 //   - Apuração de ICMS/IBS por período
@@ -26,7 +26,7 @@ const { DB, COL } = CONFIG
 /**
  * Retorna o resumo fiscal de um mês/ano específico.
  *
- * @param {{ mes: number, ano: number }} params  (mes: 1–12)
+ * @param {{ mes: number, ano: number }} params  (mes: 1-12)
  * @returns {Promise<object>} resumo com totais por imposto
  */
 export async function apurarMes({ mes, ano }) {
@@ -107,7 +107,7 @@ export async function apurarMes({ mes, ano }) {
 
 /**
  * Retorna apuração dos últimos N meses para gráfico de evolução.
- * @param {number} meses — quantos meses retroativos (padrão: 6)
+ * @param {number} meses - quantos meses retroativos (padrão: 6)
  */
 export async function evolucaoMensal(meses = 6) {
   const resultados = []
@@ -135,11 +135,11 @@ export async function evolucaoMensal(meses = 6) {
 
 /**
  * Gera um arquivo TXT simplificado no padrão SPED Fiscal EFD (EFD ICMS/IPI).
- * ⚠ Esta é uma implementação de referência — DEVE ser validada por contador
+ * ⚠ Esta é uma implementação de referência - DEVE ser validada por contador
  * e adequada ao regime tributário específico antes de uso em produção.
  *
  * @param {{ mes, ano }} params
- * @returns {string} — conteúdo do arquivo TXT no formato SPED
+ * @returns {string} - conteúdo do arquivo TXT no formato SPED
  */
 export async function gerarSpedFiscal({ mes, ano }) {
   const apuracao = await apurarMes({ mes, ano })
@@ -158,34 +158,34 @@ export async function gerarSpedFiscal({ mes, ano }) {
 
   const linhas = []
 
-  // Registro 0000 — Abertura do arquivo
+  // Registro 0000 - Abertura do arquivo
   linhas.push(`|0000|013|0||${fmt(inicio)}|${fmt(fim)}|${CONFIG.FISCAL.RAZAO_SOCIAL}|${CONFIG.FISCAL.CNPJ.replace(/\D/g,"")}||MA|3|1|12|0|0|0||`)
 
-  // Registro 0001 — Abertura do Bloco 0
+  // Registro 0001 - Abertura do Bloco 0
   linhas.push(`|0001|0|`)
 
-  // Registro 0100 — Dados do contador (obrigatório — preencher com dados reais)
+  // Registro 0100 - Dados do contador (obrigatório - preencher com dados reais)
   linhas.push(`|0100|CONTADOR RESPONSAVEL|000.000.000-00|CRC/UF-000000|||||||||`)
 
-  // Registro 0990 — Encerramento do Bloco 0
+  // Registro 0990 - Encerramento do Bloco 0
   linhas.push(`|0990|${linhas.length + 1}|`)
 
-  // Bloco C — Documentos Fiscais
+  // Bloco C - Documentos Fiscais
   linhas.push(`|C001|0|`)
 
   nfes.documents.forEach((nfe, i) => {
     const dt = new Date(nfe.emitidaEm)
-    // C100 — NF-e/NFC-e emitida
+    // C100 - NF-e/NFC-e emitida
     linhas.push([
       "|C100",
       "1",                                          // ind_oper: 1 = saída
       "1",                                          // ind_emit: 1 = emissão própria
-      nfe.destinatarioCpf?.replace(/\D/g,"") || "",// cod_part
+      nfe.destinatarioCpf?.replace(/\D/g,"") || '-',// cod_part
       "65",                                         // cod_mod: 65 = NFC-e
       "00",                                         // cod_sit: 00 = autorizada
       nfe.serie || "001",
       nfe.numero || String(i+1).padStart(9,"0"),
-      nfe.chaveAcesso || "",
+      nfe.chaveAcesso || '-',
       fmt(dt),
       fmt(dt),                                      // dt_e_s (entrada/saída)
       fmtVal(nfe.totalNota),
@@ -204,13 +204,13 @@ export async function gerarSpedFiscal({ mes, ano }) {
 
   linhas.push(`|C990|${linhas.filter(l => l.startsWith("|C")).length + 1}|`)
 
-  // Bloco E — Apuração do ICMS
+  // Bloco E - Apuração do ICMS
   linhas.push(`|E001|0|`)
   linhas.push(`|E100|${fmt(inicio)}|${fmt(fim)}|`)
   linhas.push(`|E110|${fmtVal(apuracao.faturamentoBruto)}|0|0|${fmtVal(apuracao.impostos.ICMS)}|0|0|${fmtVal(apuracao.impostos.ICMS)}|0|0|0|0|0|0|`)
   linhas.push(`|E990|3|`)
 
-  // Bloco 9 — Controle e Encerramento
+  // Bloco 9 - Controle e Encerramento
   linhas.push(`|9001|0|`)
   linhas.push(`|9900|0000|1|`)
   linhas.push(`|9900|0001|1|`)

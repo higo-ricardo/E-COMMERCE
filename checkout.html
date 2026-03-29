@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout â€” HIVERCAR AUTOPEÃ‡AS</title>
+<title>Checkout - HIVERCAR AUTOPEÇAS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -18,7 +18,7 @@
   <div class="container">
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÃ‡AS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
     <div class="nav-links">
       <a href="cart.html" class="nav-cart">
@@ -45,10 +45,10 @@
   <div class="container">
     <div class="checkout-layout">
 
-      <!-- FORMULÃRIO EM STEPS -->
+      <!-- FORMULÁRIO EM STEPS -->
       <div class="form-panel">
 
-        <!-- Step 1 â€” Dados Pessoais -->
+        <!-- Step 1 - Dados Pessoais -->
         <div class="step-panel active" id="step1">
           <div class="step-title">Dados Pessoais</div>
           <p class="step-sub">Preencha seus dados para continuar</p>
@@ -61,14 +61,14 @@
             <div class="field"><label>Telefone</label><input type="tel" id="telefone" placeholder="(00) 00000-0000"></div>
           </div>
           <div class="nav-btns">
-            <button class="btn btn-primary" onclick="goStep(2)">PrÃ³ximo <i class="fas fa-arrow-right"></i></button>
+            <button class="btn btn-primary" onclick="goStep(2)">Próximo <i class="fas fa-arrow-right"></i></button>
           </div>
         </div>
 
-        <!-- Step 2 â€” Entrega -->
+        <!-- Step 2 - Entrega -->
         <div class="step-panel" id="step2">
           <div class="step-title">Entrega</div>
-          <p class="step-sub">Para onde enviamos suas peÃ§as?</p>
+          <p class="step-sub">Para onde enviamos suas peças?</p>
           <div class="form-row">
             <div class="field">
               <label>CEP *</label>
@@ -77,10 +77,10 @@
                 <button class="btn btn-ghost btn-sm" id="buscarCep"><i class="fas fa-magnifying-glass"></i></button>
               </div>
             </div>
-            <div class="field"><label>NÃºmero *</label><input type="text" id="numero" placeholder="123"></div>
+            <div class="field"><label>Número *</label><input type="text" id="numero" placeholder="123"></div>
           </div>
           <div class="form-row">
-            <div class="field"><label>EndereÃ§o</label><input type="text" id="endereco" placeholder="Rua, Av..."></div>
+            <div class="field"><label>Endereço</label><input type="text" id="endereco" placeholder="Rua, Av..."></div>
             <div class="field"><label>Bairro</label><input type="text" id="bairro"></div>
           </div>
           <div class="form-row">
@@ -109,13 +109,13 @@
               </div>
               <div class="pay-option" data-frete="15">
                 <div class="pay-icon"><i class="fas fa-box"></i></div>
-                <div><div class="pay-name">Sedex</div><div class="pay-detail">3â€“5 dias Ãºteis</div></div>
+                <div><div class="pay-name">Sedex</div><div class="pay-detail">3-5 dias úteis</div></div>
                 <div style="margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green)">R$ 15</div>
                 <div class="pay-check"><i class="fas fa-check"></i></div>
               </div>
               <div class="pay-option" data-frete="25">
                 <div class="pay-icon"><i class="fas fa-rocket"></i></div>
-                <div><div class="pay-name">Expresso</div><div class="pay-detail">1â€“2 dias Ãºteis</div></div>
+                <div><div class="pay-name">Expresso</div><div class="pay-detail">1-2 dias úteis</div></div>
                 <div style="margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green)">R$ 25</div>
                 <div class="pay-check"><i class="fas fa-check"></i></div>
               </div>
@@ -123,23 +123,23 @@
           </div>
           <div class="nav-btns">
             <button class="btn btn-ghost" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Voltar</button>
-            <button class="btn btn-primary" onclick="goStep(3)">PrÃ³ximo <i class="fas fa-arrow-right"></i></button>
+            <button class="btn btn-primary" onclick="goStep(3)">Próximo <i class="fas fa-arrow-right"></i></button>
           </div>
         </div>
 
-        <!-- Step 3 â€” Pagamento -->
+        <!-- Step 3 - Pagamento -->
         <div class="step-panel" id="step3">
           <div class="step-title">Pagamento</div>
           <p class="step-sub">Escolha como pagar</p>
           <div id="payOptions">
             <div class="pay-option selected" data-pay="pix">
               <div class="pay-icon"><i class="fas fa-qrcode"></i></div>
-              <div><div class="pay-name">PIX</div><div class="pay-detail">InstantÃ¢neo, sem taxas</div></div>
+              <div><div class="pay-name">PIX</div><div class="pay-detail">Instantâneo, sem taxas</div></div>
               <div class="pay-check"><i class="fas fa-check"></i></div>
             </div>
             <div class="pay-option" data-pay="card">
               <div class="pay-icon"><i class="fas fa-credit-card"></i></div>
-              <div><div class="pay-name">CartÃ£o de CrÃ©dito</div><div class="pay-detail">AtÃ© 6x sem juros</div></div>
+              <div><div class="pay-name">Cartão de Crédito</div><div class="pay-detail">Até 6x sem juros</div></div>
               <div class="pay-check"><i class="fas fa-check"></i></div>
             </div>
             <div class="pay-option" data-pay="boleto">
@@ -149,7 +149,7 @@
             </div>
           </div>
           <div id="cardFields" style="display:none;margin-top:16px">
-            <div class="field"><label>NÃºmero do CartÃ£o</label><input type="text" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="19"></div>
+            <div class="field"><label>Número do Cartão</label><input type="text" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="19"></div>
             <div class="form-row">
               <div class="field"><label>Validade</label><input type="text" id="cardVal" placeholder="MM/AA" maxlength="5"></div>
               <div class="field"><label>CVV</label><input type="text" id="cardCvv" placeholder="000" maxlength="4"></div>
@@ -159,7 +159,7 @@
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--muted)">
               <input type="checkbox" id="aceitarTermos" style="accent-color:var(--green)">
               Li e aceito os <a href="termos-uso.html" style="color:var(--green)">Termos de Uso</a>
-              e <a href="privacidade.html" style="color:var(--green)">PolÃ­tica de Privacidade</a> *
+              e <a href="privacidade.html" style="color:var(--green)">Política de Privacidade</a> *
             </label>
           </div>
           <div class="nav-btns">
@@ -196,7 +196,7 @@
   <div class="modal-box">
     <div class="modal-icon"><i class="fas fa-circle-check"></i></div>
     <div class="modal-num" id="pedidoNum">Pedido #00000</div>
-    <p class="modal-text">Seu pedido foi recebido com sucesso!<br>VocÃª receberÃ¡ a confirmaÃ§Ã£o por e-mail.</p>
+    <p class="modal-text">Seu pedido foi recebido com sucesso!<br>Você receberá a confirmação por e-mail.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
       <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Continuar Comprando</a>
@@ -213,10 +213,10 @@
       <a href="page404.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
     </div>
     <div style="font-size:12px;color:var(--muted);text-align:center;line-height:1.8">
-      Av. Ataliba Vieira, 1357 â€” SÃ£o LuÃ­s, MA<br>
+      Av. Ataliba Vieira, 1357 - São Luís, MA<br>
       <a href="tel:+5598981168787" style="color:var(--green);text-decoration:none">(98) 98116-8787</a>
     </div>
-    <div class="bottom-copy">Â© 2026 HIVERCAR AUTOPEÃ‡AS LTDA</div>
+    <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
   </div>
 </footer>
 

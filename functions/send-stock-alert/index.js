@@ -95,12 +95,12 @@ async function sendEmail(productName, stock, productId) {
   const body = {
     from,
     to: [to],
-    subject: `${urgencia} — ${productName}`,
+    subject: `${urgencia} - ${productName}`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
         <div style="background:#fb1230;color:#fff;padding:20px 28px">
           <h1 style="margin:0;font-size:22px;letter-spacing:.05em">⚠ ALERTA DE ESTOQUE</h1>
-          <p style="margin:8px 0 0;opacity:.85">HIVERCAR AUTOPEÇAS — Sistema ERP</p>
+          <p style="margin:8px 0 0;opacity:.85">HIVERCAR AUTOPEÇAS - Sistema ERP</p>
         </div>
         <div style="padding:28px;background:#f8f8f8">
           <h2 style="color:#111;margin:0 0 16px">${productName}</h2>
@@ -153,14 +153,14 @@ async function sendWhatsApp(productName, stock) {
   const phone    = process.env.WHATSAPP_NUMBER ?? "5598981168787"
 
   if (!instance || !token) {
-    // WhatsApp não configurado — loga mas não falha (e-mail basta)
-    console.warn("[stock-alert] Z-API não configurado — WhatsApp ignorado")
+    // WhatsApp não configurado - loga mas não falha (e-mail basta)
+    console.warn("[stock-alert] Z-API não configurado - WhatsApp ignorado")
     return { skipped: true }
   }
 
   const emoji    = stock === 0 ? "🔴" : "🟠"
   const mensagem = [
-    `${emoji} *ALERTA DE ESTOQUE — HIVERCAR*`,
+    `${emoji} *ALERTA DE ESTOQUE - HIVERCAR*`,
     ``,
     `*Produto:* ${productName}`,
     `*Estoque atual:* ${stock} ${stock === 1 ? "unidade" : "unidades"}`,

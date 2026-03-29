@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Produtos â€” HIVERCAR ERP</title>
+<title>Produtos - HIVERCAR ERP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -24,7 +24,7 @@
     <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
     <a href="admin-produtos.html" class="active"><i class="fas fa-box-open"></i> Produtos</a>
     <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
-    <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de ServiÃ§o</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de Serviço</a>
     <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
     <a href="painel-vendas.html"><i class="fas fa-chart-line"></i> Vendas</a>
     <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
@@ -36,7 +36,7 @@
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">GESTÃƒO DE PRODUTOS</span>
+    <span class="topbar-title">GESTÃO DE PRODUTOS</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
       <span id="userName">Admin</span>
@@ -45,7 +45,7 @@
   </div>
 
   <div class="content">
-    <!-- Alerta estoque crÃ­tico -->
+    <!-- Alerta estoque crítico -->
     <div id="stockAlert" style="display:none;margin-bottom:20px;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;">
       <i class="fas fa-triangle-exclamation"></i>
       <span id="stockAlertMsg"></span>
@@ -53,7 +53,7 @@
 
     <!-- Barra superior -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar produtos por nomeâ€¦">
+      <input type="text" id="searchInput" placeholder="Buscar produtos por nome…">
       <button class="btn btn-ghost btn-sm" id="clearSearch"><i class="fas fa-xmark"></i></button>
       <button class="btn btn-primary btn-sm" id="btnNovo">
         <i class="fas fa-plus"></i> Novo Produto
@@ -69,14 +69,14 @@
             <th>Nome</th>
             <th>Categoria</th>
             <th>Marca</th>
-            <th>PreÃ§o</th>
+            <th>Preço</th>
             <th>Estoque</th>
             <th>Status</th>
-            <th style="width:130px">AÃ§Ãµes</th>
+            <th style="width:130px">Ações</th>
           </tr>
         </thead>
         <tbody id="produtosTable">
-          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
+          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
         </tbody>
       </table>
 
@@ -85,7 +85,7 @@
   </div>
 </div>
 
-<!-- â”€â”€ MODAL PRODUTO â”€â”€ -->
+<!-- ── MODAL PRODUTO ── -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -115,10 +115,10 @@
         <div class="field">
           <label>SKU</label>
           <input type="text" id="fSku" placeholder="Ex: HV-00123">
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">CÃ³digo interno de controle</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">Código interno de controle</div>
         </div>
         <div class="field">
-          <label>CÃ³digo de Barras</label>
+          <label>Código de Barras</label>
           <input type="text" id="fBarcode" placeholder="Ex: 1234567890123" maxlength="13">
           <div style="font-size:10px;color:var(--muted);margin-top:3px">EAN/GTIN do produto</div>
         </div>
@@ -126,11 +126,11 @@
       <!-- Coluna direita -->
       <div>
         <div class="field">
-          <label>PreÃ§o de Venda (R$) *</label>
+          <label>Preço de Venda (R$) *</label>
           <input type="number" id="fPreco" placeholder="0.00" min="0" step="0.01">
         </div>
         <div class="field">
-          <label>PreÃ§o de Custo (R$) *</label>
+          <label>Preço de Custo (R$) *</label>
           <input type="number" id="fCostPrice" placeholder="0.00" min="0" step="0.01">
         </div>
         <div class="field">
@@ -142,9 +142,9 @@
           <input type="number" id="fEstoque" placeholder="0" min="0" step="1">
         </div>
         <div class="field">
-          <label>Estoque MÃ­nimo (Alerta)</label>
-          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta serÃ¡ disparado quando estoque cair abaixo deste valor">
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Deixe em branco para usar o padrÃ£o do sistema (5 unidades).</div>
+          <label>Estoque Mínimo (Alerta)</label>
+          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta será disparado quando estoque cair abaixo deste valor">
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">Deixe em branco para usar o padrão do sistema (5 unidades).</div>
         </div>
         <div class="field">
           <label>Imagem do Produto</label>
@@ -169,10 +169,10 @@
       </div>
     </div>
 
-    <!-- DescriÃ§Ã£o full-width -->
+    <!-- Descrição full-width -->
     <div class="field">
-      <label>DescriÃ§Ã£o</label>
-      <textarea id="fDescricao" rows="3" placeholder="DescriÃ§Ã£o tÃ©cnica do produtoâ€¦" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
+      <label>Descrição</label>
+      <textarea id="fDescricao" rows="3" placeholder="Descrição técnica do produto…" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
     </div>
 
     <div id="formError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
@@ -186,11 +186,11 @@
   </div>
 </div>
 
-<!-- â”€â”€ CONFIRM DELETE â”€â”€ -->
+<!-- ── CONFIRM DELETE ── -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <h3><i class="fas fa-triangle-exclamation"></i> EXCLUIR PRODUTO</h3>
-    <p>Esta aÃ§Ã£o Ã© <strong>irreversÃ­vel</strong>. O produto e sua imagem serÃ£o removidos permanentemente.</p>
+    <p>Esta ação é <strong>irreversível</strong>. O produto e sua imagem serão removidos permanentemente.</p>
     <p id="confirmNome" style="color:var(--white);font-weight:600;margin-bottom:20px;"></p>
     <div class="confirm-actions">
       <button class="btn btn-ghost" id="confirmCancel">Cancelar</button>
@@ -201,13 +201,13 @@
   </div>
 </div>
 
-<!-- â”€â”€ TOAST â”€â”€ -->
+<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
 <script type="module">
 
 
-// â”€â”€ APPWRITE SDK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── APPWRITE SDK ─────────────────────────────────────────────────────────────
 import { Client, Databases, Account, Storage, Query, ID, Permission, Role }
   from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
 import { CONFIG } from "./js/config.js"
@@ -219,7 +219,7 @@ const databases = new Databases(client)
 const account   = new Account(client)
 const storage   = new Storage(client)
 
-// â”€â”€ GUARD â€” apenas admin â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── GUARD - apenas admin ─────────────────────────────────────────────────────
 ;(async () => {
   try {
     const user = await account.get()
@@ -230,11 +230,11 @@ const storage   = new Storage(client)
   }
 
   // Verifica role via Mirror
-  // (simplificado â€” validaÃ§Ã£o completa em userService.js)
+  // (simplificado - validação completa em userService.js)
   init()
 })()
 
-// â”€â”€ ESTADO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ESTADO ───────────────────────────────────────────────────────────────────
 let currentPage    = 1
 let totalPages     = 1
 let searchTerm     = ""
@@ -242,9 +242,9 @@ let searchTimer    = null
 let editingId      = null       // null = criar novo, string = editar existente
 let deleteTarget   = null       // { $id, name }
 let selectedFile   = null       // File a fazer upload
-let existingImageURL = null      // imageURL jÃ¡ salva no produto em ediÃ§Ã£o
+let existingImageURL = null      // imageURL já salva no produto em edição
 
-// â”€â”€ CACHE (in-memory, mesma lÃ³gica do productService.js) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CACHE (in-memory, mesma lógica do productService.js) ────────────────────
 const cache = new Map()
 
 function cacheKey(term, page) { return `${term}|${page}` }
@@ -257,7 +257,7 @@ function cacheGet(k) {
 function cacheSet(k, d) { cache.set(k, { time: Date.now(), data: d }) }
 function invalidateCache() { cache.clear() }
 
-// â”€â”€ PRODUTO SERVICE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PRODUTO SERVICE ──────────────────────────────────────────────────────────
 async function listProdutos(page = 1, term = "") {
   const k = cacheKey(term, page)
   const c = cacheGet(k)
@@ -284,23 +284,27 @@ async function listProdutos(page = 1, term = "") {
 async function saveProduto(data, fileObj, editId) {
   let imageURL = data.imageURL ?? null
 
-  // âœ… PermissÃµes â€” VÃLIDAS apenasPR: read, update, delete, write
-  // (Appwrite != 1.0 nÃ£o suporta Permission.create())
-  const adminPerms = [
-    Permission.read(Role.any()),                                   // âœ… loja pÃºblica pode ler
-    Permission.write(Role.team("69c7e962001466871fcc")),           // âœ… admin pode escrever
-    Permission.update(Role.team("69c7e962001466871fcc")),          // âœ… admin pode editar
-    Permission.delete(Role.team("69c7e962001466871fcc")),          // âœ… admin pode deletar
+  const adminTeamId = "69c7e962001466871fcc"
+  // Appwrite Storage (arquivos) aceita somente read/write.
+  const filePerms = [
+    Permission.read(Role.any()),
+    Permission.write(Role.team(adminTeamId)),
+  ]
+  const productPerms = [
+    Permission.read(Role.any()),
+    Permission.write(Role.team(adminTeamId)),
+    Permission.update(Role.team(adminTeamId)),
+    Permission.delete(Role.team(adminTeamId)),
   ]
 
   // Upload de imagem se houver arquivo novo
   if (fileObj) {
     try {
-      const uploaded = await storage.createFile(CONFIG.BUCKET_ID, ID.unique(), fileObj, adminPerms)
-      imageURL = storage.getFilePreview(CONFIG.BUCKET_ID, uploaded.$id).toString()
+      const uploaded = await storage.createFile(CONFIG.BUCKET_ID, ID.unique(), fileObj, filePerms)
+      // Persistir /view para evitar bloqueio de image transformations no /preview.
+      imageURL = storage.getFileView(CONFIG.BUCKET_ID, uploaded.$id).toString()
     } catch (err) {
-      console.warn("Storage upload failed (bucket may not exist):", err.message)
-      imageURL = existingImageURL  // manter URL anterior
+      throw new Error(`Falha no upload da imagem para o bucket ${CONFIG.BUCKET_ID}: ${err.message}`)
     }
   }
 
@@ -326,7 +330,7 @@ async function saveProduto(data, fileObj, editId) {
   if (editId) {
     saved = await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, editId, payload)
   } else {
-    saved = await databases.createDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, ID.unique(), payload, adminPerms)
+    saved = await databases.createDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, ID.unique(), payload, productPerms)
   }
 
   invalidateCache()
@@ -339,7 +343,7 @@ async function toggleActive(id, currentValue) {
 }
 
 async function deleteProduto(id) {
-  // Soft-delete: registra deletedAt, desativa produto â€” nunca apaga do banco
+  // Soft-delete: registra deletedAt, desativa produto - nunca apaga do banco
   await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, id, {
     deletedAt: new Date().toISOString(),
     isActive:  false,
@@ -347,7 +351,7 @@ async function deleteProduto(id) {
   invalidateCache()
 }
 
-// â”€â”€ ALERTA ESTOQUE CRÃTICO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ALERTA ESTOQUE CRÍTICO ───────────────────────────────────────────────────
 async function checkStockAlerts() {
   try {
     // Busca ativos e filtra client-side usando minStock individual ou STOCK_CRITICAL como fallback
@@ -362,7 +366,7 @@ async function checkStockAlerts() {
     const el  = document.getElementById("stockAlert")
     const msg = document.getElementById("stockAlertMsg")
     if (criticos.length > 0) {
-      msg.textContent = `${criticos.length} produto(s) com estoque crÃ­tico. Acesse GestÃ£o de Estoque para repor.`
+      msg.textContent = `${criticos.length} produto(s) com estoque crítico. Acesse Gestão de Estoque para repor.`
       el.style.display = "flex"
     } else {
       el.style.display = "none"
@@ -370,7 +374,7 @@ async function checkStockAlerts() {
   } catch {}
 }
 
-// â”€â”€ RENDER TABELA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── RENDER TABELA ────────────────────────────────────────────────────────────
 function renderTable(products) {
   const tbody = document.getElementById("produtosTable")
   if (!products.length) {
@@ -379,23 +383,24 @@ function renderTable(products) {
   }
 
   tbody.innerHTML = products.map(p => {
+    const imageSrc = p.imageURL ? String(p.imageURL).replace(/\/preview(\?|$)/, "/view$1") : ""
     const imgHtml = p.imageURL
-      ? `<img src="${p.imageURL}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
+      ? `<img src="${imageSrc}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
       : `<div style="width:44px;height:44px;background:var(--dark);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="fas fa-image"></i></div>`
 
     const minimo     = p.minStock ?? CONFIG.STOCK_CRITICAL
     const isCrit     = (p.qtd ?? 0) < minimo
     const stockClass = isCrit ? "style=\"color:var(--red);font-weight:700\"" : ""
-    const stockIcon  = isCrit ? `<i class="fas fa-triangle-exclamation" title="Abaixo do mÃ­nimo (${minimo})" style="margin-left:4px;color:var(--red)"></i>` : ""
+    const stockIcon  = isCrit ? `<i class="fas fa-triangle-exclamation" title="Abaixo do mínimo (${minimo})" style="margin-left:4px;color:var(--red)"></i>` : ""
 
     const activeLabel = p.isActive ? "Ativo" : "Inativo"
     const toggleClass = p.isActive ? "active" : "inactive"
     
-    // âœ… XSS FIX: Garantir que esc() Ã© usada em TODOS os dados dinÃ¢micos
+    // ✅ XSS FIX: Garantir que esc() é usada em TODOS os dados dinâmicos
     const escapedName = esc(p.name)
     const escapedNCM = p.ncm ? esc(p.ncm) : ""
-    const escapedCategory = esc(p.category || "â€”")
-    const escapedBrand = esc(p.brand || "â€”")
+    const escapedCategory = esc(p.category || "-")
+    const escapedBrand = esc(p.brand || "-")
     const escapedDataName = esc(p.name)
 
     return `<tr>
@@ -469,12 +474,12 @@ function renderPagination(page, pages) {
   const range = []
   for (let i = 1; i <= pages; i++) {
     if (i === 1 || i === pages || Math.abs(i - page) <= 2) range.push(i)
-    else if (range[range.length - 1] !== "â€¦") range.push("â€¦")
+    else if (range[range.length - 1] !== "…") range.push("…")
   }
 
   range.forEach(r => {
-    if (r === "â€¦") {
-      html += `<span style="color:var(--muted);padding:0 4px">â€¦</span>`
+    if (r === "…") {
+      html += `<span style="color:var(--muted);padding:0 4px">…</span>`
     } else {
       html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`
     }
@@ -490,10 +495,10 @@ function renderPagination(page, pages) {
   })
 }
 
-// â”€â”€ LOAD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LOAD ─────────────────────────────────────────────────────────────────────
 async function load() {
   document.getElementById("produtosTable").innerHTML =
-    `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>`
+    `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>`
 
   try {
     const result = await listProdutos(currentPage, searchTerm)
@@ -506,7 +511,7 @@ async function load() {
   }
 }
 
-// â”€â”€ MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── MODAL ────────────────────────────────────────────────────────────────────
 async function openModal() {
   document.getElementById("modalOverlay").classList.add("open")
 }
@@ -539,18 +544,18 @@ async function openEditModal(productId) {
     existingImageURL = p.imageURL ?? null
 
     document.getElementById("modalTitle").textContent = "EDITAR PRODUTO"
-    document.getElementById("fNome").value      = p.name        ?? ""
-    document.getElementById("fCategoria").value = p.category    ?? ""
-    document.getElementById("fMarca").value     = p.brand       ?? ""
-    document.getElementById("fPreco").value     = p.price       ?? ""
-    document.getElementById("fCostPrice").value = p.costPrice   ?? ""
-    document.getElementById("fWeight").value    = p.weight      ?? ""
-    document.getElementById("fEstoque").value   = p.qtd       ?? ""
-    document.getElementById("fMinStock").value  = p.minStock    ?? ""
-    document.getElementById("fSku").value       = p.sku         ?? ""
-    document.getElementById("fNcm").value       = p.ncm         ?? ""
-    document.getElementById("fBarcode").value   = p.barcode     ?? ""
-    document.getElementById("fDescricao").value = p.description ?? ""
+    document.getElementById("fNome").value      = p.name        ?? ''
+    document.getElementById("fCategoria").value = p.category    ?? ''
+    document.getElementById("fMarca").value     = p.brand       ?? ''
+    document.getElementById("fPreco").value     = p.price       ?? ''
+    document.getElementById("fCostPrice").value = p.costPrice   ?? ''
+    document.getElementById("fWeight").value    = p.weight      ?? ''
+    document.getElementById("fEstoque").value   = p.qtd       ?? ''
+    document.getElementById("fMinStock").value  = p.minStock    ?? ''
+    document.getElementById("fSku").value       = p.sku         ?? ''
+    document.getElementById("fNcm").value       = p.ncm         ?? ''
+    document.getElementById("fBarcode").value   = p.barcode     ?? ''
+    document.getElementById("fDescricao").value = p.description ?? ''
 
     if (p.imageURL) {
       document.getElementById("imgPreview").src           = p.imageURL
@@ -559,13 +564,13 @@ async function openEditModal(productId) {
       document.getElementById("btnRemoverImg").style.display  = "inline-flex"
     }
 
-    await openModal()  // âœ… Aguarda o carregamento de filtros
+    await openModal()  // ✅ Aguarda o carregamento de filtros
   } catch (e) {
     toast("Erro ao carregar produto: " + e.message, "error")
   }
 }
 
-// â”€â”€ SALVAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── SALVAR ───────────────────────────────────────────────────────────────────
 async function handleSave() {
   const nome     = document.getElementById("fNome").value.trim()
   const categoria= document.getElementById("fCategoria").value.trim()
@@ -576,7 +581,7 @@ async function handleSave() {
   const errEl    = document.getElementById("formError")
 
   if (!nome || !preco || !custPrice || estoque === "") {
-    errEl.textContent = "Preencha os campos obrigatÃ³rios: Nome, PreÃ§o, PreÃ§o de Custo e Estoque."
+    errEl.textContent = "Preencha os campos obrigatórios: Nome, Preço, Preço de Custo e Estoque."
     errEl.style.display = "block"
     return
   }
@@ -584,7 +589,7 @@ async function handleSave() {
 
   const btn = document.getElementById("btnSalvar")
   btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Salvandoâ€¦`
+  btn.innerHTML = `<span class="spinner"></span> Salvando…`
 
   try {
     await saveProduto({
@@ -618,7 +623,7 @@ async function handleSave() {
   }
 }
 
-// â”€â”€ CONFIRM DELETE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CONFIRM DELETE ───────────────────────────────────────────────────────────
 function openConfirm(id, name) {
   deleteTarget = { $id: id, name }
   document.getElementById("confirmNome").textContent = name
@@ -630,7 +635,7 @@ function closeConfirm() {
   document.getElementById("confirmOverlay").classList.remove("open")
 }
 
-// â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOAST ────────────────────────────────────────────────────────────────────
 let toastTimer
 function toast(msg, type = "") {
   const el = document.getElementById("toast")
@@ -640,12 +645,12 @@ function toast(msg, type = "") {
   toastTimer = setTimeout(() => { el.classList.remove("show") }, 3500)
 }
 
-// â”€â”€ UTILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── UTILS ────────────────────────────────────────────────────────────────────
 function esc(str) {
-  return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+  return String(str ?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 }
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
   load()
   checkStockAlerts()
@@ -660,7 +665,7 @@ function init() {
   // Novo produto
   document.getElementById("btnNovo").addEventListener("click", async () => {
     clearForm()
-    await openModal()  // âœ… Aguarda o carregamento de filtros
+    await openModal()  // ✅ Aguarda o carregamento de filtros
   })
 
   // Fechar modal
@@ -703,20 +708,20 @@ function init() {
     const file = fileInput.files[0]
     if (!file) return
 
-    // ValidaÃ§Ãµes
+    // Validações
     if (!file.type.startsWith("image/")) {
-      imgStatus.textContent = "Arquivo invÃ¡lido. Selecione uma imagem."
+      imgStatus.textContent = "Arquivo inválido. Selecione uma imagem."
       imgStatus.style.color = "var(--red)"
       return
     }
     if (file.size > 5 * 1024 * 1024) {
-      imgStatus.textContent = "Imagem muito grande. MÃ¡ximo 5MB."
+      imgStatus.textContent = "Imagem muito grande. Máximo 5MB."
       imgStatus.style.color = "var(--red)"
       return
     }
 
     selectedFile = file
-    imgStatus.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB) â€” serÃ¡ enviada ao salvar`
+    imgStatus.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB) - será enviada ao salvar`
     imgStatus.style.color = "var(--green)"
 
     const reader = new FileReader()
@@ -741,7 +746,7 @@ function init() {
     imgStatus.style.color = "var(--muted)"
   })
 
-  // ConfirmaÃ§Ã£o de exclusÃ£o
+  // Confirmação de exclusão
   document.getElementById("confirmCancel").addEventListener("click", closeConfirm)
   document.getElementById("confirmOverlay").addEventListener("click", e => {
     if (e.target === e.currentTarget) closeConfirm()
@@ -751,10 +756,10 @@ function init() {
     if (!deleteTarget) return
     const btn = document.getElementById("confirmDelete")
     btn.disabled = true
-    btn.innerHTML = `<span class="spinner"></span> Excluindoâ€¦`
+    btn.innerHTML = `<span class="spinner"></span> Excluindo…`
     try {
       await deleteProduto(deleteTarget.$id)
-      toast("Produto excluÃ­do.")
+      toast("Produto excluído.")
       closeConfirm()
       if (currentPage > 1) currentPage = 1
       load()
@@ -770,7 +775,6 @@ function init() {
 </script>
 </body>
 </html>
-
 
 
 

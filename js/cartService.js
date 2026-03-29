@@ -1,6 +1,6 @@
 // ─── HIVERCAR · cartService.js ───────────────────────────────────────────────
-// Lógica do carrinho — localStorage. Zero UI.
-// Camada: Domain / Service — Loja.
+// Lógica do carrinho - localStorage. Zero UI.
+// Camada: Domain / Service - Loja.
 
 import { CONFIG } from "./config.js"
 

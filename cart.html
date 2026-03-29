@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carrinho â€” HIVERCAR AUTOPEÃ‡AS</title>
+<title>Carrinho - HIVERCAR AUTOPEÇAS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -18,7 +18,7 @@
   <div class="container">
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÃ‡AS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <div class="nav-links" id="navMenu">
@@ -68,15 +68,15 @@
           <span>Frete</span>
           <select id="freteSelect" style="background:var(--dark);border:1px solid var(--border);color:var(--white);padding:6px 10px;font-size:12px;outline:none">
             <option value="0">Calcular frete</option>
-            <option value="15">Sedex â€” R$ 15,00</option>
-            <option value="25">Expresso â€” R$ 25,00</option>
-            <option value="0">Retirada grÃ¡tis</option>
+            <option value="15">Sedex - R$ 15,00</option>
+            <option value="25">Expresso - R$ 25,00</option>
+            <option value="0">Retirada grátis</option>
           </select>
         </div>
-        <div class="resumo-row" style="color:var(--green)"><span>Desconto</span><span id="rDisc">âˆ’ R$ 0,00</span></div>
+        <div class="resumo-row" style="color:var(--green)"><span>Desconto</span><span id="rDisc">− R$ 0,00</span></div>
         <div class="resumo-total"><span>TOTAL</span><span class="total-val" id="rTotal">R$ 0,00</span></div>
         <div class="cupom-row">
-          <input type="text" id="cupomInput" placeholder="CÃ³digo do cupom">
+          <input type="text" id="cupomInput" placeholder="Código do cupom">
           <button id="cupomBtn" class="btn btn-ghost btn-sm">Aplicar</button>
         </div>
         <div class="cupom-msg" id="cupomMsg"></div>
@@ -98,25 +98,25 @@
     <a href="loja.html">Loja</a>
     <a href="https://wa.me/5598981168787">Suporte</a>
   </div>
-  <div class="bottom-copy">Â© 2026 HIVERCAR AUTOPEÃ‡AS LTDA</div>
+  <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
 </div>
 
 <script type="module">
 import { CartService }                               from "./js/cartService.js"
 import { fmt, initParticles, initNavToggle }         from "./js/utils.js"
 
-// â”€â”€ CUPONS vÃ¡lidos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CUPONS válidos ────────────────────────────────────────────────────────────
 const CUPONS = { "HIVERCAR10": 10, "FRETE0": 0 }
 let discount = 0
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ──────────────────────────────────────────────────────────────────────
 initParticles()
 initNavToggle()
 
-// â”€â”€ UTILITÃRIO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── UTILITÁRIO ────────────────────────────────────────────────────────────────
 const fmtBRL = v => "R$ " + Number(v).toFixed(2).replace(".", ",")
 
-// â”€â”€ RENDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── RENDER ────────────────────────────────────────────────────────────────────
 function render() {
   const cart    = CartService.get()
   const empty   = document.getElementById("emptyState")
@@ -149,7 +149,7 @@ function render() {
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
         <div class="qty-ctrl">
-          <button class="qty-btn" data-action="dec" data-i="${i}">âˆ’</button>
+          <button class="qty-btn" data-action="dec" data-i="${i}">−</button>
           <span class="qty-val">${item.qty || 1}</span>
           <button class="qty-btn" data-action="inc" data-i="${i}">+</button>
         </div>
@@ -177,11 +177,11 @@ function updateTotals(sub) {
   const total = Math.max(0, sub + tax + frete - discount)
   document.getElementById("rSub").textContent   = fmtBRL(sub)
   document.getElementById("rTax").textContent   = fmtBRL(tax)
-  document.getElementById("rDisc").textContent  = "âˆ’ " + fmtBRL(discount)
+  document.getElementById("rDisc").textContent  = "− " + fmtBRL(discount)
   document.getElementById("rTotal").textContent = fmtBRL(total)
 }
 
-// â”€â”€ EVENTOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── EVENTOS ───────────────────────────────────────────────────────────────────
 document.getElementById("freteSelect").onchange = () => updateTotals(CartService.total())
 
 document.getElementById("clearBtn").onclick = () => { CartService.clear(); render() }
@@ -191,10 +191,10 @@ document.getElementById("cupomBtn").onclick = () => {
   const msg  = document.getElementById("cupomMsg")
   if (CUPONS[code] !== undefined) {
     discount = CUPONS[code]
-    msg.className = "cupom-msg ok"; msg.textContent = "âœ“ Cupom aplicado!"
+    msg.className = "cupom-msg ok"; msg.textContent = "✓ Cupom aplicado!"
   } else {
     discount = 0
-    msg.className = "cupom-msg err"; msg.textContent = "Cupom invÃ¡lido."
+    msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido."
   }
   updateTotals(CartService.total())
 }

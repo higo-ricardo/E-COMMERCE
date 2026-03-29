@@ -5,9 +5,9 @@
 //   Event: databases.*.collections.orders.documents.*.create
 //
 // Variáveis de ambiente necessárias (Settings > Variables na Function):
-//   RESEND_API_KEY   — chave da API do Resend.com
-//   EMAIL_FROM       — "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>"
-//   STORE_URL        — "https://hivercar.com.br"
+//   RESEND_API_KEY   - chave da API do Resend.com
+//   EMAIL_FROM       - "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>"
+//   STORE_URL        - "https://hivercar.com.br"
 //
 // Runtime: node-18.0
 // Entrypoint: src/main.js
@@ -19,7 +19,7 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-    .setKey(req.headers["x-appwrite-key"] ?? "")
+    .setKey(req.headers["x-appwrite-key"] ?? '')
 
   const db = new Databases(client)
 
@@ -36,7 +36,7 @@ export default async ({ req, res, log, error }) => {
   const { $id: orderId, nome, email, items: itemsRaw, subtotal, taxes, frete, total, payment, createdAt } = order
 
   if (!email) {
-    error(`Pedido ${orderId} sem e-mail de cliente — e-mail não enviado.`)
+    error(`Pedido ${orderId} sem e-mail de cliente - e-mail não enviado.`)
     return res.json({ ok: false, reason: "no_email" }, 200)
   }
 
@@ -62,7 +62,7 @@ export default async ({ req, res, log, error }) => {
       body: JSON.stringify({
         from:    process.env.EMAIL_FROM ?? "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>",
         to:      [email],
-        subject: `✅ Pedido #${orderId.slice(-5).toUpperCase()} confirmado — HIVERCAR`,
+        subject: `✅ Pedido #${orderId.slice(-5).toUpperCase()} confirmado - HIVERCAR`,
         html,
       }),
     })
@@ -74,7 +74,7 @@ export default async ({ req, res, log, error }) => {
       return res.json({ ok: false, reason: "resend_error", details: resendData }, 500)
     }
 
-    log(`E-mail de confirmação enviado: ${email} — pedido ${orderId} — resend_id: ${resendData.id}`)
+    log(`E-mail de confirmação enviado: ${email} - pedido ${orderId} - resend_id: ${resendData.id}`)
     return res.json({ ok: true, resend_id: resendData.id })
 
   } catch (fetchErr) {
@@ -84,7 +84,7 @@ export default async ({ req, res, log, error }) => {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TEMPLATE HTML — CONFIRMAÇÃO DE PEDIDO
+// TEMPLATE HTML - CONFIRMAÇÃO DE PEDIDO
 // ─────────────────────────────────────────────────────────────────────────────
 function fmtBRL(v) {
   return "R$ " + Number(v || 0).toFixed(2).replace(".", ",")
@@ -227,7 +227,7 @@ function buildConfirmationEmail({ orderId, nome, email, items, subtotal, taxes, 
         <tr>
           <td style="padding:16px 32px;background:#0d0f10;border-top:1px solid #1e2023;text-align:center">
             <p style="font-size:11px;color:#3a3c3e;margin:0;line-height:1.8">
-              HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 — Chapadinha, MA<br>
+              HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 - Chapadinha, MA<br>
               © ${new Date().getFullYear()} Todos os direitos reservados.
             </p>
           </td>

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Erro â€” HIVERCAR</title>
+<title>Erro - HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/page-error.css">
@@ -20,7 +20,7 @@
     <div class="err-title" id="errTitle">ERRO INTERNO DO SERVIDOR</div>
     <p class="err-desc" id="errDesc">
       Algo deu errado no servidor. Nossa equipe foi notificada automaticamente.
-      VocÃª serÃ¡ redirecionado em instantes ou pode voltar manualmente.
+      Você será redirecionado em instantes ou pode voltar manualmente.
     </p>
     <p class="err-ctx" id="errCtx"></p>
 
@@ -30,49 +30,49 @@
 
     <div class="btn-row">
       <button class="btn btn-primary" onclick="history.back()">
-        â† Voltar
+        ← Voltar
       </button>
       <a class="btn btn-ghost" href="index.html">
-        ðŸ  InÃ­cio
+        🏠 Início
       </a>
       <button class="btn btn-ghost" onclick="location.reload()">
-        â†º Tentar novamente
+        ↺ Tentar novamente
       </button>
     </div>
 
     <div class="net-badge">
       <span class="net-dot" id="netDot"></span>
-      <span id="netLabel">Verificando conexÃ£oâ€¦</span>
+      <span id="netLabel">Verificando conexão…</span>
     </div>
 
   </div>
 </div>
 
 <script>
-// â”€â”€ Lerparams da URL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Lerparams da URL ─────────────────────────────────────────────────────────
 const params  = new URLSearchParams(location.search)
 const code    = parseInt(params.get("code") || "500", 10)
-const ctx     = params.get("ctx") || ""
+const ctx     = params.get("ctx") || '-'
 
-// â”€â”€ ConfiguraÃ§Ã£o por cÃ³digo HTTP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Configuração por código HTTP ──────────────────────────────────────────────
 const config = {
-  400: { title: "REQUISIÃ‡ÃƒO INVÃLIDA",          desc: "Os dados enviados sÃ£o invÃ¡lidos ou estÃ£o incompletos. Volte e verifique as informaÃ§Ãµes." },
-  401: { title: "ACESSO NÃƒO AUTORIZADO",        desc: "Sua sessÃ£o expirou ou vocÃª nÃ£o estÃ¡ autenticado. FaÃ§a login para continuar.", redirect: "login.html", delay: 4000 },
-  403: { title: "ACESSO PROIBIDO",              desc: "VocÃª nÃ£o tem permissÃ£o para acessar este recurso. Verifique sua conta ou entre em contato com o suporte." },
-  404: { title: "RECURSO NÃƒO ENCONTRADO",       desc: "O item que vocÃª procura nÃ£o existe mais ou foi removido.", redirect: "page404.html", delay: 3000 },
-  408: { title: "TEMPO ESGOTADO",               desc: "A conexÃ£o demorou demais para responder. Verifique sua rede e tente novamente." },
-  429: { title: "MUITAS REQUISIÃ‡Ã•ES",           desc: "VocÃª fez muitas tentativas em pouco tempo. Aguarde alguns instantes antes de tentar novamente." },
+  400: { title: "REQUISIÇÃO INVÁLIDA",          desc: "Os dados enviados são inválidos ou estão incompletos. Volte e verifique as informações." },
+  401: { title: "ACESSO NÃO AUTORIZADO",        desc: "Sua sessão expirou ou você não está autenticado. Faça login para continuar.", redirect: "login.html", delay: 4000 },
+  403: { title: "ACESSO PROIBIDO",              desc: "Você não tem permissão para acessar este recurso. Verifique sua conta ou entre em contato com o suporte." },
+  404: { title: "RECURSO NÃO ENCONTRADO",       desc: "O item que você procura não existe mais ou foi removido.", redirect: "page404.html", delay: 3000 },
+  408: { title: "TEMPO ESGOTADO",               desc: "A conexão demorou demais para responder. Verifique sua rede e tente novamente." },
+  429: { title: "MUITAS REQUISIÇÕES",           desc: "Você fez muitas tentativas em pouco tempo. Aguarde alguns instantes antes de tentar novamente." },
   500: { title: "ERRO INTERNO DO SERVIDOR",     desc: "Algo deu errado em nosso servidor. Nossa equipe foi notificada. Tente novamente em alguns minutos." },
-  502: { title: "GATEWAY INVÃLIDO",             desc: "O servidor estÃ¡ temporariamente indisponÃ­vel. Aguarde e tente novamente." },
-  503: { title: "SERVIÃ‡O INDISPONÃVEL",         desc: "O sistema estÃ¡ em manutenÃ§Ã£o ou sobrecarregado. Tente novamente em breve." },
+  502: { title: "GATEWAY INVÁLIDO",             desc: "O servidor está temporariamente indisponível. Aguarde e tente novamente." },
+  503: { title: "SERVIÇO INDISPONÍVEL",         desc: "O sistema está em manutenção ou sobrecarregado. Tente novamente em breve." },
 }
 
 const cfg = config[code] || {
   title: "ERRO INESPERADO",
-  desc: "Ocorreu um problema que nÃ£o conseguimos identificar. Tente novamente ou entre em contato com o suporte.",
+  desc: "Ocorreu um problema que não conseguimos identificar. Tente novamente ou entre em contato com o suporte.",
 }
 
-// â”€â”€ Preenche card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Preenche card ─────────────────────────────────────────────────────────────
 document.getElementById("errCode").textContent                = code
 document.getElementById("errCode").dataset.code              = code
 document.getElementById("errTitle").textContent              = cfg.title
@@ -80,11 +80,11 @@ document.getElementById("errDesc").textContent               = cfg.desc
 
 if (ctx) {
   const ctxEl = document.getElementById("errCtx")
-  ctxEl.textContent   = "mÃ³dulo: " + ctx
+  ctxEl.textContent   = "módulo: " + ctx
   ctxEl.style.display = "block"
 }
 
-// â”€â”€ Auto-redirect com barra de progresso â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Auto-redirect com barra de progresso ──────────────────────────────────────
 if (cfg.redirect && cfg.delay) {
   const bar  = document.getElementById("progressBar")
   const wrap = document.getElementById("progressWrap")
@@ -102,23 +102,23 @@ if (cfg.redirect && cfg.delay) {
   })(start)
 }
 
-// â”€â”€ Status de rede â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Status de rede ────────────────────────────────────────────────────────────
 function updateNet() {
   const dot   = document.getElementById("netDot")
   const label = document.getElementById("netLabel")
   if (navigator.onLine) {
     dot.classList.add("online")
-    label.textContent = "Conectado Ã  internet"
+    label.textContent = "Conectado à internet"
   } else {
     dot.classList.remove("online")
-    label.textContent = "Sem conexÃ£o com a internet"
+    label.textContent = "Sem conexão com a internet"
   }
 }
 updateNet()
 window.addEventListener("online",  updateNet)
 window.addEventListener("offline", updateNet)
 
-// â”€â”€ PartÃ­culas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Partículas ────────────────────────────────────────────────────────────────
 ;(function(){
   const canvas = document.getElementById("canvas")
   if (!canvas) return
@@ -139,7 +139,7 @@ window.addEventListener("offline", updateNet)
       if(p.x<0)p.x=W; if(p.x>W)p.x=0
       if(p.y<0)p.y=H; if(p.y>H)p.y=0
       ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2)
-      // partÃ­culas vermelhas para pÃ¡gina de erro
+      // partículas vermelhas para página de erro
       ctx2.fillStyle=`rgba(251,18,48,${p.a})`; ctx2.fill()
     })
     requestAnimationFrame(loop)

@@ -6,7 +6,7 @@ const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PR
 const account   = new Account(client)
 const databases = new Databases(client)
 
-// -- PartÌculas ----------------------------------------------------------------
+// -- Part√≠culas ----------------------------------------------------------------
 ;(function() {
   const cv = document.getElementById("canvas"); if (!cv) return
   const ctx = cv.getContext("2d"); let W, H
@@ -40,49 +40,49 @@ const setMsg = (txt, cls="error") => {
 
 function messageForMirrorError(err) {
   const code = err?.code
-  const msg  = String(err?.message || "")
+  const msg  = String(err?.message || '')
 
   if (!navigator.onLine || /network|failed to fetch|cors/i.test(msg)) {
-    return { text: "Sem conex„o com o servidor. Verifique sua internet e tente novamente.", cls: "warning" }
+    return { text: "Sem conex√£o com o servidor. Verifique sua internet e tente novamente.", cls: "warning" }
   }
   if (code === 401 || code === 403) {
-    return { text: "Sem permiss„o para salvar o perfil no banco. No Appwrite, libere CREATE na collection USERS para usu·rios autenticados (role:users), ou mova esse passo para uma Function.", cls: "error" }
+    return { text: "Sem permiss√£o para salvar o perfil no banco. No Appwrite, libere CREATE na collection USERS para usu√°rios autenticados (role:users), ou mova esse passo para uma Function.", cls: "error" }
   }
   if (code === 409) {
-    return { text: "J· existe um perfil com este identificador. Tente novamente.", cls: "warning" }
+    return { text: "J√° existe um perfil com este identificador. Tente novamente.", cls: "warning" }
   }
   if (/Unknown attribute/i.test(msg)) {
-    return { text: "A estrutura da collection USERS est· diferente do esperado. Ajuste o schema no Appwrite.", cls: "error" }
+    return { text: "A estrutura da collection USERS est√° diferente do esperado. Ajuste o schema no Appwrite.", cls: "error" }
   }
   if (/invalid format/i.test(msg)) {
-    return { text: "Um ou mais campos est„o em formato inv·lido para a collection USERS.", cls: "error" }
+    return { text: "Um ou mais campos est√£o em formato inv√°lido para a collection USERS.", cls: "error" }
   }
   if (code === 429) {
-    return { text: "Muitas tentativas em sequÍncia. Aguarde alguns segundos e tente novamente.", cls: "warning" }
+    return { text: "Muitas tentativas em sequ√™ncia. Aguarde alguns segundos e tente novamente.", cls: "warning" }
   }
-  return { text: "N„o foi possÌvel salvar os dados do perfil. Tente novamente.", cls: "error" }
+  return { text: "N√£o foi poss√≠vel salvar os dados do perfil. Tente novamente.", cls: "error" }
 }
 
 function messageForAuthError(err) {
   const code = err?.code
-  const msg  = String(err?.message || "")
+  const msg  = String(err?.message || '')
 
   if (!navigator.onLine || /network|failed to fetch|cors/i.test(msg)) {
-    return { text: "Sem conex„o com o servidor de autenticaÁ„o. Tente novamente.", cls: "warning" }
+    return { text: "Sem conex√£o com o servidor de autentica√ß√£o. Tente novamente.", cls: "warning" }
   }
   if (code === 409) {
-    return { text: "Este e-mail j· est· registrado no sistema. FaÁa login ou recupere a senha.", cls: "warning" }
+    return { text: "Este e-mail j√° est√° registrado no sistema. Fa√ßa login ou recupere a senha.", cls: "warning" }
   }
   if (code === 400 && /password/i.test(msg)) {
-    return { text: "A senha n„o atende ‡s regras do Auth. Use ao menos 8 caracteres com letras e n˙meros.", cls: "error" }
+    return { text: "A senha n√£o atende √†s regras do Auth. Use ao menos 8 caracteres com letras e n√∫meros.", cls: "error" }
   }
   if (code === 429) {
     return { text: "Muitas tentativas de cadastro. Aguarde um momento e tente novamente.", cls: "warning" }
   }
   if (code === 401 || code === 403) {
-    return { text: "Projeto sem permiss„o para criar usu·rio no Auth. Verifique a configuraÁ„o do Appwrite.", cls: "error" }
+    return { text: "Projeto sem permiss√£o para criar usu√°rio no Auth. Verifique a configura√ß√£o do Appwrite.", cls: "error" }
   }
-  return { text: "N„o foi possÌvel criar sua conta de acesso. Tente novamente.", cls: "error" }
+  return { text: "N√£o foi poss√≠vel criar sua conta de acesso. Tente novamente.", cls: "error" }
 }
 
 // -- Validadores ---------------------------------------------------------------
@@ -92,7 +92,7 @@ const cpfDigitsRegex = /^(?!^(\d)\1{10}$)\d{11}$/
 const mobileDigitsRegex = /^\d{12}$/
 
 function isValidCpf(cpf) {
-  const d = String(cpf ?? "").replace(/\D/g, "")
+  const d = String(cpf ?? '').replace(/\D/g, "")
   if (!cpfDigitsRegex.test(d)) return false
 
   const calcDigit = (base, factor) => {
@@ -110,26 +110,26 @@ function isValidCpf(cpf) {
 }
 
 function isValidMobile(mobile) {
-  const d = String(mobile ?? "").replace(/\D/g, "")
+  const d = String(mobile ?? '').replace(/\D/g, "")
   return mobileDigitsRegex.test(d)
 }
 
 function parseAddressNumberOrThrow(value) {
-  const raw = String(value ?? "").trim()
+  const raw = String(value ?? '').trim()
   if (!raw) return null
   if (!/^\d+$/.test(raw)) {
-    throw new Error("N˙mero inv·lido. Use apenas dÌgitos inteiros.")
+    throw new Error("N√∫mero inv√°lido. Use apenas d√≠gitos inteiros.")
   }
   const parsed = Number.parseInt(raw, 10)
   if (parsed < 0 || parsed > 10000) {
-    throw new Error("N˙mero do endereÁo deve estar entre 0 e 10000.")
+    throw new Error("N√∫mero do endere√ßo deve estar entre 0 e 10000.")
   }
   return parsed
 }
 function validatePass(p) {
-  if (p.length < 8)         return { ok:false, msg:"MÌnimo 8 caracteres." }
+  if (p.length < 8)         return { ok:false, msg:"M√≠nimo 8 caracteres." }
   if (!/[a-zA-Z]/.test(p)) return { ok:false, msg:"Deve conter letras." }
-  if (!/[0-9]/.test(p))    return { ok:false, msg:"Deve conter n˙meros." }
+  if (!/[0-9]/.test(p))    return { ok:false, msg:"Deve conter n√∫meros." }
   return { ok:true }
 }
 
@@ -142,11 +142,11 @@ function passStrength(p) {
   return score
 }
 
-// -- Barra de forÁa ------------------------------------------------------------
+// -- Barra de for√ßa ------------------------------------------------------------
 $("password").addEventListener("input", () => {
   const val = $("password").value
   const score = passStrength(val)
-  const labels = ["", "Fraca", "Razo·vel", "Boa", "Forte"]
+  const labels = ["", "Fraca", "Razo√°vel", "Boa", "Forte"]
   const cls    = ["", "weak",  "medium",   "strong", "strong"]
   const active = Math.min(score, 3)
   ;[1,2,3].forEach(i => {
@@ -156,7 +156,7 @@ $("password").addEventListener("input", () => {
   $("strengthTxt").textContent = val.length === 0 ? "Informe uma senha" : (labels[score] || "Fraca")
 })
 
-// -- M·scara CPF ----------------------------------------------------------------
+// -- M√°scara CPF ----------------------------------------------------------------
 $("cpf").addEventListener("input", e => {
   let v = e.target.value.replace(/\D/g,"").slice(0,12)
   if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4")
@@ -165,7 +165,7 @@ $("cpf").addEventListener("input", e => {
   e.target.value = v
 })
 
-// -- M·scara celular ------------------------------------------------------------
+// -- M√°scara celular ------------------------------------------------------------
 $("mobile").addEventListener("input", e => {
   let v = e.target.value.replace(/\D/g,"").slice(0,12)
   if (v.length > 8) v = v.replace(/(\d{3})(\d{5})(\d+)/,"($1) $2-$3")
@@ -173,7 +173,7 @@ $("mobile").addEventListener("input", e => {
   e.target.value = v
 })
 
-// -- M·scara CEP ----------------------------------------------------------------
+// -- M√°scara CEP ----------------------------------------------------------------
 $("cep").addEventListener("input", e => {
   let v = e.target.value.replace(/\D/g,"").slice(0,8)
   if (v.length > 5) v = v.replace(/(\d{5})(\d+)/,"$1-$2")
@@ -193,7 +193,7 @@ async function createSessionForNewUser(email, password) {
   }
 }
 
-// -- CriaÁ„o do Mirror com fallback para schema divergente ---------------------
+// -- Cria√ß√£o do Mirror com fallback para schema divergente ---------------------
 async function createMirrorWithSchemaFallback(docId, payload) {
   const data = { ...payload }
 
@@ -201,15 +201,15 @@ async function createMirrorWithSchemaFallback(docId, payload) {
     try {
       return await databases.createDocument(CONFIG.DB, CONFIG.COL.USERS, docId, data)
     } catch (err) {
-      const msg = String(err?.message || "")
+      const msg = String(err?.message || '')
       const m = msg.match(/Unknown attribute:\s*"([^"]+)"/i)
       if (m && Object.prototype.hasOwnProperty.call(data, m[1])) {
-        console.warn(`[Cadastro] atributo n„o existe no schema e ser· removido: ${m[1]}`)
+        console.warn(`[Cadastro] atributo n√£o existe no schema e ser√° removido: ${m[1]}`)
         delete data[m[1]]
         continue
       }
       if (/Attribute\s+"role"\s+has\s+invalid\s+format/i.test(msg) && Object.prototype.hasOwnProperty.call(data, "role")) {
-        console.warn("[Cadastro] role inv·lido para este schema; ajustando para USERS")
+        console.warn("[Cadastro] role inv√°lido para este schema; ajustando para USERS")
         data.role = "USERS"
         continue
       }
@@ -248,39 +248,39 @@ async function doCadastro() {
   const cepRaw    = $("cep").value.replace(/\D/g,"")
   const termos    = $("chkTermos").checked
 
-  // -- ValidaÁıes --------------------------------------------------------------
+  // -- Valida√ß√µes --------------------------------------------------------------
   if (!name) {
-    setMsg("Nome È obrigatÛrio."); reset(); return
+    setMsg("Nome √© obrigat√≥rio."); reset(); return
   }
   if (!isEmail(email)) {
-    setMsg("E-mail com formato inv·lido."); reset(); return
+    setMsg("E-mail com formato inv√°lido."); reset(); return
   }
   const passCheck = validatePass(password)
   if (!passCheck.ok) {
-    setMsg("Senha inv·lida: " + passCheck.msg); reset(); return
+    setMsg("Senha inv√°lida: " + passCheck.msg); reset(); return
   }
   if (password !== confirm) {
-    setMsg("As senhas n„o coincidem."); reset(); return
+    setMsg("As senhas n√£o coincidem."); reset(); return
   }
   if (!termos) {
-    setMsg("VocÍ deve aceitar os Termos de Uso."); reset(); return
+    setMsg("Voc√™ deve aceitar os Termos de Uso."); reset(); return
   }
   if (cpfRaw && !isValidCpf(cpfRaw)) {
-    setMsg("CPF inv·lido. Informe os 11 dÌgitos corretos."); reset(); return
+    setMsg("CPF inv√°lido. Informe os 11 d√≠gitos corretos."); reset(); return
   }
   if (mobileRaw && !isValidMobile(mobileRaw)) {
-    setMsg("Celular inv·lido. Use DDD de 3 dÌgitos + telefone de 9 dÌgitos (12 no total)."); reset(); return
+    setMsg("Celular inv√°lido. Use DDD de 3 d√≠gitos + telefone de 9 d√≠gitos (12 no total)."); reset(); return
   }
   try {
     number = parseAddressNumberOrThrow($("number").value)
   } catch (err) {
-    setMsg(String(err?.message || "N˙mero do endereÁo inv·lido.")); reset(); return
+    setMsg(String(err?.message || "N√∫mero do endere√ßo inv√°lido.")); reset(); return
   }
 
   // -- Gera ID compartilhado entre Auth e Mirror -------------------------------
   const authId = ID.unique()
 
-  // -- PASSO 1: cria no Auth (fonte ˙nica para duplicidade de e-mail) ----------
+  // -- PASSO 1: cria no Auth (fonte √∫nica para duplicidade de e-mail) ----------
   try {
     await account.create(authId, email, password, name)
   } catch (err) {
@@ -290,12 +290,12 @@ async function doCadastro() {
     reset(); return
   }
 
-  // Necess·rio para CREATE no banco quando a collection USERS permite role:users.
+  // Necess√°rio para CREATE no banco quando a collection USERS permite role:users.
   try {
     await createSessionForNewUser(email, password)
   } catch (err) {
     console.error("Session create error:", err)
-    setMsg("Conta criada, mas n„o foi possÌvel iniciar sess„o para finalizar o perfil. FaÁa login e complete seu cadastro.", "warning")
+    setMsg("Conta criada, mas n√£o foi poss√≠vel iniciar sess√£o para finalizar o perfil. Fa√ßa login e complete seu cadastro.", "warning")
     reset(); return
   }
 
@@ -328,8 +328,8 @@ async function doCadastro() {
     })
   } catch (err) {
     console.error("Mirror create error:", err)
-    // A conta no Auth foi criada; avisamos para login e suporte, evitando falso "e-mail j· existe".
-    setMsg("Conta criada no acesso, mas houve falha ao salvar seu perfil. Tente fazer login e, se necess·rio, contate o suporte.", "warning")
+    // A conta no Auth foi criada; avisamos para login e suporte, evitando falso "e-mail j√° existe".
+    setMsg("Conta criada no acesso, mas houve falha ao salvar seu perfil. Tente fazer login e, se necess√°rio, contate o suporte.", "warning")
     reset(); return
   }
 

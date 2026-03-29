@@ -1,6 +1,6 @@
 // ─── HIVERCAR · appwriteClient.js ────────────────────────────────────────────
 // Única instância Client/Databases/Account para todo o sistema.
-// Camada: Infrastructure — importado pelos repositories e authService.
+// Camada: Infrastructure - importado pelos repositories e authService.
 
 import { Client, Databases, Account, Query, ID, Permission, Role }
   from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Conta â€” HIVERCAR</title>
+<title>Minha Conta - HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -33,8 +33,8 @@
     <div class="hero-inner">
       <div class="hero-avatar"><i class="fas fa-user"></i></div>
       <div class="hero-info">
-        <h1>OLÃ, <em id="heroNome">CLIENTE</em></h1>
-        <div class="hero-sub" id="heroSub">Carregandoâ€¦</div>
+        <h1>OLÁ, <em id="heroNome">CLIENTE</em></h1>
+        <div class="hero-sub" id="heroSub">Carregando…</div>
         <div class="hero-stats" id="heroStats" style="display:none">
           <div class="stat"><div class="stat-val" id="statPedidos">0</div><div class="stat-lbl">Pedidos</div></div>
           <div class="stat"><div class="stat-val" id="statTotal">R$ 0</div><div class="stat-lbl">Gasto Total</div></div>
@@ -48,8 +48,8 @@
   <div class="tabs-bar">
     <div class="tab active" data-tab="pedidos"><i class="fas fa-box"></i> &nbsp;Meus Pedidos</div>
     <div class="tab" data-tab="perfil"><i class="fas fa-user-pen"></i> &nbsp;Perfil</div>
-    <div class="tab" data-tab="endereco"><i class="fas fa-location-dot"></i> &nbsp;EndereÃ§o</div>
-    <div class="tab" data-tab="seguranca"><i class="fas fa-lock"></i> &nbsp;SeguranÃ§a</div>
+    <div class="tab" data-tab="endereco"><i class="fas fa-location-dot"></i> &nbsp;Endereço</div>
+    <div class="tab" data-tab="seguranca"><i class="fas fa-lock"></i> &nbsp;Segurança</div>
   </div>
 
   <!-- TAB: PEDIDOS -->
@@ -57,7 +57,7 @@
     <div id="pedidosList">
       <div style="color:var(--muted);padding:32px;text-align:center">
         <span class="spinner" style="width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;margin-bottom:12px"></span>
-        <div>Carregando pedidosâ€¦</div>
+        <div>Carregando pedidos…</div>
       </div>
     </div>
   </div>
@@ -74,19 +74,19 @@
       </div>
       <div id="perfilError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
       <button class="btn btn-primary" id="btnSalvarPerfil">
-        <i class="fas fa-floppy-disk"></i> Salvar AlteraÃ§Ãµes
+        <i class="fas fa-floppy-disk"></i> Salvar Alterações
       </button>
     </div>
   </div>
 
-  <!-- TAB: ENDEREÃ‡O -->
+  <!-- TAB: ENDEREÇO -->
   <div class="tab-panel" id="tab-endereco" style="display:none">
     <div class="panel">
-      <div class="panel-title">EndereÃ§o de Entrega</div>
+      <div class="panel-title">Endereço de Entrega</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="field" style="grid-column:1/-1"><label>Rua / Logradouro</label><input type="text" id="eAddress" placeholder="Ex: Rua das Flores"></div>
-        <div class="field"><label>NÃºmero</label><input type="number" id="eNumber" placeholder="Ex: 100" min="0" max="10000" step="1" inputmode="numeric"></div>
-        <div class="field"><label>Complemento</label><input type="text" id="eComplement" placeholder="Apto, blocoâ€¦"></div>
+        <div class="field"><label>Número</label><input type="number" id="eNumber" placeholder="Ex: 100" min="0" max="10000" step="1" inputmode="numeric"></div>
+        <div class="field"><label>Complemento</label><input type="text" id="eComplement" placeholder="Apto, bloco…"></div>
         <div class="field"><label>Bairro</label><input type="text" id="eDistrict" placeholder="Centro"></div>
         <div class="field"><label>CEP</label><input type="text" id="eCep" placeholder="65500-000" maxlength="9"></div>
         <div class="field"><label>Cidade</label><input type="text" id="eCity" placeholder="Chapadinha"></div>
@@ -94,27 +94,27 @@
       </div>
       <div id="enderecoError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
       <button class="btn btn-primary" id="btnSalvarEndereco">
-        <i class="fas fa-floppy-disk"></i> Salvar EndereÃ§o
+        <i class="fas fa-floppy-disk"></i> Salvar Endereço
       </button>
     </div>
   </div>
 
-  <!-- TAB: SEGURANÃ‡A -->
+  <!-- TAB: SEGURANÇA -->
   <div class="tab-panel" id="tab-seguranca" style="display:none">
     <div class="panel">
       <div class="panel-title">Redefinir Senha</div>
       <p style="color:var(--muted);font-size:13px;margin-bottom:20px">
-        Enviaremos um link para seu e-mail cadastrado para redefiniÃ§Ã£o de senha.
+        Enviaremos um link para seu e-mail cadastrado para redefinição de senha.
       </p>
       <div class="field"><label>E-mail cadastrado</label><input type="email" id="sEmail" readonly></div>
       <div id="senhaMsg" style="font-size:13px;margin-bottom:12px;display:none"></div>
       <button class="btn btn-primary" id="btnResetSenha">
-        <i class="fas fa-envelope"></i> Enviar Link de RedefiniÃ§Ã£o
+        <i class="fas fa-envelope"></i> Enviar Link de Redefinição
       </button>
     </div>
     <div class="panel" style="margin-top:16px">
       <div class="panel-title" style="color:var(--red)">Zona de Risco</div>
-      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Encerrar sessÃ£o em todos os dispositivos.</p>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Encerrar sessão em todos os dispositivos.</p>
       <button class="btn btn-ghost" id="btnLogout" style="color:var(--red);border-color:rgba(251,18,48,.3)">
         <i class="fas fa-right-from-bracket"></i> Sair de Todos os Dispositivos
       </button>

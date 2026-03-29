@@ -1,8 +1,8 @@
-﻿// â”€â”€â”€ HIVERCAR Â· vitest.config.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// US-26: ConfiguraÃ§Ã£o do Vitest com cobertura mÃ­nima 70% em Domain + Infrastructure.
+// ─── HIVERCAR · vitest.config.js ─────────────────────────────────────────────
+// US-26: Configuração do Vitest com cobertura mínima 70% em Domain + Infrastructure.
 //
-// Ambiente jsdom (global) para todos os testes â€” necessÃ¡rio porque cartService.js
-// usa localStorage. ServiÃ§os que nÃ£o precisam de DOM nÃ£o sÃ£o afetados por isso.
+// Ambiente jsdom (global) para todos os testes - necessário porque cartService.js
+// usa localStorage. Serviços que não precisam de DOM não são afetados por isso.
 //
 // Sprint 05: + taxEngine.js (US-44), + nfService.js (US-43)
 
@@ -23,13 +23,13 @@ export default defineConfig({
     // Globals: permite describe/it/expect sem import (comportamento Jest-like)
     globals: true,
 
-    // â”€â”€ Cobertura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Cobertura ─────────────────────────────────────────────────────────────
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
       reportsDirectory: "./coverage",
 
-      // Thresholds mÃ­nimos â€” US-26 Task 6: 70%
+      // Thresholds mínimos - US-26 Task 6: 70%
       thresholds: {
         lines:      70,
         functions:  70,
@@ -50,12 +50,12 @@ export default defineConfig({
         "./js/productRepository.js",
         "./js/adminService.js",
         // Sprint 05
-        "./js/taxEngine.js",          // US-44: Motor TributÃ¡rio
-        "./js/nfService.js",          // US-43: EmissÃ£o NF-e
-        "./js/fiscalReportService.js",// US-45: RelatÃ³rios Fiscais
+        "./js/taxEngine.js",          // US-44: Motor Tributário
+        "./js/nfService.js",          // US-43: Emissão NF-e
+        "./js/fiscalReportService.js",// US-45: Relatórios Fiscais
       ],
 
-      // ExcluÃ­dos da contagem
+      // Excluídos da contagem
       exclude: [
         "**/*.html",
         "**/*.css",

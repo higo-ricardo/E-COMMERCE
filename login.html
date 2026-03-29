@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login â€” HIVERCAR</title>
+<title>Login - HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,15 +17,15 @@
 <div class="auth-scene">
 
   <div class="auth-left">
-    <div class="auth-label"><span>Acesso Restrito â€” HIVERCAR</span></div>
+    <div class="auth-label"><span>Acesso Restrito - HIVERCAR</span></div>
     <h1 class="auth-h1">PAINEL<br>DE <em>CONTROLE</em></h1>
-    <p class="auth-sub">Ãrea exclusiva para colaboradores, vendedores e administradores.</p>
+    <p class="auth-sub">Área exclusiva para colaboradores, vendedores e administradores.</p>
   </div>
 
   <div class="auth-box">
     <a href="index.html" class="auth-brand">
       <div class="brand-dot"></div>
-      <span class="auth-brand-name">HIVERCAR AUTOPEÃ‡AS</span>
+      <span class="auth-brand-name">HIVERCAR AUTOPEÇAS</span>
     </a>
     <h1>ENTRAR <em>AGORA</em></h1>
     <p class="auth-sub2">Informe suas credenciais para continuar.</p>
@@ -36,7 +36,7 @@
     </div>
     <div class="field">
       <label for="password">Senha</label>
-      <input type="password" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password">
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
     </div>
 
     <div class="attempt-bar">
@@ -64,10 +64,10 @@
   </div>
 
   <div class="auth-right">
-    <div class="ok">[OK] ssl: certificado vÃ¡lido</div>
+    <div class="ok">[OK] ssl: certificado válido</div>
     <div class="ok">[OK] servidor: online</div>
     <div class="ok">[OK] banco: conectado</div>
-    <div class="err" id="statusAuth">[WAIT] sessÃ£o: aguardando</div>
+    <div class="err" id="statusAuth">[WAIT] sessão: aguardando</div>
     <div id="statusAttempts">[INFO] tentativas: 0/5</div>
   </div>
 
@@ -231,7 +231,7 @@ async function recordFail(mirror) {
 
 async function getClientIp() {
   const isValidIp = (value) => {
-    const v = String(value ?? "").trim()
+    const v = String(value ?? '').trim()
     const ipv4 = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/
     const ipv6 = /^[a-fA-F0-9:]+$/
     return ipv4.test(v) || ipv6.test(v)
@@ -285,7 +285,7 @@ async function recordSuccess(authUser, mirrorHint = null) {
   }
 
   try {
-    const mirrorByEmail = await getMirror(authUser?.email || "")
+    const mirrorByEmail = await getMirror(authUser?.email || '-')
     if (!mirrorByEmail?.$id) return false
     await databases.updateDocument(CFG.DB, CFG.USERS, mirrorByEmail.$id, {
       lastLogin: timestamp,
@@ -305,7 +305,7 @@ async function ensureMirrorForUser(authUser, mirrorHint = null) {
   if (!authUser) return null
   if (mirrorHint) return mirrorHint
 
-  const email = String(authUser.email || "").toLowerCase().trim()
+  const email = String(authUser.email || '').toLowerCase().trim()
   let mirror = await getMirror(email)
   if (mirror) return mirror
 
@@ -343,7 +343,7 @@ async function ensureMirrorForUser(authUser, mirrorHint = null) {
 }
 
 function redirectByRole(role) {
-  const normalized = String(role ?? "").trim().toUpperCase()
+  const normalized = String(role ?? '').trim().toUpperCase()
   const map = {
     ADMIN: "dashboard.html",
     SELLER: "painel-vendas.html",

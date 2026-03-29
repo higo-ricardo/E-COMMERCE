@@ -1,8 +1,8 @@
 // ─── HIVERCAR · adminService.js ──────────────────────────────────────────────
 // Métricas e operações do painel ERP. Zero UI.
-// Camada: Domain / Service — exclusivo do ERP.
+// Camada: Domain / Service - exclusivo do ERP.
 //
-// Sprint 03 — correções:
+// Sprint 03 - correções:
 //   - Todas as queries com Query.limit + Query.orderDesc (sem scan full)
 //   - getMetrics() adaptado ao novo modelo OS (clienteName, placa, modelo)
 //   - getCustomerList() lê da collection USERS (Auth Mirror)
@@ -44,8 +44,8 @@ export const AdminService = {
       lowStockProducts: lowStockProds.slice(0, 10),
       recentOS: os.slice(0, 5).map(o => ({
         ...o,
-        displayName:    o.clienteName || o.customer || "—",
-        displayVehicle: o.placa ? `${o.placa} ${o.modelo || ""}`.trim() : (o.vehicle || "—"),
+        displayName:    o.clienteName || o.customer || "-",
+        displayVehicle: o.placa ? `${o.placa} ${o.modelo || '-'}`.trim() : (o.vehicle || "-"),
       })),
     }
   },

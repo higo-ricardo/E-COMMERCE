@@ -1,35 +1,35 @@
-﻿// â”€â”€â”€ HIVERCAR Â· tests/cartService.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// US-26 Â· Task 3: Testes para CartService
+// ─── HIVERCAR · tests/cartService.test.js ────────────────────────────────────
+// US-26 · Task 3: Testes para CartService
 //   - add(), remove(), setQty(), total(), count(), clear(), get()
 //
-// CartService usa localStorage â†’ ambiente jsdom via configuraÃ§Ã£o por arquivo.
+// CartService usa localStorage → ambiente jsdom via configuração por arquivo.
 // @vitest-environment jsdom
 
 import { describe, it, expect, beforeEach } from "vitest"
 
-// â”€â”€ Mock do config.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mock do config.js ─────────────────────────────────────────────────────────
 // config.js usa CONFIG.STORE.CART_KEY para a chave do localStorage.
-// NÃ£o precisamos mockar porque o jsdom jÃ¡ fornece localStorage.
+// Não precisamos mockar porque o jsdom já fornece localStorage.
 
 import { CartService } from "../js/cartService.js"
 
-// â”€â”€ Produto de exemplo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Produto de exemplo ────────────────────────────────────────────────────────
 const prodA = { $id: "pid-001", name: "Pastilha Brembo", price: 89.90, category: "Freios" }
 const prodB = { $id: "pid-002", name: "Filtro de Ar",    price: 35.50, category: "Motor"  }
-const prodC = { $id: "pid-003", name: "Ã“leo 5W30",       price: 45.00, category: "Lubrificantes" }
+const prodC = { $id: "pid-003", name: "Óleo 5W30",       price: 45.00, category: "Lubrificantes" }
 
-// â”€â”€ Limpa o carrinho antes de cada teste â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Limpa o carrinho antes de cada teste ──────────────────────────────────────
 beforeEach(() => {
   CartService.clear()
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.get()", () => {
-  it("retorna array vazio quando o carrinho estÃ¡ limpo", () => {
+  it("retorna array vazio quando o carrinho está limpo", () => {
     expect(CartService.get()).toEqual([])
   })
 
-  it("retorna os itens apÃ³s adicionar produtos", () => {
+  it("retorna os itens após adicionar produtos", () => {
     CartService.add(prodA)
     const cart = CartService.get()
     expect(cart).toHaveLength(1)
@@ -37,7 +37,7 @@ describe("CartService.get()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.add()", () => {
   it("adiciona um produto novo com qty=1", () => {
     CartService.add(prodA)
@@ -47,7 +47,7 @@ describe("CartService.add()", () => {
     expect(cart[0].name).toBe("Pastilha Brembo")
   })
 
-  it("incrementa qty quando produto jÃ¡ existe no carrinho", () => {
+  it("incrementa qty quando produto já existe no carrinho", () => {
     CartService.add(prodA)
     CartService.add(prodA)
     CartService.add(prodA)
@@ -56,17 +56,17 @@ describe("CartService.add()", () => {
     expect(cart[0].qty).toBe(3)      // qty = 3
   })
 
-  it("adiciona mÃºltiplos produtos distintos", () => {
+  it("adiciona múltiplos produtos distintos", () => {
     CartService.add(prodA)
     CartService.add(prodB)
     CartService.add(prodC)
     expect(CartService.get()).toHaveLength(3)
   })
 
-  it("nÃ£o muta o objeto original do produto", () => {
+  it("não muta o objeto original do produto", () => {
     const original = { ...prodA }
     CartService.add(prodA)
-    expect(prodA.qty).toBeUndefined()  // original nÃ£o deve ter qty
+    expect(prodA.qty).toBeUndefined()  // original não deve ter qty
     expect(prodA).toEqual(original)
   })
 
@@ -80,43 +80,43 @@ describe("CartService.add()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.remove()", () => {
-  it("remove o item pelo Ã­ndice correto", () => {
+  it("remove o item pelo índice correto", () => {
     CartService.add(prodA)
     CartService.add(prodB)
     CartService.add(prodC)
 
-    CartService.remove(1)   // remove prodB (Ã­ndice 1)
+    CartService.remove(1)   // remove prodB (índice 1)
     const cart = CartService.get()
     expect(cart).toHaveLength(2)
     expect(cart.find(i => i.$id === "pid-002")).toBeUndefined()
   })
 
-  it("remove o Ãºnico item e deixa carrinho vazio", () => {
+  it("remove o único item e deixa carrinho vazio", () => {
     CartService.add(prodA)
     CartService.remove(0)
     expect(CartService.get()).toHaveLength(0)
   })
 
-  it("nÃ£o quebra ao remover Ã­ndice inexistente", () => {
+  it("não quebra ao remover índice inexistente", () => {
     CartService.add(prodA)
-    // splice com Ã­ndice alÃ©m do tamanho â†’ nÃ£o remove nada, nÃ£o lanÃ§a
+    // splice com índice além do tamanho → não remove nada, não lança
     expect(() => CartService.remove(99)).not.toThrow()
-    // O item original ainda existe (splice de 0 elementos nÃ£o remove)
-    // comportamento de Array.splice â€” nÃ£o Ã© erro
+    // O item original ainda existe (splice de 0 elementos não remove)
+    // comportamento de Array.splice - não é erro
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.setQty()", () => {
-  it("atualiza a quantidade de um item pelo Ã­ndice", () => {
+  it("atualiza a quantidade de um item pelo índice", () => {
     CartService.add(prodA)
     CartService.setQty(0, 5)
     expect(CartService.get()[0].qty).toBe(5)
   })
 
-  it("forÃ§a quantidade mÃ­nima de 1 (nÃ£o permite 0 ou negativo)", () => {
+  it("força quantidade mínima de 1 (não permite 0 ou negativo)", () => {
     CartService.add(prodA)
     CartService.setQty(0, 0)
     expect(CartService.get()[0].qty).toBe(1)
@@ -125,21 +125,21 @@ describe("CartService.setQty()", () => {
     expect(CartService.get()[0].qty).toBe(1)
   })
 
-  it("nÃ£o altera outros itens ao mudar qty de um", () => {
+  it("não altera outros itens ao mudar qty de um", () => {
     CartService.add(prodA)
     CartService.add(prodB)
     CartService.setQty(0, 7)
-    expect(CartService.get()[1].qty).toBe(1)  // prodB nÃ£o mudou
+    expect(CartService.get()[1].qty).toBe(1)  // prodB não mudou
   })
 
-  it("nÃ£o faz nada para Ã­ndice invÃ¡lido (sem exceÃ§Ã£o)", () => {
+  it("não faz nada para índice inválido (sem exceção)", () => {
     CartService.add(prodA)
     expect(() => CartService.setQty(99, 5)).not.toThrow()
     expect(CartService.get()[0].qty).toBe(1)  // prodA inalterado
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.total()", () => {
   it("retorna 0 para carrinho vazio", () => {
     expect(CartService.total()).toBe(0)
@@ -152,21 +152,21 @@ describe("CartService.total()", () => {
 
   it("calcula total considerando qty > 1", () => {
     CartService.add(prodA)
-    CartService.setQty(0, 3)  // 89.90 Ã— 3 = 269.70
+    CartService.setQty(0, 3)  // 89.90 Ã- 3 = 269.70
     expect(CartService.total()).toBeCloseTo(269.70)
   })
 
-  it("soma mÃºltiplos produtos com quantidades diferentes", () => {
-    CartService.add(prodA)          // 89.90 Ã— 1
-    CartService.add(prodB)          // 35.50 Ã— 1
-    CartService.add(prodC)          // 45.00 Ã— 1
-    CartService.setQty(0, 2)        // 89.90 Ã— 2 = 179.80
+  it("soma múltiplos produtos com quantidades diferentes", () => {
+    CartService.add(prodA)          // 89.90 Ã- 1
+    CartService.add(prodB)          // 35.50 Ã- 1
+    CartService.add(prodC)          // 45.00 Ã- 1
+    CartService.setQty(0, 2)        // 89.90 Ã- 2 = 179.80
     // Total: 179.80 + 35.50 + 45.00 = 260.30
     expect(CartService.total()).toBeCloseTo(260.30)
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.count()", () => {
   it("retorna 0 para carrinho vazio", () => {
     expect(CartService.count()).toBe(0)
@@ -180,7 +180,7 @@ describe("CartService.count()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("CartService.clear()", () => {
   it("esvazia o carrinho completamente", () => {
     CartService.add(prodA)
@@ -191,19 +191,19 @@ describe("CartService.clear()", () => {
     expect(CartService.total()).toBe(0)
   })
 
-  it("nÃ£o lanÃ§a erro quando o carrinho jÃ¡ estÃ¡ vazio", () => {
+  it("não lança erro quando o carrinho já está vazio", () => {
     expect(() => CartService.clear()).not.toThrow()
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("PersistÃªncia no localStorage", () => {
-  it("mantÃ©m os dados apÃ³s recriar o serviÃ§o (simula reload)", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("Persistência no localStorage", () => {
+  it("mantém os dados após recriar o serviço (simula reload)", () => {
     // Adiciona produto
     CartService.add(prodA)
     CartService.setQty(0, 3)
 
-    // LÃª direto do localStorage (como se fosse um reload)
+    // Lê direto do localStorage (como se fosse um reload)
     const raw  = localStorage.getItem("hiverCart")
     const data = JSON.parse(raw)
     expect(data).toHaveLength(1)
@@ -212,9 +212,9 @@ describe("PersistÃªncia no localStorage", () => {
   })
 
   it("suporta JSON corrompido sem travar", () => {
-    // Injeta valor invÃ¡lido no localStorage
+    // Injeta valor inválido no localStorage
     localStorage.setItem("hiverCart", "INVALIDO###")
-    // CartService deve retornar array vazio ao invÃ©s de lanÃ§ar
+    // CartService deve retornar array vazio ao invés de lançar
     expect(CartService.get()).toEqual([])
   })
 })

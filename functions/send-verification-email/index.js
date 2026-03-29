@@ -38,7 +38,7 @@ export default async ({ req, res, log, error }) => {
     const client = new Client()
       .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
       .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-      .setKey(req.headers["x-appwrite-key"] ?? "")
+      .setKey(req.headers["x-appwrite-key"] ?? '')
 
     const databases = new Databases(client)
     const users     = new Users(client)
@@ -75,7 +75,7 @@ export default async ({ req, res, log, error }) => {
       body: JSON.stringify({
         from:    process.env.EMAIL_FROM ?? "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>",
         to:      [user.email],
-        subject: "Confirme seu e-mail — HIVERCAR AUTOPEÇAS",
+        subject: "Confirme seu e-mail - HIVERCAR AUTOPEÇAS",
         html,
       }),
     })
@@ -87,7 +87,7 @@ export default async ({ req, res, log, error }) => {
     }
 
     const resendData = await resendResp.json()
-    log(`[send-verification-email] E-mail enviado para ${user.email} — ID: ${resendData.id}`)
+    log(`[send-verification-email] E-mail enviado para ${user.email} - ID: ${resendData.id}`)
     return res.json({ ok: true, resend_id: resendData.id })
 
   } catch (err) {
@@ -148,7 +148,7 @@ function buildVerificationEmail({ name, email, verifyLink }) {
         <tr>
           <td style="padding:16px 32px;background:#0d0f10;border-top:1px solid #1e2023;text-align:center">
             <p style="font-size:11px;color:#3a3c3e;margin:0">
-              HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 — Chapadinha, MA<br>
+              HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 - Chapadinha, MA<br>
               © ${new Date().getFullYear()} Todos os direitos reservados.
             </p>
           </td>

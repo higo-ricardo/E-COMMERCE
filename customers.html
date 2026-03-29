@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clientes â€” HIVERCAR ERP</title>
+<title>Clientes - HIVERCAR ERP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -24,7 +24,7 @@
     <a href="dashboard.html">    <i class="fas fa-gauge-high"></i>  Dashboard</a>
     <a href="admin-produtos.html"><i class="fas fa-box-open"></i>    Produtos</a>
     <a href="admin-estoque.html"> <i class="fas fa-warehouse"></i>   Estoque</a>
-    <a href="admin-os.html">      <i class="fas fa-wrench"></i>      O. de ServiÃ§o</a>
+    <a href="admin-os.html">      <i class="fas fa-wrench"></i>      O. de Serviço</a>
     <a href="customers.html" class="active"><i class="fas fa-users"></i> Clientes</a>
     <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
     <a href="loja.html">          <i class="fas fa-store"></i>       Loja</a>
@@ -36,7 +36,7 @@
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">GESTÃƒO DE CLIENTES</span>
+    <span class="topbar-title">GESTÃO DE CLIENTES</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
       <span id="userName">Admin</span>
@@ -45,17 +45,17 @@
   </div>
 
   <div class="content">
-    <!-- MÃ©tricas -->
+    <!-- Métricas -->
     <div class="metrics-grid" style="margin-bottom:24px">
-      <div class="metric-card"><div class="metric-value" id="mTotal">â€”</div><div class="metric-label">Total de Clientes</div></div>
-      <div class="metric-card"><div class="metric-value" id="mAtivos">â€”</div><div class="metric-label">Contas Ativas</div></div>
-      <div class="metric-card red"><div class="metric-value" id="mBloqueados">â€”</div><div class="metric-label">Bloqueados</div></div>
-      <div class="metric-card"><div class="metric-value" id="mHoje">â€”</div><div class="metric-label">Cadastros Hoje</div></div>
+      <div class="metric-card"><div class="metric-value" id="mTotal">-</div><div class="metric-label">Total de Clientes</div></div>
+      <div class="metric-card"><div class="metric-value" id="mAtivos">-</div><div class="metric-label">Contas Ativas</div></div>
+      <div class="metric-card red"><div class="metric-value" id="mBloqueados">-</div><div class="metric-label">Bloqueados</div></div>
+      <div class="metric-card"><div class="metric-value" id="mHoje">-</div><div class="metric-label">Cadastros Hoje</div></div>
     </div>
 
     <!-- Busca -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar por nome, e-mail ou CPFâ€¦">
+      <input type="text" id="searchInput" placeholder="Buscar por nome, e-mail ou CPF…">
       <select id="filterStatus" style="padding:10px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none">
         <option value="">Todos</option>
         <option value="active">Ativos</option>
@@ -76,13 +76,13 @@
             <th>CPF</th>
             <th>Cidade</th>
             <th>Cadastro</th>
-            <th>Ãšltimo Login</th>
+            <th>Último Login</th>
             <th>Status</th>
-            <th style="width:100px">AÃ§Ãµes</th>
+            <th style="width:100px">Ações</th>
           </tr>
         </thead>
         <tbody id="customersTable">
-          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
+          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
         </tbody>
       </table>
       <div class="pagination" id="paginacao"></div>
@@ -105,7 +105,7 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-// â”€â”€ CONFIG (inline) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CONFIG (inline) ───────────────────────────────────────────────────────────
 const CONFIG = {
   ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
   PROJECT_ID: "69c7e94a003a1c86b7ca",
@@ -121,7 +121,7 @@ const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PR
 const databases = new Databases(client)
 const account   = new Account(client)
 
-// â”€â”€ GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── GUARD ─────────────────────────────────────────────────────────────────────
 ;(async () => {
   try {
     const user = await account.get()
@@ -132,15 +132,15 @@ const account   = new Account(client)
   init()
 })()
 
-// â”€â”€ ESTADO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ESTADO ────────────────────────────────────────────────────────────────────
 let allCustomers = []
 let filtered     = []
 let currentPage  = 1
 const PAGE_SIZE  = CONFIG.PAGE_SIZE
 
-// â”€â”€ UTILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── UTILS ─────────────────────────────────────────────────────────────────────
 function esc(s) {
-  return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+  return String(s ?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 }
 let toastT
 function toast(msg, type="") {
@@ -151,16 +151,16 @@ function toast(msg, type="") {
   toastT = setTimeout(()=>el.classList.remove("show"), 3500)
 }
 function fmtDate(iso) {
-  if (!iso) return "â€”"
+  if (!iso) return "-"
   return new Date(iso).toLocaleDateString("pt-BR")
 }
 function fmtDateTime(iso) {
-  if (!iso) return "â€”"
+  if (!iso) return "-"
   const d = new Date(iso)
   return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
 }
 
-// â”€â”€ LOAD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LOAD ──────────────────────────────────────────────────────────────────────
 async function loadCustomers() {
   try {
     const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_USERS, [
@@ -170,7 +170,7 @@ async function loadCustomers() {
     ])
     allCustomers = res.documents
 
-    // MÃ©tricas
+    // Métricas
     const today     = new Date(); today.setHours(0,0,0,0)
     const ativos    = allCustomers.filter(c => c.isActive !== false)
     const bloqueados= allCustomers.filter(c => c.isActive === false || (c.blockedUntil && new Date(c.blockedUntil) > new Date()))
@@ -194,9 +194,9 @@ function applyFilter() {
 
   filtered = allCustomers.filter(c => {
     const matchSearch = !search ||
-      (c.name  || "").toLowerCase().includes(search) ||
-      (c.email || "").toLowerCase().includes(search) ||
-      (c.cpf   || "").includes(search)
+      (c.name || '').toLowerCase().includes(search) ||
+      (c.email || '').toLowerCase().includes(search) ||
+      (c.cpf   || '-').includes(search)
 
     const isBlocked = c.isActive === false ||
       (c.blockedUntil && new Date(c.blockedUntil) > new Date())
@@ -236,10 +236,10 @@ function renderPage() {
       : `<span class="badge badge-green">Ativo</span>`
 
     return `<tr>
-      <td style="font-weight:600">${esc(c.name||"â€”")}</td>
-      <td style="color:var(--muted);font-size:12px">${esc(c.email||"â€”")}</td>
-      <td style="color:var(--muted);font-size:12px">${esc(c.cpf||"â€”")}</td>
-      <td style="color:var(--muted)">${esc(c.city||"â€”")}</td>
+      <td style="font-weight:600">${esc(c.name||"-")}</td>
+      <td style="color:var(--muted);font-size:12px">${esc(c.email||"-")}</td>
+      <td style="color:var(--muted);font-size:12px">${esc(c.cpf||"-")}</td>
+      <td style="color:var(--muted)">${esc(c.city||"-")}</td>
       <td style="color:var(--muted);font-size:12px">${fmtDate(c.createdAt||c.$createdAt)}</td>
       <td style="color:var(--muted);font-size:12px">${fmtDate(c.lastLogin)}</td>
       <td>${badge}</td>
@@ -269,7 +269,7 @@ function renderPage() {
     btn.addEventListener("click", () => toggleBlock(btn.dataset.id, btn.dataset.blocked === "true"))
   })
 
-  // PaginaÃ§Ã£o
+  // Paginação
   renderPagination(currentPage, pages)
 }
 
@@ -291,7 +291,7 @@ function renderPagination(page, pages) {
   })
 }
 
-// â”€â”€ DETALHE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── DETALHE ───────────────────────────────────────────────────────────────────
 function openDetalhe(c) {
   const blocked = c.isActive === false ||
     (c.blockedUntil && new Date(c.blockedUntil) > new Date())
@@ -299,18 +299,18 @@ function openDetalhe(c) {
   document.getElementById("modalTitle").textContent = c.name || "Cliente"
 
   document.getElementById("modalBody").innerHTML = `
-    <div class="detail-row"><span class="detail-label">Nome</span><span>${esc(c.name||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">E-mail</span><span>${esc(c.email||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">CPF</span><span>${esc(c.cpf||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">Celular</span><span>${esc(c.mobile||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">EndereÃ§o</span>
-      <span>${esc([c.address, c.number, c.complement].filter(Boolean).join(", ")||"â€”")}</span>
+    <div class="detail-row"><span class="detail-label">Nome</span><span>${esc(c.name||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">E-mail</span><span>${esc(c.email||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">CPF</span><span>${esc(c.cpf||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">Celular</span><span>${esc(c.mobile||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">Endereço</span>
+      <span>${esc([c.address, c.number, c.complement].filter(Boolean).join(", ")||"-")}</span>
     </div>
-    <div class="detail-row"><span class="detail-label">Bairro</span><span>${esc(c.district||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">Cidade/UF</span><span>${esc((c.city||"") + (c.state ? " â€” " + c.state : "")||"â€”")}</span></div>
-    <div class="detail-row"><span class="detail-label">CEP</span><span>${esc(c.cep||"â€”")}</span></div>
+    <div class="detail-row"><span class="detail-label">Bairro</span><span>${esc(c.district||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">Cidade/UF</span><span>${esc((c.city|| '-') + (c.state ? "-" + c.state : "")||"-")}</span></div>
+    <div class="detail-row"><span class="detail-label">CEP</span><span>${esc(c.cep||"-")}</span></div>
     <div class="detail-row"><span class="detail-label">Cadastro</span><span>${fmtDateTime(c.createdAt||c.$createdAt)}</span></div>
-    <div class="detail-row"><span class="detail-label">Ãšltimo Login</span><span>${fmtDateTime(c.lastLogin)}</span></div>
+    <div class="detail-row"><span class="detail-label">Último Login</span><span>${fmtDateTime(c.lastLogin)}</span></div>
     <div class="detail-row"><span class="detail-label">Logins</span><span>${c.loginCounter ?? 0}</span></div>
     <div class="detail-row"><span class="detail-label">Tentativas Falhas</span>
       <span style="${(c.failedLogin||0) >= 5 ? 'color:var(--red);font-weight:700' : ''}">${c.failedLogin ?? 0}</span>
@@ -322,7 +322,7 @@ function openDetalhe(c) {
       </span>
     </div>
     ${c.blockedUntil && blocked ? `
-    <div class="detail-row"><span class="detail-label">Bloqueado atÃ©</span>
+    <div class="detail-row"><span class="detail-label">Bloqueado até</span>
       <span style="color:var(--red)">${fmtDateTime(c.blockedUntil)}</span>
     </div>` : ""}
   `
@@ -345,7 +345,7 @@ function openDetalhe(c) {
   document.getElementById("modalOverlay").classList.add("open")
 }
 
-// â”€â”€ TOGGLE BLOQUEIO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOGGLE BLOQUEIO ────────────────────────────────────────────────────────────
 async function toggleBlock(id, isCurrentlyBlocked) {
   try {
     const patch = isCurrentlyBlocked
@@ -360,7 +360,7 @@ async function toggleBlock(id, isCurrentlyBlocked) {
   }
 }
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ──────────────────────────────────────────────────────────────────────
 function init() {
   document.getElementById("logoutBtn").addEventListener("click", async e => {
     e.preventDefault()

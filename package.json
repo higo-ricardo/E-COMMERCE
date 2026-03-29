@@ -4,6 +4,7 @@
   "description": "HIVERCAR AUTOPEÇAS — ERP + Loja",
   "type": "module",
   "scripts": {
+    "lint:text":     "node scripts/check-text-integrity.mjs",
     "test":          "vitest run",
     "test:watch":    "vitest",
     "test:coverage": "vitest run --coverage",

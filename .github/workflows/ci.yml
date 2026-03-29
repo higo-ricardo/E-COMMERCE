@@ -49,6 +49,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Validar integridade de texto (UTF-8/mojibake)
+        run: npm run lint:text
+
       - name: Rodar testes com cobertura
         run: npm run test:coverage
 

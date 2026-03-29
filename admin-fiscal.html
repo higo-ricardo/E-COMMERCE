@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fiscal â€” HIVERCAR ERP</title>
+<title>Fiscal - HIVERCAR ERP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -24,7 +24,7 @@
     <a href="dashboard.html">      <i class="fas fa-gauge-high"></i>  Dashboard</a>
     <a href="admin-produtos.html"> <i class="fas fa-box-open"></i>    Produtos</a>
     <a href="admin-estoque.html">  <i class="fas fa-warehouse"></i>   Estoque</a>
-    <a href="admin-os.html">       <i class="fas fa-wrench"></i>      O. de ServiÃ§o</a>
+    <a href="admin-os.html">       <i class="fas fa-wrench"></i>      O. de Serviço</a>
     <a href="customers.html">      <i class="fas fa-users"></i>       Clientes</a>
     <a href="painel-vendas.html">  <i class="fas fa-chart-line"></i>  Vendas</a>
     <a href="admin-fiscal.html" class="active"><i class="fas fa-receipt"></i> Fiscal</a>
@@ -37,7 +37,7 @@
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">MÃ“DULO FISCAL</span>
+    <span class="topbar-title">MÓDULO FISCAL</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
       <span id="userName">Admin</span>
@@ -47,25 +47,25 @@
 
   <div class="content">
 
-    <!-- â”€â”€ AVISO LEGAL OBRIGATÃ“RIO â”€â”€ -->
+    <!-- ── AVISO LEGAL OBRIGATÓRIO ── -->
     <div class="legal-banner">
       <div class="legal-banner-icon"><i class="fas fa-triangle-exclamation"></i></div>
       <div class="legal-banner-text">
-        <strong>Aviso Legal â€” ValidaÃ§Ã£o ObrigatÃ³ria</strong><br>
-        Os valores apurados neste mÃ³dulo sÃ£o <strong>estimativas baseadas nas alÃ­quotas configuradas no TaxEngine</strong>.
-        Toda apuraÃ§Ã£o deve ser conferida e homologada por contador responsÃ¡vel antes de ser usada em
-        obrigaÃ§Ãµes acessÃ³rias (SPED, DCTF, EFD, GIA-ICMS etc). As alÃ­quotas CBS/IBS estÃ£o em
-        estimativa â€” <strong>aguardam regulamentaÃ§Ã£o via Lei Complementar (EC 132/2023)</strong>.
+        <strong>Aviso Legal - Validação Obrigatória</strong><br>
+        Os valores apurados neste módulo são <strong>estimativas baseadas nas alíquotas configuradas no TaxEngine</strong>.
+        Toda apuração deve ser conferida e homologada por contador responsável antes de ser usada em
+        obrigações acessórias (SPED, DCTF, EFD, GIA-ICMS etc). As alíquotas CBS/IBS estão em
+        estimativa - <strong>aguardam regulamentação via Lei Complementar (EC 132/2023)</strong>.
         Ambiente configurado:
-        <strong id="ambienteTag" style="color:var(--amber)">homologaÃ§Ã£o</strong>.
+        <strong id="ambienteTag" style="color:var(--amber)">homologação</strong>.
       </div>
     </div>
 
-    <!-- â”€â”€ SELETOR DE PERÃODO â”€â”€ -->
+    <!-- ── SELETOR DE PERÍODO ── -->
     <div class="periodo-bar">
       <select id="selMes">
         <option value="1">Janeiro</option><option value="2">Fevereiro</option>
-        <option value="3">MarÃ§o</option><option value="4">Abril</option>
+        <option value="3">Março</option><option value="4">Abril</option>
         <option value="5">Maio</option><option value="6">Junho</option>
         <option value="7">Julho</option><option value="8">Agosto</option>
         <option value="9">Setembro</option><option value="10">Outubro</option>
@@ -75,81 +75,81 @@
       <button class="btn btn-primary btn-sm" id="btnApurar">
         <i class="fas fa-calculator"></i> Apurar
       </button>
-      <button class="btn btn-ghost btn-sm" id="btnPrint" title="Imprimir relatÃ³rio">
+      <button class="btn btn-ghost btn-sm" id="btnPrint" title="Imprimir relatório">
         <i class="fas fa-print"></i> Imprimir
       </button>
     </div>
 
-    <!-- â”€â”€ MÃ‰TRICAS PRINCIPAIS â”€â”€ -->
+    <!-- ── MÉTRICAS PRINCIPAIS ── -->
     <div class="metrics-grid" style="margin-bottom:1px">
       <div class="metric-card">
-        <div class="metric-value" id="mFaturamento">â€”</div>
+        <div class="metric-value" id="mFaturamento">-</div>
         <div class="metric-label">Faturamento Bruto</div>
       </div>
       <div class="metric-card red">
-        <div class="metric-value" id="mImpostos">â€”</div>
+        <div class="metric-value" id="mImpostos">-</div>
         <div class="metric-label">Total de Impostos</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value" id="mAliq">â€”%</div>
-        <div class="metric-label">AlÃ­quota Efetiva</div>
+        <div class="metric-value" id="mAliq">-%</div>
+        <div class="metric-label">Alíquota Efetiva</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value" id="mNFe">â€”</div>
+        <div class="metric-value" id="mNFe">-</div>
         <div class="metric-label">NF-e Emitidas</div>
       </div>
     </div>
 
-    <!-- â”€â”€ BREAKDOWN POR IMPOSTO â”€â”€ -->
+    <!-- ── BREAKDOWN POR IMPOSTO ── -->
     <div class="imposto-grid" id="impostoGrid">
       <div class="imposto-card imp-ipi">
         <div class="imp-sigla">IPI</div>
-        <div class="imp-valor" id="vIPI">R$ â€”</div>
+        <div class="imp-valor" id="vIPI">R$ -</div>
         <div class="imp-aliq">Imposto sobre Produtos Industrializados</div>
       </div>
       <div class="imposto-card imp-icms">
         <div class="imp-sigla">ICMS</div>
-        <div class="imp-valor" id="vICMS">R$ â€”</div>
-        <div class="imp-aliq">Imposto sobre CirculaÃ§Ã£o de Mercadorias</div>
+        <div class="imp-valor" id="vICMS">R$ -</div>
+        <div class="imp-aliq">Imposto sobre Circulação de Mercadorias</div>
       </div>
       <div class="imposto-card imp-pis">
         <div class="imp-sigla">PIS</div>
-        <div class="imp-valor" id="vPIS">R$ â€”</div>
-        <div class="imp-aliq">Programa de IntegraÃ§Ã£o Social</div>
-        <div class="imp-ec132">â†“ TransiÃ§Ã£o EC 132/2023</div>
+        <div class="imp-valor" id="vPIS">R$ -</div>
+        <div class="imp-aliq">Programa de Integração Social</div>
+        <div class="imp-ec132">↓ Transição EC 132/2023</div>
       </div>
       <div class="imposto-card imp-cofins">
         <div class="imp-sigla">COFINS</div>
-        <div class="imp-valor" id="vCOFINS">R$ â€”</div>
-        <div class="imp-aliq">ContribuiÃ§Ã£o para Financiamento da Seguridade</div>
-        <div class="imp-ec132">â†“ TransiÃ§Ã£o EC 132/2023</div>
+        <div class="imp-valor" id="vCOFINS">R$ -</div>
+        <div class="imp-aliq">Contribuição para Financiamento da Seguridade</div>
+        <div class="imp-ec132">↓ Transição EC 132/2023</div>
       </div>
       <div class="imposto-card imp-cbs">
         <div class="imp-sigla">CBS</div>
-        <div class="imp-valor" id="vCBS">R$ â€”</div>
-        <div class="imp-aliq">ContribuiÃ§Ã£o sobre Bens e ServiÃ§os</div>
-        <div class="imp-ec132">âœ¦ EC 132/2023 (novo)</div>
+        <div class="imp-valor" id="vCBS">R$ -</div>
+        <div class="imp-aliq">Contribuição sobre Bens e Serviços</div>
+        <div class="imp-ec132">✦ EC 132/2023 (novo)</div>
       </div>
       <div class="imposto-card imp-ibs">
         <div class="imp-sigla">IBS</div>
-        <div class="imp-valor" id="vIBS">R$ â€”</div>
-        <div class="imp-aliq">Imposto sobre Bens e ServiÃ§os (estimativa)</div>
-        <div class="imp-ec132">âœ¦ EC 132/2023 (novo)</div>
+        <div class="imp-valor" id="vIBS">R$ -</div>
+        <div class="imp-aliq">Imposto sobre Bens e Serviços (estimativa)</div>
+        <div class="imp-ec132">✦ EC 132/2023 (novo)</div>
       </div>
     </div>
 
-    <!-- â”€â”€ TABS â”€â”€ -->
+    <!-- ── TABS ── -->
     <div class="tabs">
       <div class="tab active" data-tab="nfe"><i class="fas fa-file-invoice"></i> &nbsp;NF-e Emitidas</div>
-      <div class="tab" data-tab="evolucao"><i class="fas fa-chart-line"></i> &nbsp;EvoluÃ§Ã£o Mensal</div>
+      <div class="tab" data-tab="evolucao"><i class="fas fa-chart-line"></i> &nbsp;Evolução Mensal</div>
       <div class="tab" data-tab="sped"><i class="fas fa-file-code"></i> &nbsp;SPED Fiscal</div>
     </div>
 
-    <!-- â”€â”€ TAB: NF-e EMITIDAS â”€â”€ -->
+    <!-- ── TAB: NF-e EMITIDAS ── -->
     <div class="tab-panel active" id="tab-nfe">
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-          <div class="section-title" style="margin:0">NF-e do PerÃ­odo</div>
+          <div class="section-title" style="margin:0">NF-e do Período</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-ghost btn-sm" id="btnExportNFeCSV">
               <i class="fas fa-table"></i> Exportar CSV
@@ -159,9 +159,9 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>NÃºmero</th>
-              <th>Data EmissÃ£o</th>
-              <th>DestinatÃ¡rio</th>
+              <th>Número</th>
+              <th>Data Emissão</th>
+              <th>Destinatário</th>
               <th>Total Nota</th>
               <th>Chave de Acesso</th>
               <th>Ambiente</th>
@@ -175,43 +175,43 @@
       </div>
     </div>
 
-    <!-- â”€â”€ TAB: EVOLUÃ‡ÃƒO MENSAL â”€â”€ -->
+    <!-- ── TAB: EVOLUÇÃO MENSAL ── -->
     <div class="tab-panel" id="tab-evolucao">
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
-        <div class="section-title">EvoluÃ§Ã£o dos Ãšltimos 6 Meses</div>
+        <div class="section-title">Evolução dos Últimos 6 Meses</div>
         <p style="color:var(--muted);font-size:12px;margin-bottom:16px">
-          Faturamento bruto e carga tributÃ¡ria mÃªs a mÃªs.
+          Faturamento bruto e carga tributária mês a mês.
         </p>
         <table class="data-table" id="evolucaoTable">
           <thead>
-            <tr><th>PerÃ­odo</th><th>Pedidos</th><th>Faturamento</th><th>Impostos</th><th>AlÃ­quota Efetiva</th><th>NF-e</th></tr>
+            <tr><th>Período</th><th>Pedidos</th><th>Faturamento</th><th>Impostos</th><th>Alíquota Efetiva</th><th>NF-e</th></tr>
           </thead>
           <tbody id="evolucaoBody">
-            <tr><td colspan="6" style="color:var(--muted);padding:24px">Carregandoâ€¦</td></tr>
+            <tr><td colspan="6" style="color:var(--muted);padding:24px">Carregando…</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- â”€â”€ TAB: SPED FISCAL â”€â”€ -->
+    <!-- ── TAB: SPED FISCAL ── -->
     <div class="tab-panel" id="tab-sped">
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-          <div class="section-title" style="margin:0">GeraÃ§Ã£o de SPED Fiscal (EFD ICMS/IPI)</div>
+          <div class="section-title" style="margin:0">Geração de SPED Fiscal (EFD ICMS/IPI)</div>
           <button class="btn btn-primary btn-sm" id="btnGerarSped">
             <i class="fas fa-file-code"></i> Gerar SPED
           </button>
         </div>
         <div style="padding:12px 16px;background:rgba(251,18,48,.06);border:1px solid rgba(251,18,48,.2);margin-bottom:16px;font-size:12px;color:var(--muted2)">
           <i class="fas fa-triangle-exclamation" style="color:var(--red);margin-right:6px"></i>
-          <strong style="color:var(--white)">AtenÃ§Ã£o:</strong> O arquivo SPED gerado Ã© uma <strong>implementaÃ§Ã£o de referÃªncia</strong>.
-          Deve ser revisado e validado pelo contador antes de transmissÃ£o ao SPED Receita Federal.
-          Campos como inscriÃ§Ã£o estadual, CFOP e CST precisam ser conferidos.
+          <strong style="color:var(--white)">Atenção:</strong> O arquivo SPED gerado é uma <strong>implementação de referência</strong>.
+          Deve ser revisado e validado pelo contador antes de transmissão ao SPED Receita Federal.
+          Campos como inscrição estadual, CFOP e CST precisam ser conferidos.
         </div>
         <button class="btn btn-ghost btn-sm" id="btnDownloadSped" style="display:none;margin-bottom:12px">
           <i class="fas fa-download"></i> Baixar arquivo .txt
         </button>
-        <textarea class="sped-area" id="spedArea" readonly placeholder="Clique em 'Gerar SPED' para gerar o arquivo EFD do perÃ­odo selecionadoâ€¦"></textarea>
+        <textarea class="sped-area" id="spedArea" readonly placeholder="Clique em 'Gerar SPED' para gerar o arquivo EFD do período selecionado…"></textarea>
       </div>
     </div>
 
@@ -236,7 +236,7 @@ const client    = new Client().setEndpoint(CONFIG_INLINE.ENDPOINT).setProject(CO
 const databases = new Databases(client)
 const account   = new Account(client)
 
-// â”€â”€ GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── GUARD ─────────────────────────────────────────────────────────────────────
 ;(async () => {
   try {
     const user = await account.get()
@@ -247,8 +247,8 @@ const account   = new Account(client)
   init()
 })()
 
-// â”€â”€ UTILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function esc(s){ return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(s){ return String(s?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
 let toastT
 function toast(msg,type=""){
   const el=document.getElementById("toast")
@@ -256,9 +256,9 @@ function toast(msg,type=""){
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),3500)
 }
 function fmtBRL(v){ return "R$ "+Number(v||0).toFixed(2).replace(".",",") }
-function fmtDate(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : "â€”" }
+function fmtDate(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : "-" }
 
-// â”€â”€ APURAR PERÃODO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── APURAR PERÍODO ────────────────────────────────────────────────────────────
 let apuracaoAtual = null
 
 async function apurar() {
@@ -267,10 +267,10 @@ async function apurar() {
 
   const btn = document.getElementById("btnApurar")
   btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Apurandoâ€¦`
+  btn.innerHTML = `<span class="spinner"></span> Apurando…`
 
   try {
-    // PerÃ­odo
+    // Período
     const inicio = new Date(ano, mes - 1, 1).toISOString()
     const fim    = new Date(ano, mes, 0, 23, 59, 59).toISOString()
 
@@ -309,7 +309,7 @@ async function apurar() {
 
     apuracaoAtual = { mes, ano, faturamento, totalImpostos, impostos, nfes, orders, aliqEfetiva }
 
-    // MÃ©tricas
+    // Métricas
     document.getElementById("mFaturamento").textContent = fmtBRL(faturamento)
     document.getElementById("mImpostos").textContent    = fmtBRL(totalImpostos)
     document.getElementById("mAliq").textContent        = aliqEfetiva + "%"
@@ -324,22 +324,22 @@ async function apurar() {
     // NF-e table
     renderNFe(nfes)
 
-    toast(`ApuraÃ§Ã£o ${String(mes).padStart(2,"0")}/${ano} concluÃ­da.`)
+    toast(`Apuração ${String(mes).padStart(2,"0")}/${ano} concluída.`)
 
   } catch (e) {
-    toast("Erro na apuraÃ§Ã£o: " + e.message, "error")
+    toast("Erro na apuração: " + e.message, "error")
   } finally {
     btn.disabled = false
     btn.innerHTML = `<i class="fas fa-calculator"></i> Apurar`
   }
 }
 
-// â”€â”€ RENDER NF-e â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── RENDER NF-e ───────────────────────────────────────────────────────────────
 function renderNFe(nfes) {
   const tbody = document.getElementById("nfeBody")
   if (!nfes.length) {
     tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:24px;text-align:center">
-      Nenhuma NF-e emitida neste perÃ­odo.
+      Nenhuma NF-e emitida neste período.
     </td></tr>`
     return
   }
@@ -349,25 +349,25 @@ function renderNFe(nfes) {
     <td style="color:var(--muted);font-size:12px">${fmtDate(n.emitidaEm)}</td>
     <td style="color:var(--muted);font-size:12px">${esc(n.destinatarioCpf ? "CPF: " + n.destinatarioCpf : "Consumidor Final")}</td>
     <td style="color:var(--green)">${fmtBRL(n.totalNota)}</td>
-    <td class="nfe-chave" title="${esc(n.chaveAcesso)}">${esc(n.chaveAcesso || "â€”")}</td>
+    <td class="nfe-chave" title="${esc(n.chaveAcesso)}">${esc(n.chaveAcesso || "-")}</td>
     <td>
       <span class="badge ${n.ambiente === 'producao' ? 'badge-green' : 'badge-muted'}" style="font-size:9px">
-        ${n.ambiente === 'producao' ? 'PRODUÃ‡ÃƒO' : 'HOMOLOG.'}
+        ${n.ambiente === 'producao' ? 'PRODUÇÃO' : 'HOMOLOG.'}
       </span>
     </td>
     <td>
       ${n.pdfUrl
         ? `<a href="${esc(n.pdfUrl)}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-file-pdf"></i> PDF</a>`
-        : `<span style="color:var(--muted);font-size:11px">â€”</span>`
+        : `<span style="color:var(--muted);font-size:11px">-</span>`
       }
     </td>
   </tr>`).join("")
 }
 
-// â”€â”€ EVOLUÃ‡ÃƒO MENSAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── EVOLUÇÃO MENSAL ──────────────────────────────────────────────────────────
 async function loadEvolucao() {
   const tbody = document.getElementById("evolucaoBody")
-  tbody.innerHTML = `<tr><td colspan="6" class="loading-state"><span class="spinner"></span> Calculandoâ€¦</td></tr>`
+  tbody.innerHTML = `<tr><td colspan="6" class="loading-state"><span class="spinner"></span> Calculando…</td></tr>`
 
   const resultados = []
   const agora      = new Date()
@@ -428,17 +428,17 @@ async function loadEvolucao() {
   </tr>`).join("")
 }
 
-// â”€â”€ SPED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── SPED ──────────────────────────────────────────────────────────────────────
 async function gerarSped() {
   const mes = parseInt(document.getElementById("selMes").value)
   const ano = parseInt(document.getElementById("selAno").value)
 
   const btn = document.getElementById("btnGerarSped")
   btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Gerandoâ€¦`
+  btn.innerHTML = `<span class="spinner"></span> Gerando…`
 
   try {
-    // Chamar fiscalReportService via import dinÃ¢mico
+    // Chamar fiscalReportService via import dinâmico
     const { FiscalReportService } = await import("./js/fiscalReportService.js")
     const sped = await FiscalReportService.gerarSpedFiscal({ mes, ano })
 
@@ -466,13 +466,13 @@ async function gerarSped() {
   }
 }
 
-// â”€â”€ EXPORTAR CSV NF-e â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── EXPORTAR CSV NF-e ─────────────────────────────────────────────────────────
 function exportarNFeCSV() {
   if (!apuracaoAtual?.nfes.length) { toast("Nenhuma NF-e para exportar.", "error"); return }
 
-  const header = "Numero,Data EmissÃ£o,DestinatÃ¡rio,Total Nota,Chave de Acesso,Ambiente\n"
+  const header = "Numero,Data Emissão,Destinatário,Total Nota,Chave de Acesso,Ambiente\n"
   const rows   = apuracaoAtual.nfes.map(n =>
-    `"${n.numero||n.$id.slice(-8).toUpperCase()}","${fmtDate(n.emitidaEm)}","${n.destinatarioCpf||"Consumidor Final"}","${n.totalNota}","${n.chaveAcesso||""}","${n.ambiente||""}"`
+    `"${n.numero||n.$id.slice(-8).toUpperCase()}","${fmtDate(n.emitidaEm)}","${n.destinatarioCpf||"Consumidor Final"}","${n.totalNota}","${n.chaveAcesso|| '-'}","${n.ambiente|| '-'}"`
   ).join("\n")
 
   const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" })
@@ -485,15 +485,15 @@ function exportarNFeCSV() {
   toast("CSV exportado!")
 }
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ──────────────────────────────────────────────────────────────────────
 function init() {
   // Ambiente
   const ambTag = document.getElementById("ambienteTag")
-  // CONFIG.FISCAL vem do config.js â€” aqui usamos valor fixo para compatibilidade inline
-  ambTag.textContent = "homologaÃ§Ã£o"
+  // CONFIG.FISCAL vem do config.js - aqui usamos valor fixo para compatibilidade inline
+  ambTag.textContent = "homologação"
   ambTag.style.color = "var(--amber)"
 
-  // PrÃ©-selecionar mÃªs atual
+  // Pré-selecionar mês atual
   const agora = new Date()
   document.getElementById("selMes").value = agora.getMonth() + 1
   document.getElementById("selAno").value = agora.getFullYear()
@@ -522,10 +522,10 @@ function init() {
   document.getElementById("btnGerarSped").addEventListener("click", gerarSped)
   document.getElementById("btnExportNFeCSV").addEventListener("click", exportarNFeCSV)
 
-  // Carregar evoluÃ§Ã£o na tab inicial
+  // Carregar evolução na tab inicial
   loadEvolucao()
 
-  // Apurar mÃªs atual automaticamente
+  // Apurar mês atual automaticamente
   apurar()
 }
 </script>

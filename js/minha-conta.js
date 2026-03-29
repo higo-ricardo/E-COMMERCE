@@ -1,4 +1,4 @@
-﻿import { CONFIG } from "./config.js"
+import { CONFIG } from "./config.js"
 import { Client, Databases, Account, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
 
 const CFG = {
@@ -16,7 +16,7 @@ let mirror = null
 let authUser = null
 
 function normalizeRole(role) {
-  return String(role ?? "").trim().toUpperCase()
+  return String(role ?? '').trim().toUpperCase()
 }
 
 function redirectByRole(role) {
@@ -62,7 +62,7 @@ async function getMirrorByEmail(email) {
 async function createMirrorForUser(user) {
   if (!user?.$id || !user?.email) return null
   const payload = {
-    name: user.name || "",
+    name: user.name || '-',
     email: String(user.email).toLowerCase(),
     role: "USERS",
     isActive: true,
@@ -93,7 +93,7 @@ async function ensureMirrorForCurrentUser() {
 }
 
 function esc(s) {
-  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  return String(s ?? '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
 let toastT
@@ -134,11 +134,11 @@ function maskCep(v) {
 }
 
 function digitsOnly(v) {
-  return String(v ?? "").replace(/\D/g, "")
+  return String(v ?? '').replace(/\D/g, "")
 }
 
 function parseAddressNumberOrThrow(value) {
-  const raw = String(value ?? "").trim()
+  const raw = String(value ?? '').trim()
   if (!raw) return null
   if (!/^\d+$/.test(raw)) {
     throw new Error("Numero do endereco invalido. Use apenas digitos inteiros.")
@@ -176,19 +176,19 @@ function isValidMobile(mobile) {
 
 function fillFormFromMirror() {
   const source = mirror ?? {}
-  document.getElementById("pNome").value = source.name || authUser?.name || ""
-  document.getElementById("pEmail").value = source.email || authUser?.email || ""
+  document.getElementById("pNome").value = source.name || authUser?.name || ''
+  document.getElementById("pEmail").value = source.email || authUser?.email || ''
   document.getElementById("pCpf").value = source.cpf ? maskCpf(String(source.cpf)) : ""
-  document.getElementById("pCelular").value = source.mobile || ""
+  document.getElementById("pCelular").value = source.mobile || ''
 
-  document.getElementById("eAddress").value = source.address || ""
-  document.getElementById("eNumber").value = source.number ?? ""
-  document.getElementById("eComplement").value = source.complement || ""
-  document.getElementById("eDistrict").value = source.district || ""
+  document.getElementById("eAddress").value = source.address || ''
+  document.getElementById("eNumber").value = source.number ?? ''
+  document.getElementById("eComplement").value = source.complement || ''
+  document.getElementById("eDistrict").value = source.district || ''
   document.getElementById("eCep").value = source.cep ? String(source.cep).replace(/(\d{5})(\d)/, "$1-$2") : ""
-  document.getElementById("eCity").value = source.city || ""
-  document.getElementById("eState").value = source.state || ""
-  document.getElementById("sEmail").value = source.email || authUser?.email || ""
+  document.getElementById("eCity").value = source.city || ''
+  document.getElementById("eState").value = source.state || ''
+  document.getElementById("sEmail").value = source.email || authUser?.email || ''
   document.getElementById("statLogins").textContent = source.loginCounter || 0
 }
 
@@ -220,7 +220,7 @@ async function init() {
   const nome = mirror?.name || authUser?.name || "CLIENTE"
   document.getElementById("heroNome").textContent = nome.split(" ")[0].toUpperCase()
   document.getElementById("heroSub").textContent =
-    (mirror?.email || authUser?.email || "") + (mirror?.city ? " - " + mirror.city : "")
+    (mirror?.email || authUser?.email || '-') + (mirror?.city ? "-" + mirror.city : "")
 
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -272,7 +272,7 @@ async function init() {
 
     try {
       const inputEmail = document.getElementById("pEmail").value.trim().toLowerCase()
-      const currentEmail = String(authUser?.email || "").toLowerCase()
+      const currentEmail = String(authUser?.email || '').toLowerCase()
 
       if (inputEmail && inputEmail !== currentEmail) {
         const password = window.prompt("Para alterar e-mail, confirme sua senha atual:")

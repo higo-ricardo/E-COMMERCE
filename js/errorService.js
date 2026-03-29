@@ -3,7 +3,7 @@
 // Substitui todos os catch silenciosos por comportamento explícito.
 //
 // REGRAS:
-//   1. NUNCA catch vazio — sempre chamar ErrorService.handle(err, contexto)
+//   1. NUNCA catch vazio - sempre chamar ErrorService.handle(err, contexto)
 //   2. Toast para erros de UX (rede, validação, permissão)
 //   3. console.error estruturado com contexto + código HTTP
 //   4. Diferenciação 401 / 403 / 404 / rede na UI
@@ -180,7 +180,7 @@ export function handleError(err, context = "desconhecido", options = {}) {
     if (code === 403) toastLevel = "warning"
     if (code === 404) toastLevel = "info"
   }
-  // Mensagem do erro (limpa — sem stack)
+  // Mensagem do erro (limpa - sem stack)
   else if (err?.message) {
     userMsg = fallback ?? err.message
   }

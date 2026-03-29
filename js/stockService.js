@@ -1,5 +1,5 @@
 // ─── HIVERCAR · stockService.js ──────────────────────────────────────────────
-// US-20: Gestão de estoque — baixa automática ao vender, verificação, reversão.
+// US-20: Gestão de estoque - baixa automática ao vender, verificação, reversão.
 // US-36: isStockCritical() verifica se estoque atingiu o minStock individual.
 //
 // Responsabilidades:
@@ -8,17 +8,17 @@
 //   - revertStock(items, ref)   → devolve estoque (pedido cancelado) + registra
 //   - getStockHistory(productId)→ historico de movimentações de um produto
 //
-// Collection "stock_history" — atributos necessários no Appwrite:
+// Collection "stock_history" - atributos necessários no Appwrite:
 //   productId   (string, required)
 //   productName (string, required)
-//   qty         (integer, required)   — positivo = entrada, negativo = saída
-//   type        (string, required)    — "venda" | "cancelamento" | "ajuste"
-//   reference   (string, required)    — orderId ou "manual"
-//   movedAt     (string, required)    — ISO 8601
+//   qty         (integer, required)   - positivo = entrada, negativo = saída
+//   type        (string, required)    - "venda" | "cancelamento" | "ajuste"
+//   reference   (string, required)    - orderId ou "manual"
+//   movedAt     (string, required)    - ISO 8601
 //   stockBefore (integer, required)
 //   stockAfter  (integer, required)
 //
-// Camada: Domain / Service — importado por orderService.js
+// Camada: Domain / Service - importado por orderService.js
 
 import { databases, ID, Query } from "./appwriteClient.js"
 import { CONFIG }               from "./config.js"
@@ -53,7 +53,7 @@ export async function checkStock(items) {
 
     if (available < requested) {
       errors.push(
-        `"${item.name}": estoque insuficiente — disponível ${available}, solicitado ${requested}.`
+        `"${item.name}": estoque insuficiente - disponível ${available}, solicitado ${requested}.`
       )
     }
   }))
@@ -113,7 +113,7 @@ export async function revertStock(items, orderId) {
     try {
       product = await databases.getDocument(DB, COL.PRODUCTS, item.$id)
     } catch {
-      // Produto pode ter sido excluído — loga mas não bloqueia o cancelamento
+      // Produto pode ter sido excluído - loga mas não bloqueia o cancelamento
       console.warn(`[StockService] Produto ${item.$id} não encontrado ao reverter estoque.`)
       return
     }

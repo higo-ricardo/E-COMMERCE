@@ -1,14 +1,14 @@
-﻿// â”€â”€â”€ HIVERCAR Â· tests/productService.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── HIVERCAR · tests/productService.test.js ─────────────────────────────────
 // US-26: Testes para ProductService (Domain/Service)
-//   - list()            â†’ paginaÃ§Ã£o, usa cache
-//   - search()          â†’ busca com termo, usa cache
-//   - getFilterOptions()â†’ categorias e marcas, usa cache
-//   - invalidateCache() â†’ limpa todo o cache
-//   - cacheStats()      â†’ inspeciona o cache
+//   - list()            → paginação, usa cache
+//   - search()          → busca com termo, usa cache
+//   - getFilterOptions()→ categorias e marcas, usa cache
+//   - invalidateCache() → limpa todo o cache
+//   - cacheStats()      → inspeciona o cache
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// â”€â”€ Mock ProductRepository â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mock ProductRepository ───────────────────────────────────────────────────
 vi.mock("../js/productRepository.js", () => ({
   ProductRepository: {
     list:             vi.fn(),
@@ -17,12 +17,12 @@ vi.mock("../js/productRepository.js", () => ({
   },
 }))
 
-// â”€â”€ Mock config para TTL controlÃ¡vel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mock config para TTL controlável ─────────────────────────────────────────
 vi.mock("../js/config.js", () => ({
   CONFIG: {
     STORE: {
       PAGE_SIZE: 15,
-      CACHE_TTL: 5000,    // 5s nos testes (ao invÃ©s de 5 min)
+      CACHE_TTL: 5000,    // 5s nos testes (ao invés de 5 min)
       CART_KEY:  "hiverCart",
     },
     TAX_RATE:   0.12,
@@ -59,7 +59,7 @@ vi.mock("../js/config.js", () => ({
 import { ProductService }    from "../js/productService.js"
 import { ProductRepository } from "../js/productRepository.js"
 
-// â”€â”€ Dados de exemplo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Dados de exemplo ──────────────────────────────────────────────────────────
 const PAGE_RESULT = {
   products: [
     { $id: "p1", name: "Pastilha Brembo", category: "Freios", brand: "Brembo", price: 89.90, qtd: 10 },
@@ -80,10 +80,10 @@ beforeEach(() => {
   ProductService.invalidateCache()   // garante cache limpo entre testes
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("ProductService.list()", () => {
 
-  it("chama ProductRepository.list na primeira requisiÃ§Ã£o (cache miss)", async () => {
+  it("chama ProductRepository.list na primeira requisição (cache miss)", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
 
     const result = await ProductService.list(1, {})
@@ -93,7 +93,7 @@ describe("ProductService.list()", () => {
     expect(result.products).toHaveLength(2)
   })
 
-  it("retorna resultado do cache na segunda requisiÃ§Ã£o (cache hit)", async () => {
+  it("retorna resultado do cache na segunda requisição (cache hit)", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
 
     await ProductService.list(1, {})  // popula cache
@@ -103,7 +103,7 @@ describe("ProductService.list()", () => {
     expect(ProductRepository.list).toHaveBeenCalledTimes(1)
   })
 
-  it("chaves de cache distintas para pÃ¡ginas diferentes", async () => {
+  it("chaves de cache distintas para páginas diferentes", async () => {
     const page2 = { ...PAGE_RESULT, page: 2 }
     ProductRepository.list
       .mockResolvedValueOnce(PAGE_RESULT)
@@ -123,22 +123,22 @@ describe("ProductService.list()", () => {
     await ProductService.list(1, { category: "Freios" })
     await ProductService.list(1, { brand: "Brembo" })
 
-    // Filtros diferentes â†’ duas chamadas ao repositÃ³rio
+    // Filtros diferentes → duas chamadas ao repositório
     expect(ProductRepository.list).toHaveBeenCalledTimes(2)
   })
 
-  it("propaga erros do repositÃ³rio sem envolver no cache", async () => {
+  it("propaga erros do repositório sem envolver no cache", async () => {
     ProductRepository.list.mockRejectedValue(new Error("DB offline"))
 
     await expect(ProductService.list()).rejects.toThrow("DB offline")
 
-    // Cache deve continuar vazio apÃ³s o erro
+    // Cache deve continuar vazio após o erro
     const stats = ProductService.cacheStats()
     expect(stats.entries).toBe(0)
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("ProductService.search()", () => {
 
   it("chama ProductRepository.search com o termo correto", async () => {
@@ -149,7 +149,7 @@ describe("ProductService.search()", () => {
     expect(ProductRepository.search).toHaveBeenCalledWith("brembo", 1, {})
   })
 
-  it("delega para list() quando o termo estÃ¡ vazio", async () => {
+  it("delega para list() quando o termo está vazio", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
 
     await ProductService.search("")
@@ -158,10 +158,10 @@ describe("ProductService.search()", () => {
     expect(ProductRepository.search).not.toHaveBeenCalled()
   })
 
-  it("ignora espaÃ§os em branco no termo (trim)", async () => {
+  it("ignora espaços em branco no termo (trim)", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
 
-    await ProductService.search("   ")  // sÃ³ espaÃ§os â†’ lista normal
+    await ProductService.search("   ")  // só espaços → lista normal
 
     expect(ProductRepository.list).toHaveBeenCalledTimes(1)
     expect(ProductRepository.search).not.toHaveBeenCalled()
@@ -186,10 +186,10 @@ describe("ProductService.search()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("ProductService.getFilterOptions()", () => {
 
-  it("retorna categorias e marcas do repositÃ³rio", async () => {
+  it("retorna categorias e marcas do repositório", async () => {
     ProductRepository.getFilterOptions.mockResolvedValue(FILTER_OPTIONS)
 
     const opts = await ProductService.getFilterOptions()
@@ -199,7 +199,7 @@ describe("ProductService.getFilterOptions()", () => {
     expect(ProductRepository.getFilterOptions).toHaveBeenCalledTimes(1)
   })
 
-  it("armazena filtros no cache com chave prÃ³pria", async () => {
+  it("armazena filtros no cache com chave própria", async () => {
     ProductRepository.getFilterOptions.mockResolvedValue(FILTER_OPTIONS)
 
     await ProductService.getFilterOptions()
@@ -209,20 +209,20 @@ describe("ProductService.getFilterOptions()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("ProductService.invalidateCache()", () => {
 
-  it("forÃ§a nova requisiÃ§Ã£o ao repositÃ³rio apÃ³s invalidaÃ§Ã£o", async () => {
+  it("força nova requisição ao repositório após invalidação", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
 
     await ProductService.list(1, {})           // popula cache
     ProductService.invalidateCache()           // limpa cache
-    await ProductService.list(1, {})           // deve chamar repositÃ³rio de novo
+    await ProductService.list(1, {})           // deve chamar repositório de novo
 
     expect(ProductRepository.list).toHaveBeenCalledTimes(2)
   })
 
-  it("invalida entradas de search e filterOptions tambÃ©m", async () => {
+  it("invalida entradas de search e filterOptions também", async () => {
     ProductRepository.search.mockResolvedValue(PAGE_RESULT)
     ProductRepository.getFilterOptions.mockResolvedValue(FILTER_OPTIONS)
 
@@ -238,12 +238,12 @@ describe("ProductService.invalidateCache()", () => {
     expect(ProductRepository.getFilterOptions).toHaveBeenCalledTimes(2)
   })
 
-  it("nÃ£o quebra quando o cache jÃ¡ estÃ¡ vazio", () => {
+  it("não quebra quando o cache já está vazio", () => {
     expect(() => ProductService.invalidateCache()).not.toThrow()
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 describe("ProductService.cacheStats()", () => {
 
   it("retorna entries=0 com cache vazio", () => {
@@ -252,7 +252,7 @@ describe("ProductService.cacheStats()", () => {
     expect(stats.keys).toEqual([])
   })
 
-  it("reflete nÃºmero correto de entradas no cache", async () => {
+  it("reflete número correto de entradas no cache", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
     ProductRepository.search.mockResolvedValue(PAGE_RESULT)
 
@@ -263,7 +263,7 @@ describe("ProductService.cacheStats()", () => {
     expect(stats.entries).toBe(2)
   })
 
-  it("entries volta a 0 apÃ³s invalidar", async () => {
+  it("entries volta a 0 após invalidar", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
     await ProductService.list(1, {})
 
@@ -278,8 +278,8 @@ describe("ProductService.cacheStats()", () => {
   })
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("ProductService â€” comportamento de TTL do cache", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("ProductService - comportamento de TTL do cache", () => {
 
   it("reusa cache dentro do TTL", async () => {
     ProductRepository.list.mockResolvedValue(PAGE_RESULT)
@@ -290,7 +290,7 @@ describe("ProductService â€” comportamento de TTL do cache", () => {
     expect(ProductRepository.list).toHaveBeenCalledTimes(1)
   })
 
-  it("invalida e rebusca apÃ³s TTL expirado (usando Date.now mock)", async () => {
+  it("invalida e rebusca após TTL expirado (usando Date.now mock)", async () => {
     // Controla Date.now para simular passagem de tempo
     const now = Date.now()
     let fakeNow = now
@@ -300,8 +300,8 @@ describe("ProductService â€” comportamento de TTL do cache", () => {
 
     await ProductService.list(1, {})        // popula cache no tempo T
 
-    fakeNow = now + 10_000                  // avanÃ§a 10s (> TTL de 5s)
-    await ProductService.list(1, {})        // cache expirado â†’ nova requisiÃ§Ã£o
+    fakeNow = now + 10_000                  // avança 10s (> TTL de 5s)
+    await ProductService.list(1, {})        // cache expirado → nova requisição
 
     expect(ProductRepository.list).toHaveBeenCalledTimes(2)
 

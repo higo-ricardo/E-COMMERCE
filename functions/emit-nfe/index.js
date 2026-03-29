@@ -1,5 +1,5 @@
 // ─── HIVERCAR · functions/emit-nfe/index.js ──────────────────────────────────
-// US-43: Appwrite Function — Emissão de NFC-e via integrador NF-e
+// US-43: Appwrite Function - Emissão de NFC-e via integrador NF-e
 //
 // TRIGGER: HTTP (chamada direta do nfService.js após confirmação de pagamento)
 //
@@ -27,8 +27,8 @@
 import { Client, Databases } from "node-appwrite"
 
 const PROVIDER  = process.env.NFE_PROVIDER  || "nfeio"
-const API_KEY   = process.env.NFE_API_KEY   || ""
-const COMPANY   = process.env.NFE_COMPANY_ID || ""
+const API_KEY   = process.env.NFE_API_KEY   || ''
+const COMPANY   = process.env.NFE_COMPANY_ID || ''
 const AMBIENTE  = process.env.NFE_AMBIENTE  || "homologacao"
 const DB_ID     = process.env.APPWRITE_DB   || "69a0ebc70034fa76feff"
 
@@ -36,7 +36,7 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-    .setKey(req.headers["x-appwrite-key"] ?? "")
+    .setKey(req.headers["x-appwrite-key"] ?? '')
 
   const db = new Databases(client)
 
@@ -82,7 +82,7 @@ export default async ({ req, res, log, error }) => {
       throw new Error(`Provedor desconhecido: ${PROVIDER}`)
     }
 
-    log(`[emit-nfe] Sucesso — chave: ${result.chaveAcesso}`)
+    log(`[emit-nfe] Sucesso - chave: ${result.chaveAcesso}`)
 
     // ── Enviar PDF por e-mail ao cliente ──────────────────────────────────
     if (result.pdfUrl && payload.destinatario?.email && process.env.RESEND_API_KEY) {
@@ -208,7 +208,7 @@ async function enviarEmailNFe({ email, nome, pedidoNum, pdfUrl, chaveAcesso, tot
     body: JSON.stringify({
       from:    process.env.EMAIL_FROM ?? "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>",
       to:      [email],
-      subject: `NFC-e do seu pedido #${pedidoNum} — HIVERCAR AUTOPEÇAS`,
+      subject: `NFC-e do seu pedido #${pedidoNum} - HIVERCAR AUTOPEÇAS`,
       html: `
 <!DOCTYPE html>
 <html lang="pt-BR">

@@ -1,4 +1,4 @@
-﻿import { ProductService } from "../../js/productService.js"
+import { ProductService } from "../../js/productService.js"
 import { CartService } from "../../js/cartService.js"
 import { databases, Query } from "../../js/appwriteClient.js"
 import { CONFIG } from "../../js/config.js"
@@ -53,7 +53,7 @@ export class HomeController {
             <div class="product-name">${esc(p.name)}</div>
             <div class="product-price">${fmt(p.price)}</div>
             <button class="btn btn-primary btn-block add-btn"
-              data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.image || "" })}'>
+              data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.image || '-' })}'>
               <i class="fas fa-cart-plus"></i> Adicionar
             </button>
           </div>

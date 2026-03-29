@@ -120,6 +120,13 @@ export class StoreController {
     } catch {}
   }
 
+  resolveImageSrc(product) {
+    const raw = (product?.imageURL || "").trim()
+    if (!raw) return imgPlaceholder(product?.name)
+    // Appwrite /preview pode falhar por bloqueio de image transformations no plano atual.
+    return raw.replace(/\/preview(\?|$)/, "/view$1")
+  }
+
   renderGrid(products) {
     if (!this.grid) return
 
@@ -131,7 +138,12 @@ export class StoreController {
     this.grid.innerHTML = products.map(p => `
       <div class="product-card">
         <div class="product-img">
-          <img src="${esc(p.imageURL || imgPlaceholder(p.name))}" alt="${esc(p.name)}" loading="lazy" decoding="async">
+          <img
+            src="${esc(this.resolveImageSrc(p))}"
+            data-fallback="${esc(imgPlaceholder(p.name))}"
+            alt="${esc(p.name)}"
+            loading="lazy"
+            decoding="async">
           ${p.brand ? `<span class="product-badge badge-muted">${esc(p.brand)}</span>` : ""}
         </div>
         <div class="product-body">
@@ -145,6 +157,19 @@ export class StoreController {
           </button>
         </div>
       </div>`).join("")
+
+    // Fallback robusto: tenta /view se vier /preview e, se falhar, usa placeholder.
+    this.grid.querySelectorAll("img[data-fallback]").forEach(img => {
+      img.addEventListener("error", () => {
+        const current = img.getAttribute("src") || ""
+        const fallback = img.getAttribute("data-fallback") || ""
+        if (current.includes("/preview")) {
+          img.src = current.replace(/\/preview(\?|$)/, "/view$1")
+          return
+        }
+        if (current !== fallback) img.src = fallback
+      }, { once: false })
+    })
 
     this.grid.onclick = e => {
       const button = e.target.closest(".add-btn")

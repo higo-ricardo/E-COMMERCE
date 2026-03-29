@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Vendas â€” HIVERCAR</title>
+<title>Painel de Vendas - HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -41,12 +41,12 @@
   </div>
 
   <div class="content">
-    <!-- MÃ©tricas -->
+    <!-- Métricas -->
     <div class="metrics-grid" style="margin-bottom:24px">
-      <div class="metric-card"><div class="metric-value" id="mMes">â€”</div><div class="metric-label">Vendas do MÃªs</div></div>
-      <div class="metric-card"><div class="metric-value" id="mTotal">â€”</div><div class="metric-label">Pedidos Total</div></div>
-      <div class="metric-card"><div class="metric-value" id="mPendentes">â€”</div><div class="metric-label">Pendentes</div></div>
-      <div class="metric-card"><div class="metric-value" id="mHoje">â€”</div><div class="metric-label">Hoje</div></div>
+      <div class="metric-card"><div class="metric-value" id="mMes">-</div><div class="metric-label">Vendas do Mês</div></div>
+      <div class="metric-card"><div class="metric-value" id="mTotal">-</div><div class="metric-label">Pedidos Total</div></div>
+      <div class="metric-card"><div class="metric-value" id="mPendentes">-</div><div class="metric-label">Pendentes</div></div>
+      <div class="metric-card"><div class="metric-value" id="mHoje">-</div><div class="metric-label">Hoje</div></div>
     </div>
 
     <!-- Tabs -->
@@ -82,7 +82,7 @@
             </tr>
           </thead>
           <tbody id="pedidosTable">
-            <tr><td colspan="7" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
+            <tr><td colspan="7" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
           </tbody>
         </table>
       </div>
@@ -91,16 +91,16 @@
     <!-- TAB PRODUTOS -->
     <div class="tab-panel" id="tab-produtos" style="display:none">
       <div class="filter-bar">
-        <input type="text" id="prodSearch" placeholder="Buscar produtoâ€¦" style="flex:1">
+        <input type="text" id="prodSearch" placeholder="Buscar produto…" style="flex:1">
         <button class="btn btn-ghost btn-sm" id="btnProdSearch"><i class="fas fa-magnifying-glass"></i></button>
       </div>
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
         <table class="data-table">
           <thead>
-            <tr><th>Produto</th><th>Categoria</th><th>PreÃ§o</th><th>Estoque</th><th>Status</th></tr>
+            <tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th></tr>
           </thead>
           <tbody id="produtosTable">
-            <tr><td colspan="5" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
+            <tr><td colspan="5" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
           </tbody>
         </table>
       </div>
@@ -136,7 +136,7 @@
         <label>Pagamento</label>
         <select id="npPagamento" style="width:100%;padding:11px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none">
           <option value="pix">PIX</option>
-          <option value="cartao">CartÃ£o</option>
+          <option value="cartao">Cartão</option>
           <option value="boleto">Boleto</option>
           <option value="dinheiro">Dinheiro</option>
         </select>
@@ -183,7 +183,7 @@ let currentUser = null
 let allProducts = []
 let itensPedido = []
 
-// â”€â”€ GUARD â€” admin ou vendedor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── GUARD - admin ou vendedor ──────────────────────────────────────────────────
 ;(async () => {
   try {
     currentUser = await account.get()
@@ -194,8 +194,8 @@ let itensPedido = []
   init()
 })()
 
-// â”€â”€ UTILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function esc(s){ return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(s){ return String(s?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
 let toastT
 function toast(msg,type=""){
   const el=document.getElementById("toast"); el.textContent=msg
@@ -203,17 +203,17 @@ function toast(msg,type=""){
   toastT=setTimeout(()=>el.classList.remove("show"),3500)
 }
 function fmtBRL(v){ return "R$ "+Number(v||0).toFixed(2).replace(".",",") }
-function fmtDate(iso){ return iso?new Date(iso).toLocaleDateString("pt-BR"):"â€”" }
+function fmtDate(iso){ return iso?new Date(iso).toLocaleDateString("pt-BR"):"-" }
 
 const STATUS_CLS = {
   novo:"badge-green", confirmado:"badge-green", em_preparo:"badge-muted",
   enviado:"badge-muted", entregue:"badge-muted", cancelado:"badge-red",
 }
 function statusBadge(s){
-  return `<span class="badge ${STATUS_CLS[s]||'badge-muted'}">${s||"â€”"}</span>`
+  return `<span class="badge ${STATUS_CLS[s]||'badge-muted'}">${s||"-"}</span>`
 }
 
-// â”€â”€ LOAD ORDERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LOAD ORDERS ───────────────────────────────────────────────────────────────
 async function loadOrders() {
   const statusFilt = document.getElementById("filterStatus").value
   const dataFilt   = document.getElementById("filterData").value
@@ -230,7 +230,7 @@ async function loadOrders() {
     orders = orders.filter(o => { const t = new Date(o.$createdAt); return t >= d && t <= e })
   }
 
-  // MÃ©tricas
+  // Métricas
   const mes    = new Date().getMonth()
   const hoje   = new Date(); hoje.setHours(0,0,0,0)
   const doMes  = orders.filter(o => new Date(o.$createdAt).getMonth()===mes)
@@ -250,14 +250,14 @@ async function loadOrders() {
 
   tbody.innerHTML = orders.map(o => `<tr>
     <td style="font-family:monospace;font-size:11px;color:var(--muted)">${o.$id.slice(-6).toUpperCase()}</td>
-    <td style="font-weight:600">${esc(o.name||o.email||"â€”")}</td>
+    <td style="font-weight:600">${esc(o.name||o.email||"-")}</td>
     <td style="color:#f97316">${fmtBRL(o.total)}</td>
-    <td style="color:var(--muted);text-transform:uppercase;font-size:11px">${esc(o.payment||"â€”")}</td>
+    <td style="color:var(--muted);text-transform:uppercase;font-size:11px">${esc(o.payment||"-")}</td>
     <td>${statusBadge(o.status)}</td>
     <td style="color:var(--muted);font-size:12px">${fmtDate(o.$createdAt)}</td>
     <td>
       <select class="status-sel" data-id="${o.$id}" data-cur="${o.status}">
-        <option value="">Alterarâ€¦</option>
+        <option value="">Alterar…</option>
         <option value="confirmado">Confirmado</option>
         <option value="em_preparo">Em Preparo</option>
         <option value="enviado">Enviado</option>
@@ -281,7 +281,7 @@ async function loadOrders() {
   })
 }
 
-// â”€â”€ LOAD PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LOAD PRODUCTS ─────────────────────────────────────────────────────────────
 async function loadProducts(search="") {
   const queries = [Query.limit(100), Query.orderAsc("name")]
   if (search) queries.push(Query.search("name", search))
@@ -296,22 +296,22 @@ async function loadProducts(search="") {
   }
   tbody.innerHTML = res.documents.map(p => `<tr>
     <td style="font-weight:600">${esc(p.name)}</td>
-    <td style="color:var(--muted)">${esc(p.category||"â€”")}</td>
+    <td style="color:var(--muted)">${esc(p.category||"-")}</td>
     <td style="color:#f97316">${fmtBRL(p.price)}</td>
     <td style="${(p.qtd||0)<5?'color:var(--red);font-weight:700':'color:var(--green)'}">${p.qtd??0}</td>
     <td>${p.isActive!==false?'<span class="badge badge-green">Ativo</span>':'<span class="badge badge-red">Inativo</span>'}</td>
   </tr>`).join("")
 }
 
-// â”€â”€ NOVO PEDIDO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── NOVO PEDIDO ───────────────────────────────────────────────────────────────
 function addItemRow() {
   const idx = itensPedido.length
   const div = document.createElement("div")
   div.className = "item-row"
   div.innerHTML = `
     <select class="item-produto">
-      <option value="">â€” Produto â€”</option>
-      ${allProducts.map(p=>`<option value="${p.$id}" data-price="${p.price||0}" data-name="${esc(p.name)}">${esc(p.name)} â€” ${fmtBRL(p.price)}</option>`).join("")}
+      <option value="">- Produto -</option>
+      ${allProducts.map(p=>`<option value="${p.$id}" data-price="${p.price||0}" data-name="${esc(p.name)}">${esc(p.name)} - ${fmtBRL(p.price)}</option>`).join("")}
     </select>
     <input type="number" class="item-qty" value="1" min="1" placeholder="Qtd">
     <span class="item-sub" style="color:#f97316;font-weight:700;text-align:right">R$ 0,00</span>
@@ -373,7 +373,7 @@ async function confirmarPedido() {
   const total    = +(subtotal+taxes+frete).toFixed(2)
 
   const btn = document.getElementById("confirmarPedido")
-  btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> Salvandoâ€¦`
+  btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> Salvando…`
 
   try {
     await databases.createDocument(CONFIG.DB, CONFIG.COL.ORDERS, ID.unique(), {
@@ -401,7 +401,7 @@ async function confirmarPedido() {
   }
 }
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
   document.getElementById("logoutBtn").addEventListener("click", async e=>{
     e.preventDefault()

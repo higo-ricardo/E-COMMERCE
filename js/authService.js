@@ -1,6 +1,6 @@
 // ─── HIVERCAR · authService.js ───────────────────────────────────────────────
 // Autenticação pura: login, logout, registro, recuperação de senha.
-// Camada: Domain / Service — usado por login.html e cadastro.html.
+// Camada: Domain / Service - usado por login.html e cadastro.html.
 //
 // REGRA DO AUTH MIRROR PATTERN:
 //   - Auth é responsável por credenciais e sessão.
@@ -11,7 +11,7 @@ import { account, ID } from "./appwriteClient.js"
 
 export const AuthService = {
 
-  /** Retorna usuário logado (Auth) ou null — nunca lança. */
+  /** Retorna usuário logado (Auth) ou null - nunca lança. */
   async getUser() {
     try   { return await account.get() }
     catch { return null }
@@ -32,7 +32,7 @@ export const AuthService = {
   /** Encerra a sessão atual. */
   async logout() {
     try   { return await account.deleteSession("current") }
-    catch { /* sessão já expirada — ignora */ }
+    catch { /* sessão já expirada - ignora */ }
   },
 
   /**

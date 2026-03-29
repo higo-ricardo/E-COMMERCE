@@ -1,5 +1,5 @@
 // ─── HIVERCAR · paymentService.js ────────────────────────────────────────────
-// US-29: Integração PIX (Mercado Pago) — geração de QR Code e polling de status
+// US-29: Integração PIX (Mercado Pago) - geração de QR Code e polling de status
 // US-30: Cálculo de frete real via ViaCEP + tabela de preços simulada
 //
 // MODO DE OPERAÇÃO:
@@ -12,17 +12,17 @@
 //
 //   // Criar preferência PIX
 //   const pix = await PaymentService.createPixPayment({ total, orderId, email })
-//   // pix.qrCode   — string para exibir com QR Code
-//   // pix.qrCodeBase64 — imagem base64
-//   // pix.paymentId — ID para polling
+//   // pix.qrCode   - string para exibir com QR Code
+//   // pix.qrCodeBase64 - imagem base64
+//   // pix.paymentId - ID para polling
 //
 //   // Verificar status
 //   const status = await PaymentService.checkPaymentStatus(paymentId)
-//   // status.paid — boolean
+//   // status.paid - boolean
 //
 //   // Calcular frete
 //   const opcoes = await PaymentService.calcularFrete(cepDestino, pesoKg)
-//   // opcoes — [{ tipo, nome, valor, prazo }]
+//   // opcoes - [{ tipo, nome, valor, prazo }]
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { CONFIG } from "./config.js"
@@ -37,7 +37,7 @@ const isMock = () =>
 const CEP_ORIGEM = "65500000"  // Chapadinha - MA
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PIX — Mercado Pago
+// PIX - Mercado Pago
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -113,12 +113,12 @@ export async function checkPaymentStatus(paymentId) {
 // ── Dados mock para PIX ───────────────────────────────────────────────────────
 function _mockPixPayment(total, orderId) {
   const mockId = `MOCK_${Date.now()}_${orderId}`
-  // QR Code mock — string válida para ser exibida (não funcional para pagamento)
+  // QR Code mock - string válida para ser exibida (não funcional para pagamento)
   const qrString = `00020126580014BR.GOV.BCB.PIX0136hivercar-mock@pix.br5204000053039865406${Number(total).toFixed(2).replace(".", "")}5802BR5913HIVERCAR AUTO6009CHAPADINHA62070503***6304HIVERCAR`
   return {
     paymentId:    mockId,
     qrCode:       qrString,
-    qrCodeBase64: null,   // null em modo mock — UI usa biblioteca de QR
+    qrCodeBase64: null,   // null em modo mock - UI usa biblioteca de QR
     status:       "pending",
     expiresAt:    new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     isMock:       true,
@@ -126,7 +126,7 @@ function _mockPixPayment(total, orderId) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FRETE — Cálculo via tabela + ViaCEP para validar CEP
+// FRETE - Cálculo via tabela + ViaCEP para validar CEP
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -134,9 +134,9 @@ function _mockPixPayment(total, orderId) {
  * Em produção: substituir _calcFreteTabela por chamada à API dos Correios
  * ou Melhor Envio (https://melhorenvio.com.br/integracao).
  *
- * @param {string} cepDestino — CEP do cliente (apenas dígitos)
- * @param {number} pesoKg     — Peso total dos produtos em kg
- * @param {number} valorDeclarado — Valor total do pedido para seguro
+ * @param {string} cepDestino - CEP do cliente (apenas dígitos)
+ * @param {number} pesoKg     - Peso total dos produtos em kg
+ * @param {number} valorDeclarado - Valor total do pedido para seguro
  * @returns {Promise<Array<{ id, tipo, nome, valor, prazo, descricao }>>}
  */
 export async function calcularFrete(cepDestino, pesoKg = 0.5, valorDeclarado = 0) {
@@ -152,7 +152,7 @@ export async function calcularFrete(cepDestino, pesoKg = 0.5, valorDeclarado = 0
       if (!data.erro) uf = data.uf
     }
   } catch {
-    // Continua com UF padrão — frete ainda é calculado
+    // Continua com UF padrão - frete ainda é calculado
   }
 
   // 2. Calcula com tabela simulada (substituir por API Correios em produção)
@@ -160,7 +160,7 @@ export async function calcularFrete(cepDestino, pesoKg = 0.5, valorDeclarado = 0
 }
 
 /**
- * Tabela de fretes por UF — valores aproximados Correios 2024.
+ * Tabela de fretes por UF - valores aproximados Correios 2024.
  * PRODUÇÃO: substituir pela API oficial dos Correios ou Melhor Envio.
  * Documentação: https://melhorenvio.com.br/integracao/
  */
@@ -189,7 +189,7 @@ function _calcFreteTabela(uf, pesoKg, valorDeclarado) {
   const pac = {
     id:        "pac",
     tipo:      "pac",
-    nome:      "PAC — Correios",
+    nome:      "PAC - Correios",
     valor:     +(base + extra * peso + seguro).toFixed(2),
     prazo:     uf === "MA" ? 3 : uf === "SP" || uf === "RJ" ? 8 : 5,
     descricao: "Entrega econômica",
@@ -199,7 +199,7 @@ function _calcFreteTabela(uf, pesoKg, valorDeclarado) {
   const sedex = {
     id:        "sedex",
     tipo:      "sedex",
-    nome:      "SEDEX — Correios",
+    nome:      "SEDEX - Correios",
     valor:     +((base * 1.8) + (extra * 1.5 * peso) + seguro).toFixed(2),
     prazo:     uf === "MA" ? 1 : uf === "SP" || uf === "RJ" ? 3 : 2,
     descricao: "Entrega expressa",
@@ -212,7 +212,7 @@ function _calcFreteTabela(uf, pesoKg, valorDeclarado) {
     nome:      "Retirar na Loja",
     valor:     0,
     prazo:     0,
-    descricao: "Av. Ataliba Vieira, 1357 — Chapadinha",
+    descricao: "Av. Ataliba Vieira, 1357 - Chapadinha",
   }
 
   return [retirada, pac, sedex]

@@ -42,7 +42,7 @@ export default async ({ req, res, log, error }) => {
     // 1. Parse do payload (documento os_history recém-criado)
     const histDoc = req.body
     if (!histDoc || !histDoc.osId) {
-      return res.json({ ok: false, reason: "payload inválido — osId ausente" }, 400)
+      return res.json({ ok: false, reason: "payload inválido - osId ausente" }, 400)
     }
 
     const { osId, statusAnterior, statusNovo, changedBy, changedAt } = histDoc
@@ -52,7 +52,7 @@ export default async ({ req, res, log, error }) => {
     const client = new Client()
       .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT || process.env.APPWRITE_ENDPOINT)
       .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID || process.env.APPWRITE_PROJECT)
-      .setKey(req.headers["x-appwrite-key"] ?? process.env.APPWRITE_API_KEY ?? "")
+      .setKey(req.headers["x-appwrite-key"] ?? process.env.APPWRITE_API_KEY ?? '')
 
     const db = new Databases(client)
     const DB  = process.env.DB_ID || "69a0ebc70034fa76feff"
@@ -68,8 +68,8 @@ export default async ({ req, res, log, error }) => {
 
     const clienteNome  = os.clienteName || "Cliente"
     const telefone     = os.telefone?.replace(/\D/g, "")
-    const placa        = os.placa     || "—"
-    const modelo       = os.modelo    || "—"
+    const placa        = os.placa     || "-"
+    const modelo       = os.modelo    || "-"
     const novoStatusInfo = STATUS_LABELS[statusNovo] || { label: statusNovo, emoji: "🔔" }
 
     log(`[send-os-status] Cliente: ${clienteNome} | Tel: ${telefone} | Status: ${novoStatusInfo.label}`)
@@ -90,7 +90,7 @@ export default async ({ req, res, log, error }) => {
       if (r.status === "rejected") error(`[send-os-status] Falha: ${r.reason}`)
     })
 
-    log(`[send-os-status] Concluído — WA: ${wa.status} | E-mail: ${email.status}`)
+    log(`[send-os-status] Concluído - WA: ${wa.status} | E-mail: ${email.status}`)
     return res.json({ ok: true, osId, statusNovo, whatsapp: wa, email })
 
   } catch (err) {
@@ -118,7 +118,7 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
       ``,
       `Sua Ordem de Serviço foi *aberta* na HIVERCAR AUTOPEÇAS.`,
       ``,
-      `🚗 *Veículo:* ${modelo} — Placa ${placa}`,
+      `🚗 *Veículo:* ${modelo} - Placa ${placa}`,
       `📋 *Nº OS:* ${osId.substring(0, 8).toUpperCase()}`,
       ``,
       `Em breve nosso técnico iniciará a análise. Fique tranquilo(a)!`,
@@ -128,7 +128,7 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
     em_andamento: [
       `${statusInfo.emoji} *${nome}, boa notícia!*`,
       ``,
-      `Seu veículo *${modelo} — ${placa}* está *em manutenção agora*.`,
+      `Seu veículo *${modelo} - ${placa}* está *em manutenção agora*.`,
       ``,
       `Nosso técnico já está trabalhando. Você será avisado(a) quando concluirmos.`,
       ``,
@@ -137,7 +137,7 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
     aguardando_pecas: [
       `📦 *Atenção, ${nome}!*`,
       ``,
-      `Seu veículo *${modelo} — ${placa}* está *aguardando chegada de peças*.`,
+      `Seu veículo *${modelo} - ${placa}* está *aguardando chegada de peças*.`,
       ``,
       `Estamos providenciando os componentes necessários. Assim que chegarem, a manutenção continua imediatamente.`,
       ``,
@@ -147,11 +147,11 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
     concluida: [
       `✅ *${nome}, seu veículo está pronto!*`,
       ``,
-      `🚗 *${modelo} — ${placa}* concluiu a manutenção com sucesso.`,
+      `🚗 *${modelo} - ${placa}* concluiu a manutenção com sucesso.`,
       ``,
-      `Você já pode vir buscar! Nosso horário de funcionamento é de seg–sex 8h–18h e sáb 8h–12h.`,
+      `Você já pode vir buscar! Nosso horário de funcionamento é de seg-sex 8h-18h e sáb 8h-12h.`,
       ``,
-      `📍 Av. Ataliba Vieira, 1357 — Chapadinha`,
+      `📍 Av. Ataliba Vieira, 1357 - Chapadinha`,
       `📋 OS: ${osId.substring(0, 8).toUpperCase()}`,
       ``,
       `Obrigado por confiar na HIVERCAR AUTOPEÇAS! 🙏`,
@@ -159,7 +159,7 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
     cancelada: [
       `❌ *${nome}, sua OS foi cancelada.*`,
       ``,
-      `A Ordem de Serviço do veículo *${modelo} — ${placa}* foi cancelada.`,
+      `A Ordem de Serviço do veículo *${modelo} - ${placa}* foi cancelada.`,
       ``,
       `Para mais informações, entre em contato conosco.`,
       `📋 OS: ${osId.substring(0, 8).toUpperCase()}`,
@@ -167,9 +167,9 @@ async function sendWhatsApp(telefone, nome, placa, modelo, status, statusInfo, o
   }
 
   const linhas = mensagens[status] || [
-    `${statusInfo.emoji} *Atualização da sua OS — HIVERCAR*`,
+    `${statusInfo.emoji} *Atualização da sua OS - HIVERCAR*`,
     ``,
-    `Veículo: ${modelo} — ${placa}`,
+    `Veículo: ${modelo} - ${placa}`,
     `Novo status: *${statusInfo.label}*`,
     `OS: ${osId.substring(0, 8).toUpperCase()}`,
   ]
@@ -196,7 +196,7 @@ async function sendEmail(emailAddr, nome, placa, modelo, status, statusInfo, osI
   const from = process.env.EMAIL_FROM || "HIVERCAR AUTOPEÇAS <noreply@hivercar.com.br>"
 
   if (!key)       throw new Error("RESEND_API_KEY não configurado")
-  if (!emailAddr) throw new Error("Cliente sem e-mail na OS — e-mail ignorado")
+  if (!emailAddr) throw new Error("Cliente sem e-mail na OS - e-mail ignorado")
 
   const dateStr = new Date(changedAt || Date.now()).toLocaleString("pt-BR", {
     dateStyle: "long", timeStyle: "short",
@@ -265,7 +265,7 @@ async function sendEmail(emailAddr, nome, placa, modelo, status, statusInfo, osI
 
         <tr><td style="padding:16px 32px;background:#0d0f10;border-top:1px solid #1e2023;text-align:center">
           <p style="font-size:11px;color:#3a3c3e;margin:0;line-height:1.8">
-            HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 — Chapadinha, MA<br>
+            HIVERCAR AUTOPEÇAS · Av. Ataliba Vieira, 1357 - Chapadinha, MA<br>
             © ${new Date().getFullYear()} Todos os direitos reservados.
           </p>
         </td></tr>
@@ -281,7 +281,7 @@ async function sendEmail(emailAddr, nome, placa, modelo, status, statusInfo, osI
     body:    JSON.stringify({
       from,
       to:      [emailAddr],
-      subject: `${statusInfo.emoji} OS ${osId.substring(0, 8).toUpperCase()} — ${statusInfo.label} | HIVERCAR`,
+      subject: `${statusInfo.emoji} OS ${osId.substring(0, 8).toUpperCase()} - ${statusInfo.label} | HIVERCAR`,
       html,
     }),
   })

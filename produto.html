@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Produto â€” HIVERCAR AUTOPEÃ‡AS</title>
-<meta name="description" id="pageDesc" content="PeÃ§as novas e originais para seu veÃ­culo.">
+<title id="pageTitle">Produto - HIVERCAR AUTOPEÇAS</title>
+<meta name="description" id="pageDesc" content="Peças novas e originais para seu veículo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -26,7 +26,7 @@
   <div class="container">
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÃ‡AS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <div class="nav-links" id="navMenu">
@@ -47,10 +47,10 @@
 
     <!-- Loading state -->
     <div id="loadingState" class="loading-state">
-      <div class="spinner"></div> Carregando produtoâ€¦
+      <div class="spinner"></div> Carregando produto…
     </div>
 
-    <!-- ConteÃºdo do produto -->
+    <!-- Conteúdo do produto -->
     <div id="produtoContent" style="display:none">
 
       <div class="produto-grid">
@@ -66,22 +66,22 @@
           <div class="produto-badges" id="prodBadges"></div>
         </div>
 
-        <!-- InformaÃ§Ãµes -->
+        <!-- Informações -->
         <div class="produto-info-panel">
           <div class="produto-breadcrumb" id="breadcrumb">
-            <a href="index.html">InÃ­cio</a>
+            <a href="index.html">Início</a>
             <span>/</span>
             <a href="loja.html">Loja</a>
             <span>/</span>
-            <span id="breadCat">â€”</span>
+            <span id="breadCat">-</span>
           </div>
 
           <div class="produto-brand" id="prodBrand"></div>
-          <h1 class="produto-name" id="prodName">Carregandoâ€¦</h1>
+          <h1 class="produto-name" id="prodName">Carregando…</h1>
 
           <div class="produto-price-wrap">
-            <div class="produto-price" id="prodPrice">â€”</div>
-            <div class="produto-price-label">Ã  vista</div>
+            <div class="produto-price" id="prodPrice">-</div>
+            <div class="produto-price-label">à vista</div>
           </div>
 
           <div class="produto-desc" id="prodDesc" style="display:none"></div>
@@ -89,22 +89,22 @@
           <!-- Estoque -->
           <div class="estoque-info" id="estoqueInfo"></div>
 
-          <!-- VeÃ­culos compatÃ­veis -->
+          <!-- Veículos compatíveis -->
           <div class="veiculos-section" id="veiculosSection" style="display:none">
-            <div class="veiculos-label"><i class="fas fa-car"></i> VeÃ­culos CompatÃ­veis</div>
+            <div class="veiculos-label"><i class="fas fa-car"></i> Veículos Compatíveis</div>
             <div class="veiculos-list" id="veiculosList"></div>
           </div>
 
-          <!-- EspecificaÃ§Ãµes tÃ©cnicas -->
+          <!-- Especificações técnicas -->
           <div class="specs-section" id="specsSection">
-            <div class="veiculos-label" style="margin-bottom:10px"><i class="fas fa-list"></i> EspecificaÃ§Ãµes</div>
+            <div class="veiculos-label" style="margin-bottom:10px"><i class="fas fa-list"></i> Especificações</div>
             <table class="specs-table" id="specsTable"></table>
           </div>
 
           <!-- CTA -->
           <div class="cta-row">
             <div class="qty-ctrl">
-              <button class="qty-btn" id="btnQtyMinus">âˆ’</button>
+              <button class="qty-btn" id="btnQtyMinus">−</button>
               <input type="number" class="qty-val" id="qtyInput" value="1" min="1" max="999">
               <button class="qty-btn" id="btnQtyPlus">+</button>
             </div>
@@ -118,19 +118,19 @@
 
           <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)">
             <i class="fas fa-shield-halved" style="color:var(--green)"></i>
-            Compra 100% segura Â· Garantia de fÃ¡brica Â· DevoluÃ§Ã£o em 7 dias
+            Compra 100% segura · Garantia de fábrica · Devolução em 7 dias
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- Produto nÃ£o encontrado -->
+    <!-- Produto não encontrado -->
     <div id="notFound" style="display:none;text-align:center;padding:80px 20px;color:var(--muted)">
       <i class="fas fa-box-open" style="font-size:48px;display:block;margin-bottom:16px;opacity:.3"></i>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:8px">Produto nÃ£o encontrado</h2>
-      <p style="margin-bottom:24px">Este produto pode ter sido removido ou o link estÃ¡ incorreto.</p>
-      <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Voltar Ã  Loja</a>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:8px">Produto não encontrado</h2>
+      <p style="margin-bottom:24px">Este produto pode ter sido removido ou o link está incorreto.</p>
+      <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Voltar à Loja</a>
     </div>
 
   </div>
@@ -140,7 +140,7 @@
 <div class="relacionados" id="relacionadosSection" style="display:none">
   <div class="container">
     <div class="rel-label">Mesma Categoria</div>
-    <h2 class="rel-title">VOCÃŠ TAMBÃ‰M PODE GOSTAR</h2>
+    <h2 class="rel-title">VOCÊ TAMBÉM PODE GOSTAR</h2>
     <div class="rel-grid products-grid" id="relacionadosGrid"></div>
   </div>
 </div>
@@ -152,7 +152,7 @@
     <a href="loja.html">Loja</a>
     <a href="https://wa.me/5598981168787">Suporte</a>
   </div>
-  <div class="bottom-copy">Â© 2026 HIVERCAR AUTOPEÃ‡AS LTDA</div>
+  <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
 </div>
 
 <script type="module">
@@ -161,19 +161,19 @@ import { fmt, esc, imgPlaceholder, initParticles, initNavToggle } from "./js/uti
 import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
 import { CONFIG } from "./js/config.js"
 
-// â”€â”€ APPWRITE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── APPWRITE ───────────────────────────────────────────────────────────────
 const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
 const databases = new Databases(client)
 
-// â”€â”€ BADGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── BADGE ──────────────────────────────────────────────────────────────────
 const badge = document.getElementById("cartBadge")
 if (badge) badge.textContent = CartService.count()
 
-// â”€â”€ PARSE ID da URL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PARSE ID da URL ────────────────────────────────────────────────────────
 const params    = new URLSearchParams(location.search)
 const productId = params.get("id")
 
-// â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOAST ──────────────────────────────────────────────────────────────────
 let toastT
 function toast(msg, type = "") {
   const el = document.getElementById("toast")
@@ -183,10 +183,10 @@ function toast(msg, type = "") {
   toastT = setTimeout(() => el.classList.remove("show"), 3000)
 }
 
-// â”€â”€ FORMATA PREÃ‡O BRL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FORMATA PREÇO BRL ──────────────────────────────────────────────────────
 const fmtBRL = v => new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(v)
 
-// â”€â”€ LOAD PRODUTO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LOAD PRODUTO ───────────────────────────────────────────────────────────
 async function loadProduto() {
   const loading  = document.getElementById("loadingState")
   const content  = document.getElementById("produtoContent")
@@ -201,11 +201,11 @@ async function loadProduto() {
   try {
     const p = await databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId)
 
-    // â”€â”€ SEO dinÃ¢mico â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    document.title = `${p.name} â€” HIVERCAR AUTOPEÃ‡AS`
-    document.getElementById("pageDesc").content = p.description || `${p.name} - peÃ§a original HIVERCAR`
+    // ── SEO dinâmico ─────────────────────────────────────────────────────
+    document.title = `${p.name} - HIVERCAR AUTOPEÇAS`
+    document.getElementById("pageDesc").content = p.description || `${p.name} - peça original HIVERCAR`
 
-    // â”€â”€ Imagem â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Imagem ────────────────────────────────────────────────────────────
     if (p.imageURL) {
       const img = document.getElementById("prodImg")
       img.src             = p.imageURL
@@ -220,69 +220,69 @@ async function loadProduto() {
       }
     }
 
-    // â”€â”€ Badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Badges ────────────────────────────────────────────────────────────
     const badges = []
     if (!p.isActive) badges.push(`<span class="badge badge-red">INATIVO</span>`)
-    if (p.qtd < 5) badges.push(`<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> Ãšltimas unidades</span>`)
+    if (p.qtd < 5) badges.push(`<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> Últimas unidades</span>`)
     if (p.brand)     badges.push(`<span class="badge badge-muted">${esc(p.brand)}</span>`)
     document.getElementById("prodBadges").innerHTML = badges.join("")
 
-    // â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Breadcrumb ────────────────────────────────────────────────────────
     if (p.category) document.getElementById("breadCat").textContent = p.category
 
-    // â”€â”€ Info bÃ¡sica â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Info básica ───────────────────────────────────────────────────────
     if (p.brand) document.getElementById("prodBrand").textContent = p.brand.toUpperCase()
     document.getElementById("prodName").textContent  = p.name
     document.getElementById("prodPrice").textContent = fmtBRL(p.price || 0)
 
-    // â”€â”€ DescriÃ§Ã£o â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Descrição ─────────────────────────────────────────────────────────
     if (p.description) {
       const descEl = document.getElementById("prodDesc")
       descEl.textContent    = p.description
       descEl.style.display  = "block"
     }
 
-    // â”€â”€ Estoque â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Estoque ───────────────────────────────────────────────────────────
     const stock = p.qtd ?? 0
     const stockMin = p.minStock ?? 5  // minStock = nome real no DB
     let estoqueHtml
     if (!p.isActive || stock === 0) {
       estoqueHtml = `<span class="estoque-dot out"></span><span style="color:var(--red)">Fora de estoque</span>`
     } else if (stock < stockMin) {
-      estoqueHtml = `<span class="estoque-dot low"></span><span style="color:var(--amber)">Ãšltimas ${stock} unidades</span>`
+      estoqueHtml = `<span class="estoque-dot low"></span><span style="color:var(--amber)">Últimas ${stock} unidades</span>`
     } else {
       estoqueHtml = `<span class="estoque-dot ok"></span><span style="color:var(--green)">Em estoque (${stock} un.)</span>`
     }
     document.getElementById("estoqueInfo").innerHTML = estoqueHtml
 
-    // veiculosSection removida â€” campo 'vehicles' nÃ£o existe na collection
+    // veiculosSection removida - campo 'vehicles' não existe na collection
 
-    // â”€â”€ EspecificaÃ§Ãµes tÃ©cnicas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Especificações técnicas ───────────────────────────────────────────
     const specs = []
     if (p.category) specs.push(["Categoria",      p.category])
     if (p.brand)    specs.push(["Marca",           p.brand])
     if (p.ncm)      specs.push(["NCM",             p.ncm])
-    if (p.barcode)  specs.push(["CÃ³d. de Barras",  p.barcode])
+    if (p.barcode)  specs.push(["Cód. de Barras",  p.barcode])
     if (p.weight)   specs.push(["Peso",            `${Number(p.weight).toFixed(3)} kg`])
     if (p.sku)      specs.push(["SKU",             p.sku])
-    specs.push(["CÃ³digo Interno", productId.slice(-8).toUpperCase()])
-    specs.push(["CondiÃ§Ã£o",       "Novo e Original"])
+    specs.push(["Código Interno", productId.slice(-8).toUpperCase()])
+    specs.push(["Condição",       "Novo e Original"])
 
     document.getElementById("specsTable").innerHTML = specs.map(([k, v]) =>
       `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`
     ).join("")
 
-    // â”€â”€ CTA: botÃ£o add-to-cart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── CTA: botão add-to-cart ────────────────────────────────────────────
     const btnAdd = document.getElementById("btnAddCart")
     if (p.isActive && stock > 0) {
       btnAdd.disabled = false
       btnAdd.addEventListener("click", () => {
         const qty = parseInt(document.getElementById("qtyInput").value) || 1
         for (let i = 0; i < qty; i++) {
-          CartService.add({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || "" })
+          CartService.add({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || '-' })
         }
         if (badge) badge.textContent = CartService.count()
-        toast(`âœ“ ${qty}x "${p.name}" adicionado ao carrinho!`)
+        toast(`✓ ${qty}x "${p.name}" adicionado ao carrinho!`)
         btnAdd.innerHTML = `<i class="fas fa-check"></i> Adicionado!`
         setTimeout(() => {
           btnAdd.innerHTML = `<i class="fas fa-cart-plus"></i> Adicionar ao Carrinho`
@@ -293,7 +293,7 @@ async function loadProduto() {
       btnAdd.style.background = "var(--muted)"
     }
 
-    // â”€â”€ Controle de quantidade â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Controle de quantidade ────────────────────────────────────────────
     const qtyInput  = document.getElementById("qtyInput")
     document.getElementById("btnQtyMinus").onclick = () => {
       qtyInput.value = Math.max(1, (parseInt(qtyInput.value) || 1) - 1)
@@ -302,17 +302,17 @@ async function loadProduto() {
       qtyInput.value = Math.min(stock || 999, (parseInt(qtyInput.value) || 1) + 1)
     }
 
-    // â”€â”€ WhatsApp â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── WhatsApp ──────────────────────────────────────────────────────────
     document.getElementById("btnWA").onclick = () => {
-      const msg = encodeURIComponent(`OlÃ¡! Tenho interesse no produto: ${p.name} â€” R$ ${(p.price||0).toFixed(2)}`)
+      const msg = encodeURIComponent(`Olá! Tenho interesse no produto: ${p.name} - R$ ${(p.price||0).toFixed(2)}`)
       window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${msg}`, "_blank")
     }
 
-    // â”€â”€ Exibe o conteÃºdo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Exibe o conteúdo ──────────────────────────────────────────────────
     loading.style.display = "none"
     content.style.display = "block"
 
-    // â”€â”€ Carrega relacionados â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Carrega relacionados ──────────────────────────────────────────────
     if (p.category) loadRelacionados(p.category, productId)
 
   } catch (err) {
@@ -322,7 +322,7 @@ async function loadProduto() {
   }
 }
 
-// â”€â”€ PRODUTOS RELACIONADOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PRODUTOS RELACIONADOS ──────────────────────────────────────────────────
 async function loadRelacionados(category, currentId) {
   try {
     const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [
@@ -347,7 +347,7 @@ async function loadRelacionados(category, currentId) {
           <div class="product-name">${esc(p.name)}</div>
           <div class="product-price">${fmtBRL(p.price || 0)}</div>
           <button class="btn btn-primary btn-block add-btn"
-            data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || "" })}'>
+            data-p='${JSON.stringify({ $id: p.$id, name: p.name, price: p.price, image: p.imageURL || '-' })}'>
             <i class="fas fa-cart-plus"></i> Adicionar
           </button>
         </div>
@@ -359,14 +359,14 @@ async function loadRelacionados(category, currentId) {
       e.stopPropagation()
       CartService.add(JSON.parse(b.dataset.p))
       if (badge) badge.textContent = CartService.count()
-      toast("âœ“ Produto adicionado ao carrinho!")
-      b.innerHTML = "âœ“ Adicionado"; b.disabled = true
+      toast("✓ Produto adicionado ao carrinho!")
+      b.innerHTML = "✓ Adicionado"; b.disabled = true
       setTimeout(() => { b.innerHTML = '<i class="fas fa-cart-plus"></i> Adicionar'; b.disabled = false }, 1200)
     }
-  } catch { /* relacionados sÃ£o opcionais â€” falha silenciosa */ }
+  } catch { /* relacionados são opcionais - falha silenciosa */ }
 }
 
-// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── INIT ────────────────────────────────────────────────────────────────────
 initParticles()
 initNavToggle()
 loadProduto()

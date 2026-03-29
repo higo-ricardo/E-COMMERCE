@@ -6,15 +6,15 @@
 //   - Bloquear transições inválidas conforme CONFIG.ORDER_STATUS_FLOW
 //   - Retornar timeline de status de um pedido (para modal de detalhes)
 //
-// Collection "order_history" — atributos necessários no Appwrite:
+// Collection "order_history" - atributos necessários no Appwrite:
 //   orderId   (string, required)
 //   oldStatus (string, required)
 //   newStatus (string, required)
-//   changedBy (string, required)   — userId ou "sistema"
-//   changedAt (string, required)   — ISO 8601
-//   note      (string, optional)   — observação livre
+//   changedBy (string, required)   - userId ou "sistema"
+//   changedAt (string, required)   - ISO 8601
+//   note      (string, optional)   - observação livre
 //
-// Camada: Domain / Service — importado por painel-vendas.html e orderService.js
+// Camada: Domain / Service - importado por painel-vendas.html e orderService.js
 
 import { databases, ID, Query } from "./appwriteClient.js"
 import { CONFIG }               from "./config.js"

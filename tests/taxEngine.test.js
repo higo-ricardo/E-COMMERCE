@@ -1,14 +1,14 @@
-﻿// â”€â”€â”€ HIVERCAR Â· tests/taxEngine.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// US-44 Â· Sprint 05 â€” Testes do TaxEngine (Motor de Regras TributÃ¡rias)
+// ─── HIVERCAR · tests/taxEngine.test.js ──────────────────────────────────────
+// US-44 · Sprint 05 - Testes do TaxEngine (Motor de Regras Tributárias)
 //
 // Cobertura:
 //   - calculate(): IPI, ICMS, PIS, COFINS, CBS, IBS para NCMs reais
-//   - calculateCart(): mÃºltiplos itens, resumo de impostos
-//   - lookupNcm(): lookup por prefixo (8708.30.90 â†’ 8708.30 â†’ 8708 â†’ default)
-//   - DiferenciaÃ§Ã£o B2C vs B2B (IPI)
-//   - Regimes tributÃ¡rios (Simples Nacional x Lucro Presumido)
+//   - calculateCart(): múltiplos itens, resumo de impostos
+//   - lookupNcm(): lookup por prefixo (8708.30.90 → 8708.30 → 8708 → default)
+//   - Diferenciação B2C vs B2B (IPI)
+//   - Regimes tributários (Simples Nacional x Lucro Presumido)
 //   - Arredondamentos (2 casas decimais)
-//   - formatDiscriminado(): saÃ­da legÃ­vel
+//   - formatDiscriminado(): saída legível
 
 import { describe, it, expect } from "vitest"
 import {
@@ -19,8 +19,8 @@ import {
   REGIMES,
 } from "../js/taxEngine.js"
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.lookupNcm â€” Lookup por prefixo NCM", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.lookupNcm - Lookup por prefixo NCM", () => {
 
   it("encontra regra exata 8708.30", () => {
     const r = TaxEngine.lookupNcm("8708.30")
@@ -28,13 +28,13 @@ describe("TaxEngine.lookupNcm â€” Lookup por prefixo NCM", () => {
     expect(r.descricao).toMatch(/[Ff]reio/)
   })
 
-  it("encontra regra pelo subgrupo 8708.30.90 â†’ 8708.30", () => {
+  it("encontra regra pelo subgrupo 8708.30.90 → 8708.30", () => {
     const r = TaxEngine.lookupNcm("8708.30.90")
     expect(r).toBeDefined()
     expect(r.ipi).toBeGreaterThanOrEqual(0)
   })
 
-  it("fallback para grupo 8708 quando subgrupo nÃ£o mapeado", () => {
+  it("fallback para grupo 8708 quando subgrupo não mapeado", () => {
     const r = TaxEngine.lookupNcm("8708.55")
     expect(r).toBeDefined()
     expect(r.ipi).toBeDefined()
@@ -54,8 +54,8 @@ describe("TaxEngine.lookupNcm â€” Lookup por prefixo NCM", () => {
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.calculate â€” CÃ¡lculo unitÃ¡rio B2C", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.calculate - Cálculo unitário B2C", () => {
 
   it("retorna todas as propriedades esperadas", () => {
     const r = calculate({ ncm: "8708.30.90", preco: 100, qty: 1, ufDestino: "MA" })
@@ -73,12 +73,12 @@ describe("TaxEngine.calculate â€” CÃ¡lculo unitÃ¡rio B2C", () => {
     expect(r).toHaveProperty("avisos")
   })
 
-  it("base de cÃ¡lculo = preco Ã— qty", () => {
+  it("base de cálculo = preco Ã- qty", () => {
     const r = calculate({ ncm: "8708", preco: 50, qty: 3 })
     expect(r.baseCalculo).toBe(150)
   })
 
-  it("IPI = 0 para B2C (consumidor final padrÃ£o)", () => {
+  it("IPI = 0 para B2C (consumidor final padrão)", () => {
     const r = calculate({ ncm: "8708.30", preco: 100, qty: 1, isB2B: false })
     expect(r.ipi).toBe(0)
   })
@@ -88,13 +88,13 @@ describe("TaxEngine.calculate â€” CÃ¡lculo unitÃ¡rio B2C", () => {
     expect(r.ipi).toBeGreaterThan(0)
   })
 
-  it("ICMS varia por UF destino (MA â†’ SP = 7%, MA â†’ MA = 12%)", () => {
+  it("ICMS varia por UF destino (MA → SP = 7%, MA → MA = 12%)", () => {
     const ma = calculate({ ncm: "8708", preco: 100, qty: 1, ufDestino: "MA" })
     const sp = calculate({ ncm: "8708", preco: 100, qty: 1, ufDestino: "SP" })
-    expect(ma.icms).toBeGreaterThan(sp.icms) // MAâ†’MA 12% > MAâ†’SP 7%
+    expect(ma.icms).toBeGreaterThan(sp.icms) // MA→MA 12% > MA→SP 7%
   })
 
-  it("UF desconhecida usa alÃ­quota padrÃ£o (12%)", () => {
+  it("UF desconhecida usa alíquota padrão (12%)", () => {
     const r = calculate({ ncm: "8708", preco: 100, qty: 1, ufDestino: "XX" })
     expect(r.icms).toBeCloseTo(12, 1)
   })
@@ -123,7 +123,7 @@ describe("TaxEngine.calculate â€” CÃ¡lculo unitÃ¡rio B2C", () => {
     expect(parseFloat(strVal)).toBe(r.totalImpostos)
   })
 
-  it("qty padrÃ£o = 1 quando nÃ£o informado", () => {
+  it("qty padrão = 1 quando não informado", () => {
     const r = calculate({ ncm: "8708", preco: 100 })
     expect(r.baseCalculo).toBe(100)
   })
@@ -137,8 +137,8 @@ describe("TaxEngine.calculate â€” CÃ¡lculo unitÃ¡rio B2C", () => {
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.calculate â€” Regimes TributÃ¡rios", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.calculate - Regimes Tributários", () => {
 
   it("Simples Nacional: ICMS, PIS, COFINS = 0", () => {
     const r = calculate({
@@ -150,7 +150,7 @@ describe("TaxEngine.calculate â€” Regimes TributÃ¡rios", () => {
     expect(r.cofins).toBe(0)
   })
 
-  it("Simples Nacional: CBS e IBS tambÃ©m = 0", () => {
+  it("Simples Nacional: CBS e IBS também = 0", () => {
     const r = calculate({
       ncm: "8708", preco: 100, qty: 1,
       regime: REGIMES.SIMPLES,
@@ -180,10 +180,10 @@ describe("TaxEngine.calculate â€” Regimes TributÃ¡rios", () => {
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.calculate â€” NCMs especÃ­ficos cap. 87", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.calculate - NCMs específicos cap. 87", () => {
 
-  it("NCM 8708.30 (freios) Ã© mapeado corretamente", () => {
+  it("NCM 8708.30 (freios) é mapeado corretamente", () => {
     const r = calculate({ ncm: "8708.30", preco: 200, qty: 1, ufDestino: "MA" })
     expect(r.totalImpostos).toBeGreaterThan(0)
     expect(r.ncmInfo.ncm).toBe("8708.30")
@@ -195,7 +195,7 @@ describe("TaxEngine.calculate â€” NCMs especÃ­ficos cap. 87", () => {
     expect(rolamento.ipi).toBeGreaterThanOrEqual(peca.ipi)
   })
 
-  it("NCM 8512 (iluminaÃ§Ã£o) tem IPI = 15% B2B", () => {
+  it("NCM 8512 (iluminação) tem IPI = 15% B2B", () => {
     const r = calculate({ ncm: "8512", preco: 100, qty: 1, isB2B: true })
     expect(r.ipi).toBeCloseTo(15, 1)
   })
@@ -207,13 +207,13 @@ describe("TaxEngine.calculate â€” NCMs especÃ­ficos cap. 87", () => {
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.calculateCart â€” Carrinho com mÃºltiplos itens", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.calculateCart - Carrinho com múltiplos itens", () => {
 
   const itens = [
-    { ncm: "8708.30", price: 150, qty: 2 },  // pastilha Ã— 2
-    { ncm: "8708.70", price:  80, qty: 1 },  // radiador Ã— 1
-    { ncm: "4011",    price: 400, qty: 4 },  // pneus Ã— 4
+    { ncm: "8708.30", price: 150, qty: 2 },  // pastilha Ã- 2
+    { ncm: "8708.70", price:  80, qty: 1 },  // radiador Ã- 1
+    { ncm: "4011",    price: 400, qty: 4 },  // pneus Ã- 4
   ]
 
   it("retorna estrutura correta", () => {
@@ -254,7 +254,7 @@ describe("TaxEngine.calculateCart â€” Carrinho com mÃºltiplos itens", () 
     expect(r.aliquotaEfetiva).toBe(0)
   })
 
-  it("cada item contÃ©m propriedade tax com resultado de calculate()", () => {
+  it("cada item contém propriedade tax com resultado de calculate()", () => {
     const r = calculateCart(itens)
     r.itens.forEach(item => {
       expect(item).toHaveProperty("tax")
@@ -263,13 +263,13 @@ describe("TaxEngine.calculateCart â€” Carrinho com mÃºltiplos itens", () 
     })
   })
 
-  it("contexto Ã© propagado para cada item", () => {
+  it("contexto é propagado para cada item", () => {
     const r = calculateCart(itens, { ufDestino: "SP", isB2B: false })
     expect(r.contexto.ufDestino).toBe("SP")
     expect(r.contexto.isB2B).toBe(false)
   })
 
-  it("item sem NCM usa regra default sem lanÃ§ar erro", () => {
+  it("item sem NCM usa regra default sem lançar erro", () => {
     const semNcm = [{ ncm: null, price: 100, qty: 1 }]
     expect(() => calculateCart(semNcm)).not.toThrow()
     const r = calculateCart(semNcm)
@@ -278,34 +278,34 @@ describe("TaxEngine.calculateCart â€” Carrinho com mÃºltiplos itens", () 
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine.formatDiscriminado â€” FormataÃ§Ã£o legÃ­vel", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine.formatDiscriminado - Formatação legível", () => {
 
   it("retorna string multi-linha com os tributos", () => {
     const r   = calculate({ ncm: "8708", preco: 100, qty: 1, ufDestino: "MA" })
     const txt = formatDiscriminado(r)
     expect(typeof txt).toBe("string")
-    expect(txt).toContain("Base de CÃ¡lculo")
+    expect(txt).toContain("Base de Cálculo")
     expect(txt).toContain("Total Impostos")
   })
 
-  it("nÃ£o inclui tributos com valor zero", () => {
+  it("não inclui tributos com valor zero", () => {
     const r = calculate({
       ncm: "8708", preco: 100, qty: 1,
       isB2B: false, regime: REGIMES.SIMPLES,
     })
     const txt = formatDiscriminado(r)
-    // IPI = 0 e ICMS = 0 no Simples, logo nÃ£o devem aparecer
-    // (a funÃ§Ã£o filtra v.valor > 0)
+    // IPI = 0 e ICMS = 0 no Simples, logo não devem aparecer
+    // (a função filtra v.valor > 0)
     expect(txt).not.toMatch(/IPI\s+0\.00/)
   })
 
 })
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-describe("TaxEngine â€” ExportaÃ§Ã£o e constantes", () => {
+// ─────────────────────────────────────────────────────────────────────────────
+describe("TaxEngine - Exportação e constantes", () => {
 
-  it("REGIMES exporta as trÃªs constantes", () => {
+  it("REGIMES exporta as três constantes", () => {
     expect(REGIMES).toHaveProperty("SIMPLES")
     expect(REGIMES).toHaveProperty("LUCRO_PRESUMIDO")
     expect(REGIMES).toHaveProperty("LUCRO_REAL")
@@ -323,7 +323,7 @@ describe("TaxEngine â€” ExportaÃ§Ã£o e constantes", () => {
     expect(cap87.length).toBeGreaterThanOrEqual(5)
   })
 
-  it("TaxEngine exporta todos os mÃ©todos esperados", () => {
+  it("TaxEngine exporta todos os métodos esperados", () => {
     expect(typeof TaxEngine.calculate).toBe("function")
     expect(typeof TaxEngine.calculateCart).toBe("function")
     expect(typeof TaxEngine.formatDiscriminado).toBe("function")

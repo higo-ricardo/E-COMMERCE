@@ -2,7 +2,7 @@
 // Lógica de pedido: validação, cálculo de totais, persistência. Zero UI.
 // Camada: Domain / Service.
 //
-// Sprint 05 — US-44:
+// Sprint 05 - US-44:
 //   - TaxEngine.calculateCart() substituiu TAX_RATE fixo de 12%
 //   - placeOrder() agora retorna breakdown fiscal completo no pedido
 //   - Retrocompatível: se item não tiver NCM, usa regra genérica cap.87

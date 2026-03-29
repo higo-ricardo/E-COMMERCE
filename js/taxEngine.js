@@ -1,11 +1,11 @@
 // ─── HIVERCAR · taxEngine.js ─────────────────────────────────────────────────
-// US-44 · Sprint 05 — Motor de Regras Tributárias por NCM
+// US-44 · Sprint 05 - Motor de Regras Tributárias por NCM
 //
 // Substitui o TAX_RATE fixo de 12% por cálculo real baseado em:
-//   - NCM do produto (capítulo 87 da TIPI — peças automotivas)
+//   - NCM do produto (capítulo 87 da TIPI - peças automotivas)
 //   - UF do comprador (ICMS interestadual)
 //   - Regime tributário da empresa (Simples Nacional vs Lucro Presumido)
-//   - EC 132/2023 — Reforma Tributária: CBS substitui PIS/COFINS, IBS substitui ICMS
+//   - EC 132/2023 - Reforma Tributária: CBS substitui PIS/COFINS, IBS substitui ICMS
 //
 // IMPORTANTE: As alíquotas desta implementação são REFERÊNCIAS baseadas na
 // legislação vigente em Março 2026. DEVEM ser validadas por contador
@@ -27,30 +27,30 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TABELA ICMS INTERESTADUAL — UF ORIGEM: MA (Maranhão)
+// TABELA ICMS INTERESTADUAL - UF ORIGEM: MA (Maranhão)
 // Alíquotas padrão conforme Convênio ICMS 142/2018 e Resoluções do Senado
 // Validar com SEFAZ-MA antes de uso em produção
 // ─────────────────────────────────────────────────────────────────────────────
 const ICMS_UF = {
-  // Norte / Nordeste — 12% (operação interestadual entre estados do mesmo grupo)
+  // Norte / Nordeste - 12% (operação interestadual entre estados do mesmo grupo)
   MA: 12, PA: 12, PI: 12, CE: 12, RN: 12, PB: 12,
   PE: 12, AL: 12, SE: 12, BA: 12, AM: 12, RR: 12,
   AP: 12, AC: 12, TO: 12, RO: 12,
 
-  // Centro-Oeste — 12%
+  // Centro-Oeste - 12%
   DF: 12, GO: 12, MT: 12, MS: 12,
 
-  // Sudeste/Sul — 7% (MA → SP/RJ/MG/ES/PR/SC/RS: alíquota reduzida)
+  // Sudeste/Sul - 7% (MA → SP/RJ/MG/ES/PR/SC/RS: alíquota reduzida)
   SP:  7, RJ:  7, MG:  7, ES:  7,
   PR:  7, SC:  7, RS:  7,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TABELA NCM → IMPOSTOS
-// Capítulo 87 TIPI — Veículos automóveis, tratores, etc.
-// Posição 8708 — Partes e acessórios para automóveis
+// Capítulo 87 TIPI - Veículos automóveis, tratores, etc.
+// Posição 8708 - Partes e acessórios para automóveis
 //
-// EC 132/2023 — Transição 2026-2033:
+// EC 132/2023 - Transição 2026-2033:
 //   - CBS (Contribuição sobre Bens e Serviços) substitui PIS/COFINS
 //   - IBS (Imposto sobre Bens e Serviços) substitui ICMS/ISS
 //   - Alíquota de referência CBS+IBS = 26,5% (estimativa RFB)
@@ -60,7 +60,7 @@ const ICMS_UF = {
 // Validar com contador e TIPI atualizada antes de produção.
 // ─────────────────────────────────────────────────────────────────────────────
 const NCM_TAX_RULES = {
-  // ── 8708 — Partes e acessórios de automóveis ──────────────────────────────
+  // ── 8708 - Partes e acessórios de automóveis ──────────────────────────────
   "8708":    { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Partes e acessórios de automóveis" },
   "8708.10": { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Para-choques" },
   "8708.21": { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Cintos de segurança" },
@@ -77,19 +77,19 @@ const NCM_TAX_RULES = {
   "8708.94": { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Volantes, colunas e caixas de direção" },
   "8708.99": { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Outras partes e acessórios" },
 
-  // ── 8482 — Rolamentos ─────────────────────────────────────────────────────
+  // ── 8482 - Rolamentos ─────────────────────────────────────────────────────
   "8482":    { ipi: 10,  pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Rolamentos" },
 
-  // ── 8512 — Aparelhos elétricos de iluminação ─────────────────────────────
+  // ── 8512 - Aparelhos elétricos de iluminação ─────────────────────────────
   "8512":    { ipi: 15,  pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Aparelhos de iluminação veicular" },
 
-  // ── 4011 — Pneus novos ────────────────────────────────────────────────────
+  // ── 4011 - Pneus novos ────────────────────────────────────────────────────
   "4011":    { ipi: 0,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Pneus novos" },
 
-  // ── 3403 — Óleos lubrificantes ────────────────────────────────────────────
+  // ── 3403 - Óleos lubrificantes ────────────────────────────────────────────
   "3403":    { ipi: 0,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Óleos lubrificantes" },
 
-  // ── DEFAULT — regra genérica para NCMs não mapeados ───────────────────────
+  // ── DEFAULT - regra genérica para NCMs não mapeados ───────────────────────
   "default": { ipi: 5,   pis: 1.65, cofins: 7.6,  cbs: 0.9, ibs: 17.0, descricao: "Peça automotiva genérica" },
 }
 
@@ -97,7 +97,7 @@ const NCM_TAX_RULES = {
 // REGIMES TRIBUTÁRIOS
 // ─────────────────────────────────────────────────────────────────────────────
 const REGIMES = {
-  SIMPLES:          "simples_nacional",   // MEI e ME — PIS/COFINS incluídos no DAS
+  SIMPLES:          "simples_nacional",   // MEI e ME - PIS/COFINS incluídos no DAS
   LUCRO_PRESUMIDO:  "lucro_presumido",
   LUCRO_REAL:       "lucro_real",
 }
@@ -113,7 +113,7 @@ const TRANSICAO_2026 = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FUNÇÃO AUXILIAR — LOOKUP NCM
+// FUNÇÃO AUXILIAR - LOOKUP NCM
 // Busca pela mais específica disponível (8708.30.90 → 8708.30 → 8708 → default)
 // ─────────────────────────────────────────────────────────────────────────────
 function lookupNcm(ncm) {
@@ -157,7 +157,7 @@ function lookupNcm(ncm) {
  *   pis:              number,   Valor do PIS (transição EC 132/2023)
  *   cofins:           number,   Valor do COFINS (transição EC 132/2023)
  *   cbs:              number,   Valor da CBS (EC 132/2023)
- *   ibs:              number,   Valor do IBS (EC 132/2023 — estimativa)
+ *   ibs:              number,   Valor do IBS (EC 132/2023 - estimativa)
  *   icms:             number,   Valor do ICMS (interestadual)
  *   totalImpostos:    number,   Soma de todos os tributos
  *   total:            number,   baseCalculo + totalImpostos
@@ -178,9 +178,9 @@ function calculate({
   const avisos = []
   const base   = +(Number(preco) * Number(qty)).toFixed(2)
 
-  if (!ncm) avisos.push("NCM não informado — aplicando regra genérica. Validar com contador.")
+  if (!ncm) avisos.push("NCM não informado - aplicando regra genérica. Validar com contador.")
   if (!NCM_TAX_RULES[ncm?.slice(0, 7)] && !NCM_TAX_RULES[ncm?.slice(0, 4)]) {
-    avisos.push(`NCM "${ncm}" não mapeado explicitamente — usando regra padrão cap. 87.`)
+    avisos.push(`NCM "${ncm}" não mapeado explicitamente - usando regra padrão cap. 87.`)
   }
 
   const regra = lookupNcm(ncm)
@@ -199,18 +199,18 @@ function calculate({
     ? 0
     : +(base * (icmsAliq / 100)).toFixed(2)
 
-  // ── PIS / COFINS (em transição — redução 30% em 2026) ────────────────────
+  // ── PIS / COFINS (em transição - redução 30% em 2026) ────────────────────
   // A partir de 2027 a alíquota diminui gradualmente até zero em 2033
   const pisAliq    = regime === REGIMES.SIMPLES ? 0 : regra.pis * (1 - TRANSICAO_2026.pisReducao)
   const cofinsAliq = regime === REGIMES.SIMPLES ? 0 : regra.cofins * (1 - TRANSICAO_2026.cofinsReducao)
   const pis    = +(base * (pisAliq    / 100)).toFixed(2)
   const cofins = +(base * (cofinsAliq / 100)).toFixed(2)
 
-  // ── CBS — Contribuição sobre Bens e Serviços (EC 132/2023) ───────────────
+  // ── CBS - Contribuição sobre Bens e Serviços (EC 132/2023) ───────────────
   const cbsAliq = TRANSICAO_2026.cbsVigor && regime !== REGIMES.SIMPLES ? regra.cbs : 0
   const cbs     = +(base * (cbsAliq / 100)).toFixed(2)
 
-  // ── IBS — Imposto sobre Bens e Serviços (EC 132/2023) ────────────────────
+  // ── IBS - Imposto sobre Bens e Serviços (EC 132/2023) ────────────────────
   // Alíquota de referência estimada 17% a ser fixada por Lei Complementar
   // Neste período de transição (2026-2033) ainda há coexistência com ICMS
   const ibsAliq = TRANSICAO_2026.ibsVigor && regime !== REGIMES.SIMPLES ? regra.ibs : 0
@@ -286,8 +286,8 @@ function calculateCart(items, context = {}) {
 
 /**
  * Retorna o breakdown formatado para exibição no checkout ou NF-e.
- * @param {object} resultado — retorno de calculate()
- * @returns {string} — texto formatado
+ * @param {object} resultado - retorno de calculate()
+ * @returns {string} - texto formatado
  */
 function formatDiscriminado(resultado) {
   const { discriminado, baseCalculo, totalImpostos, aliquotaEfetiva, avisos } = resultado
