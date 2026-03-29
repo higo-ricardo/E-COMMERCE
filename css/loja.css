@@ -1,23 +1,23 @@
-/* ============================================================
-   base.css — Design System HIVERCAR
-   DNA extraído da page404: dark tech, glitch, partículas, grid
-   ============================================================ */
+﻿/* â”€â”€  LOJA VIRTUAL HIVERCAR AUTOPEÃ‡AS â”€â”€ */
 
-/* ── VARS ── */
+/* â”€â”€ PALETA DE CORES â”€â”€ */
 :root {
   --black:  #0a0a0a;
   --dark:   #111214;
   --panel:  #161819;
   --border: #252729;
   --red:    #fb1230;
+  --danger: #FFC72C;
   --green:  #26fd71;
-  --white:  #f0f0ee;
+  --darkgreen: #006400;
+  --white:  #fdfdfd;
   --muted:  #545658;
   --glow-r: rgba(251,18,48,0.35);
   --glow-g: rgba(38,253,113,0.25);
+  --glow-b: rgba(245,245,245,0.95);
 }
 
-/* ── RESET ── */
+/* â”€â”€ RESET â”€â”€ */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 
@@ -25,12 +25,12 @@ body {
   font-family: 'Barlow', sans-serif;
   font-size: 14px;
   line-height: 1.7;
-  background: var(--black);
+  background: var(--white);
   color: var(--white);
   min-height: 100vh;
 }
 
-/* ── BG NOISE + SCANLINES ── */
+/* â”€â”€ BG NOISE + SCANLINES â”€â”€ */
 body::before {
   content:'';
   position:fixed; inset:0; z-index:0;
@@ -44,7 +44,7 @@ body::after {
   pointer-events:none;
 }
 
-/* ── GRID BG ── */
+/* â”€â”€ GRID BG â”€â”€ */
 .grid-bg {
   position:fixed; inset:0; z-index:0;
   background-image:
@@ -54,96 +54,132 @@ body::after {
   pointer-events:none;
 }
 
-/* ── PARTICLES CANVAS ── */
+/* â”€â”€ PARTICLES CANVAS â”€â”€ */
 #canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
-/* ── CONTAINER ── */
+/* â”€â”€ CONTAINER â”€â”€ */
 .container {
-  position:relative; z-index:10;
-  width:100%; max-width:1300px;
-  margin:0 auto; padding:0 5%;
+  position:relative; 
+  z-index:10;
+  width:100%; 
+  max-width:1300px;
+  margin:0 auto; 
+  padding:0 5%;
 }
 
-/* ── NAVBAR ── */
+/* â”€â”€ NAVBAR â”€â”€ */
 .navbar {
-  position:sticky; top:0; z-index:200;
-  background:rgba(10,10,10,0.92);
+  position:sticky; 
+  top:0; 
+  z-index:200;
+  background:var(--darkgreen);
   backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
   height:62px;
-  display:flex; align-items:center;
+  display:flex; 
+  align-items:center;
 }
 .navbar .container { display:flex; align-items:center; justify-content:space-between; }
 
 .nav-brand {
-  display:flex; align-items:center; gap:12px;
+  display:flex; 
+  align-items:center; 
+  gap:12px;
   text-decoration:none;
 }
-.brand-dot {
-  width:8px; height:8px;
-  background:var(--green); border-radius:50%;
-  box-shadow:0 0 12px var(--green);
+.brand-dot { /* PONTO PULSANTE*/
+  width:8px; 
+  height:8px;
+  background:var(--green); 
+  border-radius:50%;
+  box-shadow:0 0 12px var(--green); 
   animation:pulse-green 2s infinite;
 }
-.nav-brand-text {
+.nav-brand-text {  /* LOGOMARCA */
   font-family:'Bebas Neue', sans-serif;
-  font-size:18px; letter-spacing:0.18em;
-  color:var(--white);
+  font-size:25px; letter-spacing:0.18em;
+  color:var(--red);
 }
-.nav-brand-text em { font-style:normal; color:var(--green); }
+.nav-brand-text em { font-style:normal; color:var(--red); }
 
 .nav-links { display:flex; align-items:center; gap:4px; }
 .nav-link {
-  display:flex; align-items:center; gap:6px;
+  display:flex; 
+  align-items:center; 
+  gap:6px;
   padding:8px 14px;
-  color:var(--muted); text-decoration:none;
-  font-size:11px; font-weight:600;
-  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--white); 
+  text-decoration:none;
+  font-size:15px; 
+  font-weight:600;
+  letter-spacing:0.2em; 
+  text-transform:uppercase;
   border:1px solid transparent;
   transition:all .2s;
 }
-.nav-link:hover  { color:var(--white); border-color:var(--border); }
-.nav-link.active { color:var(--green); border-color:rgba(38,253,113,0.2); background:rgba(38,253,113,0.04); }
+.nav-link:hover  { 
+  color:var(--white); 
+  border-color: var(--white);
+}
+
+.nav-link.active { 
+  color:var(--green); 
+  border-color:rgba(38,253,113,0.05);;
+  background:rgba(38,253,113,0.1); }
 
 .nav-cart {
   position:relative;
-  display:flex; align-items:center; gap:8px;
+  display:flex; 
+  align-items:center; 
+  gap:8px;
   padding:8px 16px;
-  color:var(--white); text-decoration:none;
-  font-size:11px; font-weight:600; letter-spacing:0.15em;
-  background:var(--panel); border:1px solid var(--border);
+  color:var(--white); 
+  font-size:15px;
+  text-decoration:none;
+  font-weight:600; letter-spacing:0.15em;
+  background: transparent; 
   transition:all .2s;
 }
-.nav-cart:hover { border-color:var(--green); color:var(--green); }
+.nav-cart:hover{ color:var(--glow-g); }
 .cart-badge {
-  min-width:18px; height:18px;
-  background:var(--green); color:var(--black);
-  font-size:10px; font-weight:700;
+  position:fixed;
+  top: 7px;
+  right:115px;
+  min-width:15px; height:15px;
+  background:var(--glow-g); color:var(--white);
+  font-size:12px; font-weight:700;
   display:inline-flex; align-items:center; justify-content:center;
   padding:0 4px; border-radius:2px;
 }
 
 .nav-toggle {
   display:none; background:none;
-  border:1px solid var(--border); color:var(--muted);
+  border:1px solid var(--border); 
+  color:var(--muted);
   padding:7px 11px; cursor:pointer; font-size:16px;
   transition:color .2s;
 }
 .nav-toggle:hover { color:var(--white); }
 
-/* ── PAGE HERO ── */
+/* â”€â”€ PAGE HERO â”€â”€ */
 .page-hero {
-  position:relative; z-index:10;
+  position:relative; 
+  z-index:10;
   padding:60px 0 40px;
   border-bottom:1px solid var(--border);
 }
 .page-label {
-  display:flex; align-items:center; gap:12px;
+  display:flex; 
+  align-items:center; 
+  gap:12px;
   margin-bottom:16px;
 }
 .page-label::before {
-  content:''; display:block; width:40px; height:1px;
-  background:var(--red); box-shadow:0 0 8px var(--glow-r);
+  content:''; display:block; 
+  width:40px; 
+  height:1px;
+  background:var(--red); 
+  box-shadow:0 0 8px var(--glow-r);
 }
 .page-label span {
   font-size:11px; font-weight:600;
@@ -154,11 +190,11 @@ body::after {
   font-family:'Bebas Neue', sans-serif;
   font-size:clamp(36px,5vw,60px);
   line-height:1; letter-spacing:0.02em;
-  color:var(--white);
+  color:var(--darkgreen);
 }
-.page-hero h1 em { font-style:normal; color:var(--green); text-shadow:0 0 30px var(--glow-g); }
+.page-hero h1 em { font-style:normal; color:var(--darkgreen); text-shadow:0 0 30px var(--glow-g); }
 
-/* ── SECTION LABEL ── */
+/* â”€â”€ SECTION LABEL â”€â”€ */
 .section-label {
   display:flex; align-items:center; gap:10px;
   font-size:11px; font-weight:600;
@@ -170,7 +206,7 @@ body::after {
   background:var(--green); box-shadow:0 0 6px var(--glow-g);
 }
 
-/* ── PANEL ── */
+/* â”€â”€ PANEL â”€â”€ */
 .panel {
   background:var(--panel);
   border:1px solid var(--border);
@@ -186,7 +222,7 @@ body::after {
 .panel::before { top:-1px; left:-1px; border-width:1px 0 0 1px; }
 .panel::after  { bottom:-1px; right:-1px; border-width:0 1px 1px 0; }
 
-/* ── FORMS ── */
+/* â”€â”€ FORMS â”€â”€ */
 .field { margin-bottom:18px; }
 .field label {
   display:block;
@@ -213,7 +249,7 @@ body::after {
 .field select option { background:var(--dark); }
 .field-error { color:var(--red); font-size:11px; margin-top:4px; }
 
-/* ── BUTTONS ── */
+/* â”€â”€ BUTTONS â”€â”€ */
 .btn {
   display:inline-flex; align-items:center; gap:8px;
   padding:12px 24px;
@@ -245,7 +281,7 @@ body::after {
 .btn-block { width:100%; justify-content:center; }
 .btn:disabled { opacity:.35; pointer-events:none; }
 
-/* ── TABLE ── */
+/* â”€â”€ TABLE â”€â”€ */
 .data-table { width:100%; border-collapse:collapse; }
 .data-table th {
   text-align:left; padding:10px 14px;
@@ -259,7 +295,7 @@ body::after {
 }
 .data-table tbody tr:hover { background:rgba(255,255,255,0.02); }
 
-/* ── BADGES ── */
+/* â”€â”€ BADGES â”€â”€ */
 .badge {
   display:inline-flex; align-items:center;
   padding:3px 9px; font-size:10px;
@@ -269,7 +305,7 @@ body::after {
 .badge-red   { background:rgba(251,18,48,0.1);  color:var(--red);   border:1px solid rgba(251,18,48,0.2); }
 .badge-muted { background:rgba(84,86,88,0.2);   color:var(--muted); border:1px solid var(--border); }
 
-/* ── METRIC CARD ── */
+/* â”€â”€ METRIC CARD â”€â”€ */
 .metric-card {
   background:var(--panel); border:1px solid var(--border);
   padding:24px 28px; position:relative; overflow:hidden;
@@ -290,7 +326,7 @@ body::after {
   color:var(--muted); margin-top:8px;
 }
 
-/* ── BOTTOM BAR ── */
+/* â”€â”€ BOTTOM BAR â”€â”€ */
 .bottom-bar {
   position:relative; z-index:10;
   border-top:1px solid var(--border);
@@ -301,13 +337,13 @@ body::after {
 }
 .bottom-links { display:flex; gap:28px; flex-wrap:wrap; }
 .bottom-links a {
-  font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--muted); text-decoration:none; transition:color .2s;
+  font-size:15px; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--green); text-decoration:none; transition:color .2s;
 }
-.bottom-links a:hover { color:var(--white); }
-.bottom-copy { font-size:11px; color:var(--border); font-family:monospace; letter-spacing:.1em; }
+.bottom-links a:hover { color:var(--red); }
+.bottom-copy { font-size:12px; color:var(--red); font-family:monospace; letter-spacing:.1em; }
 
-/* ── RIPPLE ── */
+/* â”€â”€ RIPPLE â”€â”€ */
 .ripple {
   position:fixed; pointer-events:none; border-radius:50%;
   border:1px solid rgba(38,253,113,0.4);
@@ -315,30 +351,32 @@ body::after {
   animation:rippleOut .6s ease-out forwards; z-index:9999;
 }
 
-/* ── STATUS DOT ── */
+/* â”€â”€ STATUS DOT â”€â”€ */
 .status-dot {
-  width:7px; height:7px; border-radius:50%;
+  width:10px; height:7px; border-radius:50%;
   display:inline-block; flex-shrink:0;
 }
 .status-dot.green { background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse-green 2s infinite; }
 .status-dot.red   { background:var(--red);   box-shadow:0 0 8px var(--red); }
 
-/* ── SPINNER ── */
+/* â”€â”€ SPINNER â”€â”€ */
 .spinner {
-  width:18px; height:18px;
-  border:2px solid var(--border); border-top-color:var(--green);
+  width:25px; height:25px;
+  border:2px solid var(--border); border-top-color:var(--red);
   border-radius:50%; animation:spin .7s linear infinite;
   display:inline-block;
 }
 
-/* ── LOADING STATE ── */
+/* â”€â”€ LOADING STATE â”€â”€ */
 .loading-state {
   display:flex; align-items:center; gap:12px;
-  padding:40px; color:var(--muted); font-size:13px;
+  padding:40px; color:var(--red); 
+  font-size:15px;
   justify-content:center;
+  background-color: var(--glow-b);
 }
 
-/* ── ANIMATIONS ── */
+/* â”€â”€ ANIMATIONS â”€â”€ */
 @keyframes fadeUp    { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn    { from{opacity:0} to{opacity:1} }
 @keyframes spin      { to{transform:rotate(360deg)} }
@@ -348,7 +386,7 @@ body::after {
   50%{box-shadow:0 0 20px var(--green);opacity:.7}
 }
 
-/* ── RESPONSIVE ── */
+/* â”€â”€ RESPONSIVE â”€â”€ */
 @media(max-width:768px) {
   .nav-links { display:none; flex-direction:column; gap:0;
     position:absolute; top:62px; left:0; right:0;
@@ -359,3 +397,111 @@ body::after {
   .nav-link, .nav-cart { width:100%; padding:14px 5%; border:none; border-bottom:1px solid var(--border); }
   .nav-toggle { display:flex; align-items:center; }
 }
+
+
+.store-wrap { position:relative; z-index:10; padding:40px 0 80px; }
+.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1px; background:var(--border); }
+
+.product-card { background:var(--panel); display:flex; flex-direction:column; transition:background .2s; }
+.product-card:hover { background:var(--dark); }
+.product-img { position:relative; aspect-ratio:1; overflow:hidden; background:var(--dark); }
+.product-img img { width:100%; height:100%; object-fit:cover; transition:transform .4s; }
+.product-card:hover .product-img img { transform:scale(1.05); }
+.product-badge { position:absolute; top:10px; left:10px; padding:3px 8px; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.badge-red { background:var(--red); color:var(--white); }
+.product-body { padding:20px; flex:1; display:flex; flex-direction:column; gap:10px; }
+.product-name { font-size:14px; font-weight:600; color:var(--white); line-height:1.4; }
+.product-price { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--green); text-shadow:0 0 16px var(--glow-g); }
+
+/* Toast */
+.toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--green); color:var(--black); padding:12px 24px; font-size:12px; font-weight:700; letter-spacing:.1em; opacity:0; transition:all .3s; z-index:9000; pointer-events:none; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Search bar */
+.search-bar { display:flex; gap:0; margin-bottom:0; }
+.search-bar input  { 
+  flex:1; 
+ 
+  padding:12px 16px; 
+  background:var(--glow-g); 
+  border:1px solid var(--green); 
+  border-right:none; 
+  color:var(--white); 
+  font-family:'Barlow',sans-serif; 
+  font-size:15px; 
+  outline:none;
+ }
+.search-bar input:focus { border-color:var(--glow-g); }
+.search-bar input::placeholder { color:var(--darkgreen); }
+.search-bar button { 
+  padding:12px 20px; 
+  background:var(--glow-g); 
+  border:1px solid var(--green); 
+  color:var(-red); 
+  cursor:pointer; 
+  transition:all .2s; }
+.search-bar button:hover { 
+  transform:scale(1.05);
+  border-color:var(--glow-g); }
+
+.store-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:24px 0; border-bottom:1px solid var(--border); margin-bottom:1px; }
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:30px;
+}
+
+.pagination button{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--white);
+  padding:8px 14px;
+  cursor:pointer;
+}
+
+.pagination button.active{
+  background:var(--green);
+  color:var(--black);
+}
+
+/* ---- moved from loja.html on 2026-03-28 23:47:02 ---- */
+/* Filtros */
+.filters-bar {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  padding: 16px 0; border-bottom: 1px solid var(--border); margin-bottom: 1px;
+}
+.filter-group {
+  display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px;
+}
+.filter-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--muted);
+}
+.filter-select, .filter-input {
+  background: var(--dark); border: 1px solid var(--border);
+  color: var(--white); padding: 9px 12px;
+  font-family: 'Barlow', sans-serif; font-size: 13px; outline: none;
+  transition: border-color .2s; width: 100%;
+}
+.filter-select:focus, .filter-input:focus { border-color: var(--green); }
+.filter-input::placeholder { color: var(--muted); }
+.filter-select option { background: var(--dark); }
+.btn-clear-filters {
+  align-self: flex-end; padding: 9px 18px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); font-family: 'Barlow', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .15em;
+  text-transform: uppercase; cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.btn-clear-filters:hover { color: var(--white); border-color: var(--muted); }
+
+/* Meta de produto (categoria/veÃ­culo) */
+.product-meta {
+  font-size: 11px; color: var(--muted);
+  display: flex; align-items: center; gap: 5px;
+}
+.badge-muted { background: rgba(84,86,88,.25); color: var(--muted); font-size: 10px; padding: 2px 7px; }
+

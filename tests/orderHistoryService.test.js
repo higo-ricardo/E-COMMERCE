@@ -1,13 +1,13 @@
-// ─── HIVERCAR · tests/orderHistoryService.test.js ────────────────────────────
+﻿// â”€â”€â”€ HIVERCAR Â· tests/orderHistoryService.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // US-26: Testes para orderHistoryService.js (Domain/Service)
-//   - canTransition()      → valida regras de ORDER_STATUS_FLOW
-//   - changeOrderStatus()  → audit log + update de pedido (mock Appwrite)
-//   - getOrderTimeline()   → leitura do histórico de um pedido
+//   - canTransition()      â†’ valida regras de ORDER_STATUS_FLOW
+//   - changeOrderStatus()  â†’ audit log + update de pedido (mock Appwrite)
+//   - getOrderTimeline()   â†’ leitura do histÃ³rico de um pedido
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// ── Mock appwriteClient ───────────────────────────────────────────────────────
-vi.mock("../appwriteClient.js", () => ({
+// â”€â”€ Mock appwriteClient â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+vi.mock("../js/appwriteClient.js", () => ({
   databases: {
     listDocuments:  vi.fn(),
     createDocument: vi.fn(),
@@ -27,16 +27,16 @@ import {
   changeOrderStatus,
   getOrderTimeline,
   OrderHistoryService,
-} from "../orderHistoryService.js"
+} from "../js/orderHistoryService.js"
 
-import { databases } from "../appwriteClient.js"
+import { databases } from "../js/appwriteClient.js"
 
 beforeEach(() => vi.clearAllMocks())
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("canTransition()", () => {
 
-  // ── Transições VÁLIDAS definidas em ORDER_STATUS_FLOW ────────────────────
+  // â”€â”€ TransiÃ§Ãµes VÃLIDAS definidas em ORDER_STATUS_FLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const validTransitions = [
     ["novo",       "confirmado"],
     ["novo",       "cancelado"],
@@ -47,14 +47,14 @@ describe("canTransition()", () => {
   ]
 
   validTransitions.forEach(([from, to]) => {
-    it(`permite transição válida: "${from}" → "${to}"`, () => {
+    it(`permite transiÃ§Ã£o vÃ¡lida: "${from}" â†’ "${to}"`, () => {
       const result = canTransition(from, to)
       expect(result.ok).toBe(true)
       expect(result.reason).toBeUndefined()
     })
   })
 
-  // ── Transições INVÁLIDAS ──────────────────────────────────────────────────
+  // â”€â”€ TransiÃ§Ãµes INVÃLIDAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const invalidTransitions = [
     ["novo",       "em_preparo", "salto de etapa"],
     ["novo",       "entregue",   "salto de etapa"],
@@ -66,7 +66,7 @@ describe("canTransition()", () => {
   ]
 
   invalidTransitions.forEach(([from, to, reason]) => {
-    it(`bloqueia transição inválida: "${from}" → "${to}" (${reason})`, () => {
+    it(`bloqueia transiÃ§Ã£o invÃ¡lida: "${from}" â†’ "${to}" (${reason})`, () => {
       const result = canTransition(from, to)
       expect(result.ok).toBe(false)
       expect(result.reason).toBeTruthy()
@@ -74,7 +74,7 @@ describe("canTransition()", () => {
     })
   })
 
-  it("retorna ok=false quando status de origem é desconhecido", () => {
+  it("retorna ok=false quando status de origem Ã© desconhecido", () => {
     const result = canTransition("status_inventado", "confirmado")
     expect(result.ok).toBe(false)
     expect(result.reason).toMatch(/desconhecido/i)
@@ -83,10 +83,10 @@ describe("canTransition()", () => {
   it("retorna ok=false quando tenta manter o mesmo status", () => {
     const result = canTransition("novo", "novo")
     expect(result.ok).toBe(false)
-    expect(result.reason).toMatch(/já está/i)
+    expect(result.reason).toMatch(/jÃ¡ estÃ¡/i)
   })
 
-  it("mensagem de erro lista os status permitidos para transições inválidas", () => {
+  it("mensagem de erro lista os status permitidos para transiÃ§Ãµes invÃ¡lidas", () => {
     // "novo" permite apenas "confirmado" e "cancelado"
     const result = canTransition("novo", "em_preparo")
     expect(result.reason).toMatch(/confirmado/i)
@@ -106,7 +106,7 @@ describe("canTransition()", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("changeOrderStatus()", () => {
 
   const HIST_DOC  = { $id: "hist-001", orderId: "ord-001", oldStatus: "novo", newStatus: "confirmado" }
@@ -117,7 +117,7 @@ describe("changeOrderStatus()", () => {
     databases.updateDocument.mockResolvedValue(ORDER_DOC)
   })
 
-  it("lança erro para transição inválida sem chamar o banco", async () => {
+  it("lanÃ§a erro para transiÃ§Ã£o invÃ¡lida sem chamar o banco", async () => {
     await expect(
       changeOrderStatus("ord-001", "entregue", "novo", "user-001")
     ).rejects.toThrow()
@@ -126,7 +126,7 @@ describe("changeOrderStatus()", () => {
     expect(databases.updateDocument).not.toHaveBeenCalled()
   })
 
-  it("cria documento na collection order_history para transição válida", async () => {
+  it("cria documento na collection order_history para transiÃ§Ã£o vÃ¡lida", async () => {
     await changeOrderStatus("ord-001", "novo", "confirmado", "user-001")
 
     expect(databases.createDocument).toHaveBeenCalledTimes(1)
@@ -155,21 +155,21 @@ describe("changeOrderStatus()", () => {
     expect(payload.changedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
   })
 
-  it("usa 'sistema' como changedBy padrão quando não informado", async () => {
+  it("usa 'sistema' como changedBy padrÃ£o quando nÃ£o informado", async () => {
     await changeOrderStatus("ord-001", "novo", "confirmado")
 
     const payload = databases.createDocument.mock.calls[0][3]
     expect(payload.changedBy).toBe("sistema")
   })
 
-  it("persiste a nota opcional no histórico", async () => {
+  it("persiste a nota opcional no histÃ³rico", async () => {
     await changeOrderStatus("ord-001", "novo", "cancelado", "admin", "Cancelado a pedido do cliente")
 
     const payload = databases.createDocument.mock.calls[0][3]
     expect(payload.note).toBe("Cancelado a pedido do cliente")
   })
 
-  it("armazena null na nota quando ela não é fornecida", async () => {
+  it("armazena null na nota quando ela nÃ£o Ã© fornecida", async () => {
     await changeOrderStatus("ord-001", "novo", "confirmado", "user")
 
     const payload = databases.createDocument.mock.calls[0][3]
@@ -192,7 +192,7 @@ describe("changeOrderStatus()", () => {
       changeOrderStatus("ord-001", "novo", "confirmado", "user")
     ).rejects.toThrow("DB write error")
 
-    // updateDocument NÃO deve ser chamado se o histórico falhou
+    // updateDocument NÃƒO deve ser chamado se o histÃ³rico falhou
     expect(databases.updateDocument).not.toHaveBeenCalled()
   })
 
@@ -205,7 +205,7 @@ describe("changeOrderStatus()", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("getOrderTimeline()", () => {
 
   it("consulta order_history filtrando pelo orderId", async () => {
@@ -228,14 +228,14 @@ describe("getOrderTimeline()", () => {
     expect(hasFilter).toBe(true)
   })
 
-  it("retorna array vazio para pedido sem histórico", async () => {
+  it("retorna array vazio para pedido sem histÃ³rico", async () => {
     databases.listDocuments.mockResolvedValue({ documents: [], total: 0 })
 
     const result = await getOrderTimeline("ord-sem-historico")
     expect(result).toEqual([])
   })
 
-  it("retorna documentos em ordem cronológica (orderAsc)", async () => {
+  it("retorna documentos em ordem cronolÃ³gica (orderAsc)", async () => {
     databases.listDocuments.mockResolvedValue({
       documents: [
         { $id: "h1", changedAt: "2024-01-01T08:00:00Z" },
@@ -261,10 +261,10 @@ describe("getOrderTimeline()", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("OrderHistoryService (export agrupado)", () => {
 
-  it("expõe canTransition, changeOrderStatus, getOrderTimeline", () => {
+  it("expÃµe canTransition, changeOrderStatus, getOrderTimeline", () => {
     expect(typeof OrderHistoryService.canTransition).toBe("function")
     expect(typeof OrderHistoryService.changeOrderStatus).toBe("function")
     expect(typeof OrderHistoryService.getOrderTimeline).toBe("function")
@@ -277,9 +277,9 @@ describe("OrderHistoryService (export agrupado)", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("Cobertura de todas as transições do fluxo", () => {
-  // Garante que todos os 6 status do fluxo são cobertos
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("Cobertura de todas as transiÃ§Ãµes do fluxo", () => {
+  // Garante que todos os 6 status do fluxo sÃ£o cobertos
 
   const FLOW = {
     novo:        ["confirmado", "cancelado"],
@@ -292,16 +292,18 @@ describe("Cobertura de todas as transições do fluxo", () => {
 
   Object.entries(FLOW).forEach(([from, allowedList]) => {
     if (allowedList.length === 0) {
-      it(`"${from}" é terminal (nenhuma transição permitida)`, () => {
+      it(`"${from}" Ã© terminal (nenhuma transiÃ§Ã£o permitida)`, () => {
         const result = canTransition(from, "novo")
         expect(result.ok).toBe(false)
       })
     } else {
       allowedList.forEach(to => {
-        it(`flow completo: "${from}" → "${to}" é permitido`, () => {
+        it(`flow completo: "${from}" â†’ "${to}" Ã© permitido`, () => {
           expect(canTransition(from, to).ok).toBe(true)
         })
       })
     }
   })
 })
+
+

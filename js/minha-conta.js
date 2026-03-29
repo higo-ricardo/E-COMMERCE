@@ -124,24 +124,65 @@ function maskCpf(v) {
 function maskPhone(v) {
   return v
     .replace(/\D/g, "")
-    .replace(/^(\d{2})(\d)/, "($1) $2")
+    .replace(/^(\d{3})(\d)/, "($1) $2")
     .replace(/(\d{5})(\d)/, "$1-$2")
-    .slice(0, 15)
+    .slice(0, 16)
 }
 
 function maskCep(v) {
   return v.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2").slice(0, 9)
 }
 
+function digitsOnly(v) {
+  return String(v ?? "").replace(/\D/g, "")
+}
+
+function parseAddressNumberOrThrow(value) {
+  const raw = String(value ?? "").trim()
+  if (!raw) return null
+  if (!/^\d+$/.test(raw)) {
+    throw new Error("Numero do endereco invalido. Use apenas digitos inteiros.")
+  }
+  const parsed = Number.parseInt(raw, 10)
+  if (parsed < 0 || parsed > 10000) {
+    throw new Error("Numero do endereco deve estar entre 0 e 10000.")
+  }
+  return parsed
+}
+
+function isValidCpf(cpf) {
+  const d = digitsOnly(cpf)
+  if (!/^\d{11}$/.test(d)) return false
+  if (/^(\d)\1{10}$/.test(d)) return false
+
+  const calcDigit = (base, factor) => {
+    let total = 0
+    for (let i = 0; i < base.length; i += 1) {
+      total += Number(base[i]) * (factor - i)
+    }
+    const rest = (total * 10) % 11
+    return rest === 10 ? 0 : rest
+  }
+
+  const d1 = calcDigit(d.slice(0, 9), 10)
+  const d2 = calcDigit(d.slice(0, 10), 11)
+  return d1 === Number(d[9]) && d2 === Number(d[10])
+}
+
+function isValidMobile(mobile) {
+  const d = digitsOnly(mobile)
+  return /^\d{12}$/.test(d)
+}
+
 function fillFormFromMirror() {
   const source = mirror ?? {}
   document.getElementById("pNome").value = source.name || authUser?.name || ""
   document.getElementById("pEmail").value = source.email || authUser?.email || ""
-  document.getElementById("pCpf").value = source.cpf || ""
+  document.getElementById("pCpf").value = source.cpf ? maskCpf(String(source.cpf)) : ""
   document.getElementById("pCelular").value = source.mobile || ""
 
   document.getElementById("eAddress").value = source.address || ""
-  document.getElementById("eNumber").value = source.number || ""
+  document.getElementById("eNumber").value = source.number ?? ""
   document.getElementById("eComplement").value = source.complement || ""
   document.getElementById("eDistrict").value = source.district || ""
   document.getElementById("eCep").value = source.cep ? String(source.cep).replace(/(\d{5})(\d)/, "$1-$2") : ""
@@ -242,11 +283,20 @@ async function init() {
         authUser = await account.get()
       }
 
+      const cpfDigits = digitsOnly(document.getElementById("pCpf").value)
+      if (cpfDigits && !isValidCpf(cpfDigits)) {
+        throw new Error("CPF invalido. Verifique os 11 digitos.")
+      }
+      const mobileDigits = digitsOnly(document.getElementById("pCelular").value)
+      if (mobileDigits && !isValidMobile(mobileDigits)) {
+        throw new Error("Celular invalido. Use DDD de 3 digitos + telefone de 9 digitos (12 no total).")
+      }
+
       mirror = await databases.updateDocument(CFG.DB, CFG.USERS, mirror.$id, {
         name: document.getElementById("pNome").value.trim(),
         email: (document.getElementById("pEmail").value.trim() || authUser.email).toLowerCase(),
-        cpf: document.getElementById("pCpf").value.trim() || null,
-        mobile: document.getElementById("pCelular").value.trim() || null,
+        cpf: cpfDigits || null,
+        mobile: mobileDigits || null,
       })
       fillFormFromMirror()
       toast("Perfil atualizado com sucesso.")
@@ -272,9 +322,10 @@ async function init() {
       '<span style="width:14px;height:14px;border:2px solid var(--black);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block"></span>'
     try {
       const cepRaw = document.getElementById("eCep").value.replace(/\D/g, "")
+      const addressNumber = parseAddressNumberOrThrow(document.getElementById("eNumber").value)
       mirror = await databases.updateDocument(CFG.DB, CFG.USERS, mirror.$id, {
         address: document.getElementById("eAddress").value.trim() || null,
-        number: document.getElementById("eNumber").value.trim() || null,
+        number: addressNumber,
         complement: document.getElementById("eComplement").value.trim() || null,
         district: document.getElementById("eDistrict").value.trim() || null,
         cep: cepRaw ? +cepRaw : null,

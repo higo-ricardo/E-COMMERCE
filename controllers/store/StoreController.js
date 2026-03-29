@@ -1,6 +1,6 @@
-import { ProductService } from "../../productService.js"
-import { CartService } from "../../cartService.js"
-import { esc, imgPlaceholder, fmt, initParticles, initNavToggle } from "../../utils.js"
+﻿import { ProductService } from "../../js/productService.js"
+import { CartService } from "../../js/cartService.js"
+import { esc, imgPlaceholder, fmt, initParticles, initNavToggle } from "../../js/utils.js"
 
 export class StoreController {
   constructor() {
@@ -209,3 +209,5 @@ export class StoreController {
     }
   }
 }
+
+

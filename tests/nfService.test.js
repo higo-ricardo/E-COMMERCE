@@ -1,13 +1,13 @@
-// ─── HIVERCAR · tests/nfService.test.js ──────────────────────────────────────
-// US-43 · Sprint 05 — Testes do NFService (Emissão de NFC-e)
+﻿// â”€â”€â”€ HIVERCAR Â· tests/nfService.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// US-43 Â· Sprint 05 â€” Testes do NFService (EmissÃ£o de NFC-e)
 //
-// Estratégia: mocks de appwriteClient e fetch global
-// Não dispara chamadas reais ao SEFAZ/integrador
+// EstratÃ©gia: mocks de appwriteClient e fetch global
+// NÃ£o dispara chamadas reais ao SEFAZ/integrador
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// ── Mocks ─────────────────────────────────────────────────────────────────────
-vi.mock("../appwriteClient.js", () => ({
+// â”€â”€ Mocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+vi.mock("../js/appwriteClient.js", () => ({
   databases: {
     getDocument:    vi.fn(),
     updateDocument: vi.fn(),
@@ -24,7 +24,7 @@ vi.mock("../appwriteClient.js", () => ({
   ID: { unique: vi.fn(() => "nfe-mock-id") },
 }))
 
-vi.mock("../config.js", () => ({
+vi.mock("../js/config.js", () => ({
   CONFIG: {
     DB:         "db-test",
     ENDPOINT:   "https://test.appwrite.io/v1",
@@ -43,14 +43,14 @@ vi.mock("../config.js", () => ({
       REGIME:       "lucro_presumido",
       UF_ORIGEM:    "MA",
       CNPJ:         "00.000.000/0001-00",
-      RAZAO_SOCIAL: "HIVERCAR AUTOPEÇAS LTDA",
+      RAZAO_SOCIAL: "HIVERCAR AUTOPEÃ‡AS LTDA",
       SERIE_NFE:    "001",
     },
   },
 }))
 
 // Mock do TaxEngine
-vi.mock("../taxEngine.js", () => ({
+vi.mock("../js/taxEngine.js", () => ({
   TaxEngine: {
     calculate: vi.fn(() => ({
       baseCalculo: 100, ipi: 0, icms: 12, pis: 1.16, cofins: 5.32,
@@ -68,13 +68,13 @@ vi.mock("../taxEngine.js", () => ({
   },
 }))
 
-import { databases } from "../appwriteClient.js"
-import { NFService, emitir, cancelar, listarNFe, buildNFePayload } from "../nfService.js"
+import { databases } from "../js/appwriteClient.js"
+import { NFService, emitir, cancelar, listarNFe, buildNFePayload } from "../js/nfService.js"
 
-// ── Pedido mock ───────────────────────────────────────────────────────────────
+// â”€â”€ Pedido mock â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const pedidoMock = {
   $id:          "order-abc123",
-  nome:         "João Silva",
+  nome:         "JoÃ£o Silva",
   email:        "joao@email.com",
   cpf:          "000.000.000-00",
   endereco:     "Rua das Flores",
@@ -97,7 +97,7 @@ const pedidoMock = {
   nfeStatus:    "pendente",
 }
 
-// ── Setup ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 beforeEach(() => {
   vi.clearAllMocks()
   databases.getDocument.mockResolvedValue(pedidoMock)
@@ -106,8 +106,8 @@ beforeEach(() => {
   databases.listDocuments.mockResolvedValue({ documents: [], total: 0 })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("NFService.buildNFePayload — Montagem do payload", () => {
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("NFService.buildNFePayload â€” Montagem do payload", () => {
 
   it("retorna objeto com emitente, destinatario e itens", () => {
     const payload = buildNFePayload(pedidoMock)
@@ -118,22 +118,22 @@ describe("NFService.buildNFePayload — Montagem do payload", () => {
     expect(payload).toHaveProperty("pagamento")
   })
 
-  it("emitente.cnpj é somente dígitos", () => {
+  it("emitente.cnpj Ã© somente dÃ­gitos", () => {
     const payload = buildNFePayload(pedidoMock)
     expect(payload.emitente.cnpj).toMatch(/^\d+$/)
   })
 
-  it("destinatario.nome é preenchido com nome do pedido", () => {
+  it("destinatario.nome Ã© preenchido com nome do pedido", () => {
     const payload = buildNFePayload(pedidoMock)
-    expect(payload.destinatario.nome).toBe("João Silva")
+    expect(payload.destinatario.nome).toBe("JoÃ£o Silva")
   })
 
-  it("itens tem o mesmo número de produtos do pedido", () => {
+  it("itens tem o mesmo nÃºmero de produtos do pedido", () => {
     const payload = buildNFePayload(pedidoMock)
     expect(payload.itens).toHaveLength(1)
   })
 
-  it("itens[0].ncm é preenchido", () => {
+  it("itens[0].ncm Ã© preenchido", () => {
     const payload = buildNFePayload(pedidoMock)
     expect(payload.itens[0].ncm).toBe("8708.30")
   })
@@ -143,19 +143,19 @@ describe("NFService.buildNFePayload — Montagem do payload", () => {
     expect(payload.totais.totalNota).toBe(pedidoMock.total)
   })
 
-  it("ambiente é homologacao (config mock)", () => {
+  it("ambiente Ã© homologacao (config mock)", () => {
     const payload = buildNFePayload(pedidoMock)
     expect(payload.ambiente).toBe("homologacao")
   })
 
-  it("pedido sem itens não lança erro", () => {
+  it("pedido sem itens nÃ£o lanÃ§a erro", () => {
     const p = { ...pedidoMock, items: "[]" }
     expect(() => buildNFePayload(p)).not.toThrow()
     const payload = buildNFePayload(p)
     expect(payload.itens).toHaveLength(0)
   })
 
-  it("destinatario usa CONSUMIDOR FINAL quando nome é vazio", () => {
+  it("destinatario usa CONSUMIDOR FINAL quando nome Ã© vazio", () => {
     const p = { ...pedidoMock, nome: "" }
     const payload = buildNFePayload(p)
     expect(payload.destinatario.nome).toBe("CONSUMIDOR FINAL")
@@ -178,15 +178,15 @@ describe("NFService.buildNFePayload — Montagem do payload", () => {
 
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("NFService.emitir — Emissão via Function", () => {
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("NFService.emitir â€” EmissÃ£o via Function", () => {
 
-  it("lança erro quando pedido não é encontrado", async () => {
+  it("lanÃ§a erro quando pedido nÃ£o Ã© encontrado", async () => {
     databases.getDocument.mockRejectedValueOnce(new Error("Not found"))
     await expect(emitir("id-inexistente")).rejects.toThrow()
   })
 
-  it("retorna { ok: false } quando NF-e já foi emitida", async () => {
+  it("retorna { ok: false } quando NF-e jÃ¡ foi emitida", async () => {
     databases.getDocument.mockResolvedValueOnce({ ...pedidoMock, nfeStatus: "emitida", nfeChave: "chave-existente" })
     const result = await emitir("order-abc123")
     expect(result.ok).toBe(false)
@@ -195,7 +195,7 @@ describe("NFService.emitir — Emissão via Function", () => {
   })
 
   it("chama databases.getDocument com o orderId correto", async () => {
-    // Simular falha no fetch (function não disponível em teste)
+    // Simular falha no fetch (function nÃ£o disponÃ­vel em teste)
     global.fetch = vi.fn().mockRejectedValue(new Error("Network error"))
     try { await emitir("order-abc123") } catch {}
     expect(databases.getDocument).toHaveBeenCalledWith("db-test", "orders", "order-abc123")
@@ -236,8 +236,8 @@ describe("NFService.emitir — Emissão via Function", () => {
 
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("NFService.cancelar — Cancelamento", () => {
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("NFService.cancelar â€” Cancelamento", () => {
 
   const pedidoEmitido = {
     ...pedidoMock,
@@ -249,15 +249,15 @@ describe("NFService.cancelar — Cancelamento", () => {
     databases.getDocument.mockResolvedValue(pedidoEmitido)
   })
 
-  it("lança erro quando motivo tem menos de 15 caracteres", async () => {
+  it("lanÃ§a erro quando motivo tem menos de 15 caracteres", async () => {
     await expect(cancelar("order-abc123", "curto")).rejects.toThrow(/15 caracteres/)
   })
 
-  it("lança erro quando motivo está vazio", async () => {
+  it("lanÃ§a erro quando motivo estÃ¡ vazio", async () => {
     await expect(cancelar("order-abc123", "")).rejects.toThrow()
   })
 
-  it("lança erro quando nfeStatus não é 'emitida'", async () => {
+  it("lanÃ§a erro quando nfeStatus nÃ£o Ã© 'emitida'", async () => {
     databases.getDocument.mockResolvedValueOnce({ ...pedidoMock, nfeStatus: "pendente" })
     await expect(
       cancelar("order-abc123", "Cancelamento a pedido do cliente por erro no pedido")
@@ -281,8 +281,8 @@ describe("NFService.cancelar — Cancelamento", () => {
 
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("NFService.listarNFe — Consulta de NF-e", () => {
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("NFService.listarNFe â€” Consulta de NF-e", () => {
 
   it("chama listDocuments na collection correta", async () => {
     await listarNFe({ mes: 3, ano: 2026 })
@@ -293,7 +293,7 @@ describe("NFService.listarNFe — Consulta de NF-e", () => {
     )
   })
 
-  it("retorna array vazio quando não há NF-e no período", async () => {
+  it("retorna array vazio quando nÃ£o hÃ¡ NF-e no perÃ­odo", async () => {
     databases.listDocuments.mockResolvedValueOnce({ documents: [], total: 0 })
     const result = await listarNFe({ mes: 1, ano: 2020 })
     expect(result).toEqual([])
@@ -310,16 +310,16 @@ describe("NFService.listarNFe — Consulta de NF-e", () => {
     expect(result[0].chaveAcesso).toBe("123")
   })
 
-  it("funciona sem parâmetros de período", async () => {
+  it("funciona sem parÃ¢metros de perÃ­odo", async () => {
     await expect(listarNFe()).resolves.not.toThrow()
   })
 
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
-describe("NFService — Exportação agrupada", () => {
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+describe("NFService â€” ExportaÃ§Ã£o agrupada", () => {
 
-  it("expõe emitir, cancelar e listarNFe no objeto NFService", () => {
+  it("expÃµe emitir, cancelar e listarNFe no objeto NFService", () => {
     expect(typeof NFService.emitir).toBe("function")
     expect(typeof NFService.cancelar).toBe("function")
     expect(typeof NFService.listarNFe).toBe("function")
@@ -327,3 +327,5 @@ describe("NFService — Exportação agrupada", () => {
   })
 
 })
+
+

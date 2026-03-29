@@ -1,75 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Termos de Uso | HIVERCAR AUTOPEÇAS</title>
-<meta name="description" content="Termos de Uso do site da HIVERCAR AUTOPEÇAS LTDA.">
+<title>Termos de Uso | HIVERCAR AUTOPEÃ‡AS</title>
+<meta name="description" content="Termos de Uso do site da HIVERCAR AUTOPEÃ‡AS LTDA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
-<style>
-:root {
-  --black:#0a0a0a;--dark:#111214;--panel:#161819;--border:#252729;
-  --red:#fb1230;--green:#26fd71;--white:#f0f0ee;--muted:#545658;
-  --glow-r:rgba(251,18,48,0.35);--glow-g:rgba(38,253,113,0.25);
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.75;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;}
-body::after{content:'';position:fixed;inset:0;z-index:1;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;}
-canvas#canvas{position:fixed;inset:0;z-index:0;}
-.grid-bg{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;}
-.top-bar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 8%;height:60px;}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.brand-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse-green 2s infinite;}
-.brand-name{font-weight:600;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);}
-.back-link{display:flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:0.1em;transition:color 0.2s;}
-.back-link:hover{color:var(--white);}
-.back-link svg{transition:transform 0.2s;}
-.back-link:hover svg{transform:translateX(-4px);}
-.hero{position:relative;z-index:10;padding:80px 8% 50px;border-bottom:1px solid var(--border);animation:fadeUp 0.6s 0.1s ease both;}
-.page-label{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-.page-label::before{content:'';display:block;width:36px;height:1px;background:var(--green);box-shadow:0 0 8px var(--glow-g);}
-.page-label span{font-size:11px;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--green);}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,64px);line-height:1.0;letter-spacing:0.02em;color:var(--white);}
-.hero h1 em{font-style:normal;color:var(--green);text-shadow:0 0 30px var(--glow-g);}
-.hero-sub{margin-top:14px;font-size:14px;font-weight:300;font-style:italic;color:var(--muted);max-width:480px;}
-.page-wrap{position:relative;z-index:10;display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1200px;margin:0 auto;padding:60px 8% 100px;}
-@media(max-width:900px){.page-wrap{grid-template-columns:1fr;}.sidebar{order:2;}.content{padding-right:0;}}
-.content{padding-right:60px;}
-.section-block{margin-bottom:48px;animation:fadeUp 0.5s ease both;}
-.section-block h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.08em;color:var(--white);display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-.section-block h2::before{content:'';display:inline-block;width:4px;height:18px;background:var(--green);box-shadow:0 0 8px var(--glow-g);flex-shrink:0;}
-.section-block p{color:var(--muted);margin-bottom:12px;font-weight:300;}
-.section-block ul{list-style:none;padding:0;color:var(--muted);}
-.section-block ul li{padding:6px 0 6px 20px;position:relative;font-weight:300;border-bottom:1px solid rgba(255,255,255,0.03);}
-.section-block ul li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--green);opacity:0.7;}
-strong{color:var(--white);font-weight:600;}
-.sidebar{display:flex;flex-direction:column;gap:24px;}
-.sidebar-panel{background:var(--panel);border:1px solid var(--border);padding:24px;}
-.sidebar-panel h3{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:0.1em;color:var(--white);margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;}
-.info-row{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
-.info-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
-.info-val{font-size:13px;color:var(--white);font-weight:300;}
-.info-val.green{color:var(--green);}
-.cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;background:var(--green);color:var(--black);text-decoration:none;font-weight:600;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;transition:box-shadow 0.3s;margin-top:4px;}
-.cta-btn:hover{box-shadow:0 0 24px var(--glow-g);}
-.nav-links{display:flex;flex-direction:column;gap:2px;}
-.nav-links a{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;color:var(--muted);text-decoration:none;font-size:13px;border:1px solid transparent;transition:all 0.2s;}
-.nav-links a:hover{color:var(--white);border-color:var(--border);background:rgba(255,255,255,0.02);}
-.nav-links a.active{color:var(--green);border-color:var(--border);background:rgba(38,253,113,0.04);}
-.bottom-bar{position:relative;z-index:10;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:16px 8%;flex-wrap:wrap;gap:10px;}
-.bottom-links{display:flex;gap:24px;flex-wrap:wrap;}
-.bottom-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:0.05em;transition:color 0.2s;}
-.bottom-links a:hover{color:var(--white);}
-.bottom-right{font-size:12px;color:var(--muted);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-@keyframes pulse-green{0%,100%{box-shadow:0 0 6px var(--green);opacity:1;}50%{box-shadow:0 0 20px var(--green);opacity:0.7;}}
-.ripple{position:fixed;pointer-events:none;border-radius:50%;border:1px solid rgba(38,253,113,0.4);width:20px;height:20px;margin:-10px 0 0 -10px;animation:rippleOut 0.6s ease-out forwards;z-index:999;}
-@keyframes rippleOut{to{width:60px;height:60px;margin:-30px 0 0 -30px;opacity:0;}}
-@media(max-width:768px){.hero{padding:60px 5% 36px;}.page-wrap{padding:40px 5% 80px;}.top-bar,.bottom-bar{padding-left:5%;padding-right:5%;}}
-</style>
+<link rel="stylesheet" href="css/termos-uso.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>
@@ -78,93 +16,93 @@ strong{color:var(--white);font-weight:600;}
 <header class="top-bar">
   <a href="index.html" class="brand">
     <div class="brand-dot"></div>
-    <span class="brand-name">HIVERCAR AUTOPEÇAS</span>
+    <span class="brand-name">HIVERCAR AUTOPEÃ‡AS</span>
   </a>
   <a href="index.html" class="back-link">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
-    Voltar ao Início
+    Voltar ao InÃ­cio
   </a>
 </header>
 
 <div class="hero">
-  <div class="page-label"><span>Informações Legais</span></div>
+  <div class="page-label"><span>InformaÃ§Ãµes Legais</span></div>
   <h1>TERMOS<br><em>DE USO</em></h1>
-  <p class="hero-sub">Ao acessar este site, você concorda com os presentes Termos de Uso da HIVERCAR AUTOPEÇAS LTDA.</p>
+  <p class="hero-sub">Ao acessar este site, vocÃª concorda com os presentes Termos de Uso da HIVERCAR AUTOPEÃ‡AS LTDA.</p>
 </div>
 
 <div class="page-wrap">
   <main class="content">
 
     <div class="section-block" style="animation-delay:0.1s">
-      <p>Ao acessar este site, você concorda com os presentes Termos de Uso. Caso não concorde com qualquer condição aqui estabelecida, recomendamos que não utilize este site.</p>
+      <p>Ao acessar este site, vocÃª concorda com os presentes Termos de Uso. Caso nÃ£o concorde com qualquer condiÃ§Ã£o aqui estabelecida, recomendamos que nÃ£o utilize este site.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.15s">
       <h2>1. Sobre o Site</h2>
-      <p>O site da HIVERCAR AUTOPEÇAS LTDA tem como objetivo apresentar informações institucionais, produtos automotivos e possibilitar contato para orçamentos e atendimento.</p>
+      <p>O site da HIVERCAR AUTOPEÃ‡AS LTDA tem como objetivo apresentar informaÃ§Ãµes institucionais, produtos automotivos e possibilitar contato para orÃ§amentos e atendimento.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.2s">
-      <h2>2. Aceitação dos Termos</h2>
-      <p>O uso do site implica na aceitação integral destes Termos de Uso e da Política de Privacidade vigente.</p>
+      <h2>2. AceitaÃ§Ã£o dos Termos</h2>
+      <p>O uso do site implica na aceitaÃ§Ã£o integral destes Termos de Uso e da PolÃ­tica de Privacidade vigente.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.25s">
       <h2>3. Uso Adequado</h2>
-      <p>O usuário compromete-se a:</p>
+      <p>O usuÃ¡rio compromete-se a:</p>
       <ul>
-        <li>Utilizar o site apenas para fins lícitos;</li>
-        <li>Não praticar atos que possam comprometer a segurança do site;</li>
-        <li>Não utilizar informações do site para atividades ilegais ou prejudiciais.</li>
+        <li>Utilizar o site apenas para fins lÃ­citos;</li>
+        <li>NÃ£o praticar atos que possam comprometer a seguranÃ§a do site;</li>
+        <li>NÃ£o utilizar informaÃ§Ãµes do site para atividades ilegais ou prejudiciais.</li>
       </ul>
     </div>
 
     <div class="section-block" style="animation-delay:0.3s">
       <h2>4. Propriedade Intelectual</h2>
-      <p>Todo o conteúdo disponível no site, incluindo textos, imagens, logotipos e marcas, é de propriedade da HIVERCAR AUTOPEÇAS LTDA ou utilizado com autorização, sendo proibida sua reprodução sem consentimento prévio.</p>
+      <p>Todo o conteÃºdo disponÃ­vel no site, incluindo textos, imagens, logotipos e marcas, Ã© de propriedade da HIVERCAR AUTOPEÃ‡AS LTDA ou utilizado com autorizaÃ§Ã£o, sendo proibida sua reproduÃ§Ã£o sem consentimento prÃ©vio.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.35s">
-      <h2>5. Informações sobre Produtos</h2>
-      <p>Os preços e disponibilidade dos produtos podem sofrer alterações sem aviso prévio. A confirmação de valores e estoque deve ser realizada diretamente com a empresa através dos canais de atendimento.</p>
+      <h2>5. InformaÃ§Ãµes sobre Produtos</h2>
+      <p>Os preÃ§os e disponibilidade dos produtos podem sofrer alteraÃ§Ãµes sem aviso prÃ©vio. A confirmaÃ§Ã£o de valores e estoque deve ser realizada diretamente com a empresa atravÃ©s dos canais de atendimento.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.4s">
-      <h2>6. Limitação de Responsabilidade</h2>
-      <p>A HIVERCAR AUTOPEÇAS LTDA não se responsabiliza por:</p>
+      <h2>6. LimitaÃ§Ã£o de Responsabilidade</h2>
+      <p>A HIVERCAR AUTOPEÃ‡AS LTDA nÃ£o se responsabiliza por:</p>
       <ul>
-        <li>Eventuais indisponibilidades temporárias do site;</li>
-        <li>Erros técnicos ou falhas de conexão;</li>
-        <li>Uso inadequado das informações por terceiros.</li>
+        <li>Eventuais indisponibilidades temporÃ¡rias do site;</li>
+        <li>Erros tÃ©cnicos ou falhas de conexÃ£o;</li>
+        <li>Uso inadequado das informaÃ§Ãµes por terceiros.</li>
       </ul>
     </div>
 
     <div class="section-block" style="animation-delay:0.45s">
       <h2>7. Links Externos</h2>
-      <p>O site pode conter links para plataformas externas (como WhatsApp). Não nos responsabilizamos pelas políticas ou conteúdos desses serviços.</p>
+      <p>O site pode conter links para plataformas externas (como WhatsApp). NÃ£o nos responsabilizamos pelas polÃ­ticas ou conteÃºdos desses serviÃ§os.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.5s">
       <h2>8. Privacidade</h2>
-      <p>O tratamento de dados pessoais é realizado conforme descrito em nossa <a href="privacidade.html" style="color:var(--green);text-decoration:none;">Política de Privacidade</a>.</p>
+      <p>O tratamento de dados pessoais Ã© realizado conforme descrito em nossa <a href="privacidade.html" style="color:var(--green);text-decoration:none;">PolÃ­tica de Privacidade</a>.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.55s">
-      <h2>9. Alterações dos Termos</h2>
-      <p>A HIVERCAR AUTOPEÇAS LTDA poderá atualizar estes Termos a qualquer momento, sendo recomendável a revisão periódica desta página.</p>
+      <h2>9. AlteraÃ§Ãµes dos Termos</h2>
+      <p>A HIVERCAR AUTOPEÃ‡AS LTDA poderÃ¡ atualizar estes Termos a qualquer momento, sendo recomendÃ¡vel a revisÃ£o periÃ³dica desta pÃ¡gina.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.6s">
-      <h2>10. Legislação Aplicável e Foro</h2>
-      <p>Estes Termos são regidos pela legislação brasileira. Fica eleito o foro da comarca de <strong>Chapadinha, Estado do Maranhão</strong>, para dirimir quaisquer controvérsias.</p>
+      <h2>10. LegislaÃ§Ã£o AplicÃ¡vel e Foro</h2>
+      <p>Estes Termos sÃ£o regidos pela legislaÃ§Ã£o brasileira. Fica eleito o foro da comarca de <strong>Chapadinha, Estado do MaranhÃ£o</strong>, para dirimir quaisquer controvÃ©rsias.</p>
     </div>
 
     <div class="section-block" style="animation-delay:0.65s">
       <h2>11. Contato</h2>
-      <p>Para dúvidas relacionadas a estes Termos de Uso:</p>
-      <p><strong>HIVERCAR AUTOPEÇAS LTDA</strong><br>
-      Endereço: Avenida Ataliba Vieira, nº 1357, Centro, Chapadinha<br>
-      Email: hivercarautopeças@gmail.com<br>
+      <p>Para dÃºvidas relacionadas a estes Termos de Uso:</p>
+      <p><strong>HIVERCAR AUTOPEÃ‡AS LTDA</strong><br>
+      EndereÃ§o: Avenida Ataliba Vieira, nÂº 1357, Centro, Chapadinha<br>
+      Email: hivercarautopeÃ§as@gmail.com<br>
       Telefone/WhatsApp: (98) 98116-8787</p>
     </div>
 
@@ -174,15 +112,15 @@ strong{color:var(--white);font-weight:600;}
     <div class="sidebar-panel">
       <h3>Info do Documento</h3>
       <div class="info-row">
-        <span class="info-label">Jurisdição</span>
-        <span class="info-val">Chapadinha — MA</span>
+        <span class="info-label">JurisdiÃ§Ã£o</span>
+        <span class="info-val">Chapadinha â€” MA</span>
       </div>
       <div class="info-row">
-        <span class="info-label">Legislação</span>
+        <span class="info-label">LegislaÃ§Ã£o</span>
         <span class="info-val">Direito Brasileiro</span>
       </div>
       <div class="info-row">
-        <span class="info-label">Versão</span>
+        <span class="info-label">VersÃ£o</span>
         <span class="info-val green">2026</span>
       </div>
       <a href="https://wa.me/5598981168787" class="cta-btn">
@@ -191,7 +129,7 @@ strong{color:var(--white);font-weight:600;}
       </a>
     </div>
     <div class="sidebar-panel">
-      <h3>Páginas Legais</h3>
+      <h3>PÃ¡ginas Legais</h3>
       <nav class="nav-links">
         <a href="frete.html">Frete &amp; Entrega <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
         <a href="garantia.html">Trocas &amp; Garantia <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
@@ -204,9 +142,9 @@ strong{color:var(--white);font-weight:600;}
 
 <footer class="bottom-bar">
   <div class="bottom-links">
-    <a href="index.html">Início</a><a href="loja.html">Loja</a><a href="login.html">Login</a><a href="https://wa.me/5598981168787">Suporte</a>
+    <a href="index.html">InÃ­cio</a><a href="loja.html">Loja</a><a href="login.html">Login</a><a href="https://wa.me/5598981168787">Suporte</a>
   </div>
-  <div class="bottom-right">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
+  <div class="bottom-right">Â© 2026 HIVERCAR AUTOPEÃ‡AS LTDA</div>
 </footer>
 
 <script>
@@ -216,3 +154,5 @@ document.addEventListener("click",e=>{const r=document.createElement("div");r.cl
 </script>
 </body>
 </html>
+
+

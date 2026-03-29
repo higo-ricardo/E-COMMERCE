@@ -1,14 +1,14 @@
-// ─── HIVERCAR · tests/stockService.test.js ───────────────────────────────────
+﻿// â”€â”€â”€ HIVERCAR Â· tests/stockService.test.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Testes para stockService.js
-//   - checkStock()  → valida disponibilidade antes de vender
-//   - deductStock() → deduz estoque e registra em stock_history
-//   - revertStock() → devolve estoque ao cancelar pedido
-//   - getStockHistory() → consulta movimentações
+//   - checkStock()  â†’ valida disponibilidade antes de vender
+//   - deductStock() â†’ deduz estoque e registra em stock_history
+//   - revertStock() â†’ devolve estoque ao cancelar pedido
+//   - getStockHistory() â†’ consulta movimentaÃ§Ãµes
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// ── Mock completo do appwriteClient ───────────────────────────────────────────
-vi.mock("../appwriteClient.js", () => ({
+// â”€â”€ Mock completo do appwriteClient â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+vi.mock("../js/appwriteClient.js", () => ({
   databases: {
     getDocument:    vi.fn(),
     createDocument: vi.fn(),
@@ -28,21 +28,21 @@ import {
   deductStock,
   revertStock,
   getStockHistory,
-} from "../stockService.js"
+} from "../js/stockService.js"
 
-import { databases } from "../appwriteClient.js"
+import { databases } from "../js/appwriteClient.js"
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function mockProduct(id, stock) {
   return { $id: id, name: `Produto-${id}`, stock, price: 50 }
 }
 
 beforeEach(() => vi.clearAllMocks())
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("checkStock()", () => {
 
-  it("não lança erro quando há estoque suficiente para todos os itens", async () => {
+  it("nÃ£o lanÃ§a erro quando hÃ¡ estoque suficiente para todos os itens", async () => {
     databases.getDocument
       .mockResolvedValueOnce(mockProduct("pid-001", 10))
       .mockResolvedValueOnce(mockProduct("pid-002", 5))
@@ -54,7 +54,7 @@ describe("checkStock()", () => {
     await expect(checkStock(items)).resolves.toBeUndefined()
   })
 
-  it("lança erro com mensagem descritiva quando estoque é insuficiente", async () => {
+  it("lanÃ§a erro com mensagem descritiva quando estoque Ã© insuficiente", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("pid-001", 2))
 
     const items = [{ $id: "pid-001", name: "Pastilha", qty: 5 }]
@@ -63,18 +63,18 @@ describe("checkStock()", () => {
     await expect(checkStock(items)).rejects.toThrow(/insuficiente/i)
   })
 
-  it("menciona quantidade disponível e solicitada na mensagem de erro", async () => {
+  it("menciona quantidade disponÃ­vel e solicitada na mensagem de erro", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("pid-001", 3))
 
-    const items = [{ $id: "pid-001", name: "Óleo", qty: 10 }]
-    await expect(checkStock(items)).rejects.toThrow(/disponível 3/i)
+    const items = [{ $id: "pid-001", name: "Ã“leo", qty: 10 }]
+    await expect(checkStock(items)).rejects.toThrow(/disponÃ­vel 3/i)
     await expect(checkStock(items)).rejects.toThrow(/solicitado 10/i)
   })
 
-  it("lança erro listando TODOS os produtos com estoque insuficiente", async () => {
+  it("lanÃ§a erro listando TODOS os produtos com estoque insuficiente", async () => {
     databases.getDocument
-      .mockResolvedValueOnce(mockProduct("pid-001", 1))   // Pastilha: 1 disponível, pede 5
-      .mockResolvedValueOnce(mockProduct("pid-002", 0))   // Filtro: 0 disponível, pede 2
+      .mockResolvedValueOnce(mockProduct("pid-001", 1))   // Pastilha: 1 disponÃ­vel, pede 5
+      .mockResolvedValueOnce(mockProduct("pid-002", 0))   // Filtro: 0 disponÃ­vel, pede 2
 
     const items = [
       { $id: "pid-001", name: "Pastilha", qty: 5 },
@@ -86,27 +86,27 @@ describe("checkStock()", () => {
     expect(err.message).toMatch(/filtro/i)
   })
 
-  it("lança erro com mensagem de 'não encontrado' quando produto não existe no DB", async () => {
+  it("lanÃ§a erro com mensagem de 'nÃ£o encontrado' quando produto nÃ£o existe no DB", async () => {
     databases.getDocument.mockRejectedValue(new Error("Document not found"))
 
-    const items = [{ $id: "pid-inexistente", name: "Peça X", qty: 1 }]
-    await expect(checkStock(items)).rejects.toThrow(/não encontrado/i)
+    const items = [{ $id: "pid-inexistente", name: "PeÃ§a X", qty: 1 }]
+    await expect(checkStock(items)).rejects.toThrow(/nÃ£o encontrado/i)
   })
 
-  it("trata estoque null como 0 (estoque undefined é zero)", async () => {
+  it("trata estoque null como 0 (estoque undefined Ã© zero)", async () => {
     databases.getDocument.mockResolvedValue({ $id: "p1", name: "P1", qtd: null })
     const items = [{ $id: "p1", name: "P1", qty: 1 }]
     await expect(checkStock(items)).rejects.toThrow(/insuficiente/i)
   })
 
-  it("aceita quando qty não é informada (usa 1 como padrão)", async () => {
+  it("aceita quando qty nÃ£o Ã© informada (usa 1 como padrÃ£o)", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("p1", 5))
     const items = [{ $id: "p1", name: "P1" }]   // qty undefined
     await expect(checkStock(items)).resolves.toBeUndefined()
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("deductStock()", () => {
 
   it("atualiza o estoque do produto com a quantidade correta", async () => {
@@ -124,7 +124,7 @@ describe("deductStock()", () => {
     )
   })
 
-  it("registra movimentação negativa em stock_history (type='venda')", async () => {
+  it("registra movimentaÃ§Ã£o negativa em stock_history (type='venda')", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("p1", 10))
     databases.updateDocument.mockResolvedValue({})
     databases.createDocument.mockResolvedValue({})
@@ -132,7 +132,7 @@ describe("deductStock()", () => {
     await deductStock([{ $id: "p1", name: "Pastilha", qty: 4 }], "ord-002")
 
     const histCall = databases.createDocument.mock.calls[0][3]
-    expect(histCall.qty).toBe(-4)          // negativo = saída
+    expect(histCall.qty).toBe(-4)          // negativo = saÃ­da
     expect(histCall.type).toBe("venda")
     expect(histCall.stockBefore).toBe(10)
     expect(histCall.stockAfter).toBe(6)
@@ -140,7 +140,7 @@ describe("deductStock()", () => {
     expect(histCall.productId).toBe("p1")
   })
 
-  it("nunca deixa estoque negativo (mínimo = 0)", async () => {
+  it("nunca deixa estoque negativo (mÃ­nimo = 0)", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("p1", 2))
     databases.updateDocument.mockResolvedValue({})
     databases.createDocument.mockResolvedValue({})
@@ -151,7 +151,7 @@ describe("deductStock()", () => {
     expect(upCall.stock).toBe(0)           // Math.max(0, 2-10) = 0
   })
 
-  it("processa múltiplos itens em paralelo", async () => {
+  it("processa mÃºltiplos itens em paralelo", async () => {
     databases.getDocument
       .mockResolvedValueOnce(mockProduct("p1", 10))
       .mockResolvedValueOnce(mockProduct("p2", 5))
@@ -167,7 +167,7 @@ describe("deductStock()", () => {
     expect(databases.createDocument).toHaveBeenCalledTimes(2)
   })
 
-  it("inclui movedAt em formato ISO no histórico", async () => {
+  it("inclui movedAt em formato ISO no histÃ³rico", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("p1", 5))
     databases.updateDocument.mockResolvedValue({})
     databases.createDocument.mockResolvedValue({})
@@ -179,7 +179,7 @@ describe("deductStock()", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("revertStock()", () => {
 
   it("devolve o estoque ao produto corretamente", async () => {
@@ -197,7 +197,7 @@ describe("revertStock()", () => {
     )
   })
 
-  it("registra movimentação positiva em stock_history (type='cancelamento')", async () => {
+  it("registra movimentaÃ§Ã£o positiva em stock_history (type='cancelamento')", async () => {
     databases.getDocument.mockResolvedValue(mockProduct("p1", 0))
     databases.updateDocument.mockResolvedValue({})
     databases.createDocument.mockResolvedValue({})
@@ -205,16 +205,16 @@ describe("revertStock()", () => {
     await revertStock([{ $id: "p1", name: "Filtro", qty: 2 }], "ord-cancel-002")
 
     const histCall = databases.createDocument.mock.calls[0][3]
-    expect(histCall.qty).toBe(2)               // positivo = entrada (devolução)
+    expect(histCall.qty).toBe(2)               // positivo = entrada (devoluÃ§Ã£o)
     expect(histCall.type).toBe("cancelamento")
     expect(histCall.stockBefore).toBe(0)
     expect(histCall.stockAfter).toBe(2)
   })
 
-  it("não falha quando produto não é encontrado (produto excluído)", async () => {
+  it("nÃ£o falha quando produto nÃ£o Ã© encontrado (produto excluÃ­do)", async () => {
     databases.getDocument.mockRejectedValue(new Error("Document not found"))
 
-    // Não deve lançar — comportamento documentado no serviço
+    // NÃ£o deve lanÃ§ar â€” comportamento documentado no serviÃ§o
     await expect(
       revertStock([{ $id: "pid-deleted", name: "X", qty: 1 }], "ord-x")
     ).resolves.toBeUndefined()
@@ -239,7 +239,7 @@ describe("revertStock()", () => {
   })
 })
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 describe("getStockHistory()", () => {
 
   it("consulta stock_history filtrando pelo productId", async () => {
@@ -261,13 +261,13 @@ describe("getStockHistory()", () => {
     expect(hasEqualFilter).toBe(true)
   })
 
-  it("retorna array vazio quando não há movimentações", async () => {
+  it("retorna array vazio quando nÃ£o hÃ¡ movimentaÃ§Ãµes", async () => {
     databases.listDocuments.mockResolvedValue({ documents: [], total: 0 })
     const result = await getStockHistory("p-sem-historico")
     expect(result).toEqual([])
   })
 
-  it("usa limit=30 por padrão", async () => {
+  it("usa limit=30 por padrÃ£o", async () => {
     databases.listDocuments.mockResolvedValue({ documents: [], total: 0 })
     await getStockHistory("p1")
 
@@ -285,3 +285,5 @@ describe("getStockHistory()", () => {
     expect(hasLimit10).toBe(true)
   })
 })
+
+

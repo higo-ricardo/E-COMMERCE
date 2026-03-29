@@ -1,8 +1,8 @@
-// ─── HIVERCAR · vitest.config.js ─────────────────────────────────────────────
-// US-26: Configuração do Vitest com cobertura mínima 70% em Domain + Infrastructure.
+﻿// â”€â”€â”€ HIVERCAR Â· vitest.config.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// US-26: ConfiguraÃ§Ã£o do Vitest com cobertura mÃ­nima 70% em Domain + Infrastructure.
 //
-// Ambiente jsdom (global) para todos os testes — necessário porque cartService.js
-// usa localStorage. Serviços que não precisam de DOM não são afetados por isso.
+// Ambiente jsdom (global) para todos os testes â€” necessÃ¡rio porque cartService.js
+// usa localStorage. ServiÃ§os que nÃ£o precisam de DOM nÃ£o sÃ£o afetados por isso.
 //
 // Sprint 05: + taxEngine.js (US-44), + nfService.js (US-43)
 
@@ -23,13 +23,13 @@ export default defineConfig({
     // Globals: permite describe/it/expect sem import (comportamento Jest-like)
     globals: true,
 
-    // ── Cobertura ─────────────────────────────────────────────────────────────
+    // â”€â”€ Cobertura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
       reportsDirectory: "./coverage",
 
-      // Thresholds mínimos — US-26 Task 6: 70%
+      // Thresholds mÃ­nimos â€” US-26 Task 6: 70%
       thresholds: {
         lines:      70,
         functions:  70,
@@ -39,23 +39,23 @@ export default defineConfig({
 
       // Arquivos que entram na contagem de cobertura (Domain + Infrastructure)
       include: [
-        "cartService.js",
-        "orderService.js",
-        "userService.js",
-        "authService.js",
-        "stockService.js",
-        "productService.js",
-        "orderHistoryService.js",
-        "orderRepository.js",
-        "productRepository.js",
-        "adminService.js",
+        "./js/cartService.js",
+        "./js/orderService.js",
+        "./js/userService.js",
+        "./js/authService.js",
+        "./js/stockService.js",
+        "./js/productService.js",
+        "./js/orderHistoryService.js",
+        "./js/orderRepository.js",
+        "./js/productRepository.js",
+        "./js/adminService.js",
         // Sprint 05
-        "taxEngine.js",          // US-44: Motor Tributário
-        "nfService.js",          // US-43: Emissão NF-e
-        "fiscalReportService.js",// US-45: Relatórios Fiscais
+        "./js/taxEngine.js",          // US-44: Motor TributÃ¡rio
+        "./js/nfService.js",          // US-43: EmissÃ£o NF-e
+        "./js/fiscalReportService.js",// US-45: RelatÃ³rios Fiscais
       ],
 
-      // Excluídos da contagem
+      // ExcluÃ­dos da contagem
       exclude: [
         "**/*.html",
         "**/*.css",
@@ -67,4 +67,6 @@ export default defineConfig({
     },
   },
 })
+
+
 

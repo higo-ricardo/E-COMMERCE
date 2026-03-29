@@ -1,113 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — HIVERCAR</title>
+<title>Login â€” HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="loja.css">
-<style>
-html, body { height: 100%; overflow: hidden; background: var(--black); }
-body { display: flex; align-items: center; justify-content: center; }
-
-.auth-scene {
-  position: relative; z-index: 10;
-  display: grid; grid-template-columns: 1fr 420px 1fr;
-  align-items: center; width: 100vw; height: 100vh;
-}
-.auth-left {
-  padding: 0 0 0 8vw; display: flex; flex-direction: column; gap: 16px;
-  animation: fadeUp .8s .1s ease both;
-}
-.auth-label { display: flex; align-items: center; gap: 12px; }
-.auth-label::before {
-  content:''; display:block; width:40px; height:1px;
-  background:var(--red); box-shadow:0 0 8px var(--glow-r);
-}
-.auth-label span {
-  font-size:11px; font-weight:600; letter-spacing:.3em;
-  text-transform:uppercase; color:var(--red);
-}
-.auth-h1 {
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(32px,4vw,52px); line-height:1.05;
-  letter-spacing:.02em; color:var(--white);
-}
-.auth-h1 em { font-style:normal; color:var(--green); text-shadow:0 0 28px var(--glow-g); }
-.auth-sub { font-size:13px; color:var(--muted); font-style:italic; max-width:260px; }
-
-.auth-right {
-  padding:0 8vw 0 0; font-family:monospace; font-size:11px;
-  color:var(--muted); animation:fadeUp .6s .5s ease both;
-  text-align:right; line-height:1.9;
-}
-.auth-right .ok   { color:rgba(38,253,113,.5); }
-.auth-right .err  { color:rgba(251,18,48,.5); }
-.auth-right .warn { color:rgba(255,199,44,.7); }
-
-/* ── Card ── */
-.auth-box {
-  position:relative; z-index:10;
-  background:var(--panel); border:1px solid var(--border);
-  padding:40px 36px; animation:fadeUp .6s ease both;
-}
-.auth-box::before,.auth-box::after {
-  content:''; position:absolute; width:16px; height:16px;
-  border-color:var(--green); border-style:solid; opacity:.5;
-}
-.auth-box::before { top:-1px; left:-1px; border-width:2px 0 0 2px; }
-.auth-box::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
-
-.auth-brand { display:flex; align-items:center; gap:10px; margin-bottom:28px; text-decoration:none; }
-.auth-brand-name { font-size:11px; font-weight:600; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
-
-.auth-box h1 {
-  font-family:'Bebas Neue',sans-serif; font-size:30px;
-  letter-spacing:.06em; color:var(--white); margin-bottom:4px;
-}
-.auth-box h1 em { font-style:normal; color:var(--green); text-shadow:0 0 24px var(--glow-g); }
-.auth-sub2 { font-size:12px; color:var(--muted); margin-bottom:24px; }
-
-#msgBox {
-  margin-top:12px; font-size:13px; text-align:center;
-  min-height:20px; line-height:1.5;
-}
-#msgBox.error   { color:var(--red); }
-#msgBox.success { color:var(--green); }
-#msgBox.warning { color:var(--danger); }
-
-#countdown {
-  margin-top:8px; font-size:12px; color:var(--danger);
-  text-align:center; letter-spacing:.05em; min-height:18px;
-}
-
-.auth-footer-links {
-  margin-top:16px; display:flex; justify-content:space-between;
-  font-size:12px; color:var(--muted);
-}
-.auth-footer-links a { color:var(--green); text-decoration:none; }
-.auth-footer-links a:hover { text-decoration:underline; }
-
-.auth-footer { margin-top:12px; text-align:center; font-size:12px; color:var(--muted); }
-.auth-footer a { color:var(--green); text-decoration:none; }
-
-/* Barra de tentativas */
-.attempt-bar { display:flex; gap:4px; margin-top:10px; }
-.attempt-dot { flex:1; height:3px; background:var(--border); border-radius:2px; transition:background .3s; }
-.attempt-dot.used  { background:var(--danger); }
-.attempt-dot.block { background:var(--red); }
-
-@media(max-width:900px) {
-  .auth-scene {
-    grid-template-columns:1fr; justify-items:center;
-    height:auto; min-height:100vh; padding:60px 20px; overflow-y:auto;
-  }
-  .auth-left,.auth-right { display:none; }
-  .auth-box { width:100%; max-width:420px; }
-}
-</style>
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>
@@ -116,15 +17,15 @@ body { display: flex; align-items: center; justify-content: center; }
 <div class="auth-scene">
 
   <div class="auth-left">
-    <div class="auth-label"><span>Acesso Restrito — HIVERCAR</span></div>
+    <div class="auth-label"><span>Acesso Restrito â€” HIVERCAR</span></div>
     <h1 class="auth-h1">PAINEL<br>DE <em>CONTROLE</em></h1>
-    <p class="auth-sub">Área exclusiva para colaboradores, vendedores e administradores.</p>
+    <p class="auth-sub">Ãrea exclusiva para colaboradores, vendedores e administradores.</p>
   </div>
 
   <div class="auth-box">
     <a href="index.html" class="auth-brand">
       <div class="brand-dot"></div>
-      <span class="auth-brand-name">HIVERCAR AUTOPEÇAS</span>
+      <span class="auth-brand-name">HIVERCAR AUTOPEÃ‡AS</span>
     </a>
     <h1>ENTRAR <em>AGORA</em></h1>
     <p class="auth-sub2">Informe suas credenciais para continuar.</p>
@@ -135,7 +36,7 @@ body { display: flex; align-items: center; justify-content: center; }
     </div>
     <div class="field">
       <label for="password">Senha</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      <input type="password" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password">
     </div>
 
     <div class="attempt-bar">
@@ -163,10 +64,10 @@ body { display: flex; align-items: center; justify-content: center; }
   </div>
 
   <div class="auth-right">
-    <div class="ok">[OK] ssl: certificado válido</div>
+    <div class="ok">[OK] ssl: certificado vÃ¡lido</div>
     <div class="ok">[OK] servidor: online</div>
     <div class="ok">[OK] banco: conectado</div>
-    <div class="err" id="statusAuth">[WAIT] sessão: aguardando</div>
+    <div class="err" id="statusAuth">[WAIT] sessÃ£o: aguardando</div>
     <div id="statusAttempts">[INFO] tentativas: 0/5</div>
   </div>
 
@@ -328,19 +229,76 @@ async function recordFail(mirror) {
   }
 }
 
-async function recordSuccess(docId) {
-  try {
-    const mirror = await databases.getDocument(CFG.DB, CFG.USERS, docId)
-    if (!mirror) return
+async function getClientIp() {
+  const isValidIp = (value) => {
+    const v = String(value ?? "").trim()
+    const ipv4 = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/
+    const ipv6 = /^[a-fA-F0-9:]+$/
+    return ipv4.test(v) || ipv6.test(v)
+  }
 
-    await databases.updateDocument(CFG.DB, CFG.USERS, docId, {
-      lastLogin: new Date().toISOString(),
-      lastIP: "client-side",
-      loginCounter: (mirror.loginCounter ?? 0) + 1,
+  const tryFetchText = async (url, timeoutMs = 2500) => {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    try {
+      const res = await fetch(url, { signal: controller.signal, cache: "no-store" })
+      if (!res.ok) return null
+      const text = (await res.text()).trim()
+      return isValidIp(text) ? text : null
+    } catch {
+      return null
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+
+  return (
+    (await tryFetchText("https://api64.ipify.org")) ||
+    (await tryFetchText("https://ipapi.co/ip/")) ||
+    "unknown"
+  )
+}
+
+async function recordSuccess(authUser, mirrorHint = null) {
+  const timestamp = new Date().toISOString()
+  const clientIp = await getClientIp()
+  const candidateDocIds = []
+  if (mirrorHint?.$id) candidateDocIds.push(mirrorHint.$id)
+  if (authUser?.$id && !candidateDocIds.includes(authUser.$id)) {
+    candidateDocIds.push(authUser.$id)
+  }
+
+  for (const docId of candidateDocIds) {
+    try {
+      const mirror = await databases.getDocument(CFG.DB, CFG.USERS, docId)
+      await databases.updateDocument(CFG.DB, CFG.USERS, docId, {
+        lastLogin: timestamp,
+        lastIP: clientIp,
+        loginCounter: (mirror?.loginCounter ?? 0) + 1,
+        failedLogin: 0,
+        blockedUntil: null,
+      })
+      return true
+    } catch (err) {
+      console.warn("[LOGIN] falha ao atualizar lastLogin por docId:", docId, err?.message || err)
+    }
+  }
+
+  try {
+    const mirrorByEmail = await getMirror(authUser?.email || "")
+    if (!mirrorByEmail?.$id) return false
+    await databases.updateDocument(CFG.DB, CFG.USERS, mirrorByEmail.$id, {
+      lastLogin: timestamp,
+      lastIP: clientIp,
+      loginCounter: (mirrorByEmail?.loginCounter ?? 0) + 1,
       failedLogin: 0,
       blockedUntil: null,
     })
-  } catch {}
+    return true
+  } catch (err) {
+    console.warn("[LOGIN] falha final ao atualizar lastLogin:", err?.message || err)
+    return false
+  }
 }
 
 async function ensureMirrorForUser(authUser, mirrorHint = null) {
@@ -399,6 +357,15 @@ function redirectByRole(role) {
 
 ;(async () => {
   try {
+    const params = new URLSearchParams(window.location.search)
+    const forceLogin = params.get("force") === "1"
+    if (forceLogin) {
+      await account.deleteSession("current").catch(() => {})
+      stAuth.className = "warn"
+      stAuth.textContent = "[INFO] sessao anterior encerrada"
+      return
+    }
+
     const user = await account.get()
     if (!user) return
 
@@ -455,7 +422,7 @@ async function doLogin() {
 
     const authUser = await account.get()
     const mirror = await ensureMirrorForUser(authUser, mirrorPre)
-    if (mirror) await recordSuccess(mirror.$id)
+    await recordSuccess(authUser, mirror)
 
     stAuth.className = "ok"
     stAuth.textContent = "[OK] sessao: autenticada"
@@ -522,3 +489,5 @@ eEmail.onkeydown = e => { if (e.key === "Enter") ePass.focus() }
 </script>
 </body>
 </html>
+
+

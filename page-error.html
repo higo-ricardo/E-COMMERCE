@@ -1,140 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Erro — HIVERCAR</title>
+<title>Erro â€” HIVERCAR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
-<style>
-:root {
-  --black:  #0a0a0a;
-  --dark:   #111214;
-  --panel:  #161819;
-  --border: #252729;
-  --red:    #fb1230;
-  --green:  #26fd71;
-  --white:  #f0f0ee;
-  --muted:  #545658;
-  --glow-r: rgba(251,18,48,.35);
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--black);color:var(--white);font-family:'Barlow',sans-serif}
-
-/* noise overlay */
-body::before{content:'';position:fixed;inset:0;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity:.03;pointer-events:none}
-/* scanlines */
-body::after{content:'';position:fixed;inset:0;z-index:1;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
-  pointer-events:none}
-
-#canvas{position:fixed;inset:0;z-index:0}
-.grid-bg{position:fixed;inset:0;z-index:0;
-  background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
-  background-size:60px 60px}
-
-/* ── Centro ─────────────────────────────────────────────────────── */
-.stage{
-  position:relative;z-index:10;
-  width:100%;height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  padding:24px;
-}
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-top:3px solid var(--red);
-  border-radius:12px;
-  padding:48px 40px;
-  max-width:520px;
-  width:100%;
-  text-align:center;
-  box-shadow:0 0 60px var(--glow-r);
-}
-
-/* ── Código HTTP ─────────────────────────────────────────────────── */
-.err-code{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(80px,18vw,140px);
-  line-height:1;
-  color:var(--red);
-  letter-spacing:4px;
-  text-shadow:0 0 40px var(--glow-r);
-  position:relative;
-}
-/* glitch layers */
-.err-code::before,.err-code::after{
-  content:attr(data-code);
-  position:absolute;left:0;top:0;width:100%;
-  font-family:inherit;font-size:inherit;color:inherit;
-}
-.err-code::before{
-  color:rgba(251,18,48,.4);
-  animation:glitchL 2.5s infinite;
-  clip-path:polygon(0 0,100% 0,100% 40%,0 40%)
-}
-.err-code::after{
-  color:rgba(38,253,113,.2);
-  animation:glitchR 3.2s infinite;
-  clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)
-}
-@keyframes glitchL{0%,90%,100%{transform:none}91%{transform:translateX(-4px)}93%{transform:translateX(2px)}95%{transform:none}}
-@keyframes glitchR{0%,85%,100%{transform:none}86%{transform:translateX(4px)}88%{transform:translateX(-2px)}90%{transform:none}}
-
-/* ── Texto ──────────────────────────────────────────────────────── */
-.err-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(20px,4vw,28px);
-  letter-spacing:2px;
-  margin:8px 0 12px;
-  color:var(--white);
-}
-.err-desc{
-  font-size:14px;color:var(--muted);
-  line-height:1.6;margin-bottom:8px;
-}
-.err-ctx{
-  font-size:11px;color:rgba(248,113,113,.6);
-  font-family:monospace;margin-bottom:32px;
-  display:none; /* exibido apenas se houver ctx na URL */
-}
-
-/* ── Barra de progresso auto-redirect ──────────────────────────── */
-.progress-wrap{
-  height:3px;background:var(--border);border-radius:999px;
-  overflow:hidden;margin-bottom:28px;
-}
-.progress-bar{
-  height:100%;background:var(--red);width:100%;
-  border-radius:999px;
-  transition:width linear;
-}
-
-/* ── Botões ──────────────────────────────────────────────────────── */
-.btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:10px 22px;border-radius:6px;
-  font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;border:none;text-decoration:none;transition:.2s;
-}
-.btn-primary{background:var(--red);color:#fff}
-.btn-primary:hover{background:#e00f28;transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-ghost:hover{color:var(--white);border-color:var(--muted)}
-
-/* ── Status de rede ─────────────────────────────────────────────── */
-.net-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;color:var(--muted);margin-top:24px;
-}
-.net-dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
-.net-dot.online{background:var(--green);box-shadow:0 0 6px var(--green)}
-</style>
+<link rel="stylesheet" href="css/page-error.css">
 </head>
 <body>
 
@@ -148,7 +20,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;
     <div class="err-title" id="errTitle">ERRO INTERNO DO SERVIDOR</div>
     <p class="err-desc" id="errDesc">
       Algo deu errado no servidor. Nossa equipe foi notificada automaticamente.
-      Você será redirecionado em instantes ou pode voltar manualmente.
+      VocÃª serÃ¡ redirecionado em instantes ou pode voltar manualmente.
     </p>
     <p class="err-ctx" id="errCtx"></p>
 
@@ -158,49 +30,49 @@ body::after{content:'';position:fixed;inset:0;z-index:1;
 
     <div class="btn-row">
       <button class="btn btn-primary" onclick="history.back()">
-        ← Voltar
+        â† Voltar
       </button>
       <a class="btn btn-ghost" href="index.html">
-        🏠 Início
+        ðŸ  InÃ­cio
       </a>
       <button class="btn btn-ghost" onclick="location.reload()">
-        ↺ Tentar novamente
+        â†º Tentar novamente
       </button>
     </div>
 
     <div class="net-badge">
       <span class="net-dot" id="netDot"></span>
-      <span id="netLabel">Verificando conexão…</span>
+      <span id="netLabel">Verificando conexÃ£oâ€¦</span>
     </div>
 
   </div>
 </div>
 
 <script>
-// ── Lerparams da URL ─────────────────────────────────────────────────────────
+// â”€â”€ Lerparams da URL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const params  = new URLSearchParams(location.search)
 const code    = parseInt(params.get("code") || "500", 10)
 const ctx     = params.get("ctx") || ""
 
-// ── Configuração por código HTTP ──────────────────────────────────────────────
+// â”€â”€ ConfiguraÃ§Ã£o por cÃ³digo HTTP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const config = {
-  400: { title: "REQUISIÇÃO INVÁLIDA",          desc: "Os dados enviados são inválidos ou estão incompletos. Volte e verifique as informações." },
-  401: { title: "ACESSO NÃO AUTORIZADO",        desc: "Sua sessão expirou ou você não está autenticado. Faça login para continuar.", redirect: "login.html", delay: 4000 },
-  403: { title: "ACESSO PROIBIDO",              desc: "Você não tem permissão para acessar este recurso. Verifique sua conta ou entre em contato com o suporte." },
-  404: { title: "RECURSO NÃO ENCONTRADO",       desc: "O item que você procura não existe mais ou foi removido.", redirect: "page404.html", delay: 3000 },
-  408: { title: "TEMPO ESGOTADO",               desc: "A conexão demorou demais para responder. Verifique sua rede e tente novamente." },
-  429: { title: "MUITAS REQUISIÇÕES",           desc: "Você fez muitas tentativas em pouco tempo. Aguarde alguns instantes antes de tentar novamente." },
+  400: { title: "REQUISIÃ‡ÃƒO INVÃLIDA",          desc: "Os dados enviados sÃ£o invÃ¡lidos ou estÃ£o incompletos. Volte e verifique as informaÃ§Ãµes." },
+  401: { title: "ACESSO NÃƒO AUTORIZADO",        desc: "Sua sessÃ£o expirou ou vocÃª nÃ£o estÃ¡ autenticado. FaÃ§a login para continuar.", redirect: "login.html", delay: 4000 },
+  403: { title: "ACESSO PROIBIDO",              desc: "VocÃª nÃ£o tem permissÃ£o para acessar este recurso. Verifique sua conta ou entre em contato com o suporte." },
+  404: { title: "RECURSO NÃƒO ENCONTRADO",       desc: "O item que vocÃª procura nÃ£o existe mais ou foi removido.", redirect: "page404.html", delay: 3000 },
+  408: { title: "TEMPO ESGOTADO",               desc: "A conexÃ£o demorou demais para responder. Verifique sua rede e tente novamente." },
+  429: { title: "MUITAS REQUISIÃ‡Ã•ES",           desc: "VocÃª fez muitas tentativas em pouco tempo. Aguarde alguns instantes antes de tentar novamente." },
   500: { title: "ERRO INTERNO DO SERVIDOR",     desc: "Algo deu errado em nosso servidor. Nossa equipe foi notificada. Tente novamente em alguns minutos." },
-  502: { title: "GATEWAY INVÁLIDO",             desc: "O servidor está temporariamente indisponível. Aguarde e tente novamente." },
-  503: { title: "SERVIÇO INDISPONÍVEL",         desc: "O sistema está em manutenção ou sobrecarregado. Tente novamente em breve." },
+  502: { title: "GATEWAY INVÃLIDO",             desc: "O servidor estÃ¡ temporariamente indisponÃ­vel. Aguarde e tente novamente." },
+  503: { title: "SERVIÃ‡O INDISPONÃVEL",         desc: "O sistema estÃ¡ em manutenÃ§Ã£o ou sobrecarregado. Tente novamente em breve." },
 }
 
 const cfg = config[code] || {
   title: "ERRO INESPERADO",
-  desc: "Ocorreu um problema que não conseguimos identificar. Tente novamente ou entre em contato com o suporte.",
+  desc: "Ocorreu um problema que nÃ£o conseguimos identificar. Tente novamente ou entre em contato com o suporte.",
 }
 
-// ── Preenche card ─────────────────────────────────────────────────────────────
+// â”€â”€ Preenche card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.getElementById("errCode").textContent                = code
 document.getElementById("errCode").dataset.code              = code
 document.getElementById("errTitle").textContent              = cfg.title
@@ -208,11 +80,11 @@ document.getElementById("errDesc").textContent               = cfg.desc
 
 if (ctx) {
   const ctxEl = document.getElementById("errCtx")
-  ctxEl.textContent   = "módulo: " + ctx
+  ctxEl.textContent   = "mÃ³dulo: " + ctx
   ctxEl.style.display = "block"
 }
 
-// ── Auto-redirect com barra de progresso ──────────────────────────────────────
+// â”€â”€ Auto-redirect com barra de progresso â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if (cfg.redirect && cfg.delay) {
   const bar  = document.getElementById("progressBar")
   const wrap = document.getElementById("progressWrap")
@@ -230,23 +102,23 @@ if (cfg.redirect && cfg.delay) {
   })(start)
 }
 
-// ── Status de rede ────────────────────────────────────────────────────────────
+// â”€â”€ Status de rede â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function updateNet() {
   const dot   = document.getElementById("netDot")
   const label = document.getElementById("netLabel")
   if (navigator.onLine) {
     dot.classList.add("online")
-    label.textContent = "Conectado à internet"
+    label.textContent = "Conectado Ã  internet"
   } else {
     dot.classList.remove("online")
-    label.textContent = "Sem conexão com a internet"
+    label.textContent = "Sem conexÃ£o com a internet"
   }
 }
 updateNet()
 window.addEventListener("online",  updateNet)
 window.addEventListener("offline", updateNet)
 
-// ── Partículas ────────────────────────────────────────────────────────────────
+// â”€â”€ PartÃ­culas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 ;(function(){
   const canvas = document.getElementById("canvas")
   if (!canvas) return
@@ -267,7 +139,7 @@ window.addEventListener("offline", updateNet)
       if(p.x<0)p.x=W; if(p.x>W)p.x=0
       if(p.y<0)p.y=H; if(p.y>H)p.y=0
       ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2)
-      // partículas vermelhas para página de erro
+      // partÃ­culas vermelhas para pÃ¡gina de erro
       ctx2.fillStyle=`rgba(251,18,48,${p.a})`; ctx2.fill()
     })
     requestAnimationFrame(loop)
@@ -276,3 +148,5 @@ window.addEventListener("offline", updateNet)
 </script>
 </body>
 </html>
+
+

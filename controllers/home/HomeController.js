@@ -1,8 +1,8 @@
-import { ProductService } from "../../productService.js"
-import { CartService } from "../../cartService.js"
-import { databases, Query } from "../../appwriteClient.js"
-import { CONFIG } from "../../config.js"
-import { esc, imgPlaceholder, fmt, initParticles, animateCount, initRipple, initNavToggle } from "../../utils.js"
+ï»¿import { ProductService } from "../../js/productService.js"
+import { CartService } from "../../js/cartService.js"
+import { databases, Query } from "../../js/appwriteClient.js"
+import { CONFIG } from "../../js/config.js"
+import { esc, imgPlaceholder, fmt, initParticles, animateCount, initRipple, initNavToggle } from "../../js/utils.js"
 
 export class HomeController {
   constructor() {
@@ -39,7 +39,7 @@ export class HomeController {
       const { products } = await ProductService.list(1)
 
       if (!products.length) {
-        this.grid.innerHTML = `<div class="loading-state" style="grid-column:1/-1">Nenhum produto disponível no momento.</div>`
+        this.grid.innerHTML = `<div class="loading-state" style="grid-column:1/-1">Nenhum produto disponÃ­vel no momento.</div>`
         return
       }
 
@@ -75,8 +75,10 @@ export class HomeController {
       }
     } catch {
       this.grid.innerHTML = `<div class="loading-state" style="grid-column:1/-1;color:var(--muted)">
-        <i class="fas fa-circle-exclamation" style="color:var(--red)"></i> Não foi possível carregar os produtos.
+        <i class="fas fa-circle-exclamation" style="color:var(--red)"></i> NÃ£o foi possÃ­vel carregar os produtos.
       </div>`
     }
   }
 }
+
+

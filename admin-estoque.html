@@ -1,95 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estoque — HIVERCAR ERP</title>
+<title>Estoque â€” HIVERCAR ERP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="loja.css">
-<link rel="stylesheet" href="dashboard.css">
-<style>
-.modal-overlay {
-  display:none; position:fixed; inset:0; z-index:500;
-  background:rgba(0,0,0,.75); backdrop-filter:blur(4px);
-  align-items:center; justify-content:center; padding:24px;
-}
-.modal-overlay.open { display:flex; }
-.modal {
-  background:var(--dark); border:1px solid var(--border);
-  width:100%; max-width:540px; padding:32px;
-  animation:fadeUp .25s ease; position:relative;
-}
-.modal-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:24px;
-}
-.modal-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.08em; color:var(--white); }
-.modal-close {
-  background:none; border:1px solid var(--border); color:var(--muted);
-  width:32px; height:32px; cursor:pointer; font-size:14px;
-  display:flex; align-items:center; justify-content:center; transition:all .2s;
-}
-.modal-close:hover { color:var(--red); border-color:var(--red); }
-
-.critical-strip {
-  background:rgba(251,18,48,.06);
-  border:1px solid rgba(251,18,48,.3);
-  padding:14px 20px; margin-bottom:24px;
-  display:none;
-}
-.critical-strip h4 {
-  font-family:'Bebas Neue',sans-serif; font-size:16px;
-  color:var(--red); margin-bottom:10px; display:flex; align-items:center; gap:8px;
-}
-.critical-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
-.critical-list li {
-  font-size:12px; color:var(--white); display:flex; align-items:center;
-  justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.04);
-}
-.critical-list li:last-child { border:none; }
-.critical-qty { color:var(--red); font-weight:700; font-size:14px; }
-
-.tabs { display:flex; border-bottom:1px solid var(--border); margin-bottom:24px; }
-.tab {
-  padding:12px 20px; font-size:11px; font-weight:600; letter-spacing:.15em;
-  text-transform:uppercase; color:var(--muted); cursor:pointer;
-  border-bottom:2px solid transparent; transition:all .2s;
-}
-.tab.active { color:var(--green); border-bottom-color:var(--green); }
-
-.tab-panel { display:none; }
-.tab-panel.active { display:block; }
-
-.mov-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:2px 8px; font-size:10px; font-weight:700; letter-spacing:.08em;
-}
-.mov-entrada { background:rgba(38,253,113,.1); color:var(--green); border:1px solid rgba(38,253,113,.2); }
-.mov-saida   { background:rgba(251,18,48,.1);  color:var(--red);   border:1px solid rgba(251,18,48,.2); }
-.mov-ajuste  { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--border); }
-
-.search-bar { display:flex; gap:12px; margin-bottom:20px; }
-.search-bar input {
-  flex:1; padding:10px 14px;
-  background:var(--dark); border:1px solid var(--border);
-  color:var(--white); font-family:'Barlow',sans-serif; font-size:13px;
-  outline:none; transition:border-color .2s;
-}
-.search-bar input:focus { border-color:var(--green); }
-
-.toast {
-  position:fixed; bottom:28px; right:28px; z-index:1000;
-  padding:14px 22px; border-left:3px solid var(--green);
-  background:var(--dark); color:var(--white);
-  font-size:13px; font-weight:600;
-  animation:fadeUp .3s ease; display:none;
-}
-.toast.error { border-left-color:var(--red); }
-.toast.show  { display:block; }
-</style>
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/dashboard.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="css/admin-estoque.css">
 </head>
 <body>
 <div class="grid-bg"></div>
@@ -104,7 +25,7 @@
     <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
     <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
     <a href="admin-estoque.html" class="active"><i class="fas fa-warehouse"></i> Estoque</a>
-    <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de Serviço</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de ServiÃ§o</a>
     <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
     <a href="painel-vendas.html"><i class="fas fa-chart-line"></i> Vendas</a>
     <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
@@ -117,7 +38,7 @@
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">GESTÃO DE ESTOQUE</span>
+    <span class="topbar-title">GESTÃƒO DE ESTOQUE</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
       <span id="userName">Admin</span>
@@ -127,62 +48,62 @@
 
   <div class="content">
 
-    <!-- Alerta Estoque Crítico -->
+    <!-- Alerta Estoque CrÃ­tico -->
     <div class="critical-strip" id="criticalStrip">
-      <h4><i class="fas fa-triangle-exclamation"></i> ESTOQUE CRÍTICO — REPOSIÇÃO URGENTE</h4>
+      <h4><i class="fas fa-triangle-exclamation"></i> ESTOQUE CRÃTICO â€” REPOSIÃ‡ÃƒO URGENTE</h4>
       <ul class="critical-list" id="criticalList"></ul>
     </div>
 
-    <!-- Métricas rápidas -->
+    <!-- MÃ©tricas rÃ¡pidas -->
     <div class="metrics-grid" style="margin-bottom:24px">
       <div class="metric-card">
-        <div class="metric-value" id="mTotal">—</div>
+        <div class="metric-value" id="mTotal">â€”</div>
         <div class="metric-label">Total de Produtos</div>
       </div>
       <div class="metric-card red">
-        <div class="metric-value" id="mCritico">—</div>
-        <div class="metric-label">Estoque Crítico (&lt; 5)</div>
+        <div class="metric-value" id="mCritico">â€”</div>
+        <div class="metric-label">Estoque CrÃ­tico (&lt; 5)</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value" id="mMovimentos">—</div>
-        <div class="metric-label">Movimentações Hoje</div>
+        <div class="metric-value" id="mMovimentos">â€”</div>
+        <div class="metric-label">MovimentaÃ§Ãµes Hoje</div>
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
       <div class="tab active" data-tab="reposicao">
-        <i class="fas fa-plus-circle"></i> &nbsp;Reposição Manual
+        <i class="fas fa-plus-circle"></i> &nbsp;ReposiÃ§Ã£o Manual
       </div>
       <div class="tab" data-tab="historico">
-        <i class="fas fa-clock-rotate-left"></i> &nbsp;Histórico de Movimentações
+        <i class="fas fa-clock-rotate-left"></i> &nbsp;HistÃ³rico de MovimentaÃ§Ãµes
       </div>
       <div class="tab" data-tab="inventario">
-        <i class="fas fa-list-check"></i> &nbsp;Inventário
+        <i class="fas fa-list-check"></i> &nbsp;InventÃ¡rio
       </div>
       <div class="tab" data-tab="importacao">
-        <i class="fas fa-file-import"></i> &nbsp;Importação em Lote
+        <i class="fas fa-file-import"></i> &nbsp;ImportaÃ§Ã£o em Lote
       </div>
     </div>
 
-    <!-- ── TAB: REPOSIÇÃO ── -->
+    <!-- â”€â”€ TAB: REPOSIÃ‡ÃƒO â”€â”€ -->
     <div class="tab-panel active" id="tab-reposicao">
       <div class="panels-row" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
           <div class="section-title">Entrada de Estoque</div>
           <p style="color:var(--muted);font-size:13px;margin-bottom:20px">
-            Registre a entrada de produtos (compra, reposição, devolução, ajuste manual).
+            Registre a entrada de produtos (compra, reposiÃ§Ã£o, devoluÃ§Ã£o, ajuste manual).
           </p>
 
           <div class="field">
             <label>Produto *</label>
             <select id="repoProduto">
-              <option value="">— Selecione o produto —</option>
+              <option value="">â€” Selecione o produto â€”</option>
             </select>
           </div>
           <div style="padding:10px 14px;background:var(--black);border:1px solid var(--border);margin-bottom:16px;display:none" id="repoAtualInfo">
             <span style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">ESTOQUE ATUAL</span>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)" id="repoAtualQty">—</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)" id="repoAtualQty">â€”</div>
           </div>
           <div class="field">
             <label>Quantidade a Adicionar *</label>
@@ -191,14 +112,14 @@
           <div class="field">
             <label>Tipo de Entrada</label>
             <select id="repoTipo">
-              <option value="reposicao">Reposição de Compra</option>
-              <option value="devolucao">Devolução de Venda</option>
+              <option value="reposicao">ReposiÃ§Ã£o de Compra</option>
+              <option value="devolucao">DevoluÃ§Ã£o de Venda</option>
               <option value="ajuste">Ajuste Manual</option>
             </select>
           </div>
           <div class="field">
-            <label>Observação</label>
-            <input type="text" id="repoObs" placeholder="Ex: NF 1234, Fornecedor XYZ…">
+            <label>ObservaÃ§Ã£o</label>
+            <input type="text" id="repoObs" placeholder="Ex: NF 1234, Fornecedor XYZâ€¦">
           </div>
 
           <div id="repoError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
@@ -210,7 +131,7 @@
 
         <!-- Painel informativo -->
         <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
-          <div class="section-title">Últimas Entradas</div>
+          <div class="section-title">Ãšltimas Entradas</div>
           <table class="data-table" id="ultimasEntradas">
             <thead>
               <tr>
@@ -221,27 +142,27 @@
               </tr>
             </thead>
             <tbody id="entradasBody">
-              <tr><td colspan="4" style="color:var(--muted);padding:20px">Carregando…</td></tr>
+              <tr><td colspan="4" style="color:var(--muted);padding:20px">Carregandoâ€¦</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ── TAB: HISTÓRICO ── -->
+    <!-- â”€â”€ TAB: HISTÃ“RICO â”€â”€ -->
     <div class="tab-panel" id="tab-historico">
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
         <div class="section-title">Filtrar por Produto</div>
         <div class="search-bar" style="margin-bottom:16px">
           <select id="histProdutoSelect" style="flex:1;padding:10px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none">
-            <option value="">— Todos os produtos —</option>
+            <option value="">â€” Todos os produtos â€”</option>
           </select>
           <select id="histTipoSelect" style="padding:10px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none">
-            <option value="">— Todos os tipos —</option>
+            <option value="">â€” Todos os tipos â€”</option>
             <option value="venda">Venda</option>
             <option value="cancelamento">Cancelamento</option>
-            <option value="reposicao">Reposição</option>
-            <option value="devolucao">Devolução</option>
+            <option value="reposicao">ReposiÃ§Ã£o</option>
+            <option value="devolucao">DevoluÃ§Ã£o</option>
             <option value="ajuste">Ajuste</option>
           </select>
           <button class="btn btn-ghost btn-sm" id="btnFiltrarHist">
@@ -253,11 +174,11 @@
           <thead>
             <tr>
               <th>Produto</th>
-              <th>Movimentação</th>
+              <th>MovimentaÃ§Ã£o</th>
               <th>Antes</th>
               <th>Depois</th>
               <th>Tipo</th>
-              <th>Referência</th>
+              <th>ReferÃªncia</th>
               <th>Data/Hora</th>
             </tr>
           </thead>
@@ -268,21 +189,21 @@
       </div>
     </div>
 
-    <!-- ── TAB: INVENTÁRIO ── -->
+    <!-- â”€â”€ TAB: INVENTÃRIO â”€â”€ -->
     <div class="tab-panel" id="tab-inventario">
       <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
         <div class="search-bar">
-          <input type="text" id="invSearch" placeholder="Buscar produto…">
+          <input type="text" id="invSearch" placeholder="Buscar produtoâ€¦">
           <select id="invFiltro" style="padding:10px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none">
             <option value="">Todos</option>
-            <option value="critico">Crítico (&lt; 5)</option>
+            <option value="critico">CrÃ­tico (&lt; 5)</option>
             <option value="zero">Zerado</option>
           </select>
           <button class="btn btn-ghost btn-sm" id="btnAtualizarInv">
             <i class="fas fa-arrows-rotate"></i> Atualizar
           </button>
         </div>
-        <div class="section-title">Inventário Atual</div>
+        <div class="section-title">InventÃ¡rio Atual</div>
         <table class="data-table">
           <thead>
             <tr>
@@ -291,11 +212,11 @@
               <th>Marca</th>
               <th>Estoque</th>
               <th>Status</th>
-              <th>Ação</th>
+              <th>AÃ§Ã£o</th>
             </tr>
           </thead>
           <tbody id="invBody">
-            <tr><td colspan="6" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
+            <tr><td colspan="6" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
           </tbody>
         </table>
       </div>
@@ -303,11 +224,11 @@
   </div>
 </div>
 
-<!-- ── MODAL REPOSIÇÃO RÁPIDA ── -->
+<!-- â”€â”€ MODAL REPOSIÃ‡ÃƒO RÃPIDA â”€â”€ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">REPOSIÇÃO RÁPIDA</span>
+      <span class="modal-title">REPOSIÃ‡ÃƒO RÃPIDA</span>
       <button class="modal-close" id="modalClose"><i class="fas fa-xmark"></i></button>
     </div>
     <div id="modalRepoProduto" style="color:var(--green);font-weight:600;margin-bottom:16px;font-size:15px"></div>
@@ -318,7 +239,7 @@
     <div class="field">
       <label>Tipo</label>
       <select id="modalRepoTipo">
-        <option value="reposicao">Reposição de Compra</option>
+        <option value="reposicao">ReposiÃ§Ã£o de Compra</option>
         <option value="ajuste">Ajuste Manual</option>
       </select>
     </div>
@@ -334,7 +255,7 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-// ── CONFIG (inline — sem import externo) ─────────────────────────────────────
+// â”€â”€ CONFIG (inline â€” sem import externo) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const CONFIG = {
   ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
   PROJECT_ID: "69c7e94a003a1c86b7ca",
@@ -351,7 +272,7 @@ const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PR
 const databases = new Databases(client)
 const account   = new Account(client)
 
-// ── GUARD ────────────────────────────────────────────────────────────────────
+// â”€â”€ GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 ;(async () => {
   try {
     const user = await account.get()
@@ -362,11 +283,11 @@ const account   = new Account(client)
   init()
 })()
 
-// ── ESTADO ───────────────────────────────────────────────────────────────────
+// â”€â”€ ESTADO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let allProducts      = []
 let modalRepoTarget  = null    // { $id, name, stock }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
+// â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function esc(s) {
   return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 }
@@ -381,7 +302,7 @@ function toast(msg, type = "") {
 }
 
 function fmtDate(iso) {
-  if (!iso) return "—"
+  if (!iso) return "â€”"
   const d = new Date(iso)
   return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" })
 }
@@ -397,7 +318,7 @@ function movBadge(qty, type) {
   return `<span class="mov-badge ${cls}"><i class="fas ${icon}"></i>${sign}${qty}</span>`
 }
 
-// ── LOAD PRODUCTS ─────────────────────────────────────────────────────────────
+// â”€â”€ LOAD PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadProducts() {
   const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [
     Query.limit(200),
@@ -413,16 +334,16 @@ async function loadProducts() {
   ;["repoProduto","histProdutoSelect","modalRepoProduto"].forEach(id => {
     const el = document.getElementById(id)
     if (!el || el.tagName !== "SELECT") return
-    const base = el.dataset.base ?? el.options[0]?.text ?? "— Selecione —"
+    const base = el.dataset.base ?? el.options[0]?.text ?? "â€” Selecione â€”"
     el.innerHTML = `<option value="">${base}</option>` + opts
   })
 
-  // Métricas
+  // MÃ©tricas
   const criticos = allProducts.filter(p => (p.qtd ?? 0) < CONFIG.STOCK_CRITICAL && p.isActive !== false)
   document.getElementById("mTotal").textContent   = allProducts.length
   document.getElementById("mCritico").textContent = criticos.length
 
-  // Strip crítico
+  // Strip crÃ­tico
   if (criticos.length > 0) {
     document.getElementById("criticalStrip").style.display = "block"
     document.getElementById("criticalList").innerHTML = criticos.slice(0, 8).map(p =>
@@ -430,11 +351,11 @@ async function loadProducts() {
     ).join("")
   }
 
-  // Inventário
+  // InventÃ¡rio
   renderInventario(allProducts)
 }
 
-// ── STOCK HISTORY ─────────────────────────────────────────────────────────────
+// â”€â”€ STOCK HISTORY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadHistory(productId = "", tipo = "") {
   const queries = [Query.orderDesc("movedAt"), Query.limit(100)]
   if (productId) queries.push(Query.equal("productId", productId))
@@ -442,32 +363,32 @@ async function loadHistory(productId = "", tipo = "") {
 
   const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.STOCK_HISTORY, queries)
 
-  // Métricas: movimentos hoje
+  // MÃ©tricas: movimentos hoje
   const today   = new Date().toDateString()
   const todayMov= res.documents.filter(m => new Date(m.movedAt).toDateString() === today).length
   document.getElementById("mMovimentos").textContent = todayMov
 
   const tbody = document.getElementById("histBody")
   if (!res.documents.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:24px;text-align:center">Nenhuma movimentação encontrada.</td></tr>`
+    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:24px;text-align:center">Nenhuma movimentaÃ§Ã£o encontrada.</td></tr>`
     return
   }
 
   tbody.innerHTML = res.documents.map(m => `<tr>
     <td style="font-weight:600">${esc(m.productName)}</td>
     <td>${movBadge(m.qty, m.type)}</td>
-    <td style="color:var(--muted)">${m.stockBefore ?? "—"}</td>
-    <td style="color:var(--green)">${m.stockAfter ?? "—"}</td>
+    <td style="color:var(--muted)">${m.stockBefore ?? "â€”"}</td>
+    <td style="color:var(--green)">${m.stockAfter ?? "â€”"}</td>
     <td>
       <span class="badge ${m.qty > 0 ? 'badge-green' : 'badge-red'}" style="font-size:10px">
         ${esc(m.type)}
       </span>
     </td>
-    <td style="color:var(--muted);font-size:12px">${esc(m.reference || "—")}</td>
+    <td style="color:var(--muted);font-size:12px">${esc(m.reference || "â€”")}</td>
     <td style="color:var(--muted);font-size:12px">${fmtDate(m.movedAt)}</td>
   </tr>`).join("")
 
-  // Últimas entradas na tab de reposição
+  // Ãšltimas entradas na tab de reposiÃ§Ã£o
   const entradas = res.documents.filter(m => m.qty > 0).slice(0, 6)
   document.getElementById("entradasBody").innerHTML = entradas.length
     ? entradas.map(m => `<tr>
@@ -479,7 +400,7 @@ async function loadHistory(productId = "", tipo = "") {
     : `<tr><td colspan="4" style="color:var(--muted);padding:16px">Nenhuma entrada recente.</td></tr>`
 }
 
-// ── INVENTÁRIO ────────────────────────────────────────────────────────────────
+// â”€â”€ INVENTÃRIO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderInventario(products) {
   const search = document.getElementById("invSearch").value.toLowerCase()
   const filtro = document.getElementById("invFiltro").value
@@ -502,19 +423,19 @@ function renderInventario(products) {
     const statusBadge = isZero
       ? `<span class="badge badge-red">Zerado</span>`
       : isCrit
-      ? `<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> Crítico</span>`
+      ? `<span class="badge badge-red"><i class="fas fa-triangle-exclamation"></i> CrÃ­tico</span>`
       : `<span class="badge badge-green">OK</span>`
 
     return `<tr>
       <td style="font-weight:600">${esc(p.name)}</td>
-      <td style="color:var(--muted)">${esc(p.category || "—")}</td>
-      <td style="color:var(--muted)">${esc(p.brand || "—")}</td>
+      <td style="color:var(--muted)">${esc(p.category || "â€”")}</td>
+      <td style="color:var(--muted)">${esc(p.brand || "â€”")}</td>
       <td style="${isCrit ? 'color:var(--red);font-weight:700' : 'color:var(--green)'}">${qty}</td>
       <td>${statusBadge}</td>
       <td>
         <button class="btn btn-ghost btn-sm repor-rapido"
           data-id="${p.$id}" data-name="${esc(p.name)}" data-stock="${qty}"
-          title="Reposição rápida">
+          title="ReposiÃ§Ã£o rÃ¡pida">
           <i class="fas fa-plus"></i> Repor
         </button>
       </td>
@@ -531,7 +452,7 @@ function renderInventario(products) {
   })
 }
 
-// ── REPOSIÇÃO ─────────────────────────────────────────────────────────────────
+// â”€â”€ REPOSIÃ‡ÃƒO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function registrarEntrada(productId, productName, qty, tipo, obs = "") {
   const product     = await databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId)
   const stockBefore = Number(product.qtd ?? 0)
@@ -540,7 +461,7 @@ async function registrarEntrada(productId, productName, qty, tipo, obs = "") {
   // Atualiza estoque
   await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId, { qtd: stockAfter })
 
-  // Registra histórico
+  // Registra histÃ³rico
   await databases.createDocument(CONFIG.DB, CONFIG.COL.STOCK_HISTORY, ID.unique(), {
     productId,
     productName,
@@ -555,7 +476,7 @@ async function registrarEntrada(productId, productName, qty, tipo, obs = "") {
   return stockAfter
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function init() {
   document.getElementById("logoutBtn").addEventListener("click", async e => {
     e.preventDefault()
@@ -577,7 +498,7 @@ async function init() {
     })
   })
 
-  // Produto selecionado → mostra estoque atual
+  // Produto selecionado â†’ mostra estoque atual
   document.getElementById("repoProduto").addEventListener("change", e => {
     const opt = e.target.selectedOptions[0]
     const info= document.getElementById("repoAtualInfo")
@@ -589,7 +510,7 @@ async function init() {
     }
   })
 
-  // Botão Registrar Entrada (tab reposição)
+  // BotÃ£o Registrar Entrada (tab reposiÃ§Ã£o)
   document.getElementById("btnRepor").addEventListener("click", async () => {
     const prodSelect = document.getElementById("repoProduto")
     const qty        = parseInt(document.getElementById("repoQty").value)
@@ -601,13 +522,13 @@ async function init() {
       errEl.textContent = "Selecione um produto."; errEl.style.display = "block"; return
     }
     if (!qty || qty < 1) {
-      errEl.textContent = "Informe uma quantidade válida (≥ 1)."; errEl.style.display = "block"; return
+      errEl.textContent = "Informe uma quantidade vÃ¡lida (â‰¥ 1)."; errEl.style.display = "block"; return
     }
     errEl.style.display = "none"
 
     const btn = document.getElementById("btnRepor")
     btn.disabled = true
-    btn.innerHTML = `<span class="spinner"></span> Registrando…`
+    btn.innerHTML = `<span class="spinner"></span> Registrandoâ€¦`
 
     try {
       const opt  = prodSelect.selectedOptions[0]
@@ -629,7 +550,7 @@ async function init() {
     }
   })
 
-  // Filtro histórico
+  // Filtro histÃ³rico
   document.getElementById("btnFiltrarHist").addEventListener("click", () => {
     loadHistory(
       document.getElementById("histProdutoSelect").value,
@@ -637,12 +558,12 @@ async function init() {
     )
   })
 
-  // Inventário — busca e filtro
+  // InventÃ¡rio â€” busca e filtro
   document.getElementById("invSearch").addEventListener("input", () => renderInventario(allProducts))
   document.getElementById("invFiltro").addEventListener("change", () => renderInventario(allProducts))
   document.getElementById("btnAtualizarInv").addEventListener("click", loadProducts)
 
-  // ── US-37: Importação em Lote ─────────────────────────────────────────────
+  // â”€â”€ US-37: ImportaÃ§Ã£o em Lote â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let impRows = []   // linhas validadas prontas para importar
 
   const impArea  = document.getElementById("impUploadArea")
@@ -662,7 +583,7 @@ async function init() {
   })
 
   async function processImportFile(file) {
-    if (file.size > 5 * 1024 * 1024) { toast("Arquivo muito grande. Máximo 5MB.", "error"); return }
+    if (file.size > 5 * 1024 * 1024) { toast("Arquivo muito grande. MÃ¡ximo 5MB.", "error"); return }
 
     let rows = []
     if (file.name.endsWith(".csv")) {
@@ -675,12 +596,12 @@ async function init() {
       rows       = XLSX.utils.sheet_to_json(ws, { defval: "" })
     }
 
-    if (!rows.length) { toast("Arquivo vazio ou formato inválido.", "error"); return }
+    if (!rows.length) { toast("Arquivo vazio ou formato invÃ¡lido.", "error"); return }
 
     // Validar e enriquecer com dados do Appwrite
     impRows = []
     const tbody  = document.getElementById("impTableBody")
-    tbody.innerHTML = `<tr><td colspan="7" class="loading-state"><span class="spinner"></span> Validando ${rows.length} linhas…</td></tr>`
+    tbody.innerHTML = `<tr><td colspan="7" class="loading-state"><span class="spinner"></span> Validando ${rows.length} linhasâ€¦</td></tr>`
     document.getElementById("impPreview").style.display = "block"
     document.getElementById("impResult").style.display  = "none"
 
@@ -693,8 +614,8 @@ async function init() {
       const tipo= String(row.tipo || row.TIPO || "reposicao").trim() || "reposicao"
       const obs = String(row.observacao || row.obs || "").trim()
 
-      if (!id) { erros++; validated.push({ id, qty, tipo, obs, status:"erro", msg:"ID vazio", name:"—", current:"—" }); continue }
-      if (!qty || qty < 1) { erros++; validated.push({ id, qty, tipo, obs, status:"erro", msg:"Qty inválida", name:"—", current:"—" }); continue }
+      if (!id) { erros++; validated.push({ id, qty, tipo, obs, status:"erro", msg:"ID vazio", name:"â€”", current:"â€”" }); continue }
+      if (!qty || qty < 1) { erros++; validated.push({ id, qty, tipo, obs, status:"erro", msg:"Qty invÃ¡lida", name:"â€”", current:"â€”" }); continue }
 
       // Buscar produto no Appwrite
       try {
@@ -703,7 +624,7 @@ async function init() {
         validated.push({ id, qty, tipo, obs, status:"ok", name: p.name, current: p.qtd ?? 0 })
       } catch {
         erros++
-        validated.push({ id, qty, tipo, obs, status:"erro", msg:"Produto não encontrado", name:"—", current:"—" })
+        validated.push({ id, qty, tipo, obs, status:"erro", msg:"Produto nÃ£o encontrado", name:"â€”", current:"â€”" })
       }
     }
 
@@ -712,7 +633,7 @@ async function init() {
 
     const total = validated.length
     document.getElementById("impSummary").innerHTML =
-      `<span style="color:var(--green)">${ok} válidas</span> · <span style="color:var(--red)">${erros} com erro</span> · ${total} total`
+      `<span style="color:var(--green)">${ok} vÃ¡lidas</span> Â· <span style="color:var(--red)">${erros} com erro</span> Â· ${total} total`
   }
 
   function parseCSV(text) {
@@ -732,8 +653,8 @@ async function init() {
     document.getElementById("impTableBody").innerHTML = rows.map(r => `
       <tr>
         <td>${r.status === "ok"
-          ? `<span class="badge badge-green">✓ OK</span>`
-          : `<span class="badge badge-red">✗ ${r.msg}</span>`}</td>
+          ? `<span class="badge badge-green">âœ“ OK</span>`
+          : `<span class="badge badge-red">âœ— ${r.msg}</span>`}</td>
         <td style="font-family:monospace;font-size:11px">${esc(r.id)}</td>
         <td>${esc(r.name)}</td>
         <td style="color:var(--muted)">${r.current}</td>
@@ -752,15 +673,15 @@ async function init() {
 
   document.getElementById("btnImpConfirm")?.addEventListener("click", async () => {
     const valid = impRows.filter(r => r.status === "ok")
-    if (!valid.length) { toast("Nenhuma linha válida para importar.", "error"); return }
+    if (!valid.length) { toast("Nenhuma linha vÃ¡lida para importar.", "error"); return }
 
     const btn = document.getElementById("btnImpConfirm")
-    btn.disabled = true; btn.innerHTML = `<span class="spinner"></span> Importando…`
+    btn.disabled = true; btn.innerHTML = `<span class="spinner"></span> Importandoâ€¦`
 
     let sucesso = 0, falhas = []
     for (const row of valid) {
       try {
-        await registrarEntrada(row.id, row.name, row.qty, row.tipo, row.obs || "importação-lote")
+        await registrarEntrada(row.id, row.name, row.qty, row.tipo, row.obs || "importaÃ§Ã£o-lote")
         sucesso++
       } catch (e) {
         falhas.push(`${row.name}: ${e.message}`)
@@ -773,7 +694,7 @@ async function init() {
     document.getElementById("impResultContent").innerHTML = `
       <div style="padding:16px;background:${sucesso ? "rgba(38,253,113,.06)" : "rgba(251,18,48,.06)"};border:1px solid ${sucesso ? "rgba(38,253,113,.3)" : "rgba(251,18,48,.3)"}">
         <div style="font-size:14px;font-weight:700;color:${sucesso ? "var(--green)" : "var(--red)"};margin-bottom:8px">
-          ${sucesso > 0 ? `✓ ${sucesso} produto(s) atualizados com sucesso!` : "Nenhum produto importado."}
+          ${sucesso > 0 ? `âœ“ ${sucesso} produto(s) atualizados com sucesso!` : "Nenhum produto importado."}
         </div>
         ${falhas.length ? `<div style="font-size:12px;color:var(--red)">Erros: ${falhas.join(", ")}</div>` : ""}
       </div>`
@@ -790,7 +711,7 @@ async function init() {
 " +
       "pid-exemplo-001,10,reposicao,Compra NF 1234
 " +
-      "pid-exemplo-002,5,ajuste,Inventário mensal
+      "pid-exemplo-002,5,ajuste,InventÃ¡rio mensal
 "
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
     const url  = URL.createObjectURL(blob)
@@ -798,7 +719,7 @@ async function init() {
     a.click(); URL.revokeObjectURL(url)
   })
 
-  // Modal reposição rápida
+  // Modal reposiÃ§Ã£o rÃ¡pida
   document.getElementById("modalClose").addEventListener("click", () => {
     document.getElementById("modalOverlay").classList.remove("open")
   })
@@ -813,10 +734,10 @@ async function init() {
     if (!modalRepoTarget) return
     const qty  = parseInt(document.getElementById("modalRepoQty").value)
     const tipo = document.getElementById("modalRepoTipo").value
-    if (!qty || qty < 1) { toast("Informe uma quantidade válida.", "error"); return }
+    if (!qty || qty < 1) { toast("Informe uma quantidade vÃ¡lida.", "error"); return }
 
     const btn = document.getElementById("modalConfirmar")
-    btn.disabled = true; btn.innerHTML = `<span class="spinner"></span> Salvando…`
+    btn.disabled = true; btn.innerHTML = `<span class="spinner"></span> Salvandoâ€¦`
 
     try {
       const novoEstoque = await registrarEntrada(
@@ -837,3 +758,5 @@ async function init() {
 </script>
 </body>
 </html>
+
+

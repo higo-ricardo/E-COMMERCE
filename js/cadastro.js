@@ -88,7 +88,44 @@ function messageForAuthError(err) {
 // -- Validadores ---------------------------------------------------------------
 const isEmail = e  => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)
 const normEmail = e => e.trim().toLowerCase()
+const cpfDigitsRegex = /^(?!^(\d)\1{10}$)\d{11}$/
+const mobileDigitsRegex = /^\d{12}$/
 
+function isValidCpf(cpf) {
+  const d = String(cpf ?? "").replace(/\D/g, "")
+  if (!cpfDigitsRegex.test(d)) return false
+
+  const calcDigit = (base, factor) => {
+    let total = 0
+    for (let i = 0; i < base.length; i++) {
+      total += Number(base[i]) * (factor - i)
+    }
+    const rest = (total * 10) % 11
+    return rest === 10 ? 0 : rest
+  }
+
+  const d1 = calcDigit(d.slice(0, 9), 10)
+  const d2 = calcDigit(d.slice(0, 10), 11)
+  return d1 === Number(d[9]) && d2 === Number(d[10])
+}
+
+function isValidMobile(mobile) {
+  const d = String(mobile ?? "").replace(/\D/g, "")
+  return mobileDigitsRegex.test(d)
+}
+
+function parseAddressNumberOrThrow(value) {
+  const raw = String(value ?? "").trim()
+  if (!raw) return null
+  if (!/^\d+$/.test(raw)) {
+    throw new Error("Número inválido. Use apenas dígitos inteiros.")
+  }
+  const parsed = Number.parseInt(raw, 10)
+  if (parsed < 0 || parsed > 10000) {
+    throw new Error("Número do endereço deve estar entre 0 e 10000.")
+  }
+  return parsed
+}
 function validatePass(p) {
   if (p.length < 8)         return { ok:false, msg:"Mínimo 8 caracteres." }
   if (!/[a-zA-Z]/.test(p)) return { ok:false, msg:"Deve conter letras." }
@@ -121,7 +158,7 @@ $("password").addEventListener("input", () => {
 
 // -- Máscara CPF ----------------------------------------------------------------
 $("cpf").addEventListener("input", e => {
-  let v = e.target.value.replace(/\D/g,"").slice(0,11)
+  let v = e.target.value.replace(/\D/g,"").slice(0,12)
   if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4")
   else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d+)/,"$1.$2.$3")
   else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/,"$1.$2")
@@ -130,9 +167,9 @@ $("cpf").addEventListener("input", e => {
 
 // -- Máscara celular ------------------------------------------------------------
 $("mobile").addEventListener("input", e => {
-  let v = e.target.value.replace(/\D/g,"").slice(0,11)
-  if (v.length > 7) v = v.replace(/(\d{2})(\d{5})(\d+)/,"($1) $2-$3")
-  else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/,"($1) $2")
+  let v = e.target.value.replace(/\D/g,"").slice(0,12)
+  if (v.length > 8) v = v.replace(/(\d{3})(\d{5})(\d+)/,"($1) $2-$3")
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/,"($1) $2")
   e.target.value = v
 })
 
@@ -203,7 +240,7 @@ async function doCadastro() {
   const mobileRaw = $("mobile").value.replace(/\D/g,"")
   const dayBirth  = $("dayBirth").value || null
   const address   = $("address").value.trim() || null
-  const number    = parseInt($("number").value) || null
+  let number = null
   const district  = $("district").value.trim() || "CENTRO"
   const complement= $("complement").value.trim() || null
   const city      = $("city").value.trim() || "CHAPADINHA"
@@ -227,6 +264,17 @@ async function doCadastro() {
   }
   if (!termos) {
     setMsg("Você deve aceitar os Termos de Uso."); reset(); return
+  }
+  if (cpfRaw && !isValidCpf(cpfRaw)) {
+    setMsg("CPF inválido. Informe os 11 dígitos corretos."); reset(); return
+  }
+  if (mobileRaw && !isValidMobile(mobileRaw)) {
+    setMsg("Celular inválido. Use DDD de 3 dígitos + telefone de 9 dígitos (12 no total)."); reset(); return
+  }
+  try {
+    number = parseAddressNumberOrThrow($("number").value)
+  } catch (err) {
+    setMsg(String(err?.message || "Número do endereço inválido.")); reset(); return
   }
 
   // -- Gera ID compartilhado entre Auth e Mirror -------------------------------
@@ -257,8 +305,8 @@ async function doCadastro() {
     await createMirrorWithSchemaFallback(authId, {
       name,
       email,
-      cpf:          cpfRaw ? parseInt(cpfRaw) : null,
-      mobile:       mobileRaw ? parseInt(mobileRaw) : null,
+      cpf:          cpfRaw || null,
+      mobile:       mobileRaw || null,
       dayBirth:     dayBirth ?? null,
       isActive:     true,
       isVerified:   false,
