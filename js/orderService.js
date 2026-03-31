@@ -7,45 +7,63 @@
 //   - placeOrder() agora retorna breakdown fiscal completo no pedido
 //   - Retrocompatível: se item não tiver NCM, usa regra genérica cap.87
 
+import { AuthService }    from "./authService.js"
 import { CartService }     from "./cartService.js"
 import { OrderRepository } from "./orderRepository.js"
+import { generateOrderNumber } from "./utils.js"
 import { CONFIG }          from "./config.js"
-import { TaxEngine }       from "./taxEngine.js"
 
 export const OrderService = {
 
-  async placeOrder(customerData, frete = 0, payment = "pix") {
+  async placeOrder(customerData, frete = 0, payment = "pix", modalFrete = "RETIRADA", couponCode = null, discountAmount = 0) {
     const cart = CartService.get()
     if (!cart.length) throw new Error("Carrinho vazio")
 
-    const subtotal = cart.reduce((s, i) => s + Number(i.price) * (i.qty || 1), 0)
+    const subtotal = cart.reduce((s, i) => {
+      const price = Number(i.price)
+      if (Number.isNaN(price)) throw new Error(`Valor do item inválido: ${i.name || i.$id || 'desconhecido'}`)
+      return s + price * (i.qty || 1)
+    }, 0)
 
-    // US-44: calcular impostos reais via TaxEngine
-    const ufDestino = customerData.estado || CONFIG.FISCAL.UF_ORIGEM
-    const taxResult = TaxEngine.calculateCart(
-      cart.map(i => ({ ncm: i.ncm || null, price: i.price, qty: i.qty || 1 })),
-      { ufDestino, isB2B: false, regime: CONFIG.FISCAL.REGIME }
-    )
+    const taxes = 0
+    const total = +(subtotal + frete).toFixed(2)
 
-    const taxes = taxResult.totalImpostos
-    const total = +(subtotal + taxes + frete).toFixed(2)
+    const authUser = await AuthService.getUser()
+    if (!authUser) throw new Error("Usuário não autenticado. Faça login para continuar.")
+    
+    const customerName = (customerData.nome || customerData.name)?.trim() || authUser?.name || authUser?.email || "CONSUMIDOR FINAL"
+
+    const paymentOption = (payment || "dinheiro").toString().trim().toLowerCase()
+    const paymentMap = {
+      pix: "PIX",
+      boleto: "BOLETO",
+      card: "CARTÃO DE CRÉDITO",
+      crediario: "CREDIÁRIO",
+      dinheiro: "DINHEIRO",
+      ted: "TED",
+      debito: "CARTÃO DE DÉBITO",
+      fiado: "FIADO",
+    }
 
     const order = {
-      ...customerData,
+      number:         generateOrderNumber(),
+      user:           customerName,
+      email:          (customerData.email || customerData.emailAddress || "").trim(),
+      mobile:         (customerData.telefone || customerData.mobile || "").trim() || null,
+      address:        (customerData.endereco || customerData.address || "").trim() || null,
       items:          JSON.stringify(cart),
       subtotal:       +subtotal.toFixed(2),
       taxes,
-      taxBreakdown:   JSON.stringify(taxResult.resumoImpostos), // US-44: breakdown fiscal
-      taxRate:        taxResult.aliquotaEfetiva,                // US-44: alíquota real
       frete:          +frete,
+      discountAmount: +discountAmount,
       total,
-      payment,
-      status:         "novo",
-      nfeStatus:      "pendente",   // US-43: pendente | emitida | cancelada | erro
-      createdAt:      new Date().toISOString(),
+      payment:        paymentMap[paymentOption] || "DINHEIRO",
+      status:         "NOVO",
+      modalFrete:     (modalFrete || "RETIRADA").toString().toUpperCase(),
+      couponCode:     couponCode || null,
     }
 
-    const saved = await OrderRepository.create(order)
+    const saved = await OrderRepository.create(order, authUser.$id)
     CartService.clear()
     return saved
   },

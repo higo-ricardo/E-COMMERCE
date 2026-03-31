@@ -7,6 +7,18 @@ import { Client, Databases, Account, Query, ID, Permission, Role }
 
 import { CONFIG } from "./config.js"
 
+if (!CONFIG || !CONFIG.FISCAL) {
+  const msg = "CONFIG.FISCAL não encontrado. Verifique js/config.js e reinicie a aplicação."
+  console.error("[HIVERCAR] ", msg)
+  throw new Error(msg)
+}
+
+if (!CONFIG.ENDPOINT || !CONFIG.PROJECT_ID) {
+  const msg = `Appwrite não configurado corretamente: ENDPOINT=${CONFIG.ENDPOINT} PROJECT_ID=${CONFIG.PROJECT_ID}`
+  console.error("[HIVERCAR] ", msg)
+  throw new Error("Nenhum projeto Appwrite foi especificado. Defina CONFIG.ENDPOINT e CONFIG.PROJECT_ID em js/config.js")
+}
+
 const client = new Client()
 
 client

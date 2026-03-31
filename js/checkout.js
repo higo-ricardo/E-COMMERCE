@@ -1,3 +1,6 @@
 import { CheckoutController } from "../controllers/checkout/CheckoutController.js"
 
-new CheckoutController().init()
+;(async () => {
+  const controller = new CheckoutController()
+  await controller.init()
+})()

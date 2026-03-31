@@ -68,34 +68,30 @@ describe("OrderService - Cálculo de valores", () => {
     expect(call.subtotal).toBeCloseTo(250.00)
   })
 
-  it("calcula taxes como 12% do subtotal (CONFIG.TAX_RATE)", async () => {
+  it("calcula taxes como 0 no pedido (impostos desativados)", async () => {
     CartService.add(prodA)   // R$ 100.00
     await OrderService.placeOrder({}, 0, "pix")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    // taxes = 100.00 Ã- 0.12 = 12.00
-    expect(call.taxes).toBeCloseTo(12.00)
+    expect(call.taxes).toBeCloseTo(0)
   })
 
-  it("total = subtotal + taxes + frete", async () => {
+  it("total = subtotal + frete", async () => {
     CartService.add(prodA)   // subtotal 100.00
-    // taxes   = 100.00 Ã- 0.12 = 12.00
     // frete   = 15.00
-    // total   = 100.00 + 12.00 + 15.00 = 127.00
+    // total   = 100.00 + 15.00 = 115.00
     await OrderService.placeOrder({}, 15, "pix")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    expect(call.total).toBeCloseTo(127.00)
+    expect(call.total).toBeCloseTo(115.00)
   })
 
-  it("total sem frete = subtotal + taxes", async () => {
+  it("total sem frete = subtotal", async () => {
     CartService.add(prodB)   // 50.00
-    // taxes = 50.00 Ã- 0.12 = 6.00
-    // total = 50.00 + 6.00 = 56.00
     await OrderService.placeOrder({}, 0, "pix")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    expect(call.total).toBeCloseTo(56.00)
+    expect(call.total).toBeCloseTo(50.00)
   })
 
   it("arredonda taxes e total para 2 casas decimais", async () => {
@@ -113,12 +109,12 @@ describe("OrderService - Cálculo de valores", () => {
     expect(decimalCases).toBeLessThanOrEqual(2)
   })
 
-  it("status inicial do pedido é sempre 'novo'", async () => {
+  it("status inicial do pedido é sempre 'NOVO'", async () => {
     CartService.add(prodA)
     await OrderService.placeOrder({}, 0, "pix")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    expect(call.status).toBe("novo")
+    expect(call.status).toBe("NOVO")
   })
 
   it("registra o método de pagamento corretamente", async () => {
@@ -126,7 +122,7 @@ describe("OrderService - Cálculo de valores", () => {
     await OrderService.placeOrder({}, 0, "cartao")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    expect(call.payment).toBe("cartao")
+    expect(call.payment).toBe("CARTÃO DE CRÉDITO")
   })
 
   it("serializa os itens do carrinho como JSON string", async () => {
@@ -164,7 +160,7 @@ describe("OrderService.placeOrder() - comportamento", () => {
   it("inclui customerData no payload do pedido", async () => {
     CartService.add(prodA)
     const customer = {
-      name:    "Maria Silva",
+      nome:    "Maria Silva",
       cpf:     "123.456.789-00",
       email:   "maria@mail.com",
       address: "Rua das Flores, 100",
@@ -173,10 +169,10 @@ describe("OrderService.placeOrder() - comportamento", () => {
     await OrderService.placeOrder(customer, 0, "boleto")
 
     const call = OrderRepository.create.mock.calls[0][0]
-    expect(call.name).toBe("Maria Silva")
-    expect(call.cpf).toBe("123.456.789-00")
+    expect(call.user).toBe("Maria Silva")
     expect(call.email).toBe("maria@mail.com")
-    expect(call.payment).toBe("boleto")
+    expect(call.address).toBe("Rua das Flores, 100")
+    expect(call.payment).toBe("BOLETO")
   })
 
   it("chama OrderRepository.create exatamente uma vez", async () => {

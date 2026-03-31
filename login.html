@@ -358,6 +358,7 @@ function redirectByRole(role) {
 ;(async () => {
   try {
     const params = new URLSearchParams(window.location.search)
+    const redirectUrl = params.get("redirect")
     const forceLogin = params.get("force") === "1"
     if (forceLogin) {
       await account.deleteSession("current").catch(() => {})
@@ -368,6 +369,11 @@ function redirectByRole(role) {
 
     const user = await account.get()
     if (!user) return
+
+    if (redirectUrl) {
+      window.location.href = redirectUrl
+      return
+    }
 
     const mirror = await ensureMirrorForUser(user, await getMirror(user.email))
     if (mirror) redirectByRole(mirror.role)
@@ -428,7 +434,15 @@ async function doLogin() {
     stAuth.textContent = "[OK] sessao: autenticada"
     setMsg("Acesso autorizado. Redirecionando...", "success")
 
+    const params = new URLSearchParams(window.location.search)
+    const redirectUrl = params.get("redirect")
+
     setTimeout(() => {
+      if (redirectUrl) {
+        window.location.href = redirectUrl
+        return
+      }
+
       if (mirror) redirectByRole(mirror.role)
       else window.location.href = "minha-conta.html"
     }, 700)

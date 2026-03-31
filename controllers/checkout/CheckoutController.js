@@ -1,7 +1,8 @@
 ﻿import { OrderService } from "../../js/orderService.js"
 import { CartService } from "../../js/cartService.js"
 import { PaymentService } from "../../js/paymentService.js"
-import { TaxEngine } from "../../js/taxEngine.js"
+import { AuthService } from "../../js/authService.js"
+import { getMirrorByEmail } from "../../js/userService.js"
 import { initParticles } from "../../js/utils.js"
 import { ErrorService } from "../../js/errorService.js"
 import { CheckoutValidator } from "./CheckoutValidator.js"
@@ -9,6 +10,7 @@ import { CheckoutValidator } from "./CheckoutValidator.js"
 export class CheckoutController {
   constructor() {
     this.selectedFrete = 0
+    this.modalFrete = "RETIRADA"
     this.currentPay = "pix"
     this.pixPaymentId = null
     this.pixPollTimer = null
@@ -18,7 +20,14 @@ export class CheckoutController {
     this.badge = document.getElementById("cartBadge")
   }
 
-  init() {
+  async init() {
+    const user = await AuthService.getUser()
+    if (!user) {
+      ErrorService.toastWarn("Para finalizar a compra, faça login.")
+      window.location.href = "login.html?redirect=checkout.html"
+      return
+    }
+
     initParticles()
 
     if (this.badge) this.badge.textContent = CartService.count()
@@ -36,10 +45,66 @@ export class CheckoutController {
     this.initTimer()
     this.bindCalcularFrete()
     this.bindPixActions()
+    this.initCartListener()
+
+    // Carrega dados do usuário logado para pré-preencher formulário
+    await this.loadUserData(user)
   }
 
   getValue(id) {
     return document.getElementById(id)?.value ?? ""
+  }
+
+  /**
+   * Carrega dados do usuário logado e pré-preenche o formulário.
+   * Step 1: nome, cpf, email, telefone
+   * Step 2: cep, endereco, numero, bairro, cidade, estado
+   */
+  async loadUserData(user) {
+    if (!user || !user.email) return
+
+    try {
+      // Busca dados completos do usuário no Mirror
+      const mirror = await getMirrorByEmail(user.email)
+      if (!mirror) {
+        console.warn("Mirror do usuário não encontrado para:", user.email)
+        return
+      }
+
+      console.log("Mirror carregado:", mirror)
+
+      // Helper para preencher campo
+      const setField = (id, value) => {
+        const el = document.getElementById(id)
+        console.log(`setField("${id}", "${value}") - elemento encontrado:`, !!el, "valor válido:", value != null && value !== "")
+        if (el && value != null && value !== "") {
+          el.value = value
+          this.clearError(id)
+        }
+      }
+
+      // Step 1 - Dados Pessoais
+      // Se mirror.name estiver vazio, usa nome do Auth como fallback
+      const nome = mirror.name && mirror.name.trim() !== "" ? mirror.name : (user.name || "")
+      setField("nome", nome)
+      setField("cpf", mirror.cpf)
+      setField("email", mirror.email)
+      setField("telefone", mirror.mobile)
+
+      // Step 2 - Endereço
+      setField("cep", mirror.cep ? String(mirror.cep).replace(/(\d{5})(\d{3})/, "$1-$2") : "")
+      setField("endereco", mirror.address)
+      setField("numero", mirror.number)
+      setField("bairro", mirror.district)
+      setField("cidade", mirror.city)
+      setField("estado", mirror.state)
+
+      console.log("Dados carregados - Nome:", nome, "CPF:", mirror.cpf, "Email:", mirror.email)
+      console.log("Nome do Auth:", user.name, "Nome do Mirror:", mirror.name)
+    } catch (err) {
+      // Log silencioso - não interfere com o checkout
+      console.warn("Erro ao carregar dados do usuário:", err)
+    }
   }
 
   setError(id, msg) {
@@ -179,15 +244,8 @@ export class CheckoutController {
   renderResumo() {
     const cart = CartService.get()
     const subtotal = CartService.total()
-    const ufDestino = this.getValue("estado") || "MA"
-
-    const taxResult = TaxEngine.calculateCart(
-      cart.map(i => ({ ncm: i.ncm || null, price: i.price, qty: i.qty || 1 })),
-      { ufDestino },
-    )
-
-    const tax = taxResult.totalImpostos
-    const total = subtotal + tax + this.selectedFrete
+    const tax = 0
+    const total = subtotal + this.selectedFrete
 
     const resumoItens = document.getElementById("resumoItens")
     if (resumoItens) {
@@ -236,6 +294,8 @@ export class CheckoutController {
         document.querySelectorAll("#freteOptions .pay-option").forEach(x => x.classList.remove("selected"))
         option.classList.add("selected")
         this.selectedFrete = Number(option.dataset.frete) || 0
+        this.modalFrete = (option.dataset.modalfrete || "RETIRADA").toUpperCase()
+
         this.renderResumo()
       }
     })
@@ -350,7 +410,6 @@ export class CheckoutController {
           {
             nome: this.getValue("nome").trim(),
             email: this.getValue("email").trim(),
-            cpf: this.getValue("cpf").trim(),
             telefone: this.getValue("telefone").trim(),
             endereco: this.getValue("endereco").trim(),
             numero: this.getValue("numero").trim(),
@@ -361,6 +420,9 @@ export class CheckoutController {
           },
           this.selectedFrete,
           this.currentPay,
+          this.modalFrete,
+          null, // couponCode
+          0,    // discountAmount
         )
 
         const pedidoNum = document.getElementById("pedidoNum")
@@ -368,6 +430,9 @@ export class CheckoutController {
 
         document.getElementById("modal")?.classList.add("show")
         if (this.badge) this.badge.textContent = CartService.count()
+        
+        // Re-sincroniza botão após carrinho ser limpo
+        this.syncConfirmarBtn()
       } catch (err) {
         ErrorService.handle(err, "checkout.confirmarPedido", {
           fallback: "Erro ao confirmar pedido. Tente novamente.",
@@ -388,6 +453,19 @@ export class CheckoutController {
       if (tMin) tMin.textContent = String(Math.floor(this.secs / 60)).padStart(2, "0")
       if (tSec) tSec.textContent = String(this.secs % 60).padStart(2, "0")
     }, 1000)
+  }
+
+  /**
+   * Inicializa listener para mudanças no carrinho (via storage event).
+   * Re-sincroniza o botão CONFIRMAR quando o carrinho muda.
+   */
+  initCartListener() {
+    window.addEventListener("storage", (e) => {
+      // Verifica se é mudança no carrinho
+      if (e.key === "hivercar_cart") {
+        this.syncConfirmarBtn()
+      }
+    })
   }
 
   bindCalcularFrete() {
@@ -496,15 +574,9 @@ export class CheckoutController {
     if (gerarPixBtn) {
       gerarPixBtn.addEventListener("click", async () => {
         const email = this.getValue("email").trim()
-        const uf = this.getValue("estado") || "MA"
         const cart = CartService.get()
 
-        const taxResult = TaxEngine.calculateCart(
-          cart.map(i => ({ ncm: i.ncm || null, price: i.price, qty: i.qty || 1 })),
-          { ufDestino: uf },
-        )
-
-        const total = CartService.total() + taxResult.totalImpostos + this.selectedFrete
+        const total = CartService.total() + this.selectedFrete
 
         if (!email) {
           ErrorService.toastWarn("Informe o e-mail antes de gerar o QR Code.")

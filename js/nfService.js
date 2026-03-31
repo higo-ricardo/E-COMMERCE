@@ -23,6 +23,12 @@ import { databases, ID, Query } from "./appwriteClient.js"
 import { CONFIG }               from "./config.js"
 import { TaxEngine }            from "./taxEngine.js"
 
+if (!CONFIG || !CONFIG.FISCAL) {
+  const msg = "CONFIG.FISCAL não encontrado em nfService. Verifique js/config.js e reinicie a aplicação."
+  console.error("[HIVERCAR] ", msg)
+  throw new Error(msg)
+}
+
 const { DB, COL, FISCAL, FUNCTIONS, ENDPOINT, PROJECT_ID } = CONFIG
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -181,8 +187,8 @@ export async function emitir(orderId) {
   const pedido = await databases.getDocument(DB, COL.ORDERS, orderId)
   if (!pedido) throw new Error(`Pedido ${orderId} não encontrado`)
 
-  // 2. Verificar se já foi emitida
-  if (pedido.nfeStatus === "emitida") {
+  // 2. Verificar se já foi emitida (usando presença de nfeChave)
+  if (pedido.nfeChave) {
     return { ok: false, reason: "nfe_ja_emitida", chaveAcesso: pedido.nfeChave }
   }
 
@@ -210,7 +216,6 @@ export async function emitir(orderId) {
   if (!result.ok) {
     // Registrar falha no pedido
     await databases.updateDocument(DB, COL.ORDERS, orderId, {
-      nfeStatus: "erro",
       nfeErro:   result.mensagem || "Erro desconhecido na emissão",
     })
     throw new Error(`Falha na emissão: ${result.mensagem || "Erro integrador NF-e"}`)
@@ -218,7 +223,6 @@ export async function emitir(orderId) {
 
   // 5. Armazenar resultado no Appwrite
   await databases.updateDocument(DB, COL.ORDERS, orderId, {
-    nfeStatus:   "emitida",
     nfeChave:    result.chaveAcesso,
     nfeProtocolo:result.protocolo   || null,
     nfePdfUrl:   result.pdfUrl      || null,
@@ -270,8 +274,8 @@ export async function cancelar(orderId, motivo) {
   }
 
   const pedido = await databases.getDocument(DB, COL.ORDERS, orderId)
-  if (pedido.nfeStatus !== "emitida") {
-    throw new Error(`Não é possível cancelar — NF-e está com status "${pedido.nfeStatus}"`)
+  if (!pedido.nfeChave) {
+    throw new Error("Não é possível cancelar — NF-e ainda não foi emitida")
   }
 
   const fnUrl = `${ENDPOINT}/functions/${FUNCTIONS.CANCEL_NFE}/executions`
@@ -286,7 +290,6 @@ export async function cancelar(orderId, motivo) {
   if (!result.ok) throw new Error(result.mensagem || "Erro ao cancelar NF-e")
 
   await databases.updateDocument(DB, COL.ORDERS, orderId, {
-    nfeStatus:      "cancelada",
     nfeCancelEm:    new Date().toISOString(),
     nfeCancelMotivo:motivo,
     nfeCancelProt:  result.protocolo || null,

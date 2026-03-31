@@ -278,7 +278,7 @@ async function apurar() {
     const ordersRes = await databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_ORDERS, [
       Query.greaterThanEqual("createdAt", inicio),
       Query.lessThanEqual("createdAt", fim),
-      Query.notEqual("status", "cancelado"),
+      Query.notEqual("status", "CANCELADO"),
       Query.limit(500),
     ])
 
@@ -384,7 +384,7 @@ async function loadEvolucao() {
         databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_ORDERS, [
           Query.greaterThanEqual("createdAt", ini),
           Query.lessThanEqual("createdAt", fim),
-          Query.notEqual("status", "cancelado"),
+          Query.notEqual("status", "CANCELADO"),
           Query.limit(200),
         ]),
         databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_NFE, [

@@ -80,9 +80,9 @@
           <button id="cupomBtn" class="btn btn-ghost btn-sm">Aplicar</button>
         </div>
         <div class="cupom-msg" id="cupomMsg"></div>
-        <a href="checkout.html" class="btn btn-primary btn-block btn-lg" id="finalizarBtn" style="margin-top:16px;pointer-events:none;opacity:.4">
+        <button type="button" class="btn btn-primary btn-block btn-lg" id="finalizarBtn" style="margin-top:16px;pointer-events:none;opacity:.4;cursor:pointer;border:none;background:inherit;color:inherit;font-family:inherit;font-size:inherit;padding:inherit">
           <i class="fas fa-lock"></i> Finalizar Compra
-        </a>
+        </button>
         <div style="margin-top:16px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;justify-content:center">
           <i class="fas fa-shield-halved" style="color:var(--green)"></i> Compra 100% segura
         </div>
@@ -103,6 +103,7 @@
 
 <script type="module">
 import { CartService }                               from "./js/cartService.js"
+import { AuthService }                               from "./js/authService.js"
 import { fmt, initParticles, initNavToggle }         from "./js/utils.js"
 
 // ── CUPONS válidos ────────────────────────────────────────────────────────────
@@ -197,6 +198,28 @@ document.getElementById("cupomBtn").onclick = () => {
     msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido."
   }
   updateTotals(CartService.total())
+}
+
+const finalizarBtn = document.getElementById("finalizarBtn")
+if (finalizarBtn) {
+  finalizarBtn.onclick = async () => {
+    if (CartService.count() === 0) return
+
+    finalizarBtn.disabled = true
+    finalizarBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...'
+
+    try {
+      const user = await AuthService.getUser()
+      if (user) {
+        window.location.href = "checkout.html"
+      } else {
+        window.location.href = "login.html?redirect=checkout.html"
+      }
+    } catch (err) {
+      console.error("Erro ao verificar autenticação:", err)
+      window.location.href = "login.html?redirect=checkout.html"
+    }
+  }
 }
 
 render()

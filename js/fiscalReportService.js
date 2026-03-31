@@ -46,7 +46,7 @@ export async function apurarMes({ mes, ano }) {
   const ordersRes = await databases.listDocuments(DB, COL.ORDERS, [
     Query.greaterThanEqual("createdAt", inicio),
     Query.lessThanEqual("createdAt", fim),
-    Query.notEqual("status", "cancelado"),
+    Query.notEqual("status", "CANCELADO"),
     Query.limit(500),
   ])
 

@@ -12,6 +12,25 @@
 // FORMATADORES
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Gera número sequencial único para pedido. Formato: YYMMDDHHmmss + 4 dígitos aleatórios.
+ *  Exemplo: 26033014324501234
+ *  Armazenado em `orders.number` como INTEGER.
+ *  JUSTIFICATIVA: Função pura, sem dependências, reutilizável. Timestamp garante
+ *  unicidade crescente + tail aleatório previne colisões em requisições simultâneas.
+ */
+export function generateOrderNumber() {
+  const now = new Date()
+  const yy  = now.getFullYear().toString().slice(-2)
+  const mm  = String(now.getMonth() + 1).padStart(2, '0')
+  const dd  = String(now.getDate()).padStart(2, '0')
+  const hh  = String(now.getHours()).padStart(2, '0')
+  const min = String(now.getMinutes()).padStart(2, '0')
+  const ss  = String(now.getSeconds()).padStart(2, '0')
+  const rnd = Math.floor(Math.random() * 10000).toString().padStart(4, '0')
+  
+  return parseInt(yy + mm + dd + hh + min + ss + rnd)
+}
+
 /** Formata valor numérico em BRL. */
 export const fmt = v =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v)
@@ -204,4 +223,119 @@ export function addSentryContext(user) {
 export function clearSentryContext() {
   if (!_sentryReady || typeof Sentry === "undefined") return
   Sentry.setUser(null)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PAGINAÇÃO COM PRÉ-CARREGAMENTO
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Classe para gerenciar paginação com pré-carregamento da próxima página.
+ * Útil para listas grandes como pedidos, produtos, etc.
+ *
+ * @example
+ * const paginator = new Paginator(items, 15)
+ * console.log(paginator.current()) // primeiros 15 itens
+ * paginator.next()
+ * console.log(paginator.current()) // próximos 15 itens
+ */
+export class Paginator {
+  constructor(items = [], pageSize = 15) {
+    this.items = items
+    this.pageSize = pageSize
+    this.currentPage = 0
+    this.preloadedPage = null
+  }
+
+  /**
+   * Define novo array de itens e reseta paginação.
+   */
+  setItems(items) {
+    this.items = items
+    this.currentPage = 0
+    this.preloadedPage = null
+  }
+
+  /**
+   * Retorna itens da página atual.
+   */
+  current() {
+    const start = this.currentPage * this.pageSize
+    return this.items.slice(start, start + this.pageSize)
+  }
+
+  /**
+   * Pré-carrega próxima página em background e retorna página atual.
+   */
+  preloadNext() {
+    if (this.currentPage + 1 < this.getTotalPages()) {
+      const nextStart = (this.currentPage + 1) * this.pageSize
+      this.preloadedPage = this.items.slice(nextStart, nextStart + this.pageSize)
+    }
+    return this.current()
+  }
+
+  /**
+   * Avança para próxima página (usa pré-carregamento se disponível).
+   */
+  next() {
+    if (this.currentPage + 1 < this.getTotalPages()) {
+      this.currentPage++
+      this.preloadedPage = null
+      return this.current()
+    }
+    return this.current()
+  }
+
+  /**
+   * Volta para página anterior.
+   */
+  prev() {
+    if (this.currentPage > 0) {
+      this.currentPage--
+      this.preloadedPage = null
+      return this.current()
+    }
+    return this.current()
+  }
+
+  /**
+   * Salta para página específica (0-indexed).
+   */
+  goToPage(page) {
+    if (page >= 0 && page < this.getTotalPages()) {
+      this.currentPage = page
+      this.preloadedPage = null
+      return this.current()
+    }
+    return this.current()
+  }
+
+  /**
+   * Retorna número total de páginas.
+   */
+  getTotalPages() {
+    return Math.ceil(this.items.length / this.pageSize)
+  }
+
+  /**
+   * Retorna número da página atual (1-indexed para exibição).
+   */
+  getCurrentPageNumber() {
+    return this.currentPage + 1
+  }
+
+  /**
+   * Retorna métrica de paginação: { current: 1, total: 5, showing: 15, totalItems: 75 }
+   */
+  getInfo() {
+    return {
+      current: this.getCurrentPageNumber(),
+      total: this.getTotalPages(),
+      showing: this.current().length,
+      totalItems: this.items.length,
+      hasNext: this.currentPage + 1 < this.getTotalPages(),
+      hasPrev: this.currentPage > 0,
+    }
+  }
 }

@@ -102,20 +102,20 @@
           <div class="field" style="margin-top:16px">
             <label>Tipo de Entrega</label>
             <div id="freteOptions">
-              <div class="pay-option selected" data-frete="0">
+              <div class="pay-option selected" data-frete="0" data-modalfrete="RETIRADA">
                 <div class="pay-icon"><i class="fas fa-store"></i></div>
-                <div><div class="pay-name">Retirar na Loja</div><div class="pay-detail">Av. Ataliba Vieira, 1357</div></div>
+                <div><div class="pay-name">Retirada na Loja</div><div class="pay-detail">Av. Ataliba Vieira, 1357</div></div>
                 <div class="pay-check"><i class="fas fa-check"></i></div>
               </div>
-              <div class="pay-option" data-frete="15">
+              <div class="pay-option" data-frete="15" data-modalfrete="SEDEX">
                 <div class="pay-icon"><i class="fas fa-box"></i></div>
                 <div><div class="pay-name">Sedex</div><div class="pay-detail">3-5 dias úteis</div></div>
                 <div style="margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green)">R$ 15</div>
                 <div class="pay-check"><i class="fas fa-check"></i></div>
               </div>
-              <div class="pay-option" data-frete="25">
-                <div class="pay-icon"><i class="fas fa-rocket"></i></div>
-                <div><div class="pay-name">Expresso</div><div class="pay-detail">1-2 dias úteis</div></div>
+              <div class="pay-option" data-frete="25" data-modalfrete="MOTOBOY">
+                <div class="pay-icon"><i class="fas fa-truck-fast"></i></div>
+                <div><div class="pay-name">Motoboy (Express)</div><div class="pay-detail">1-2 dias úteis</div></div>
                 <div style="margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green)">R$ 25</div>
                 <div class="pay-check"><i class="fas fa-check"></i></div>
               </div>
@@ -145,6 +145,11 @@
             <div class="pay-option" data-pay="boleto">
               <div class="pay-icon"><i class="fas fa-barcode"></i></div>
               <div><div class="pay-name">Boleto</div><div class="pay-detail">Vencimento em 3 dias</div></div>
+              <div class="pay-check"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="pay-option" data-pay="dinheiro">
+              <div class="pay-icon"><i class="fas fa-money-bill"></i></div>
+              <div><div class="pay-name">Dinheiro</div><div class="pay-detail">Pagamento na entrega ou retirada</div></div>
               <div class="pay-check"><i class="fas fa-check"></i></div>
             </div>
           </div>
@@ -177,7 +182,7 @@
         <div class="section-label" style="margin-bottom:16px"><span>Resumo</span></div>
         <div id="resumoItens" style="margin-bottom:12px"></div>
         <div class="resumo-row"><span>Subtotal</span><span id="rSub">R$ 0,00</span></div>
-        <div class="resumo-row"><span>Impostos 12%</span><span id="rTax">R$ 0,00</span></div>
+        <div class="resumo-row"><span>Impostos</span><span id="rTax">R$ 0,00</span></div>
         <div class="resumo-row"><span>Frete</span><span id="rFrete">R$ 0,00</span></div>
         <div class="resumo-total"><span>TOTAL</span><span class="total-val" id="rTotal">R$ 0,00</span></div>
         <div class="timer-card">

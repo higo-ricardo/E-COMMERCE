@@ -389,9 +389,9 @@ async function loadPedidos() {
     }
 
     const stClass = (s) => {
-      if (s === "cancelado") return "st-cancelado"
-      if (s === "entregue") return "st-entregue"
-      if (s === "novo") return "st-novo"
+      if (s === "CANCELADO") return "st-cancelado"
+      if (s === "ENTREGUE") return "st-entregue"
+      if (s === "NOVO") return "st-novo"
       return "st-default"
     }
 
@@ -408,7 +408,7 @@ async function loadPedidos() {
             <div style="font-size:12px;color:var(--muted)">${fmtDate(o.$createdAt)} - ${fmtBRL(o.total)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:12px">
-            <span class="order-status ${stClass(o.status)}">${o.status || "novo"}</span>
+            <span class="order-status ${stClass(o.status)}">${o.status || "NOVO"}</span>
             <i class="fas fa-chevron-down acc-icon"></i>
           </div>
         </div>

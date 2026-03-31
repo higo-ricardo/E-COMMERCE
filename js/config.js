@@ -26,8 +26,6 @@ export const CONFIG = {
     CART_KEY:  "hiverCart",
   },
 
-  TAX_RATE: 0.12,
-
   WHATSAPP: "5598981168787",
 
   // ── Estoque ───────────────────────────────────────────────────────────────
@@ -45,6 +43,16 @@ export const CONFIG = {
     BLOCK_10:   60 * 60 * 1000,  // 10 tentativas → 1 hora
     DISABLE_AT: 15,              // 15 tentativas → isActive = false
     UI_LOCK_MS: 15 * 60 * 1000, // lock do botão na UI (15 min)
+  },
+
+  // ── Configuração fiscal padrão (usada por orderService e nfService) ─────
+  FISCAL: {
+    AMBIENTE:     "homologacao",        // homologacao | produção
+    REGIME:       "lucro_presumido",    // simples_nacional | lucro_presumido | lucro_real
+    UF_ORIGEM:    "MA",
+    CNPJ:         "00.000.000/0001-00",
+    RAZAO_SOCIAL: "HIVERCAR AUTOPEÇAS LTDA",
+    SERIE_NFE:    "001",
   },
 
   // ── Regras de transição de status de pedido ──────────────────────────────
