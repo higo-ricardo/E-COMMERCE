@@ -21,6 +21,7 @@
 
 import { databases, ID, Query } from "./appwriteClient.js"
 import { CONFIG }               from "./config.js"
+import { DocumentNumberService } from "./documentNumberService.js"
 import { TaxEngine }            from "./taxEngine.js"
 
 if (!CONFIG || !CONFIG.FISCAL) {
@@ -49,7 +50,7 @@ function buildNFePayload(pedido) {
   let taxBreakdown = {}
   try { taxBreakdown = JSON.parse(pedido.taxBreakdown || "{}") } catch {}
 
-  const numero = pedido.$id.slice(-8).toUpperCase()
+  const numero = DocumentNumberService.invoice()
   const agora  = new Date().toISOString()
 
   return {

@@ -7,11 +7,11 @@
 //   - placeOrder() agora retorna breakdown fiscal completo no pedido
 //   - Retrocompatível: se item não tiver NCM, usa regra genérica cap.87
 
-import { AuthService }    from "./authService.js"
-import { CartService }     from "./cartService.js"
-import { OrderRepository } from "./orderRepository.js"
-import { generateOrderNumber } from "./utils.js"
-import { CONFIG }          from "./config.js"
+import { AuthService }           from "./authService.js"
+import { CartService }            from "./cartService.js"
+import { OrderRepository }        from "./orderRepository.js"
+import { DocumentNumberService } from "./documentNumberService.js"
+import { CONFIG }                 from "./config.js"
 
 export const OrderService = {
 
@@ -46,7 +46,7 @@ export const OrderService = {
     }
 
     const order = {
-      number:         generateOrderNumber(),
+      number:         DocumentNumberService.order(),
       user:           customerName,
       email:          (customerData.email || customerData.emailAddress || "").trim(),
       mobile:         (customerData.telefone || customerData.mobile || "").trim() || null,

@@ -55,9 +55,58 @@
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Buscar produtos por nome…">
       <button class="btn btn-ghost btn-sm" id="clearSearch"><i class="fas fa-xmark"></i></button>
+      <button class="btn btn-ghost btn-sm" id="btnToggleFiltros" title="Filtros avançados">
+        <i class="fas fa-filter"></i> Filtros
+      </button>
+      <button class="btn btn-ghost btn-sm" id="btnRelatorioDuplicatas" title="Verificar SKUs duplicados">
+        <i class="fas fa-exclamation-triangle"></i> Duplicatas
+      </button>
       <button class="btn btn-primary btn-sm" id="btnNovo">
         <i class="fas fa-plus"></i> Novo Produto
       </button>
+    </div>
+
+    <!-- Barra de Filtros Avançada (inicialmente oculta) -->
+    <div id="filtrosPanel" style="display:none;padding:16px;background:var(--dark);border:1px solid var(--border);margin-bottom:16px;border-radius:6px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:12px">
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">SKU</label>
+          <input type="text" id="filterSku" placeholder="Ex: VWGOL16" style="padding:6px 8px;font-size:12px">
+        </div>
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">NCM</label>
+          <input type="text" id="filterNcm" placeholder="Ex: 8708.30" style="padding:6px 8px;font-size:12px">
+        </div>
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">Barcode EAN</label>
+          <input type="text" id="filterBarcode" placeholder="Ex: 1234567890" style="padding:6px 8px;font-size:12px">
+        </div>
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">Preço Mín (R$)</label>
+          <input type="number" id="filterPriceMin" placeholder="0.00" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
+        </div>
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">Preço Máx (R$)</label>
+          <input type="number" id="filterPriceMax" placeholder="999999.99" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
+        </div>
+        <div class="field" style="margin:0">
+          <label style="font-size:12px;margin-bottom:4px;display:block">Status</label>
+          <select id="filterStatus" style="padding:6px 8px;font-size:12px;background:var(--dark);border:1px solid var(--border);color:var(--white);outline:none">
+            <option value="">-- Todos --</option>
+            <option value="ativo">Apenas Ativos</option>
+            <option value="inativo">Apenas Inativos</option>
+            <option value="todos">Incluindo Deletados</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+        <button class="btn btn-ghost btn-sm" id="btnLimparFiltros" style="padding:8px 12px">
+          <i class="fas fa-times"></i> Limpar Filtros
+        </button>
+        <button class="btn btn-primary btn-sm" id="btnAplicarFiltros" style="padding:8px 12px">
+          <i class="fas fa-search"></i> Aplicar
+        </button>
+      </div>
     </div>
 
     <!-- Tabela -->
@@ -112,10 +161,20 @@
           <label>NCM</label>
           <input type="text" id="fNcm" placeholder="Ex: 8708.30.90" maxlength="12">
         </div>
+        <!-- Campo de Motor para SKU -->
         <div class="field">
-          <label>SKU</label>
-          <input type="text" id="fSku" placeholder="Ex: HV-00123">
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">Código interno de controle</div>
+          <label>Motor / Aplicação</label>
+          <input type="text" id="fMotor" placeholder="Ex: 1.6, 2.0 (obrigatório para gerar SKU)" title="Necessário para gerar o SKU do produto">
+        </div>
+        <div class="field">
+          <label>SKU (Gerado Automaticamente)</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="fSku" placeholder="Ex: VWGOL16001" readonly style="background:var(--dark);opacity:0.7">
+            <button type="button" id="btnGerarSku" class="btn btn-ghost btn-sm" style="white-space:nowrap;padding:8px 12px">
+              <i class="fas fa-magic"></i> Gerar
+            </button>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">Gerado automaticamente a partir de marca, nome e motor. Clique 'Gerar' para criar novo.</div>
         </div>
         <div class="field">
           <label>Código de Barras</label>
@@ -201,6 +260,19 @@
   </div>
 </div>
 
+<!-- ── RELATÓRIO DUPLICATAS ── -->
+<div class="confirm-overlay" id="relatorioDuplicatasOverlay">
+  <div class="confirm-box" style="max-height:80vh;overflow-y:auto;max-width:600px">
+    <h3><i class="fas fa-chart-bar"></i> RELATÓRIO DE SKUs</h3>
+    <div id="relatorioDuplicatasContent" style="color:var(--text);font-size:13px;line-height:1.6;margin:16px 0">
+      <span class="spinner"></span> Gerando relatório…
+    </div>
+    <div class="confirm-actions">
+      <button class="btn btn-primary" id="btnFecharRelatorio">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
@@ -211,6 +283,7 @@
 import { Client, Databases, Account, Storage, Query, ID, Permission, Role }
   from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
 import { CONFIG } from "./js/config.js"
+import { SKUService } from "./js/skuService.js"
 const client = new Client()
   .setEndpoint(CONFIG.ENDPOINT)
   .setProject(CONFIG.PROJECT_ID)
@@ -244,10 +317,24 @@ let deleteTarget   = null       // { $id, name }
 let selectedFile   = null       // File a fazer upload
 let existingImageURL = null      // imageURL já salva no produto em edição
 
+// ── FILTROS (para aproveitamento de indexes) ──────────────────────────────────
+let filtrosAtivos = {
+  sku:           "",
+  ncm:           "",
+  barcode:       "",
+  priceMin:      null,
+  priceMax:      null,
+  status:        "",   // "" = ativos, "inativo" = inativos, "todos" = include deleted
+}
+
 // ── CACHE (in-memory, mesma lógica do productService.js) ────────────────────
 const cache = new Map()
 
-function cacheKey(term, page) { return `${term}|${page}` }
+function cacheKey(term, page, filtros) { 
+  // Inclui filtros na chave do cache
+  const filtroStr = JSON.stringify(filtros)
+  return `${term}|${page}|${filtroStr}` 
+}
 function cacheGet(k) {
   const e = cache.get(k)
   if (!e) return null
@@ -259,7 +346,7 @@ function invalidateCache() { cache.clear() }
 
 // ── PRODUTO SERVICE ──────────────────────────────────────────────────────────
 async function listProdutos(page = 1, term = "") {
-  const k = cacheKey(term, page)
+  const k = cacheKey(term, page, filtrosAtivos)
   const c = cacheGet(k)
   if (c) return c
 
@@ -268,7 +355,42 @@ async function listProdutos(page = 1, term = "") {
     Query.offset((page - 1) * CONFIG.STORE.PAGE_SIZE),
     Query.orderDesc("$createdAt"),
   ]
+
+  // Filtro de nome (busca full-text usando index)
   if (term) queries.push(Query.search("name", term))
+
+  // Filtro de SKU (index: sku_unique)
+  if (filtrosAtivos.sku) queries.push(Query.equal("sku", filtrosAtivos.sku))
+
+  // Filtro de NCM (index: ncm_key)
+  if (filtrosAtivos.ncm) queries.push(Query.equal("ncm", filtrosAtivos.ncm))
+
+  // Filtro de Barcode (index: barcode_key)
+  if (filtrosAtivos.barcode) queries.push(Query.equal("barcode", filtrosAtivos.barcode))
+
+  // Filtro de Preço Mínimo (index: price_key)
+  if (filtrosAtivos.priceMin !== null && filtrosAtivos.priceMin > 0) {
+    queries.push(Query.greaterThanOrEqual("price", filtrosAtivos.priceMin))
+  }
+
+  // Filtro de Preço Máximo (index: price_key)
+  if (filtrosAtivos.priceMax !== null && filtrosAtivos.priceMax > 0) {
+    queries.push(Query.lessThanOrEqual("price", filtrosAtivos.priceMax))
+  }
+
+  // Filtro de Status (index: deletedAt_key, isActive pode ter index implícito)
+  if (filtrosAtivos.status === "ativo") {
+    // Ativos: isActive=true e sem deletedAt
+    queries.push(Query.equal("isActive", true))
+    queries.push(Query.isNull("deletedAt"))
+  } else if (filtrosAtivos.status === "inativo") {
+    // Inativos: isActive=false ou com deletedAt
+    queries.push(Query.equal("isActive", false))
+  } else if (filtrosAtivos.status !== "todos") {
+    // Default: mostrar ativos (não deletados)
+    queries.push(Query.isNull("deletedAt"))
+  }
+  // Se "todos", não adiciona filtro de deletedAt
 
   const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, queries)
   const result = {
@@ -321,6 +443,7 @@ async function saveProduto(data, fileObj, editId) {
     sku:         data.sku?.trim()             || null,
     ncm:         data.ncm?.replace(/\D/g,"") || null,
     barcode:     data.barcode?.trim()         || null,
+    motor:       data.motor?.trim()           || null,
     isActive:    data.isActive               ?? true,
     imageURL:    imageURL,
     deletedAt:   null,
@@ -349,6 +472,79 @@ async function deleteProduto(id) {
     isActive:  false,
   })
   invalidateCache()
+}
+
+// ── VALIDAÇÃO SKU ────────────────────────────────────────────────────────────
+async function verificarSkuDuplicado(sku, excludeId = null) {
+  if (!sku) return true // Vazio é permitido
+  
+  try {
+    const result = await databases.listDocuments(
+      CONFIG.DB,
+      CONFIG.COL.PRODUCTS,
+      [Query.equal("sku", sku)]
+    )
+    
+    // Se encontrou e é um ID diferente do que está sendo editado
+    if (result.documents.length > 0 && result.documents[0].$id !== excludeId) {
+      throw new Error(`SKU "${sku}" já existe no sistema! Use outro ou clique em "Gerar" para gerar um novo.`)
+    }
+    
+    return true
+  } catch (err) {
+    if (err.message.includes("já existe")) throw err
+    // Se der erro de Query, significa que SKU não existe (esperado)
+    return true
+  }
+}
+
+// ── RELATÓRIO DE DUPLICATAS ──────────────────────────────────────────────────
+async function gerarRelatorioDuplicatas() {
+  try {
+    const allProducts = await databases.listDocuments(
+      CONFIG.DB,
+      CONFIG.COL.PRODUCTS,
+      [Query.limit(1000)] // Pegue até 1000 produtos
+    )
+    
+    const skuMap = new Map()
+    const duplicatas = []
+    const semSku = []
+    
+    allProducts.documents.forEach(p => {
+      if (p.sku) {
+        if (skuMap.has(p.sku)) {
+          // Encontrou duplicata
+          const existing = skuMap.get(p.sku)
+          duplicatas.push({
+            sku: p.sku,
+            produtos: [
+              { id: existing.id, nome: existing.name },
+              { id: p.$id, nome: p.name }
+            ]
+          })
+          skuMap.delete(p.sku) // Remove para não duplicar no resultado
+        } else {
+          skuMap.set(p.sku, { id: p.$id, name: p.name })
+        }
+      } else {
+        semSku.push({ id: p.$id, nome: p.name })
+      }
+    })
+    
+    return {
+      total: allProducts.documents.length,
+      comSku: skuMap.size,
+      semSku: semSku.length,
+      duplicatas: duplicatas.length,
+      detalhes: {
+        duplicatas,
+        semSku
+      }
+    }
+  } catch (err) {
+    throw new Error(`Erro ao gerar relatório: ${err.message}`)
+  }
 }
 
 // ── ALERTA ESTOQUE CRÍTICO ───────────────────────────────────────────────────
@@ -525,7 +721,7 @@ function clearForm() {
   editingId       = null
   selectedFile    = null
   existingImageURL = null
-  ;["fNome","fCategoria","fMarca","fPreco","fCostPrice","fWeight","fEstoque","fMinStock","fSku","fNcm","fBarcode","fDescricao"].forEach(id => {
+  ;["fNome","fCategoria","fMarca","fPreco","fCostPrice","fWeight","fEstoque","fMinStock","fSku","fNcm","fBarcode","fDescricao","fMotor"].forEach(id => {
     const el = document.getElementById(id)
     if (el) el.value = ""
   })
@@ -555,6 +751,7 @@ async function openEditModal(productId) {
     document.getElementById("fSku").value       = p.sku         ?? ''
     document.getElementById("fNcm").value       = p.ncm         ?? ''
     document.getElementById("fBarcode").value   = p.barcode     ?? ''
+    document.getElementById("fMotor").value     = p.motor       ?? ''
     document.getElementById("fDescricao").value = p.description ?? ''
 
     if (p.imageURL) {
@@ -587,9 +784,39 @@ async function handleSave() {
   }
   errEl.style.display = "none"
 
+  // Auto-gerar SKU se vazio
+  let skuValue = document.getElementById("fSku").value.trim()
+  if (!skuValue) {
+    try {
+      const product = { name: nome, brand: marca }
+      const variaciones = {}
+      const motor = document.getElementById("fMotor").value.trim()
+      if (motor) variaciones.motor = motor
+      
+      skuValue = SKUService.generate(product, variaciones, 1)
+      document.getElementById("fSku").value = skuValue
+    } catch (err) {
+      console.warn("Aviso ao gerar SKU automático:", err.message)
+      // Continue mesmo se falhar
+    }
+  }
+
   const btn = document.getElementById("btnSalvar")
   btn.disabled = true
   btn.innerHTML = `<span class="spinner"></span> Salvando…`
+
+  // Validar SKU duplicado antes de salvar
+  if (skuValue) {
+    try {
+      await verificarSkuDuplicado(skuValue, editingId)
+    } catch (err) {
+      errEl.textContent = "Erro: " + err.message
+      errEl.style.display = "block"
+      btn.disabled = false
+      btn.innerHTML = `<i class="fas fa-floppy-disk"></i> SALVAR PRODUTO`
+      return
+    }
+  }
 
   try {
     await saveProduto({
@@ -602,9 +829,10 @@ async function handleSave() {
       weight:      document.getElementById("fWeight").value,
       qtd:         estoque,
       minStock:    document.getElementById("fMinStock").value,
-      sku:         document.getElementById("fSku").value,
+      sku:         skuValue,
       ncm:         document.getElementById("fNcm").value,
       barcode:     document.getElementById("fBarcode").value,
+      motor:       document.getElementById("fMotor").value,
       isActive:    true,
       imageURL:    existingImageURL,
       // imageURL atualizado em saveProduto via Storage
@@ -650,6 +878,55 @@ function esc(str) {
   return String(str ?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 }
 
+// ── RELATÓRIO HANDLER ────────────────────────────────────────────────────────
+async function handleRelatorioDuplicatas() {
+  const overlay = document.getElementById("relatorioDuplicatasOverlay")
+  const content = document.getElementById("relatorioDuplicatasContent")
+  
+  overlay.classList.add("open")
+  content.innerHTML = `<span class="spinner"></span> Gerando relatório…`
+  
+  try {
+    const dados = await gerarRelatorioDuplicatas()
+    
+    // Monta HTML com os resultados
+    let html = `
+      <div style="background:rgba(255,255,255,.05);padding:12px;border-radius:4px;margin-bottom:12px">
+        <strong>Resumo:</strong><br>
+        Total de produtos: <strong>${dados.total}</strong><br>
+        Com SKU: <strong style="color:var(--green)">${dados.comSku}</strong><br>
+        Sem SKU: <strong style="color:var(--yellow)">${dados.semSku}</strong><br>
+        SKUs duplicados: <strong style="color:var(--red)">${dados.duplicatas}</strong>
+      </div>
+    `
+    
+    if (dados.duplicatas > 0) {
+      html += `<div style="color:var(--red);font-weight:600;margin-bottom:8px"><i class="fas fa-triangle-exclamation"></i> Duplicatas encontradas:</div>`
+      dados.detalhes.duplicatas.forEach(dup => {
+        html += `<div style="background:rgba(251,18,48,.1);padding:8px;border-left:3px solid var(--red);margin-bottom:8px">`
+        html += `<strong>${esc(dup.sku)}</strong><br>`
+        dup.produtos.forEach((p, i) => {
+          html += `${i > 0 ? '<br>' : ''}→ ${esc(p.nome)} (${esc(p.id)})`
+        })
+        html += `</div>`
+      })
+    } else {
+      html += `<div style="color:var(--green)"><i class="fas fa-check-circle"></i> Nenhuma duplicata encontrada!</div>`
+    }
+    
+    if (dados.detalhes.semSku.length > 0) {
+      html += `<div style="color:var(--yellow);font-weight:600;margin:12px 0 8px"><i class="fas fa-circle-exclamation"></i> ${dados.detalhes.semSku.length} produto(s) sem SKU:</div>`
+      dados.detalhes.semSku.forEach(p => {
+        html += `<div style="background:rgba(255,193,7,.1);padding:8px;margin-bottom:4px">→ ${esc(p.nome)}</div>`
+      })
+    }
+    
+    content.innerHTML = html
+  } catch (err) {
+    content.innerHTML = `<div style="color:var(--red)"><i class="fas fa-circle-xmark"></i> Erro: ${esc(err.message)}</div>`
+  }
+}
+
 // ── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
   load()
@@ -678,6 +955,43 @@ function init() {
   // Salvar
   document.getElementById("btnSalvar").addEventListener("click", handleSave)
 
+  // Gerar SKU
+  function gerarNovoSku() {
+    const nome = document.getElementById("fNome").value.trim()
+    const marca = document.getElementById("fMarca").value.trim()
+    const motor = document.getElementById("fMotor").value.trim()
+
+    if (!nome || !marca) {
+      alert("Preenchha Nome e Marca antes de gerar SKU")
+      return
+    }
+
+    if (!motor) {
+      alert("Preenchha Motor antes de gerar SKU")
+      return
+    }
+
+    try {
+      // Monta objeto produto para SKUService
+      const product = { name: nome, brand: marca }
+      
+      // Monta variações com motor
+      const variaciones = { motor: motor }
+
+      // Gera novo SKU com serial 001
+      const novoSku = SKUService.generate(product, variaciones, 1)
+      document.getElementById("fSku").value = novoSku
+      toast(`SKU gerado: ${novoSku}`, "success")
+    } catch (err) {
+      alert("Erro ao gerar SKU: " + err.message)
+    }
+  }
+
+  document.getElementById("btnGerarSku").addEventListener("click", e => {
+    e.preventDefault()
+    gerarNovoSku()
+  })
+
   // Busca com debounce
   document.getElementById("searchInput").addEventListener("input", e => {
     clearTimeout(searchTimer)
@@ -692,6 +1006,76 @@ function init() {
     searchTerm  = ""
     currentPage = 1
     load()
+  })
+
+  // ── FILTROS AVANÇADOS ────────────────────────────────────────────────────
+  const filtrosPanel = document.getElementById("filtrosPanel")
+  
+  // Toggle painel de filtros
+  document.getElementById("btnToggleFiltros").addEventListener("click", () => {
+    filtrosPanel.style.display = filtrosPanel.style.display === "none" ? "block" : "none"
+  })
+
+  // Limpar filtros
+  document.getElementById("btnLimparFiltros").addEventListener("click", () => {
+    filtrosAtivos = { sku: "", ncm: "", barcode: "", priceMin: null, priceMax: null, status: "" }
+    document.getElementById("filterSku").value = ""
+    document.getElementById("filterNcm").value = ""
+    document.getElementById("filterBarcode").value = ""
+    document.getElementById("filterPriceMin").value = ""
+    document.getElementById("filterPriceMax").value = ""
+    document.getElementById("filterStatus").value = ""
+    currentPage = 1
+    invalidateCache()
+    load()
+    toast("Filtros limpos")
+  })
+
+  // Aplicar filtros
+  document.getElementById("btnAplicarFiltros").addEventListener("click", () => {
+    // Coleta valores dos inputs
+    filtrosAtivos.sku = document.getElementById("filterSku").value.trim()
+    filtrosAtivos.ncm = document.getElementById("filterNcm").value.trim()
+    filtrosAtivos.barcode = document.getElementById("filterBarcode").value.trim()
+    
+    const priceMin = document.getElementById("filterPriceMin").value
+    filtrosAtivos.priceMin = priceMin ? parseFloat(priceMin) : null
+    
+    const priceMax = document.getElementById("filterPriceMax").value
+    filtrosAtivos.priceMax = priceMax ? parseFloat(priceMax) : null
+    
+    filtrosAtivos.status = document.getElementById("filterStatus").value
+
+    // Reseta para página 1 e invalida cache
+    currentPage = 1
+    invalidateCache()
+    
+    // Carrega com novos filtros
+    load()
+    
+    // Feedback visual
+    const filtroQtd = [
+      filtrosAtivos.sku,
+      filtrosAtivos.ncm,
+      filtrosAtivos.barcode,
+      filtrosAtivos.priceMin,
+      filtrosAtivos.priceMax,
+      filtrosAtivos.status ? filtrosAtivos.status !== "ativo" : false
+    ].filter(x => x).length
+    
+    if (filtroQtd > 0) {
+      document.getElementById("btnToggleFiltros").innerHTML = `<i class="fas fa-filter"></i> Filtros (${filtroQtd})`
+      toast(`${filtroQtd} filtro(s) aplicado(s)`)
+    } else {
+      document.getElementById("btnToggleFiltros").innerHTML = `<i class="fas fa-filter"></i> Filtros`
+    }
+  })
+
+  // Enter nos campos de filtro
+  ;["filterSku", "filterNcm", "filterBarcode", "filterPriceMin", "filterPriceMax"].forEach(id => {
+    document.getElementById(id).addEventListener("keypress", e => {
+      if (e.key === "Enter") document.getElementById("btnAplicarFiltros").click()
+    })
   })
 
   // Upload de imagem
@@ -769,6 +1153,17 @@ function init() {
     } finally {
       btn.disabled = false
       btn.innerHTML = `<i class="fas fa-trash"></i> Excluir Definitivamente`
+    }
+  })
+
+  // Relatório de duplicatas
+  document.getElementById("btnRelatorioDuplicatas").addEventListener("click", handleRelatorioDuplicatas)
+  document.getElementById("btnFecharRelatorio").addEventListener("click", () => {
+    document.getElementById("relatorioDuplicatasOverlay").classList.remove("open")
+  })
+  document.getElementById("relatorioDuplicatasOverlay").addEventListener("click", e => {
+    if (e.target === e.currentTarget) {
+      document.getElementById("relatorioDuplicatasOverlay").classList.remove("open")
     }
   })
 }
