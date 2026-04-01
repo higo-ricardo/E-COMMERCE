@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sprint Backlog S01–S05 — HIVERCAR</title>
+<title>Sprint Backlog S01–S08 — HIVERCAR</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--black:#090909;--dark:#0f1012;--panel:#131517;--border:#1c1f21;--border2:#252a2e;--red:#fb1230;--green:#26fd71;--amber:#f59e0b;--blue:#3b82f6;--cyan:#06b6d4;--purple:#a855f7;--white:#eeecea;--muted:#454a4e;--muted2:#6b7280;--glow-g:rgba(38,253,113,0.18);--glow-a:rgba(245,158,11,0.18);--glow-r:rgba(251,18,48,0.15);}
@@ -160,8 +160,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <header class="hdr">
   <div class="brand"><div class="dot"></div>HIVER<em>CAR</em></div>
   <div class="hright">
-    <div class="dlabel dl-green">Sprint Backlog · S01–S05</div>
-    <div class="dmeta"><span>v6.0</span><span>Março 2026</span></div>
+    <div class="dlabel dl-green">Sprint Backlog · S01–S08</div>
+    <div class="dmeta"><span>v7.0</span><span>Abril 2026</span></div>
   </div>
 </header>
 <div class="hero">
@@ -169,7 +169,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <h1>SPRINT <em>BACKLOG</em></h1>
   <p class="hsub">
     <strong style="color:var(--green)">5 Sprints — 234 pts entregues</strong> ·
-    S01 ✅ S02 ✅ S03 ✅ S04 ✅ S05 ⚡ (implementada, aguarda desbloqueio fiscal)
+    S01 ✅ S02 ✅ S03 ✅ S04 ✅ S05 ⚡ (implementada, aguarda desbloqueio fiscal) · S06 📋 (planejamento — Épico Cupons) · S07 📋 (Épicos Pedidos & Dashboard) · S08 📋 (Épicos Relatórios & Exportação)
   </p>
 </div>
 <div class="vbar">
@@ -204,6 +204,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <button class="stab" onclick="showS('s3',this)">✅ Sprint 03</button>
   <button class="stab" onclick="showS('s4',this)">✅ Sprint 04</button>
   <button class="stab s5" onclick="showS('s5',this)">⚡ Sprint 05</button>
+  &nbsp;&nbsp;
+  <button class="stab s6" onclick="showS('s6',this)">📋 Sprint 06 — Cupons</button>
+  <button class="stab s7" onclick="showS('s7',this)">📋 Sprint 07 — Pedidos</button>
+  <button class="stab s8" onclick="showS('s8',this)">📋 Sprint 08 — Relatórios</button>
 </nav>
 <main class="main">
 <div class="ss on" id="s1">
@@ -575,7 +579,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 </div></div>
 </div>
 <div class="retro"><div class="retro-t">⟳ Notas da Sprint</div><div class="retro-l">
-<div class="retro-i"><span>✓</span>147→190+ testes após Sprint 05</div>
+<div class="retro-i"><span>✓</span>147→190+ testes após Sprint 05 · +23 testes planejados para S06 (cupons)</div>
 <div class="retro-i"><span>✓</span>Admin completo: produtos, estoque, OS, clientes</div>
 <div class="retro-i"><span>✓</span>send-stock-alert em produção</div>
 </div></div>
@@ -882,13 +886,354 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <div class="retro-i"><span>✓</span>admin-fiscal.html com sidebar em todos os 6 painéis</div>
 </div></div>
 </div>
+</div>
+<div class="ss " id="s6">
+<div class="sh">
+<div class="snum">S06</div>
+<div class="si">
+<div class="sname">Cupons & Promoções</div>
+<div class="smeta"><span>📅 Abril 2026</span><span>📋 Planejamento</span><span>🎯 Épico Cupons</span></div>
+<div class="sgoal">Implementar sistema completo de cupons de desconto com regras de negócio, segmentação e validações de segurança.</div>
+</div>
+<div class="sstats">
+<div class="spts">78 <span class="spl">PTS</span></div>
+<div class="pb"><div class="pf" style="width:0%"></div></div>
+<div class="spl">0% concluído</div>
+</div>
+</div>
+
+<div class="sec-lbl">📋 User Stories (14 US · 78 pts)</div>
+<div class="ul">
+<div class="uc s-back" data-search="us-50 criar cupom">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-50</div>
+<div class="utit">Criar Cupom</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero criar cupons com regras configuráveis, para aplicar promoções no sistema.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir código do cupom (único)</div>
+<div class="acitem"><span class="acn">2</span>Definir tipo: percentual ou fixo</div>
+<div class="acitem"><span class="acn">3</span>Definir valor do desconto</div>
+<div class="acitem"><span class="acn">4</span>Definir data de validade</div>
+<div class="acitem"><span class="acn">5</span>Definir valor mínimo de compra</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span><span class="ft">dashboard-cupons.html</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-51 limite de uso">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-51</div>
+<div class="utit">Limite de Uso Global</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero limitar o uso de um cupom, para controlar promoções.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir usageLimit global</div>
+<div class="acitem"><span class="acn">2</span>Sistema bloqueia uso ao atingir limite</div>
+<div class="acitem"><span class="acn">3</span>Contador de usos incrementa automaticamente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-52 cupom por usuário">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-52</div>
+<div class="utit">Limite de Uso por Usuário</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero limitar uso por usuário, para evitar abuso.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir userLimit por cupom</div>
+<div class="acitem"><span class="acn">2</span>Sistema rastreia uso por usuário (userId)</div>
+<div class="acitem"><span class="acn">3</span>Bloqueia quando atingir limite individual</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-53 validar cupom">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-53</div>
+<div class="utit">Validar Cupom no Checkout</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero validar o cupom antes de aplicar, para garantir regras corretas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Verifica se cupom existe</div>
+<div class="acitem"><span class="acn">2</span>Verifica se está ativo</div>
+<div class="acitem"><span class="acn">3</span>Verifica valor mínimo da compra</div>
+<div class="acitem"><span class="acn">4</span>Retorna erro claro se inválido</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">checkout.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-54 verificar expiração">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-54</div>
+<div class="utit">Verificar Expiração do Cupom</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de cupons expirados, para evitar inconsistências.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Compara data atual com expirationDate</div>
+<div class="acitem"><span class="acn">2</span>Bloqueia cupom expirado</div>
+<div class="acitem"><span class="acn">3</span>Retorna mensagem clara de expiração</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-55 verificar limite">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-55</div>
+<div class="utit">Verificar Limite de Uso</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso quando limite for atingido.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Validar usageLimit global</div>
+<div class="acitem"><span class="acn">2</span>Incrementar quantidade de usos</div>
+<div class="acitem"><span class="acn">3</span>Bloqueia uso se limite atingido</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-56 aplicar desconto">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-56</div>
+<div class="utit">Aplicar Desconto no Carrinho</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero aplicar desconto corretamente no carrinho.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Calcula desconto percentual ou fixo</div>
+<div class="acitem"><span class="acn">2</span>Atualiza total do pedido</div>
+<div class="acitem"><span class="acn">3</span>Mostra valor do desconto na UI</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span><span class="ft">cart.html</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-57 evitar negativo">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-57</div>
+<div class="utit">Evitar Total Negativo</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero evitar que o total fique negativo após desconto.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Total mínimo = R$ 0,00</div>
+<div class="acitem"><span class="acn">2</span>Ajusta desconto automaticamente se ultrapassar</div>
+<div class="acitem"><span class="acn">3</span>Validação no cartService</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-58 cupom por produto">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-58</div>
+<div class="utit">Cupom por Produto</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero criar cupons específicos para produtos, para campanhas direcionadas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Cupom aplica apenas a produtos selecionados (productIds)</div>
+<div class="acitem"><span class="acn">2</span>Ignora outros itens do carrinho</div>
+<div class="acitem"><span class="acn">3</span>UI mostra quais produtos elegíveis</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-59 cupom por categoria">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-59</div>
+<div class="utit">Cupom por Categoria</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero aplicar cupons por categoria, para promoções segmentadas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Aplica desconto apenas em produtos da categoria</div>
+<div class="acitem"><span class="acn">2</span>Funciona com múltiplos itens</div>
+<div class="acitem"><span class="acn">3</span>Cálculo proporcional no carrinho</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-60 bloquear expirado">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-60</div>
+<div class="utit">Bloquear Cupom Expirado</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de cupons expirados.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Não permite aplicação</div>
+<div class="acitem"><span class="acn">2</span>Retorna mensagem clara de expiração</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-61 bloquear duplicado">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-61</div>
+<div class="utit">Bloquear Cupom Duplicado</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir aplicação duplicada do mesmo cupom.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Um cupom por pedido</div>
+<div class="acitem"><span class="acn">2</span>Não pode reaplicar o mesmo código</div>
+<div class="acitem"><span class="acn">3</span>Estado do cupom armazenado no carrinho</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-62 limite 50%">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-62</div>
+<div class="utit">Limitar Desconto Máximo (50%)</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero limitar desconto a 50% do pedido, para evitar prejuízo.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Desconto máximo = 50% do subtotal</div>
+<div class="acitem"><span class="acn">2</span>Ajuste automático se ultrapassar</div>
+<div class="acitem"><span class="acn">3</span>Configurável via CONFIG</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">config.js</span></div>
+</div></div>
+<div class="uc s-back" data-search="us-63 bloquear cumulatividade">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-63</div>
+<div class="utit">Bloquear Cumulatividade de Cupons</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-dom">Cupons</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de múltiplos cupons no mesmo pedido.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Apenas 1 cupom ativo por carrinho</div>
+<div class="acitem"><span class="acn">2</span>Nova aplicação substitui ou bloqueia</div>
+<div class="acitem"><span class="acn">3</span>UI mostra cupom aplicado claramente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span><span class="ft">cart.html</span></div>
+</div></div>
+</div>
+
+<div class="retro"><div class="retro-t">📋 Planejamento da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>📋</span>14 US planejadas para S06 — Épico Cupons</div>
+<div class="retro-i"><span>🎯</span>Foco: criação, validação, aplicação e segurança de cupons</div>
+<div class="retro-i"><span>🔧</span>Novos arquivos: couponService.js, couponRepository.js, dashboard-cupons.html</div>
+<div class="retro-i"><span>⚡</span>Integração com cartService e checkout existentes</div>
+</div></div>
+</div>
+
+<!-- ==================== SPRINT 07 ==================== -->
+<div class="ss " id="s7">
+<div class="sh blue">
+<div class="snum">07</div>
+<div class="si"><div class="sname">PEDIDOS & DASHBOARD</div>
+<div class="smeta"><span>📋 Planejamento</span><span>Abril 2026</span><span>21 US · 96 pts</span></div>
+</div>
+<div class="sl blue"></div>
+<div class="ssc">
+<div class="epic"><div class="ep-title">🟦 ÉPICO 1 — Gestão de Pedidos</div><div class="ep-desc">Controle completo do ciclo de vida do pedido</div></div>
+<div class="ucard"><div class="uc-id">US-64</div><div class="uc-tit">Criar Pedido Manualmente</div><div class="uc-desc">Como vendedor, quero criar um pedido manualmente para registrar vendas offline.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-65</div><div class="uc-tit">Visualizar Todos os Pedidos</div><div class="uc-desc">Como vendedor, quero visualizar todos os pedidos para acompanhar minhas vendas.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-66</div><div class="uc-tit">Ver Detalhes de um Pedido</div><div class="uc-desc">Como vendedor, quero ver detalhes de um pedido para entender informações do cliente e valor.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟨 ÉPICO 2 — Status do Pedido</div><div class="ep-desc">Fluxo tipo Shopee / Mercado Livre</div></div>
+<div class="ucard"><div class="uc-id">US-67</div><div class="uc-tit">Alterar Status para Processando</div><div class="uc-desc">Como vendedor, quero alterar o status do pedido para "Processando" para iniciar a preparação.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-68</div><div class="uc-tit">Marcar como Enviado</div><div class="uc-desc">Como vendedor, quero marcar como "Enviado" para indicar que saiu para entrega.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-69</div><div class="uc-tit">Marcar como Entregue</div><div class="uc-desc">Como vendedor, quero marcar como "Entregue" para finalizar o pedido.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-70</div><div class="uc-tit">Registrar Histórico de Mudanças</div><div class="uc-desc">Como sistema, quero registrar histórico de mudanças para auditoria.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟩 ÉPICO 3 — Logística / Entrega</div><div class="ep-desc">Controle de envio e entrega</div></div>
+<div class="ucard"><div class="uc-id">US-71</div><div class="uc-tit">Confirmar Entrega</div><div class="uc-desc">Como vendedor, quero confirmar entrega para garantir que o cliente recebeu.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-72</div><div class="uc-tit">Ver Status da Entrega</div><div class="uc-desc">Como vendedor, quero ver status da entrega para acompanhar logística.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟥 ÉPICO 4 — Cancelamento</div><div class="ep-desc">Controle de pedidos cancelados</div></div>
+<div class="ucard"><div class="uc-id">US-73</div><div class="uc-tit">Cancelar Pedido</div><div class="uc-desc">Como vendedor, quero cancelar um pedido para interromper vendas inválidas.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-74</div><div class="uc-tit">Bloquear Ações em Pedidos Cancelados</div><div class="uc-desc">Como sistema, quero bloquear ações em pedidos cancelados para evitar inconsistência.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟪 ÉPICO 5 — Devoluções (Returns)</div><div class="ep-desc">Fluxo de pós-venda</div></div>
+<div class="ucard"><div class="uc-id">US-75</div><div class="uc-tit">Registrar Devolução</div><div class="uc-desc">Como vendedor, quero registrar devolução para tratar produtos retornados.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-76</div><div class="uc-tit">Marcar Pedidos com Devolução</div><div class="uc-desc">Como sistema, quero marcar pedidos com devolução para controle financeiro.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟫 ÉPICO 6 — Dashboard</div><div class="ep-desc">Visão geral do negócio</div></div>
+<div class="ucard"><div class="uc-id">US-77</div><div class="uc-tit">Ver Total de Vendas</div><div class="uc-desc">Como vendedor, quero ver total de vendas para acompanhar faturamento.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-78</div><div class="uc-tit">Ver Quantidade de Pedidos</div><div class="uc-desc">Como vendedor, quero ver quantidade de pedidos para medir desempenho.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟦 ÉPICO 7 — Autenticação e Auditoria</div><div class="ep-desc">Rastrear comportamento de login</div></div>
+<div class="ucard"><div class="uc-id">US-79</div><div class="uc-tit">Capturar Horário do Último Login</div><div class="uc-desc">Como desenvolvedor, preciso que o sistema capture o horário do último login e armazene no atributo lastLogin.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-80</div><div class="uc-tit">Capturar IP do Cliente</div><div class="uc-desc">Como desenvolvedor, quero capturar o IP do cliente em logins bem-sucedidos para auditoria.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-81</div><div class="uc-tit">Incrementar Contador de Logins</div><div class="uc-desc">Como desenvolvedor, quero incrementar o contador de logins para análise de uso.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-82</div><div class="uc-tit">Visualizar Total de Produtos</div><div class="uc-desc">Como administrador, quero visualizar a quantidade total de produtos cadastrados para monitorar o catálogo.</div><div class="uc-badges"><span class="b b-pts">3 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟩 ÉPICO 8 — Regras de Desconto e Checkout</div><div class="ep-desc">Garantir consistência nas regras</div></div>
+<div class="ucard"><div class="uc-id">US-83</div><div class="uc-tit">Ignorar Cupons Expirados</div><div class="uc-desc">Como lojista, quero ignorar cupons expirados para evitar descontos inválidos.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-84</div><div class="uc-tit">Oferecer Pagamento em Dinheiro</div><div class="uc-desc">Como lojista, quero oferecer pagamento em dinheiro para aumentar flexibilidade.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟪 ÉPICO 9 — Fluxo de Checkout e UX</div><div class="ep-desc">Melhorar experiência do usuário</div></div>
+<div class="ucard"><div class="uc-id">US-85</div><div class="uc-tit">Checkout Inteligente</div><div class="uc-desc">Como usuário, quero um fluxo de checkout inteligente baseado no estado do carrinho e autenticação.</div><div class="uc-badges"><span class="b b-pts">8 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-86</div><div class="uc-tit">Preenchimento Automático de Dados</div><div class="uc-desc">Como usuário, quero que meus dados sejam preenchidos automaticamente no checkout para agilizar a compra.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟫 ÉPICO 10 — Gestão de Pedidos Avançada</div><div class="ep-desc">Controle e rastreabilidade</div></div>
+<div class="ucard"><div class="uc-id">US-87</div><div class="uc-tit">Gerar Números Únicos de Pedido</div><div class="uc-desc">Como sistema, quero gerar números únicos de pedido para rastreabilidade e ordenação.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-88</div><div class="uc-tit">Gerenciar Status de Pagamento</div><div class="uc-desc">Como lojista, quero gerenciar status de pagamento do pedido para controle financeiro.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟦 ÉPICO 11 — Paginação e Performance</div><div class="ep-desc">Melhorar navegação em listas grandes</div></div>
+<div class="ucard"><div class="uc-id">US-89</div><div class="uc-tit">Paginação de Pedidos</div><div class="uc-desc">Como usuário, quero navegar entre páginas de pedidos para visualizar grandes volumes de dados.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟪 ÉPICO 12 — Seleção em Massa</div><div class="ep-desc">Facilitar ações em múltiplos pedidos</div></div>
+<div class="ucard"><div class="uc-id">US-90</div><div class="uc-tit">Seleção Múltipla de Pedidos</div><div class="uc-desc">Como usuário, quero selecionar múltiplos pedidos facilmente para ações em lote.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+</div>
+
+<div class="retro"><div class="retro-t">📋 Planejamento da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>📋</span>21 US planejadas para S07 — Épicos Pedidos & Dashboard</div>
+<div class="retro-i"><span>🎯</span>Foco: gestão completa de pedidos, status, logística e dashboard</div>
+<div class="retro-i"><span>🔧</span>Novos arquivos: orderService.js, orderRepository.js, dashboard-pedidos.html, paginator.js</div>
+<div class="retro-i"><span>⚡</span>Integração com auth, carrinho e checkout existentes</div>
+</div></div>
+</div>
+
+<!-- ==================== SPRINT 08 ==================== -->
+<div class="ss " id="s8">
+<div class="sh purple">
+<div class="snum">08</div>
+<div class="si"><div class="sname">RELATÓRIOS & EXPORTAÇÃO</div>
+<div class="smeta"><span>📋 Planejamento</span><span>Abril 2026</span><span>7 US · 38 pts</span></div>
+</div>
+<div class="sl purple"></div>
+<div class="ssc">
+<div class="epic"><div class="ep-title">🟦 ÉPICO 1 — Geração de Relatórios</div><div class="ep-desc">Permitir geração de relatórios com dados estratégicos do e-commerce</div></div>
+<div class="ucard"><div class="uc-id">US-91</div><div class="uc-tit">Gerar Relatório de Vendas</div><div class="uc-desc">Como administrador, quero gerar um relatório de faturamento para analisar o desempenho financeiro.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-92</div><div class="uc-tit">Relatório de Pedidos por Status</div><div class="uc-desc">Como administrador, quero visualizar pedidos agrupados por status para acompanhar o fluxo operacional.</div><div class="uc-badges"><span class="b b-pts">5 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-93</div><div class="uc-tit">Produtos Mais Vendidos</div><div class="uc-desc">Como administrador, quero visualizar os produtos mais vendidos para tomar decisões de estoque e marketing.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟨 ÉPICO 2 — Exportação de Relatórios</div><div class="ep-desc">Permitir exportação dos relatórios para diferentes formatos</div></div>
+<div class="ucard"><div class="uc-id">US-94</div><div class="uc-tit">Exportar Relatório em PDF</div><div class="uc-desc">Como administrador, quero exportar relatórios em PDF para compartilhamento e documentação.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+<div class="ucard"><div class="uc-id">US-95</div><div class="uc-tit">Exportar Relatório em Excel</div><div class="uc-desc">Como administrador, quero exportar relatórios em Excel para análise detalhada.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟩 ÉPICO 3 — Impressão de Relatórios</div><div class="ep-desc">Permitir impressão direta dos relatórios</div></div>
+<div class="ucard"><div class="uc-id">US-96</div><div class="uc-tit">Imprimir Relatório</div><div class="uc-desc">Como administrador, quero imprimir relatórios para uso físico ou auditoria.</div><div class="uc-badges"><span class="b b-pts">4 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+
+<div class="epic"><div class="ep-title">🟪 ÉPICO 4 — Filtros e Personalização</div><div class="ep-desc">Permitir relatórios dinâmicos e filtráveis</div></div>
+<div class="ucard"><div class="uc-id">US-97</div><div class="uc-tit">Filtrar por Período</div><div class="uc-desc">Como administrador, quero filtrar relatórios por data para analisar períodos específicos.</div><div class="uc-badges"><span class="b b-pts">6 pts</span><span class="b b-back">📋 Backlog</span></div></div>
+</div>
+
+<div class="retro"><div class="retro-t">📋 Planejamento da Sprint</div><div class="retro-l">
+<div class="retro-i"><span>📋</span>7 US planejadas para S08 — Épicos Relatórios & Exportação</div>
+<div class="retro-i"><span>🎯</span>Foco: geração, exportação (PDF/Excel), impressão e filtros de relatórios</div>
+<div class="retro-i"><span>🔧</span>Novos arquivos: reportsService.js, jspdf.min.js, xlsx.mini.min.js, reports.css</div>
+<div class="retro-i"><span>⚡</span>Integração com orderService, productService e analytics existentes</div>
+</div></div>
+</div>
 </main>
 <div class="leg">
   <div class="li"><div class="ld done"></div> Concluída</div>
   <div class="li"><div class="ld impl"></div> Implementada</div>
   <div class="li"><div class="ld block"></div> Bloqueada</div>
   <div class="li"><div class="ld debt"></div> Débito Técnico</div>
-  <div style="margin-left:auto;font-size:10px;color:var(--muted)">HIVERCAR AUTOPEÇAS · Sprint Backlog S01–S05 · v6.0 · Março 2026</div>
+  <div style="margin-left:auto;font-size:10px;color:var(--muted)">HIVERCAR AUTOPEÇAS · Sprint Backlog S01–S08 · v8.0 · Abril 2026</div>
 </div>
 <script>
 function showS(id, btn) {
