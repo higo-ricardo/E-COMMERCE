@@ -56,6 +56,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .dom-estoque .dom-hdr{border-left-color:var(--amber);}
 .dom-oficina .dom-hdr{border-left-color:var(--purple);}
 .dom-fiscal .dom-hdr{border-left-color:var(--red);}
+.dom-cupons .dom-hdr{border-left-color:#ec4899;}
+.dom-pedidos .dom-hdr{border-left-color:#14b8a6;}
+.dom-dashboard .dom-hdr{border-left-color:#f97316;}
+.dom-relatorios .dom-hdr{border-left-color:#8b5cf6;}
 .dom-infra .dom-hdr{border-left-color:var(--muted2);}
 .ul{display:flex;flex-direction:column;gap:1px;background:var(--border);}
 .uc{background:var(--panel);transition:background .15s;}
@@ -116,20 +120,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <header class="hdr">
   <div class="brand"><div class="dot"></div>HIVER<em>CAR</em></div>
   <div class="hdrlabels">
-    <div class="dlabel">Product Backlog v5.0</div>
-    <div class="dmeta"><span>36 US · 7 Domínios</span><span>Março 2026</span></div>
+    <div class="dlabel">Product Backlog v8.0</div>
+    <div class="dmeta"><span>65 US · 11 Domínios</span><span>Abril 2026</span></div>
   </div>
 </header>
 <div class="hero">
   <div class="hl">Gestão de Produto</div>
   <h1>PRODUCT <em>BACKLOG</em></h1>
-  <p class="hsub">5 Sprints implementadas · <strong style="color:var(--green)">234 pts entregues</strong> · 74 arquivos · 190+ testes · Sprint 05 implementada — <strong style="color:var(--amber)">4 desbloqueadores fiscais pendentes</strong></p>
+  <p class="hsub">5 Sprints implementadas · <strong style="color:var(--green)">234 pts entregues</strong> · 88 arquivos · 190+ testes · Sprint 05 implementada — <strong style="color:var(--amber)">4 desbloqueadores fiscais pendentes</strong> · <strong style="color:#ec4899">Épico Cupons (S06)</strong> · <strong style="color:#14b8a6">Épicos Pedidos & Dashboard (S07)</strong> · <strong style="color:#8b5cf6">Épicos Relatórios & Exportação (S08)</strong></p>
 </div>
 <div class="vbar">
   <div class="vc"><div class="vn g">234</div><div class="vl">Pts Entregues</div></div>
-  <div class="vc"><div class="vn a">36</div><div class="vl">User Stories</div></div>
-  <div class="vc"><div class="vn g">27</div><div class="vl">US Concluídas</div></div>
-  <div class="vc"><div class="vn b">5</div><div class="vl">Sprints</div></div>
+  <div class="vc"><div class="vn a">65</div><div class="vl">User Stories</div></div>
+  <div class="vc"><div class="vn g">28</div><div class="vl">US Concluídas</div></div>
+  <div class="vc"><div class="vn b">8</div><div class="vl">Sprints</div></div>
   <div class="vc"><div class="vn c">74</div><div class="vl">Arquivos</div></div>
   <div class="vc"><div class="vn g">190+</div><div class="vl">Testes</div></div>
 </div>
@@ -149,6 +153,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <button class="fbtn" onclick="fDom('estoque',this)">Estoque</button>
   <button class="fbtn" onclick="fDom('oficina',this)">Oficina</button>
   <button class="fbtn" onclick="fDom('fiscal',this)">Fiscal</button>
+  <button class="fbtn" onclick="fDom('cupons',this)">Cupons</button>
+  <button class="fbtn" onclick="fDom('pedidos',this)">Pedidos</button>
+  <button class="fbtn" onclick="fDom('dashboard',this)">Dashboard</button>
+  <button class="fbtn" onclick="fDom('relatorios',this)">Relatórios</button>
   <button class="fbtn" onclick="fDom('infra',this)">Infra</button>
   <input class="sinput" id="sq" placeholder="Buscar US, título, domínio…" oninput="fQ(this.value)">
 </div>
@@ -585,6 +593,670 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <div class="blocker" style="margin-top:10px"><strong>⊘ Aguarda desbloqueio:</strong> Certificado Digital A1, SEFAZ homologação, integrador NF-e contratado e alíquotas validadas por contador.</div>
 </div></div>
 </div></div>
+<div class="dom-sec dom-cupons" data-dom="cupons">
+<div class="dom-hdr"><div class="dom-ico">🎫</div><div class="dom-name">CUPONS</div><div class="dom-meta"><div class="dom-pts">78 pts</div><div class="dom-cnt">14 US · 0 concluídas · 14 backlog</div></div></div>
+<div class="ul">
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-50 criar cupom cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-50</div>
+<div class="utit">Criar Cupom</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero criar cupons com regras configuráveis, para aplicar promoções no sistema.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir código do cupom (único)</div>
+<div class="acitem"><span class="acn">2</span>Definir tipo: percentual ou fixo</div>
+<div class="acitem"><span class="acn">3</span>Definir valor do desconto</div>
+<div class="acitem"><span class="acn">4</span>Definir data de validade</div>
+<div class="acitem"><span class="acn">5</span>Definir valor mínimo de compra</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">dashboard-cupons.html</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-51 limite de uso cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-51</div>
+<div class="utit">Limite de Uso Global</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero limitar o uso de um cupom, para controlar promoções.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir usageLimit global</div>
+<div class="acitem"><span class="acn">2</span>Sistema bloqueia uso ao atingir limite</div>
+<div class="acitem"><span class="acn">3</span>Contador de usos incrementa automaticamente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-52 cupom por usuário cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-52</div>
+<div class="utit">Limite de Uso por Usuário</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero limitar uso por usuário, para evitar abuso.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Definir userLimit por cupom</div>
+<div class="acitem"><span class="acn">2</span>Sistema rastreia uso por usuário (userId)</div>
+<div class="acitem"><span class="acn">3</span>Bloqueia quando atingir limite individual</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-53 validar cupom checkout cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-53</div>
+<div class="utit">Validar Cupom no Checkout</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero validar o cupom antes de aplicar, para garantir regras corretas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Verifica se cupom existe</div>
+<div class="acitem"><span class="acn">2</span>Verifica se está ativo</div>
+<div class="acitem"><span class="acn">3</span>Verifica valor mínimo da compra</div>
+<div class="acitem"><span class="acn">4</span>Retorna erro claro se inválido</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">checkout.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-54 verificar expiração cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-54</div>
+<div class="utit">Verificar Expiração do Cupom</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de cupons expirados, para evitar inconsistências.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Compara data atual com expirationDate</div>
+<div class="acitem"><span class="acn">2</span>Bloqueia cupom expirado</div>
+<div class="acitem"><span class="acn">3</span>Retorna mensagem clara de expiração</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-55 verificar limite de uso cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-55</div>
+<div class="utit">Verificar Limite de Uso</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso quando limite for atingido.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Validar usageLimit global</div>
+<div class="acitem"><span class="acn">2</span>Incrementar quantidade de usos</div>
+<div class="acitem"><span class="acn">3</span>Bloqueia uso se limite atingido</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">couponRepository.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-56 aplicar desconto carrinho cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-56</div>
+<div class="utit">Aplicar Desconto no Carrinho</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero aplicar desconto corretamente no carrinho.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Calcula desconto percentual ou fixo</div>
+<div class="acitem"><span class="acn">2</span>Atualiza total do pedido</div>
+<div class="acitem"><span class="acn">3</span>Mostra valor do desconto na UI</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span><span class="ft">cart.html</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-57 evitar valor negativo cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-57</div>
+<div class="utit">Evitar Total Negativo</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero evitar que o total fique negativo após desconto.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Total mínimo = R$ 0,00</div>
+<div class="acitem"><span class="acn">2</span>Ajusta desconto automaticamente se ultrapassar</div>
+<div class="acitem"><span class="acn">3</span>Validação no cartService</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-58 cupom por produto cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-58</div>
+<div class="utit">Cupom por Produto</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero criar cupons específicos para produtos, para campanhas direcionadas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Cupom aplica apenas a produtos selecionados (productIds)</div>
+<div class="acitem"><span class="acn">2</span>Ignora outros itens do carrinho</div>
+<div class="acitem"><span class="acn">3</span>UI mostra quais produtos elegíveis</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-59 cupom por categoria cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-59</div>
+<div class="utit">Cupom por Categoria</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero aplicar cupons por categoria, para promoções segmentadas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Aplica desconto apenas em produtos da categoria</div>
+<div class="acitem"><span class="acn">2</span>Funciona com múltiplos itens</div>
+<div class="acitem"><span class="acn">3</span>Cálculo proporcional no carrinho</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span><span class="ft">cartService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-60 bloquear cupom expirado segurança cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-60</div>
+<div class="utit">Bloquear Cupom Expirado</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de cupons expirados.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Não permite aplicação</div>
+<div class="acitem"><span class="acn">2</span>Retorna mensagem clara de expiração</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">couponService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-61 bloquear cupom duplicado segurança cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-61</div>
+<div class="utit">Bloquear Cupom Duplicado</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir aplicação duplicada do mesmo cupom.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Um cupom por pedido</div>
+<div class="acitem"><span class="acn">2</span>Não pode reaplicar o mesmo código</div>
+<div class="acitem"><span class="acn">3</span>Estado do cupom armazenado no carrinho</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-62 limitar desconto máximo segurança cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-62</div>
+<div class="utit">Limitar Desconto Máximo (50%)</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero limitar desconto a 50% do pedido, para evitar prejuízo.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Desconto máximo = 50% do subtotal</div>
+<div class="acitem"><span class="acn">2</span>Ajuste automático se ultrapassar</div>
+<div class="acitem"><span class="acn">3</span>Configurável via CONFIG</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">config.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="cupons" data-status="back" data-search="us-63 bloquear cumulatividade segurança cupons s06">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-63</div>
+<div class="utit">Bloquear Cumulatividade de Cupons</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S06</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero impedir uso de múltiplos cupons no mesmo pedido.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Apenas 1 cupom ativo por carrinho</div>
+<div class="acitem"><span class="acn">2</span>Nova aplicação substitui ou bloqueia</div>
+<div class="acitem"><span class="acn">3</span>UI mostra cupom aplicado claramente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">cartService.js</span><span class="ft">checkout.js</span><span class="ft">cart.html</span></div>
+</div></div>
+</div></div>
+
+<!-- ======================= PEDIDOS ======================= -->
+<div class="dom-sec dom-pedidos" data-dom="pedidos">
+<div class="dom-hdr"><div class="dom-ico">📦</div><div class="dom-name">PEDIDOS</div><div class="dom-meta"><div class="dom-pts">68 pts</div><div class="dom-cnt">15 US · 0 concluídas · 15 backlog</div></div></div>
+<div class="ul">
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-64 criar pedido manualmente vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-64</div>
+<div class="utit">Criar Pedido Manualmente</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero criar um pedido manualmente para registrar vendas offline.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Formulário com cliente, produtos, valores</div>
+<div class="acitem"><span class="acn">2</span>Gera número único do pedido</div>
+<div class="acitem"><span class="acn">3</span>Status inicial: NOVO</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard-pedidos.html</span><span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-65 visualizar todos pedidos vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-65</div>
+<div class="utit">Visualizar Todos os Pedidos</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero visualizar todos os pedidos para acompanhar minhas vendas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Lista com paginação (15/pág)</div>
+<div class="acitem"><span class="acn">2</span>Filtros por status, data, cliente</div>
+<div class="acitem"><span class="acn">3</span>Ordenação por data decrescente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard-pedidos.html</span><span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-66 ver detalhes pedido vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-66</div>
+<div class="utit">Ver Detalhes de um Pedido</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero ver detalhes de um pedido para entender informações do cliente e valor.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Modal ou página com dados completos</div>
+<div class="acitem"><span class="acn">2</span>Exibe itens, subtotal, total, frete</div>
+<div class="acitem"><span class="acn">3</span>Dados do cliente e endereço</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard-pedidos.html</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-67 alterar status processando vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-67</div>
+<div class="utit">Alterar Status para "Processando"</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero alterar o status do pedido para "Processando" para iniciar a preparação.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Botão muda status NOVO → PROCESSANDO</div>
+<div class="acitem"><span class="acn">2</span>Registra timestamp da mudança</div>
+<div class="acitem"><span class="acn">3</span>Atualiza lista sem reload</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-68 marcar como enviado vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-68</div>
+<div class="utit">Marcar como "Enviado"</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero marcar como "Enviado" para indicar que saiu para entrega.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Status PROCESSANDO → ENVIADO</div>
+<div class="acitem"><span class="acn">2</span>Campo para código de rastreio</div>
+<div class="acitem"><span class="acn">3</span>Notifica cliente (email/whatsapp)</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-69 marcar como entregue vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-69</div>
+<div class="utit">Marcar como "Entregue"</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero marcar como "Entregue" para finalizar o pedido.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Status ENVIADO → ENTREGUE</div>
+<div class="acitem"><span class="acn">2</span>Registra data de entrega</div>
+<div class="acitem"><span class="acn">3</span>Libera avaliação do produto</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-70 historico mudanças status vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-70</div>
+<div class="utit">Registrar Histórico de Mudanças</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero registrar histórico de mudanças para auditoria.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Array statusHistory no documento</div>
+<div class="acitem"><span class="acn">2</span>Cada entry: {status, timestamp, user}</div>
+<div class="acitem"><span class="acn">3</span>Exibe timeline no detalhe do pedido</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-71 confirmar entrega vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-71</div>
+<div class="utit">Confirmar Entrega</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero confirmar entrega para garantir que o cliente recebeu.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Confirmação via código ou assinatura</div>
+<div class="acitem"><span class="acn">2</span>Marca deliveredAt</div>
+<div class="acitem"><span class="acn">3</span>Fecha pedido automaticamente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-72 ver status entrega vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-72</div>
+<div class="utit">Ver Status da Entrega</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero ver status da entrega para acompanhar logística.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Integração com API dos Correios/transportadora</div>
+<div class="acitem"><span class="acn">2</span>Exibe eventos de rastreio</div>
+<div class="acitem"><span class="acn">3</span>Alerta de atraso</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-73 cancelar pedido vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-73</div>
+<div class="utit">Cancelar Pedido</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero cancelar um pedido para interromper vendas inválidas.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Botão CANCELAR em pedidos NÃO enviados</div>
+<div class="acitem"><span class="acn">2</span>Solicita motivo do cancelamento</div>
+<div class="acitem"><span class="acn">3</span>Status → CANCELADO, registra canceledAt</div>
+<div class="acitem"><span class="acn">4</span>Reverte estoque dos produtos</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span><span class="ft">stockService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-74 bloquear acoes pedido cancelado vendas s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-74</div>
+<div class="utit">Bloquear Ações em Pedido Cancelado</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero bloquear ações em pedidos cancelados para evitar inconsistência.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Não permite alterar status após cancelado</div>
+<div class="acitem"><span class="acn">2</span>Não permite reativar pedido</div>
+<div class="acitem"><span class="acn">3</span>Exibe badge "CANCELADO" visível</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-75 registrar devolucao pos-venda s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-75</div>
+<div class="utit">Registrar Devolução</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como vendedor, quero registrar devolução para tratar produtos retornados.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Formulário com motivo, fotos, condição</div>
+<div class="acitem"><span class="acn">2</span>Status → DEVOLUÇÃO EM ANÁLISE</div>
+<div class="acitem"><span class="acn">3</span>Gera etiqueta de retorno</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span><span class="ft">returnsService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-76 marcar pedido com devolucao pos-venda s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-76</div>
+<div class="utit">Marcar Pedido com Devolução</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero marcar pedidos com devolução para controle financeiro.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Flag isReturned no pedido</div>
+<div class="acitem"><span class="acn">2</span>Badge visual na listagem</div>
+<div class="acitem"><span class="acn">3</span>Impacta relatórios de vendas líquidas</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-77 gerar numero unico pedido infra s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-77</div>
+<div class="utit">Gerar Número Único de Pedido</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como sistema, quero gerar números únicos de pedido para rastreabilidade e ordenação.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Função generateOrderNumber() em utils.js</div>
+<div class="acitem"><span class="acn">2</span>Formato: YYMMDDHHmmss + random(4)</div>
+<div class="acitem"><span class="acn">3</span>Tipo inteiro (16 dígitos)</div>
+<div class="acitem"><span class="acn">4</span>Evita colisões</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">utils.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="pedidos" data-status="back" data-search="us-78 gerenciar status pagamento financeiro s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-78</div>
+<div class="utit">Gerenciar Status de Pagamento</div>
+<div class="ubadges"><span class="b b-pts">8 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como lojista, quero gerenciar status de pagamento do pedido para controle financeiro.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Botão CONFIRMAR PAGAMENTO: NOVO → PAGO</div>
+<div class="acitem"><span class="acn">2</span>Registra paidAt com $updatedAt do Appwrite</div>
+<div class="acitem"><span class="acn">3</span>Botão CANCELAR: → CANCELADO, registra canceledAt</div>
+<div class="acitem"><span class="acn">4</span>Recarrega lista com dados atualizados</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">orderService.js</span><span class="ft">dashboard-pedidos.html</span></div>
+</div></div>
+</div></div>
+
+<!-- ======================= DASHBOARD ======================= -->
+<div class="dom-sec dom-dashboard" data-dom="dashboard">
+<div class="dom-hdr"><div class="dom-ico">📊</div><div class="dom-name">DASHBOARD</div><div class="dom-meta"><div class="dom-pts">28 pts</div><div class="dom-cnt">6 US · 0 concluídas · 6 backlog</div></div></div>
+<div class="ul">
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-79 taxa cancelamento kpis dashboard s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-79</div>
+<div class="utit">Taxa de Cancelamento (KPI)</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero visualizar a taxa de cancelamento de pedidos para identificar problemas operacionais.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Fórmula: Cancelados / Total de pedidos</div>
+<div class="acitem"><span class="acn">2</span>Exibe valor em percentual</div>
+<div class="acitem"><span class="acn">3</span>Atualização em tempo real</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">analyticsService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-80 taxa devolucao kpis dashboard s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-80</div>
+<div class="utit">Taxa de Devolução (KPI)</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero visualizar a taxa de devolução para identificar problemas de produto ou logística.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Fórmula: Devoluções / Pedidos entregues</div>
+<div class="acitem"><span class="acn">2</span>Considera apenas pedidos entregues</div>
+<div class="acitem"><span class="acn">3</span>Exibe percentual corretamente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">analyticsService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-81 estoque morto kpis dashboard s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-81</div>
+<div class="utit">Estoque Morto (KPI)</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero visualizar a porcentagem de estoque morto para reduzir prejuízos.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Fórmula: Produtos sem venda / Total de produtos</div>
+<div class="acitem"><span class="acn">2</span>Período configurável (30, 60, 90 dias)</div>
+<div class="acitem"><span class="acn">3</span>Lista produtos afetados</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">analyticsService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-82 produtos menos vendidos analise dashboard s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-82</div>
+<div class="utit">Produtos Menos Vendidos</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero identificar produtos com baixo desempenho para tomar ações comerciais.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Filtro por período: 30, 60 e 90 dias</div>
+<div class="acitem"><span class="acn">2</span>Lista produtos sem vendas no período</div>
+<div class="acitem"><span class="acn">3</span>Exibe tempo desde última venda</div>
+<div class="acitem"><span class="acn">4</span>Ordenação por pior desempenho</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">analyticsService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-83 alerta estoque baixo notificacoes s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-83</div>
+<div class="utit">Alerta de Estoque Baixo</div>
+<div class="ubadges"><span class="b b-pts">3 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero receber alertas de estoque baixo para evitar ruptura de estoque.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Define limite mínimo por produto</div>
+<div class="acitem"><span class="acn">2</span>Dispara alerta ao atingir limite</div>
+<div class="acitem"><span class="acn">3</span>Exibe no dashboard</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">stockService.js</span></div>
+</div></div>
+<div class="uc s-back" data-dom="dashboard" data-status="back" data-search="us-84 alerta queda vendas notificacoes s07">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-84</div>
+<div class="utit">Alerta de Queda de Vendas</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S07</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero ser alertado quando houver queda de vendas para agir rapidamente.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Compara período atual com anterior</div>
+<div class="acitem"><span class="acn">2</span>Detecta queda percentual significativa (>20%)</div>
+<div class="acitem"><span class="acn">3</span>Exibe alerta no sistema</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft">dashboard.html</span><span class="ft">analyticsService.js</span></div>
+</div></div>
+</div></div>
+
+<!-- ==================== RELATÓRIOS ==================== -->
+<div class="dom-sec dom-relatorios" data-dom="relatorios">
+<div class="dom-hdr"><div class="dom-ico">📈</div><div class="dom-name">RELATÓRIOS</div><div class="dom-meta"><div class="dom-pts">38 pts</div><div class="dom-cnt">7 US · 0 concluídas · 7 backlog</div></div></div>
+<div class="ul">
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-85 gerar relatório de vendas relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-85</div>
+<div class="utit">Gerar Relatório de Vendas</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero gerar um relatório de faturamento para analisar o desempenho financeiro.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Soma apenas pedidos com status "Entregue"</div>
+<div class="acitem"><span class="acn">2</span>Exibe valor total</div>
+<div class="acitem"><span class="acn">3</span>Atualização sob demanda</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">dashboard-vendas.html</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-86 relatório de pedidos por status relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-86</div>
+<div class="utit">Relatório de Pedidos por Status</div>
+<div class="ubadges"><span class="b b-pts">5 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero visualizar pedidos agrupados por status para acompanhar o fluxo operacional.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Agrupa pedidos por status (Pendente, Enviado, Entregue, etc.)</div>
+<div class="acitem"><span class="acn">2</span>Exibe quantidade por status</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">dashboard-pedidos.html</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-87 produtos mais vendidos relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-87</div>
+<div class="utit">Produtos Mais Vendidos</div>
+<div class="ubadges"><span class="b b-pts">6 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero visualizar os produtos mais vendidos para tomar decisões de estoque e marketing.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Agrupa vendas por produto</div>
+<div class="acitem"><span class="acn">2</span>Ordena do mais vendido para o menos vendido</div>
+<div class="acitem"><span class="acn">3</span>Permite visualizar top N produtos</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">dashboard-produtos.html</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-88 exportar relatório em pdf relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-88</div>
+<div class="utit">Exportar Relatório em PDF</div>
+<div class="ubadges"><span class="b b-pts">6 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero exportar relatórios em PDF para compartilhamento e documentação.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Gera arquivo PDF</div>
+<div class="acitem"><span class="acn">2</span>Contém dados de vendas, status e produtos</div>
+<div class="acitem"><span class="acn">3</span>Layout legível</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">jspdf.min.js</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-89 exportar relatório em excel relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-89</div>
+<div class="utit">Exportar Relatório em Excel</div>
+<div class="ubadges"><span class="b b-pts">6 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero exportar relatórios em Excel para análise detalhada.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Gera arquivo .xlsx</div>
+<div class="acitem"><span class="acn">2</span>Estrutura em tabela</div>
+<div class="acitem"><span class="acn">3</span>Compatível com Excel</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">xlsx.mini.min.js</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-90 imprimir relatório relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-90</div>
+<div class="utit">Imprimir Relatório</div>
+<div class="ubadges"><span class="b b-pts">4 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero imprimir relatórios para uso físico ou auditoria.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Abre modo de impressão</div>
+<div class="acitem"><span class="acn">2</span>Conteúdo formatado corretamente</div>
+<div class="acitem"><span class="acn">3</span>Compatível com navegador</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reports.css</span><span class="ft m">dashboard.html</span></div>
+</div></div>
+
+<div class="uc s-back" data-dom="relatorios" data-status="back" data-search="us-91 filtrar por período relatórios s08">
+<div class="uh" onclick="tog(this.parentElement)">
+<div class="ustrip"></div><div class="uid">US-91</div>
+<div class="utit">Filtrar por Período</div>
+<div class="ubadges"><span class="b b-pts">6 pts</span><span class="b b-sp">S08</span><span class="b b-back">📋 Backlog</span></div>
+<div class="ucaret">▶</div></div>
+<div class="ubody"><div class="udesc">Como administrador, quero filtrar relatórios por data para analisar períodos específicos.</div>
+<div class="aclbl">Critérios de Aceite</div><div class="aclist">
+<div class="acitem"><span class="acn">1</span>Filtro por data inicial e final</div>
+<div class="acitem"><span class="acn">2</span>Aplica em todos os KPIs</div>
+<div class="acitem"><span class="acn">3</span>Atualiza resultados corretamente</div>
+</div>
+<div class="fslbl">Arquivos</div><div class="flist">
+<span class="ft m">reportsService.js</span><span class="ft m">dashboard.html</span></div>
+</div></div>
+</div></div>
+
 <div class="dom-sec dom-infra" data-dom="infra">
 <div class="dom-hdr"><div class="dom-ico">⚙️</div><div class="dom-name">INFRA</div><div class="dom-meta"><div class="dom-pts">38 pts</div><div class="dom-cnt">7 US · 7 concluídas</div></div></div>
 <div class="ul">
@@ -706,8 +1378,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <tr><td>🏭 Estoque</td><td>4</td><td>26</td><td style="color:var(--green)">3 / 4</td><td><div class="bw"><div class="bf" style="width:75%"></div></div></td><td>S03, S04</td></tr>
 <tr><td>🔧 Oficina</td><td>4</td><td>26</td><td style="color:var(--green)">3 / 4</td><td><div class="bw"><div class="bf" style="width:75%"></div></div></td><td>S03, S04</td></tr>
 <tr><td>🧾 Fiscal</td><td>3</td><td>42</td><td style="color:var(--amber)">2 / 3 ⚡</td><td><div class="bw"><div class="bf" style="width:67%;background:var(--amber)"></div></div></td><td>S05</td></tr>
-<tr><td>⚙️ Infra</td><td>7</td><td>38</td><td style="color:var(--green)">7 / 7</td><td><div class="bw"><div class="bf" style="width:100%"></div></div></td><td>S01–S05</td></tr>
-<tr style="font-weight:700"><td><strong>TOTAL</strong></td><td><strong>33</strong></td><td><strong>234</strong></td><td style="color:var(--green)"><strong>28 / 33</strong></td><td><div class="bw"><div class="bf" style="width:85%"></div></div></td><td></td></tr>
+<tr><td>🎫 Cupons</td><td>14</td><td>78</td><td style="color:var(--muted2)">0 / 14 📋</td><td><div class="bw"><div class="bf" style="width:0%;background:var(--muted)"></div></div></td><td>S06</td></tr>
+<tr><td>📦 Pedidos</td><td>15</td><td>68</td><td style="color:var(--muted2)">0 / 15 📋</td><td><div class="bw"><div class="bf" style="width:0%;background:var(--muted)"></div></div></td><td>S07</td></tr>
+<tr><td>📊 Dashboard</td><td>6</td><td>28</td><td style="color:var(--muted2)">0 / 6 📋</td><td><div class="bw"><div class="bf" style="width:0%;background:var(--muted)"></div></div></td><td>S07</td></tr>
+<tr><td>📈 Relatórios</td><td>7</td><td>38</td><td style="color:var(--muted2)">0 / 7 📋</td><td><div class="bw"><div class="bf" style="width:0%;background:var(--muted)"></div></div></td><td>S08</td></tr>
+<tr><td>⚙️ Infra</td><td>9</td><td>44</td><td style="color:var(--green)">7 / 9</td><td><div class="bw"><div class="bf" style="width:78%"></div></div></td><td>S01–S05</td></tr>
+<tr style="font-weight:700"><td><strong>TOTAL GERAL</strong></td><td><strong>65</strong></td><td><strong>458</strong></td><td style="color:var(--green)"><strong>28 / 65</strong></td><td><div class="bw"><div class="bf" style="width:43%"></div></div></td><td></td></tr>
 </tbody>
 </table>
 </div>
@@ -717,7 +1393,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <div class="li"><div class="ld impl"></div> Implementada (aguarda desbloqueio)</div>
   <div class="li"><div class="ld block"></div> Bloqueada</div>
   <div class="li"><div class="ld back"></div> Backlog</div>
-  <div style="margin-left:auto;font-size:10px;color:var(--muted)">HIVERCAR AUTOPEÇAS · Product Backlog v5.0 · Março 2026</div>
+  <div style="margin-left:auto;font-size:10px;color:var(--muted)">HIVERCAR AUTOPEÇAS · Product Backlog v8.0 · Abril 2026</div>
 </div>
 
 <script>
