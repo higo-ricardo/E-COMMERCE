@@ -1,0 +1,150 @@
+/* HIVERCAR · Dashboard de Cupons (UI final) */
+:root{
+  --bg:#0f1012;--panel:#131517;--border:#252a2e;--muted:#9ca3af;--muted2:#6b7280;
+  --green:#26fd71;--red:#fb1230;--amber:#f59e0b;--blue:#3b82f6;--white:#eeecea;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+body{
+  font-family:'Barlow',Arial,sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  margin:0;
+  padding:24px;
+}
+header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+header h1{
+  margin:0;
+  letter-spacing:.05em;
+}
+header .meta{
+  color:var(--muted);
+  font-size:12px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:420px 1fr;
+  gap:18px;
+}
+@media(max-width:1024px){
+  .grid{grid-template-columns:1fr;}
+}
+section{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+}
+section h2{
+  margin:0 0 12px;
+  font-size:18px;
+  letter-spacing:.02em;
+}
+form .row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:10px;
+}
+form .row.single{
+  grid-template-columns:1fr;
+}
+label{
+  font-size:12px;
+  color:var(--muted);
+  display:block;
+  margin-bottom:4px;
+}
+input, select{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:#0c0d0f;
+  color:var(--white);
+}
+input:focus, select:focus{
+  outline:none;
+  border-color:rgba(38,253,113,.4);
+  box-shadow:0 0 0 2px rgba(38,253,113,.12);
+}
+.actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+button{
+  background:linear-gradient(90deg,#26fd71,#0ad15d);
+  color:#0a0a0a;
+  border:none;
+  border-radius:8px;
+  padding:12px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.ghost{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--white);
+}
+.table-wrap{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+th{
+  text-align:left;
+  color:var(--muted);
+  background:#15181b;
+}
+tr:last-child td{border-bottom:none;}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.pill.green{color:var(--green);border-color:rgba(38,253,113,.3);}
+.pill.red{color:var(--red);border-color:rgba(251,18,48,.3);}
+.pill.amber{color:var(--amber);border-color:rgba(245,158,11,.4);}
+.pill.blue{color:var(--blue);border-color:rgba(59,130,246,.4);}
+.muted{color:var(--muted2);}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  display:inline-block;
+  margin-right:6px;
+}
+.status-active{background:var(--green);}
+.status-inactive{background:var(--red);}
+.status-expired{background:var(--amber);}
+.status-limit{background:var(--blue);}
+.msg{
+  margin-top:8px;
+  font-size:12px;
+}
+.msg.ok{color:var(--green);}
+.msg.err{color:var(--red);}
+.flex-between{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.small{font-size:12px;color:var(--muted);}

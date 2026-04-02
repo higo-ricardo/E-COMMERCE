@@ -7,6 +7,11 @@
 // Fluxo de Login:     Auth.createSession() → Mirror.update(lastLogin, lastIP, loginCounter)
 // Fluxo de Bloqueio:  5 tentativas → 30min | 10 → 1h | 15 → isActive=false
 //
+// Sprint 07 - US-79, US-80, US-81:
+//   + lastLogin    → capturado em recordSuccessLogin()
+//   + lastIP       → capturado via getClientIP()
+//   + loginCounter → incrementado em recordSuccessLogin()
+//
 // Camada: Domain / Service - importado por login.html e cadastro.html
 
 import { databases, Query, ID } from "./appwriteClient.js"
@@ -222,4 +227,46 @@ export function redirectByRole(role) {
     cliente:  "minha-conta.html",
   }
   window.location.href = map[normalized] ?? map[role] ?? "loja.html"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SPRINT 07 — US-80: CAPTURAR IP DO CLIENTE
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Captura o IP do cliente para auditoria (US-80).
+ * Usa API externa para obter IP público do usuário.
+ * @returns {Promise<string>} IP do cliente
+ */
+export async function getClientIP() {
+  try {
+    // Tenta API pública gratuita
+    const response = await fetch('https://api.ipify.org?format=json')
+    const data = await response.json()
+    return data.ip || 'unknown'
+  } catch {
+    // Fallback: tenta outra API
+    try {
+      const response = await fetch('https://ipapi.co/json/')
+      const data = await response.json()
+      return data.ip || 'unknown'
+    } catch {
+      return 'unknown'
+    }
+  }
+}
+
+/**
+ * Atualiza o IP do usuário no mirror.
+ * @param {string} docId - ID do documento do usuário
+ * @param {string} ip - IP do cliente
+ */
+export async function updateClientIP(docId, ip) {
+  try {
+    return await databases.updateDocument(DB, COL.USERS, docId, {
+      lastIP: ip,
+    })
+  } catch {
+    return null
+  }
 }

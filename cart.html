@@ -106,10 +106,6 @@ import { CartService }                               from "./js/cartService.js"
 import { AuthService }                               from "./js/authService.js"
 import { fmt, initParticles, initNavToggle }         from "./js/utils.js"
 
-// ── CUPONS válidos ────────────────────────────────────────────────────────────
-const CUPONS = { "HIVERCAR10": 10, "FRETE0": 0 }
-let discount = 0
-
 // ── INIT ──────────────────────────────────────────────────────────────────────
 initParticles()
 initNavToggle()
@@ -173,12 +169,11 @@ function render() {
 }
 
 function updateTotals(sub) {
-  const tax   = sub * 0.12
   const frete = Number(document.getElementById("freteSelect").value) || 0
-  const total = Math.max(0, sub + tax + frete - discount)
+  const effectiveDiscount = Math.min(sub, discount || 0)
+  const total = Math.max(0, sub - effectiveDiscount + frete)
   document.getElementById("rSub").textContent   = fmtBRL(sub)
-  document.getElementById("rTax").textContent   = fmtBRL(tax)
-  document.getElementById("rDisc").textContent  = "− " + fmtBRL(discount)
+  document.getElementById("rDisc").textContent  = "− " + fmtBRL(effectiveDiscount)
   document.getElementById("rTotal").textContent = fmtBRL(total)
 }
 
@@ -187,17 +182,43 @@ document.getElementById("freteSelect").onchange = () => updateTotals(CartService
 
 document.getElementById("clearBtn").onclick = () => { CartService.clear(); render() }
 
-document.getElementById("cupomBtn").onclick = () => {
+document.getElementById("cupomBtn").onclick = async () => {
   const code = document.getElementById("cupomInput").value.trim().toUpperCase()
   const msg  = document.getElementById("cupomMsg")
-  if (CUPONS[code] !== undefined) {
-    discount = CUPONS[code]
-    msg.className = "cupom-msg ok"; msg.textContent = "✓ Cupom aplicado!"
-  } else {
-    discount = 0
-    msg.className = "cupom-msg err"; msg.textContent = "Cupom inválido."
+  const btn  = document.getElementById("cupomBtn")
+  const subtotal = CartService.total()
+
+  if (!code) {
+    if (msg) { msg.className = "cupom-msg err"; msg.textContent = "Informe o código do cupom."; }
+    return
   }
-  updateTotals(CartService.total())
+
+  // Desabilita botão durante requisição
+  btn.disabled = true
+  const original = btn.innerHTML
+  btn.innerHTML = '<span class="spinner"></span> Aplicando...'
+
+  try {
+    // Importa CouponService dinamicamente
+    const { CouponService } = await import("./js/couponService.js")
+    
+    const res = await CouponService.apply(code, { subtotal })
+    if (!res.ok) {
+      CartService.clearCoupon()
+      if (msg) { msg.className = "cupom-msg err"; msg.textContent = res.message || "Cupom inválido."; }
+    } else {
+      CartService.setCoupon({ code, discount: res.discount, message: res.message })
+      if (msg) { msg.className = "cupom-msg ok"; msg.textContent = `✓ Cupom ${code} aplicado!` }
+    }
+    updateTotals(CartService.total())
+  } catch (err) {
+    CartService.clearCoupon()
+    if (msg) { msg.className = "cupom-msg err"; msg.textContent = "Erro ao aplicar cupom."; }
+    console.error("Erro ao aplicar cupom:", err)
+  } finally {
+    btn.disabled = false
+    btn.innerHTML = original
+  }
 }
 
 const finalizarBtn = document.getElementById("finalizarBtn")
@@ -226,7 +247,6 @@ render()
 </script>
 </body>
 </html>
-
 
 
 

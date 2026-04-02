@@ -49,6 +49,9 @@ export default defineConfig({
         "./js/orderRepository.js",
         "./js/productRepository.js",
         "./js/adminService.js",
+        "./js/couponService.js",
+        "./js/couponRepository.js",
+        "./js/couponUsageRepository.js",
         // Sprint 05
         "./js/taxEngine.js",          // US-44: Motor Tributário
         "./js/nfService.js",          // US-43: Emissão NF-e
@@ -67,6 +70,5 @@ export default defineConfig({
     },
   },
 })
-
 
 

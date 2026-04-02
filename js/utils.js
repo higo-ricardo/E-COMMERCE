@@ -2,11 +2,8 @@
 // Utilitários puros compartilhados entre ERP e Loja.
 // Sem dependências de projeto — pode ser importado por qualquer módulo.
 //
-// US-47: Integração Sentry para monitoramento de erros em produção.
-//   - initSentry(dsn, release?)  → inicializa o SDK via CDN
-//   - captureError(err, context) → envia erro com contexto estruturado
-//   - addSentryContext(user)     → associa usuário logado ao Sentry
-//   - clearSentryContext()       → limpa contexto no logout
+// Contém: formatadores, UI helpers, partículas, paginação.
+// Para tratamento de erros com Sentry, use: errorService.js
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FORMATADORES
@@ -116,113 +113,6 @@ export function initNavToggle(toggleId = "navToggle", menuId = "navMenu") {
   const btn  = document.getElementById(toggleId)
   const menu = document.getElementById(menuId)
   if (btn && menu) btn.onclick = () => menu.classList.toggle("open")
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// US-47 — SENTRY: MONITORAMENTO DE ERROS EM PRODUÇÃO
-// ─────────────────────────────────────────────────────────────────────────────
-
-let _sentryReady = false
-
-/**
- * Inicializa o Sentry via CDN (sem bundler).
- * Chamar no topo do <script> de cada página principal.
- *
- * @param {string} dsn     — DSN do projeto Sentry
- * @param {string} release — Versão do app (padrão: "hivercar@3.0.0")
- *
- * @example
- * import { initSentry } from "./utils.js"
- * initSentry("https://SEU_DSN@sentry.io/ID", "hivercar@3.0.0")
- */
-export function initSentry(dsn, release = "hivercar@3.0.0") {
-  if (!dsn || _sentryReady) return
-
-  const script = document.createElement("script")
-  script.src   = "https://browser.sentry-cdn.com/7.99.0/bundle.min.js"
-  script.crossOrigin = "anonymous"
-  script.onload = () => {
-    if (typeof Sentry === "undefined") return
-    Sentry.init({
-      dsn,
-      release,
-      environment: window.location.hostname === "localhost" ? "development" : "production",
-      tracesSampleRate: 0.1,
-      ignoreErrors: [
-        "ResizeObserver loop limit exceeded",
-        "Non-Error promise rejection",
-        /^Script error/,
-        /chrome-extension/,
-        /moz-extension/,
-      ],
-      beforeSend(event) {
-        // Remove dados sensíveis antes de enviar
-        if (event.request?.data && typeof event.request.data === "object") {
-          const d = event.request.data
-          delete d.password; delete d.senha; delete d.token; delete d.cpf
-        }
-        return event
-      },
-    })
-    _sentryReady = true
-    // Captura rejeições de Promise não tratadas
-    window.addEventListener("unhandledrejection", e => {
-      Sentry.captureException(e.reason)
-    })
-    console.debug("[Sentry] Monitoramento ativo —", release)
-  }
-  script.onerror = () => console.warn("[Sentry] Falha ao carregar SDK.")
-  document.head.appendChild(script)
-}
-
-/**
- * Captura um erro manualmente com contexto estruturado.
- * Seguro — fallback para console.error se Sentry não estiver disponível.
- *
- * @param {Error|any} err     — Erro capturado no catch
- * @param {string}    context — Ex: "OrderService.placeOrder"
- * @param {object}    extras  — Dados extras para debug
- *
- * @example
- * try { await OrderService.placeOrder(...) }
- * catch (err) { captureError(err, "checkout.confirmarPedido", { cartSize }) }
- */
-export function captureError(err, context = "desconhecido", extras = {}) {
-  const message = err?.message ?? String(err)
-  console.error(`[HIVERCAR] ${context}:`, { message, code: err?.code, extras })
-  if (!_sentryReady || typeof Sentry === "undefined") return
-  Sentry.withScope(scope => {
-    scope.setTag("context", context)
-    scope.setLevel(err?.code >= 500 ? "fatal" : "error")
-    Object.entries(extras).forEach(([k, v]) => scope.setExtra(k, v))
-    if (err?.code) scope.setExtra("http_code", err.code)
-    Sentry.captureException(err instanceof Error ? err : new Error(message))
-  })
-}
-
-/**
- * Associa o usuário logado ao contexto do Sentry.
- * Chamar após login bem-sucedido passando dados do Mirror.
- *
- * @param {{ id: string, email: string, role: string, name?: string }} user
- *
- * @example
- * // Após login:
- * addSentryContext({ id: mirror.$id, email: mirror.email, role: mirror.role })
- */
-export function addSentryContext(user) {
-  if (!_sentryReady || typeof Sentry === "undefined") return
-  if (!user) { Sentry.setUser(null); return }
-  Sentry.setUser({ id: user.id || user.$id, email: user.email, role: user.role, name: user.name })
-  Sentry.setTag("user.role", user.role || "unknown")
-}
-
-/**
- * Remove contexto do usuário (chamar no logout).
- */
-export function clearSentryContext() {
-  if (!_sentryReady || typeof Sentry === "undefined") return
-  Sentry.setUser(null)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

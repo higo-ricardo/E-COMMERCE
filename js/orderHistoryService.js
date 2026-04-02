@@ -1,5 +1,5 @@
 // ─── HIVERCAR · orderHistoryService.js ───────────────────────────────────────
-// US-09: Audit log de alterações de status de pedido.
+// US-09, US-67, US-68, US-69, US-70: Audit log de alterações de status de pedido.
 //
 // Responsabilidades:
 //   - Registrar cada mudança de status na collection "order_history"
@@ -114,6 +114,132 @@ export async function getOrderTimeline(orderId) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SPRINT 07 — US-70: REGISTRAR HISTÓRICO DE MUDANÇAS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Retorna o histórico de mudanças de um pedido (alias para getOrderTimeline).
+ * @param {string} orderId - ID do pedido
+ * @returns {Promise<Array>}
+ */
+export async function getHistoryByOrder(orderId) {
+  return getOrderTimeline(orderId)
+}
+
+/**
+ * Registra uma mudança de status com campos adicionais para auditoria.
+ * US-67, US-68, US-69: Processando, Enviado, Entregue
+ * @param {string} orderId - ID do pedido
+ * @param {string} newStatus - Novo status
+ * @param {string} userId - ID do usuário que fez a alteração
+ * @param {string} [note] - Observação opcional
+ * @returns {Promise<Object>}
+ */
+export async function registerStatusChange(orderId, newStatus, userId, note = "") {
+  const order = await databases.getDocument(DB, COL.ORDERS, orderId)
+  const oldStatus = order.status
+  
+  return changeOrderStatus(orderId, oldStatus, newStatus, userId, note)
+}
+
+/**
+ * Verifica se um pedido pode ser cancelado.
+ * US-73, US-74: Cancelamento de pedidos
+ * @param {string} status - Status atual do pedido
+ * @returns {{ canCancel: boolean, reason?: string }}
+ */
+export function canCancelOrder(status) {
+  const cancellableStatuses = ["NOVO", "PAGO", "CONFIRMADO", "EM_PREPARO"]
+  if (status === "CANCELADO") {
+    return { canCancel: false, reason: "Pedido já está cancelado" }
+  }
+  if (!cancellableStatuses.includes(status)) {
+    return { canCancel: false, reason: `Pedido não pode ser cancelado no status "${status}"` }
+  }
+  return { canCancel: true }
+}
+
+/**
+ * Cancela um pedido com registro de histórico.
+ * @param {string} orderId - ID do pedido
+ * @param {string} userId - ID do usuário que cancelou
+ * @param {string} [reason] - Motivo do cancelamento
+ * @returns {Promise<Object>}
+ */
+export async function cancelOrder(orderId, userId, reason = "") {
+  const order = await databases.getDocument(DB, COL.ORDERS, orderId)
+  const { canCancel, reason: cancelReason } = canCancelOrder(order.status)
+  
+  if (!canCancel) {
+    throw new Error(cancelReason)
+  }
+  
+  const note = reason ? `Cancelamento: ${reason}` : ""
+  return changeOrderStatus(orderId, order.status, "CANCELADO", userId, note)
+}
+
+/**
+ * Confirma a entrega de um pedido.
+ * US-71: Confirmar Entrega
+ * @param {string} orderId - ID do pedido
+ * @param {string} userId - ID do usuário que confirmou
+ * @returns {Promise<Object>}
+ */
+export async function confirmDelivery(orderId, userId) {
+  const order = await databases.getDocument(DB, COL.ORDERS, orderId)
+  
+  if (order.status !== "ENVIADO") {
+    throw new Error(`Só é possível confirmar entrega de pedidos "ENVIADOS". Status atual: ${order.status}`)
+  }
+  
+  return changeOrderStatus(orderId, "ENVIADO", "ENTREGUE", userId, "Entrega confirmada")
+}
+
+/**
+ * Registra devolução de pedido.
+ * US-75, US-76: Devoluções (Returns)
+ * @param {string} orderId - ID do pedido
+ * @param {string} userId - ID do usuário que registrou
+ * @param {string} [reason] - Motivo da devolução
+ * @returns {Promise<Object>}
+ */
+export async function registerReturn(orderId, userId, reason = "") {
+  const order = await databases.getDocument(DB, COL.ORDERS, orderId)
+  
+  // Só permite devolução de pedidos entregues
+  if (order.status !== "ENTREGUE") {
+    throw new Error(`Só é possível registrar devolução de pedidos "ENTREGUES". Status atual: ${order.status}`)
+  }
+  
+  const note = reason ? `Devolução: ${reason}` : "Devolução registrada"
+  
+  // Atualiza pedido com flag de devolução
+  const orderDoc = await databases.updateDocument(DB, COL.ORDERS, orderId, {
+    status: "DEVOLVIDO",
+    updatedAt: new Date().toISOString(),
+    returnReason: reason || null,
+    returnedAt: new Date().toISOString(),
+  })
+  
+  // Registra no histórico
+  const historyDoc = await databases.createDocument(
+    DB,
+    COL.ORDER_HISTORY,
+    ID.unique(),
+    {
+      orderId,
+      oldStatus: "ENTREGUE",
+      newStatus: "DEVOLVIDO",
+      changedBy: userId,
+      changedAt: new Date().toISOString(),
+      note,
+    },
+  )
+  
+  return { historyDoc, orderDoc }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // EXPORTAÇÃO AGRUPADA
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -121,4 +247,10 @@ export const OrderHistoryService = {
   canTransition,
   changeOrderStatus,
   getOrderTimeline,
+  getHistoryByOrder,
+  registerStatusChange,
+  canCancelOrder,
+  cancelOrder,
+  confirmDelivery,
+  registerReturn,
 }

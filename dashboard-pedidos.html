@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Pedidos - HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/painel-vendas.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<aside class="sidebar">
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
+  </a>
+  <div class="sidebar-role">Vendedor</div>
+  <nav>
+    <a href="dashboard-pedidos.html" class="active"><i class="fas fa-chart-line"></i> Dashboard Pedidos</a>
+    <a href="painel-vendas.html"><i class="fas fa-list"></i> Painel de Vendas</a>
+    <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title">DASHBOARD DE PEDIDOS</span>
+    <div class="topbar-user">
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+      <span id="userName">Vendedor</span>
+      <div class="status-dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- US-77, US-78: Métricas de Pedidos -->
+    <div class="metrics-grid" style="margin-bottom:24px">
+      <div class="metric-card">
+        <div class="metric-value" id="mTotalVendas">-</div>
+        <div class="metric-label">Total de Vendas</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mQtdPedidos">-</div>
+        <div class="metric-label">Quantidade de Pedidos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mTicketMedio">-</div>
+        <div class="metric-label">Ticket Médio</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-value" id="mEntregues">-</div>
+        <div class="metric-label">Entregues</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-value" id="mEmPreparo">-</div>
+        <div class="metric-label">Em Preparo</div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-value" id="mCancelados">-</div>
+        <div class="metric-label">Cancelados</div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-bar" style="margin-bottom:16px">
+      <input type="date" id="filterDataFrom" title="Data inicial">
+      <input type="date" id="filterDataTo" title="Data final">
+      <select id="filterStatus">
+        <option value="">Todos os status</option>
+        <option value="NOVO">Novo</option>
+        <option value="PAGO">Pago</option>
+        <option value="CONFIRMADO">Confirmado</option>
+        <option value="EM_PREPARO">Em Preparo</option>
+        <option value="ENVIADO">Enviado</option>
+        <option value="ENTREGUE">Entregue</option>
+        <option value="CANCELADO">Cancelado</option>
+        <option value="DEVOLVIDO">Devolvido</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" id="btnFiltrar"><i class="fas fa-filter"></i> Filtrar</button>
+      <button class="btn btn-ghost btn-sm" id="btnLimpar"><i class="fas fa-undo"></i> Limpar</button>
+    </div>
+
+    <!-- Gráfico de Status -->
+    <div class="panel-wrap" style="margin-bottom:16px">
+      <div class="section-title">Pedidos por Status</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:12px" id="statusChart">
+        <!-- Preenchido via JS -->
+      </div>
+    </div>
+
+    <!-- Tabela de Pedidos -->
+    <div class="panel-wrap">
+      <div class="section-title">Últimos Pedidos</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Pagamento</th>
+            <th>Status</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="pedidosTable">
+          <tr><td colspan="6" style="color:var(--muted);padding:24px;text-align:center">Carregando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- US-82: Total de Produtos -->
+    <div style="margin-top:16px;padding:16px;background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.15);border-radius:4px;display:flex;align-items:center;gap:12px">
+      <i class="fas fa-box" style="font-size:20px;color:var(--blue)"></i>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)">Total de Produtos</div>
+        <div style="font-size:24px;font-family:'Bebas Neue';color:var(--white)" id="mTotalProdutos">-</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { Client, Databases, Account, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+import { ProductService } from "./js/productService.js"
+
+const CONFIG = {
+  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
+  PROJECT_ID: "69c7e94a003a1c86b7ca",
+  DB:         "69c7e9af00296b17179e",
+  COL_ORDERS: "orders",
+  COL_PRODUCTS: "products",
+}
+
+const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
+const databases = new Databases(client)
+const account   = new Account(client)
+
+let currentUser = null
+let allOrders = []
+
+// ── GUARD - autenticação ──────────────────────────────────────────────────────
+;(async () => {
+  try {
+    currentUser = await account.get()
+    document.getElementById("userName").textContent = currentUser.name || "Vendedor"
+  } catch {
+    window.location.href = "login.html"; return
+  }
+  init()
+})()
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(s){ return String(s?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
+function fmtBRL(v){ return "R$ "+Number(v||0).toFixed(2).replace(".",",") }
+function fmtDate(iso){ return iso?new Date(iso).toLocaleDateString("pt-BR"):"-" }
+let toastT
+function toast(msg,type=""){
+  const el=document.getElementById("toast"); el.textContent=msg
+  el.className="toast show"+(type?" "+type:""); clearTimeout(toastT)
+  toastT=setTimeout(()=>el.classList.remove("show"),3500)
+}
+
+const STATUS_CLS = {
+  NOVO:"badge-green", PAGO:"badge-green", CONFIRMADO:"badge-green", 
+  EM_PREPARO:"badge-amber", ENVIADO:"badge-muted", ENTREGUE:"badge-muted", 
+  CANCELADO:"badge-red", DEVOLVIDO:"badge-red",
+}
+function statusBadge(s){
+  return `<span class="badge ${STATUS_CLS[s]||'badge-muted'}">${s||"-"}</span>`
+}
+
+// ── LOAD ORDERS ───────────────────────────────────────────────────────────────
+async function loadOrders() {
+  const statusFilt = document.getElementById("filterStatus").value
+  const dataFrom   = document.getElementById("filterDataFrom").value
+  const dataTo     = document.getElementById("filterDataTo").value
+
+  const queries = [Query.orderDesc("$createdAt"), Query.limit(100)]
+  if (statusFilt) queries.push(Query.equal("status", statusFilt))
+
+  try {
+    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_ORDERS, queries)
+    let orders = res.documents
+
+    // Filtro por período
+    if (dataFrom || dataTo) {
+      const from = dataFrom ? new Date(dataFrom + "T00:00:00") : null
+      const to = dataTo ? new Date(dataTo + "T23:59:59") : null
+      orders = orders.filter(o => {
+        const t = new Date(o.$createdAt)
+        if (from && t < from) return false
+        if (to && t > to) return false
+        return true
+      })
+    }
+
+    allOrders = orders
+    updateDashboard(orders)
+  } catch (e) {
+    console.error("Erro ao carregar pedidos:", e)
+    toast("Erro ao carregar pedidos: " + e.message, "error")
+  }
+}
+
+// ── UPDATE DASHBOARD ──────────────────────────────────────────────────────────
+function updateDashboard(orders) {
+  // US-77: Total de Vendas
+  const totalVendas = orders.reduce((s, o) => s + Number(o.total || 0), 0)
+  document.getElementById("mTotalVendas").textContent = fmtBRL(totalVendas)
+
+  // US-78: Quantidade de Pedidos
+  document.getElementById("mQtdPedidos").textContent = orders.length
+
+  // Ticket Médio
+  const ticketMedio = orders.length > 0 ? totalVendas / orders.length : 0
+  document.getElementById("mTicketMedio").textContent = fmtBRL(ticketMedio)
+
+  // Contagem por status
+  const statusCount = {}
+  orders.forEach(o => {
+    const s = o.status || "NOVO"
+    statusCount[s] = (statusCount[s] || 0) + 1
+  })
+
+  document.getElementById("mEntregues").textContent = statusCount["ENTREGUE"] || 0
+  document.getElementById("mEmPreparo").textContent = statusCount["EM_PREPARO"] || 0
+  document.getElementById("mCancelados").textContent = statusCount["CANCELADO"] || 0
+
+  // Gráfico de Status
+  const statusLabels = {
+    NOVO: "Novo", PAGO: "Pago", CONFIRMADO: "Confirmado",
+    EM_PREPARO: "Em Preparo", ENVIADO: "Enviado", ENTREGUE: "Entregue",
+    CANCELADO: "Cancelado", DEVOLVIDO: "Devolvido",
+  }
+  const statusColors = {
+    NOVO: "#26fd71", PAGO: "#26fd71", CONFIRMADO: "#26fd71",
+    EM_PREPARO: "#f59e0b", ENVIADO: "#6b7280", ENTREGUE: "#6b7280",
+    CANCELADO: "#fb1230", DEVOLVIDO: "#fb1230",
+  }
+
+  const statusChart = document.getElementById("statusChart")
+  statusChart.innerHTML = Object.entries(statusLabels).map(([key, label]) => {
+    const count = statusCount[key] || 0
+    const color = statusColors[key] || "#6b7280"
+    return `
+      <div style="background:rgba(255,255,255,.02);border:1px solid var(--border);padding:12px;border-radius:4px;text-align:center">
+        <div style="font-size:20px;font-family:'Bebas Neue';color:${color};margin-bottom:4px">${count}</div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">${label}</div>
+      </div>
+    `
+  }).join("")
+
+  // Tabela de Pedidos
+  const tbody = document.getElementById("pedidosTable")
+  if (!orders.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);padding:24px;text-align:center">Nenhum pedido encontrado.</td></tr>`
+    return
+  }
+
+  tbody.innerHTML = orders.slice(0, 20).map(o => `
+    <tr>
+      <td style="font-family:monospace;font-size:10px;font-weight:600">${esc(o.number||"-" )}</td>
+      <td style="font-weight:600;font-size:12px">${esc(o.user||o.name||"-" )}</td>
+      <td style="font-size:11px;text-align:right;color:#f97316;font-weight:600">${fmtBRL(o.total||0)}</td>
+      <td style="font-size:10px;color:var(--muted);text-transform:uppercase">${esc(o.payment||"-" )}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td style="font-size:9px;color:var(--muted)">${fmtDate(o.$createdAt)}</td>
+    </tr>
+  `).join("")
+}
+
+// ── LOAD TOTAL PRODUTOS (US-82) ───────────────────────────────────────────────
+async function loadTotalProdutos() {
+  try {
+    const products = await ProductService.getAllProducts()
+    document.getElementById("mTotalProdutos").textContent = products.length || 0
+  } catch (e) {
+    console.error("Erro ao carregar produtos:", e)
+    document.getElementById("mTotalProdutos").textContent = "-"
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById("logoutBtn").addEventListener("click", async e=>{
+    e.preventDefault()
+    await account.deleteSession("current").catch(()=>{})
+    window.location.href="login.html"
+  })
+
+  document.getElementById("btnFiltrar").addEventListener("click", loadOrders)
+  document.getElementById("btnLimpar").addEventListener("click", () => {
+    document.getElementById("filterDataFrom").value = ""
+    document.getElementById("filterDataTo").value = ""
+    document.getElementById("filterStatus").value = ""
+    loadOrders()
+  })
+
+  loadOrders()
+  loadTotalProdutos()
+}
+</script>
+</body>
+</html>

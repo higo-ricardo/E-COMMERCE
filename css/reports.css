@@ -1,0 +1,199 @@
+/* ─── HIVERCAR · reports.css ──────────────────────────────────────────────────
+   Estilos específicos para a página de relatórios
+   Sprint 08 - US-94, US-95, US-96: Exportação e Impressão
+*/
+
+/* Filter Panel */
+.filter-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.filter-panel input[type="date"] {
+  min-width: 140px;
+}
+
+/* Tab Panels */
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Status Colors */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.status-badge.novo { background: rgba(38, 253, 113, 0.15); color: var(--green); border: 1px solid rgba(38, 253, 113, 0.3); }
+.status-badge.pago { background: rgba(38, 253, 113, 0.15); color: var(--green); border: 1px solid rgba(38, 253, 113, 0.3); }
+.status-badge.confirmado { background: rgba(38, 253, 113, 0.15); color: var(--green); border: 1px solid rgba(38, 253, 113, 0.3); }
+.status-badge.em_preparo { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+.status-badge.enviado { background: rgba(59, 130, 246, 0.15); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+.status-badge.entregue { background: rgba(107, 114, 128, 0.15); color: var(--muted2); border: 1px solid rgba(107, 114, 128, 0.3); }
+.status-badge.cancelado { background: rgba(251, 18, 48, 0.15); color: var(--red); border: 1px solid rgba(251, 18, 48, 0.3); }
+.status-badge.devolvido { background: rgba(251, 18, 48, 0.15); color: var(--red); border: 1px solid rgba(251, 18, 48, 0.3); }
+
+/* Chart Cards */
+.status-chart-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 4px;
+  text-align: center;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.status-chart-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.status-chart-card .value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.status-chart-card .label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.status-chart-card .percent {
+  font-size: 11px;
+  color: var(--muted2);
+}
+
+/* Print Styles */
+@media print {
+  .sidebar,
+  .topbar,
+  .filter-panel,
+  .tabs,
+  .btn,
+  .toast {
+    display: none !important;
+  }
+  
+  .main {
+    padding: 0;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .tab-panel {
+    display: none !important;
+  }
+  
+  .tab-panel.active {
+    display: block !important;
+  }
+  
+  .panel-wrap {
+    break-inside: avoid;
+  }
+  
+  table {
+    page-break-inside: avoid;
+  }
+  
+  .metrics-grid {
+    break-inside: avoid;
+  }
+}
+
+/* Export Actions */
+.export-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: var(--muted);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+}
+
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .filter-panel {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filter-panel input[type="date"] {
+    width: 100%;
+  }
+  
+  .filter-panel .btn {
+    width: 100%;
+  }
+  
+  .export-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  #statusChart {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

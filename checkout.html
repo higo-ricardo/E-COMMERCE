@@ -181,9 +181,18 @@
       <aside class="aside-panel">
         <div class="section-label" style="margin-bottom:16px"><span>Resumo</span></div>
         <div id="resumoItens" style="margin-bottom:12px"></div>
+        
+        <!-- Cupom -->
+        <div class="cupom-row">
+          <input type="text" id="cupomInput" class="cupom-input" placeholder="Cupom de desconto" maxlength="20">
+          <button id="cupomBtn" class="cupom-btn">Aplicar</button>
+        </div>
+        <div id="cupomMsg" class="cupom-msg"></div>
+        
         <div class="resumo-row"><span>Subtotal</span><span id="rSub">R$ 0,00</span></div>
         <div class="resumo-row"><span>Impostos</span><span id="rTax">R$ 0,00</span></div>
         <div class="resumo-row"><span>Frete</span><span id="rFrete">R$ 0,00</span></div>
+        <div class="resumo-row" id="rDiscountRow" style="color:var(--green);display:none"><span>Desconto</span><span id="rDiscount">R$ 0,00</span></div>
         <div class="resumo-total"><span>TOTAL</span><span class="total-val" id="rTotal">R$ 0,00</span></div>
         <div class="timer-card">
           <div class="timer-label">Oferta expira em</div>

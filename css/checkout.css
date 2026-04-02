@@ -28,6 +28,17 @@
 .resumo-total{display:flex;justify-content:space-between;padding:12px 0 0;border-top:1px solid var(--border);margin-top:4px}
 .resumo-total span:first-child{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--white)}
 .total-val{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--green)}
+
+/* Cupom */
+.cupom-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.cupom-input{flex:1;background:var(--dark);border:1px solid var(--border);padding:8px 12px;color:var(--white);font-size:13px}
+.cupom-input:focus{outline:none;border-color:var(--green)}
+.cupom-btn{background:var(--green);color:var(--black);border:none;padding:0 16px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.cupom-btn:hover{opacity:.9}
+.cupom-btn:disabled{opacity:.5;cursor:not-allowed}
+.cupom-msg{font-size:12px;margin-top:8px;padding:6px 8px;border-radius:4px}
+.cupom-msg.ok{background:rgba(38,253,113,.1);color:var(--green);border:1px solid rgba(38,253,113,.2)}
+.cupom-msg.err{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.2)}
 .timer-card{margin-top:20px;padding:14px;background:rgba(251,18,48,.06);border:1px solid green;text-align:center}
 .timer-display{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);letter-spacing:.1em;margin:4px 0}
 .timer-label{font-size:10px;color:var(--red);letter-spacing:.12em;text-transform:uppercase}

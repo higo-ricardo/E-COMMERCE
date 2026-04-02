@@ -15,9 +15,12 @@ export const CONFIG = {
     PRODUCTS:        "products",
     USERS:           "users",
     ORDERS:          "orders",
+    ORDER_HISTORY:   "order_history",
     NFE:             "nfe_documents",
     STOCK_HISTORY:   "stock_history",
     SERVICE_ORDERS:  "service_orders",
+    COUPONS:         "coupons",
+    COUPON_USAGE:    "coupon_usage",
   },
 
   STORE: {
@@ -56,13 +59,19 @@ export const CONFIG = {
   },
 
   // ── Regras de transição de status de pedido ──────────────────────────────
-  // US-09: Transições inválidas são bloqueadas no OrderHistoryService.
+  // US-09, US-67, US-68, US-69, US-71, US-75: Transições inválidas são bloqueadas no OrderHistoryService.
   ORDER_STATUS_FLOW: {
     novo:        ["confirmado", "cancelado"],
     confirmado:  ["em_preparo", "cancelado"],
     em_preparo:  ["enviado"],
     enviado:     ["entregue"],
-    entregue:    [],   // estado terminal - nenhuma transição permitida
+    entregue:    ["devolvido"],  // permite devolução
+    devolvido:   [],   // estado terminal - nenhuma transição permitida
     cancelado:   [],   // estado terminal
+  },
+
+  // ── Cupons de desconto ───────────────────────────────────────────────────
+  COUPON: {
+    MAX_DISCOUNT_PERCENT: 0.5,  // Limite máximo de desconto: 50% do pedido
   },
 }

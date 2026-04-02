@@ -6,6 +6,7 @@ import { getMirrorByEmail } from "../../js/userService.js"
 import { initParticles } from "../../js/utils.js"
 import { ErrorService } from "../../js/errorService.js"
 import { CheckoutValidator } from "./CheckoutValidator.js"
+import { CouponService } from "../../js/couponService.js"
 
 export class CheckoutController {
   constructor() {
@@ -28,6 +29,14 @@ export class CheckoutController {
       return
     }
 
+    // US-85: Checkout Inteligente - verifica estado e redireciona se necessário
+    const checkoutState = await OrderService.getSmartCheckoutState()
+    if (!checkoutState.canCheckout && checkoutState.redirect) {
+      ErrorService.toastWarn(checkoutState.message || "Não foi possível iniciar o checkout.")
+      window.location.href = checkoutState.redirect
+      return
+    }
+
     initParticles()
 
     if (this.badge) this.badge.textContent = CartService.count()
@@ -40,6 +49,7 @@ export class CheckoutController {
     this.bindFreteOptions()
     this.bindPaymentOptions()
     this.bindMasks()
+    this.bindCupom()
     this.bindBuscarCep()
     this.bindConfirmarPedido()
     this.initTimer()
@@ -47,8 +57,19 @@ export class CheckoutController {
     this.bindPixActions()
     this.initCartListener()
 
-    // Carrega dados do usuário logado para pré-preencher formulário
+    // Carrega dados do usuário logado para pré-preencher formulário (US-86)
     await this.loadUserData(user)
+    
+    // US-85: Se tiver checkout inteligente, pula para o step apropriado
+    if (checkoutState.step && checkoutState.step > 0) {
+      // Pequeno delay para garantir que o DOM está pronto
+      setTimeout(() => {
+        this.goStep(checkoutState.step)
+        if (checkoutState.message) {
+          ErrorService.toastInfo(checkoutState.message)
+        }
+      }, 300)
+    }
   }
 
   getValue(id) {
@@ -244,8 +265,11 @@ export class CheckoutController {
   renderResumo() {
     const cart = CartService.get()
     const subtotal = CartService.total()
+    const totalWithDiscount = CartService.totalWithDiscount()
+    const coupon = CartService.getCoupon()
+    const discount = coupon ? Math.min(subtotal, Number(coupon.discount || 0)) : 0
     const tax = 0
-    const total = subtotal + this.selectedFrete
+    const total = totalWithDiscount + this.selectedFrete
 
     const resumoItens = document.getElementById("resumoItens")
     if (resumoItens) {
@@ -262,9 +286,29 @@ export class CheckoutController {
     }
 
     set("rSub", this.fmtBRL(subtotal))
+    if (document.getElementById("rDiscount")) {
+      set("rDiscount", this.fmtBRL(-discount))
+      const discountRow = document.getElementById("rDiscountRow")
+      if (discountRow) discountRow.style.display = discount > 0 ? "flex" : "none"
+    }
     set("rTax", this.fmtBRL(tax))
     set("rFrete", this.fmtBRL(this.selectedFrete))
     set("rTotal", this.fmtBRL(total))
+
+    const cupomMsg = document.getElementById("cupomMsg")
+    if (cupomMsg) {
+      if (coupon) {
+        cupomMsg.className = "cupom-msg ok"
+        // Sanitizar código do cupom para prevenir XSS
+        const safeCode = (coupon.code || "").replace(/[<>&'"]/g, c => ({
+          '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&#39;', '"': '&quot;'
+        })[c])
+        cupomMsg.textContent = `✓ Cupom ${safeCode} aplicado: -${this.fmtBRL(discount)}`
+      } else {
+        cupomMsg.className = "cupom-msg"
+        cupomMsg.textContent = ""
+      }
+    }
   }
 
   goStep(n) {
@@ -310,6 +354,53 @@ export class CheckoutController {
 
         const cardFields = document.getElementById("cardFields")
         if (cardFields) cardFields.style.display = this.currentPay === "card" ? "block" : "none"
+      }
+    })
+  }
+
+  bindCupom() {
+    const btn = document.getElementById("cupomBtn")
+    const input = document.getElementById("cupomInput")
+    const msg = document.getElementById("cupomMsg")
+
+    if (!btn || !input) return
+
+    btn.addEventListener("click", async () => {
+      const code = input.value.trim().toUpperCase()
+      const cpf = this.getValue("cpf").replace(/\D/g, "")
+      const subtotal = CartService.total()
+
+      if (!code) {
+        if (msg) { msg.className = "cupom-msg err"; msg.textContent = "Informe o código do cupom."; }
+        return
+      }
+
+      // Validar CPF antes de aplicar cupom
+      if (cpf && !CheckoutValidator.isCpfValid(cpf)) {
+        if (msg) { msg.className = "cupom-msg err"; msg.textContent = "CPF inválido. Informe um CPF válido para aplicar cupom."; }
+        return
+      }
+
+      btn.disabled = true
+      const original = btn.innerHTML
+      btn.innerHTML = '<span class="spinner"></span> Aplicando...'
+
+      try {
+        const res = await CouponService.apply(code, { subtotal, cpf })
+        if (!res.ok) {
+          CartService.clearCoupon()
+          if (msg) { msg.className = "cupom-msg err"; msg.textContent = res.message || "Cupom inválido."; }
+        } else {
+          CartService.setCoupon({ code, discount: res.discount, message: res.message })
+          if (msg) { msg.className = "cupom-msg ok"; msg.textContent = `✓ Cupom ${code} aplicado. Desconto: ${this.fmtBRL(res.discount)}` }
+        }
+        this.renderResumo()
+      } catch (err) {
+        CartService.clearCoupon()
+        ErrorService.handle(err, "checkout.applyCoupon", { fallback: "Erro ao aplicar cupom." })
+      } finally {
+        btn.disabled = false
+        btn.innerHTML = original
       }
     })
   }
@@ -406,6 +497,7 @@ export class CheckoutController {
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...'
 
       try {
+        const coupon = CartService.getCoupon()
         const order = await OrderService.placeOrder(
           {
             nome: this.getValue("nome").trim(),
@@ -421,8 +513,8 @@ export class CheckoutController {
           this.selectedFrete,
           this.currentPay,
           this.modalFrete,
-          null, // couponCode
-          0,    // discountAmount
+          coupon?.code || null,
+          coupon?.discount || 0,
         )
 
         const pedidoNum = document.getElementById("pedidoNum")

@@ -6,6 +6,9 @@
 //   - Auth é responsável por credenciais e sessão.
 //   - Dados do usuário (role, company, bloqueios) → sempre via userService.js
 //   - Este serviço NÃO lê perfil do usuário. Use getMirrorByEmail() para isso.
+//
+// Sprint 07 - US-79, US-80, US-81:
+//   + login() agora retorna usuário para chamar recordSuccessLogin() com IP
 
 import { account, ID } from "./appwriteClient.js"
 
@@ -20,6 +23,9 @@ export const AuthService = {
   /**
    * Cria sessão por e-mail + senha.
    * Após chamar login(), sempre chame recordSuccessLogin() do userService.
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<Object>} Sessão criada
    */
   async login(email, password) {
     // Compatibilidade SDK v14+/v16
