@@ -197,7 +197,7 @@ async function loadProduto() {
     const fileId = p.imageURL || p.imageUrl || p.imageId || p.image || p.fileId
     if (!fileId) return null
     if (String(fileId).startsWith("http")) return fileId
-    return `${CONFIG.ENDPOINT}/storage/buckets/${CONFIG.BUCKET_ID}/files/${fileId}/view?project=${CONFIG.PROJECT_ID}`
+    return `${CONFIG.ENDPOINT}/storage/buckets/${CONFIG.BUCKET_ID}/files/${fileId}/preview?project=${CONFIG.PROJECT_ID}`
   }
 
   if (!productId) {
@@ -220,6 +220,7 @@ async function loadProduto() {
       img.src             = resolvedImg
       img.alt             = p.name
       img.style.display   = "block"
+      img.onerror         = () => { img.style.display = "none"; document.getElementById("imgPlaceholderIcon").style.display = "flex"; }
       document.getElementById("imgPlaceholderIcon").style.display = "none"
       const btnZoom = document.getElementById("btnZoom")
       btnZoom.style.display = "flex"
@@ -347,10 +348,13 @@ async function loadRelacionados(category, currentId) {
     const grid    = document.getElementById("relacionadosGrid")
     section.style.display = "block"
 
-    grid.innerHTML = others.map(p => `
+    grid.innerHTML = others.map(p => {
+      const fallback = imgPlaceholder(p.name)
+      return `
       <div class="product-card" style="cursor:pointer" onclick="window.location='produto.html?id=${p.$id}'">
         <div class="product-img">
-          <img src="${esc(p.imageURL || imgPlaceholder(p.name))}" alt="${esc(p.name)}" loading="lazy">
+          <img src="${esc(p.imageURL || fallback)}" alt="${esc(p.name)}" loading="lazy"
+               onerror="this.onerror=null;this.src='${fallback}';">
         </div>
         <div class="product-body">
           <div class="product-name">${esc(p.name)}</div>
@@ -360,7 +364,8 @@ async function loadRelacionados(category, currentId) {
             <i class="fas fa-cart-plus"></i> Adicionar
           </button>
         </div>
-      </div>`).join("")
+      </div>`
+    }).join("")
 
     grid.onclick = e => {
       const b = e.target.closest(".add-btn")

@@ -37,8 +37,8 @@ export class CheckoutController {
   }
 
   async init() {
-    await this.checkAuth()
     this.setupDOM()
+    await this.checkAuth()
     this.loadCart()
     this.startTimer()
     this.bindEvents()

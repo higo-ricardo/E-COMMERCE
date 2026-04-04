@@ -12,10 +12,13 @@ export class HomeController {
     if (!grid) return
 
     const resolveImage = (p) => {
+      // Compatibilidade: tenta todos os campos possíveis (legado + atual)
       const fileId = p.imageURL || p.imageUrl || p.imageId || p.image || p.fileId
       if (!fileId) return null
+      // Se já é URL completa, retorna como está
       if (String(fileId).startsWith("http")) return fileId
-      return `${CONFIG.ENDPOINT}/storage/buckets/${CONFIG.BUCKET_ID}/files/${fileId}/view?project=${CONFIG.PROJECT_ID}`
+      // Se é fileId puro, monta URL com /preview (funciona sem auth)
+      return `${CONFIG.ENDPOINT}/storage/buckets/${CONFIG.BUCKET_ID}/files/${fileId}/preview?project=${CONFIG.PROJECT_ID}`
     }
 
     try {
@@ -29,10 +32,13 @@ export class HomeController {
         const img = resolveImage(p)
         const src = img || imgPlaceholder(p.name)
         const price = fmt(p.price ?? p.salePrice ?? 0)
+        const fallback = imgPlaceholder(p.name)
         return `
           <article class="product-card">
             <div class="product-thumb" style="min-height:180px;display:flex;align-items:center;justify-content:center;background:#0f172a;">
-              <img src="${esc(src)}" alt="${esc(p.name || "Produto")}" loading="lazy" style="max-height:170px;max-width:100%;object-fit:contain;display:block;">
+              <img src="${esc(src)}" alt="${esc(p.name || "Produto")}" loading="lazy"
+                   onerror="this.onerror=null;this.src='${fallback}';"
+                   style="max-height:170px;max-width:100%;object-fit:contain;display:block;">
             </div>
             <div class="product-info">
               <h3>${esc(p.name || "-")}</h3>

@@ -28,7 +28,7 @@ npm test              # Run all tests
 npm test -- --coverage # With coverage report
 ```
 
-**127 tests, 100% pass rate.**
+**127 tests, 125 passed, 2 failed.**
 
 ## Features
 

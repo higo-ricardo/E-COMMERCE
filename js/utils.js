@@ -136,7 +136,8 @@ export const fmt = formatBRL;
 // -- Placeholder SVG para imagens de produtos -----------------------------------
 export function imgPlaceholder(name = "") {
   const label = encodeURIComponent((name || "Produto").slice(0, 20));
-  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-family='sans-serif' font-size='18'%3E${label}%3C/text%3E%3C/svg%3E`;
+  // SVG com ícone de caixa + texto, visual melhor que texto puro
+  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%231a1a2e'/%3E%3Cg transform='translate(170,80)'%3E%3Crect x='20' y='30' width='60' height='50' fill='none' stroke='%23555' stroke-width='3' rx='4'/%3E%3Cpath d='M20 40 L50 25 L80 40' fill='none' stroke='%23555' stroke-width='3'/%3E%3Cline x1='50' y1='25' x2='50' y2='50' stroke='%23555' stroke-width='2'/%3E%3C/g%3E%3Ctext x='50%25' y='75%25' dominant-baseline='middle' text-anchor='middle' fill='%23888' font-family='sans-serif' font-size='14'%3E${label}%3C/text%3E%3C/svg%3E`;
 }
 
 // -- Animação de contagem numérica ----------------------------------------------

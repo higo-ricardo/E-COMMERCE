@@ -15,9 +15,8 @@
 
 import { AuthService }           from "./authService.js"
 import { CartService }            from "./cartService.js"
-import { OrderRepository }        from "./repositories.js"
+import { OrderRepository, ProductRepository } from "./repositories.js"
 import { docNumService } from "./docNumService.js"
-import { apiService }             from "./apiService.js"
 import { CONFIG }                 from "./config.js"
 
 export const OrderService = {
@@ -263,7 +262,6 @@ export const OrderService = {
 
   /**
    * Valida se todos os itens do carrinho estão disponíveis e com preços atualizados.
-   * Usa proxy API para evitar exposição de credenciais.
    * @returns {Promise<{valid: boolean, validations: Array, message?: string}>}
    */
   async validateCart() {
@@ -272,20 +270,33 @@ export const OrderService = {
       return { valid: false, validations: [], message: "Carrinho vazio" }
     }
 
-    try {
-      const result = await apiService.validateCart(cart)
-      return result
-    } catch (error) {
-      console.error("[OrderService] Erro ao validar carrinho:", error)
-      return {
-        valid: false,
-        validations: cart.map(item => ({
+    const validations = []
+    let allValid = true
+
+    for (const item of cart) {
+      try {
+        const product = await ProductRepository.getById(item.$id)
+        const inStock = (product?.stock ?? 0) >= (item.qty ?? 1)
+        const priceMatch = Number(product?.price) === Number(item.price)
+
+        validations.push({
           id: item.$id,
-          valid: false,
-          error: "Erro de validação"
-        })),
-        message: "Erro ao validar carrinho"
+          valid: inStock && priceMatch,
+          inStock,
+          priceMatch,
+        })
+
+        if (!inStock || !priceMatch) allValid = false
+      } catch {
+        validations.push({ id: item.$id, valid: false, error: "Produto não encontrado" })
+        allValid = false
       }
+    }
+
+    return {
+      valid: allValid,
+      validations,
+      message: allValid ? undefined : "Alguns itens do carrinho estão indisponíveis ou com preço alterado.",
     }
   },
 }

@@ -7,7 +7,6 @@
 
 import { databases, ID, Query, Permission, Role } from "./db.js"
 import { CONFIG } from "./config.js"
-import { apiService } from "./apiService.js"
 
 const { DB, COL } = CONFIG
 
@@ -18,11 +17,10 @@ const { DB, COL } = CONFIG
 export const OrderRepository = {
 
   async create(order, userId) {
-    // Usa proxy API para evitar exposição de credenciais
-    // Permissões são gerenciadas server-side na função Appwrite
-    return apiService.createOrder({
+    // Permissões herdadas da collection "orders" configurada no Appwrite Console.
+    return databases.createDocument(DB, COL.ORDERS, ID.unique(), {
       ...order,
-      _ownerId: userId, // referência para auditoria
+      _ownerId: userId,
     })
   },
 
@@ -118,25 +116,106 @@ export const ProductRepository = {
 
   /**
    * Lista produtos com paginação por página e filtros opcionais.
-   * Usa proxy API para evitar exposição de credenciais.
    * @param {number} page - Página (1-based)
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
   async list(page = 1, filters = {}) {
-    return apiService.getProducts(page, filters)
+    const PAGE_SIZE = 15
+    const queries = [
+      Query.limit(PAGE_SIZE),
+      Query.offset((page - 1) * PAGE_SIZE),
+      Query.orderDesc("$createdAt"),
+      Query.isNull("deletedAt"),  // soft-delete: nunca exibe produtos excluídos
+    ]
+
+    if (filters.category) {
+      queries.push(Query.equal("category", filters.category))
+    }
+    if (filters.brand) {
+      queries.push(Query.equal("brand", filters.brand))
+    }
+    if (filters.vehicle) {
+      queries.push(Query.search("compatibleVehicles", filters.vehicle))
+    }
+
+    const res = await databases.listDocuments(DB, COL.PRODUCTS, queries)
+    const pages = Math.ceil(res.total / PAGE_SIZE)
+
+    return {
+      products: res.documents,
+      total: res.total,
+      page,
+      pages: Math.max(1, pages),
+    }
   },
 
   /**
    * Busca produtos por termo + filtros opcionais.
-   * Usa proxy API para evitar exposição de credenciais.
    * @param {string} term - Termo de busca
    * @param {number} page - Página (1-based)
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
   async search(term, page = 1, filters = {}) {
-    return apiService.searchProducts(term, page, filters)
+    const PAGE_SIZE = 15
+    const queries = [
+      Query.limit(PAGE_SIZE),
+      Query.offset((page - 1) * PAGE_SIZE),
+      Query.orderDesc("$createdAt"),
+      Query.isNull("deletedAt"),  // soft-delete
+    ]
+
+    if (filters.category) {
+      queries.push(Query.equal("category", filters.category))
+    }
+    if (filters.brand) {
+      queries.push(Query.equal("brand", filters.brand))
+    }
+    if (filters.vehicle) {
+      queries.push(Query.search("compatibleVehicles", filters.vehicle))
+    }
+
+    const searchLower = term.toLowerCase()
+
+    let res
+    try {
+      res = await databases.listDocuments(DB, COL.PRODUCTS, [
+        Query.search("name", term),
+        ...queries,
+      ])
+    } catch {
+      const all = await databases.listDocuments(DB, COL.PRODUCTS, [
+        Query.limit(500),
+        ...queries,
+      ])
+      res = {
+        ...all,
+        documents: all.documents.filter(doc => {
+          const name = (doc.name || "").toLowerCase()
+          const ncm = (doc.ncm || "").toLowerCase()
+          const brand = (doc.brand || "").toLowerCase()
+          const category = (doc.category || "").toLowerCase()
+          const description = (doc.description || "").toLowerCase()
+          return name.includes(searchLower) ||
+                 ncm.includes(searchLower) ||
+                 brand.includes(searchLower) ||
+                 category.includes(searchLower) ||
+                 description.includes(searchLower)
+        }),
+        total: 0,
+      }
+      res.total = res.documents.length
+    }
+
+    const pages = Math.ceil(res.total / PAGE_SIZE)
+
+    return {
+      products: res.documents,
+      total: res.total,
+      page,
+      pages: Math.max(1, pages),
+    }
   },
 
   /**

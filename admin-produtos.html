@@ -398,7 +398,11 @@ class ProdutosPage extends AdminPage {
 
   renderTable(products) {
     const tbody = document.getElementById("produtosTable");
-    this.renderTable(tbody, products, p => {
+    if (!products.length) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-muted text-center" style="padding:32px"><i class="fas fa-box-open" style="font-size:24px;display:block;margin-bottom:8px"></i>Nenhum produto encontrado.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = products.map(p => {
       const imageSrc = p.imageURL ? String(p.imageURL).replace(/\/preview(\?|$)/, "/view$1") : "";
       const imgHtml = p.imageURL
         ? `<img src="${imageSrc}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
@@ -423,7 +427,7 @@ class ProdutosPage extends AdminPage {
           <button class="btn btn-danger btn-sm del-btn" data-id="${p.$id}" data-name="${esc(p.name)}"><i class="fas fa-trash"></i></button>
         </div></td>
       </tr>`;
-    }, "produtosTable");
+    }).join("");
 
     tbody.querySelectorAll(".toggle-btn").forEach(btn => {
       btn.addEventListener("click", async () => {
