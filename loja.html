@@ -1,24 +1,26 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja â€” HIVERCAR AUTOPEÃ‡AS</title>
+<title>Loja — HIVERCAR AUTOPEÇAS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>
 <div class="grid-bg"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <nav class="navbar">
   <div class="container">
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÃ‡AS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <div class="nav-links" id="navMenu">
@@ -28,18 +30,21 @@
         <i class="fa-solid fa-cart-shopping fa-2x"></i>
         <span class="cart-badge" id="cartBadge">0</span>
       </a>
+      <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
   </div>
 </nav>
 
 <div class="page-hero">
   <div class="container">
-    <div class="page-label"><span>CatÃ¡logo Premium</span></div>
-    <h1>PEÃ‡AS<em>&nbsp;NOVAS&nbsp;E&nbsp;ORIGINAIS</em></h1>
+    <div class="page-label"><span>Catálogo Premium</span></div>
+    <h1>PEÇAS<em>&nbsp;NOVAS&nbsp;E&nbsp;ORIGINAIS</em></h1>
   </div>
 </div>
 
-<div class="store-wrap">
+<main class="store-wrap">
   <div class="container">
 
     <!-- Barra de busca + contador -->
@@ -48,28 +53,28 @@
         <span id="productCount">Carregando...</span>
       </div>
       <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Pesquise por nome...">
+        <input type="text" id="searchInput" aria-label="Pesquisar produtos" placeholder="Pesquise por nome...">
         <button id="searchBtn"><i class="fas fa-magnifying-glass"></i></button>
       </div>
     </div>
 
-    <!-- Filtros: categoria, marca, veÃ­culo -->
+    <!-- Filtros: categoria, marca, veículo -->
     <div class="filters-bar">
       <div class="filter-group">
         <span class="filter-label"><i class="fas fa-tag"></i> Categoria</span>
-        <select id="filterCategory" class="filter-select">
+        <select id="filterCategory" class="filter-select" aria-label="Filtrar por categoria">
           <option value="">Todas as Categorias</option>
         </select>
       </div>
       <div class="filter-group">
         <span class="filter-label"><i class="fas fa-industry"></i> Marca</span>
-        <select id="filterBrand" class="filter-select">
+        <select id="filterBrand" class="filter-select" aria-label="Filtrar por marca">
           <option value="">Todas as Marcas</option>
         </select>
       </div>
       <div class="filter-group">
-        <span class="filter-label"><i class="fas fa-car"></i> VeÃ­culo</span>
-        <input type="text" id="filterVehicle" class="filter-input" placeholder="Ex: Corolla, HB20...">
+        <span class="filter-label"><i class="fas fa-car"></i> Veículo</span>
+        <input type="text" id="filterVehicle" class="filter-input" placeholder="Ex: Corolla, HB20..." aria-label="Filtrar por veículo">
       </div>
       <button id="clearFilters" class="btn-clear-filters">
         <i class="fas fa-xmark"></i> Limpar
@@ -86,20 +91,20 @@
     <div id="pagination" class="pagination"></div>
 
   </div>
-</div>
+</main>
 
-<div class="bottom-bar">
+<footer class="bottom-bar">
   <div class="bottom-links">
-    <a href="page404.html" aria-label="Instagram"><i class="fa-brands fa-square-instagram fa-2x"></i></a>
-    <a href="page404.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
-    <a href="page404.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
+    <a href="page-error.html" aria-label="Instagram"><i class="fa-brands fa-square-instagram fa-2x"></i></a>
+    <a href="page-error.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
+    <a href="page-error.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
   </div>
-  <div class="bottom-copy">Â© 2026 HIVERCAR AUTOPEÃ‡AS LTDA</div>
-</div>
+  <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
+</footer>
 <script type="module" src="./js/loja.js"></script>
+<script type="module">
+import { initThemeToggle } from './js/utils.js';
+initThemeToggle();
+</script>
 </body>
 </html>
-
-
-
-

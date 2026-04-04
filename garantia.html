@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Troca e Devolução | HIVERCAR AUTOPEÇAS</title>
 <meta name="description" content="Política de Troca e Devolução da HIVERCAR AUTOPEÇAS LTDA conforme Código de Defesa do Consumidor.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/garantia.css">
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/page-institucional.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>
@@ -18,6 +21,7 @@
     <div class="brand-dot"></div>
     <span class="brand-name">HIVERCAR AUTOPEÇAS</span>
   </a>
+  <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema" style="background:none;border:none;color:var(--green);font-size:18px;cursor:pointer;padding:4px"><i class="fas fa-moon"></i></button>
   <a href="index.html" class="back-link">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
     Voltar ao Início
@@ -139,9 +143,10 @@
   <div class="bottom-right">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
 </footer>
 
-<script>
-const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");let W,H,particles=[];function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}resize();window.addEventListener("resize",resize);class Particle{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-0.5)*0.3;this.vy=(Math.random()-0.5)*0.3;this.size=Math.random()*1.5+0.3;this.alpha=Math.random()*0.4+0.05;this.color=Math.random()>0.7?"#26fd71":"#fb1230";}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0)this.x=W;if(this.x>W)this.x=0;if(this.y<0)this.y=H;if(this.y>H)this.y=0;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=this.color;ctx.globalAlpha=this.alpha;ctx.fill();}}
-for(let i=0;i<80;i++)particles.push(new Particle());function loop(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle="#26fd71";ctx.globalAlpha=(1-dist/120)*0.04;ctx.lineWidth=0.5;ctx.stroke();}}}ctx.globalAlpha=1;requestAnimationFrame(loop);}loop();
+<script type="module">
+import { initParticles, initThemeToggle } from "./js/utils.js";
+initParticles("canvas", "38,253,113", 80);
+initThemeToggle();
 document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),600);});
 </script>
 </body>

@@ -1,4 +1,5 @@
-﻿/* ---- moved from painel-vendas.html on 2026-03-28 23:47:02 ---- */
+﻿/* painel-vendas.css — componentes únicos (não presentes em loja.css) */
+
 /* Sidebar laranja para vendedor */
 .sidebar-role { color: #f97316 !important; }
 .sidebar nav a.active { color: #f97316 !important; border-left-color: #f97316 !important; background: rgba(249,115,22,.04) !important; }
@@ -7,28 +8,7 @@
 .metric-card::after { background: linear-gradient(90deg, #f97316, transparent) !important; }
 .metric-value { color: #f97316 !important; text-shadow: 0 0 20px rgba(249,115,22,.4) !important; }
 
-.modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:24px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--dark);border:1px solid var(--border);width:100%;max-width:720px;max-height:92vh;overflow-y:auto;padding:32px;animation:fadeUp .25s ease}
-.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--white)}
-.modal-close{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.modal-close:hover{color:var(--red);border-color:var(--red)}
+.status-sel { padding:5px 10px; background:var(--dark); border:1px solid var(--border); color:var(--white); font-family:'Barlow',sans-serif; font-size:12px; outline:none; cursor:pointer; }
 
-.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px}
-.tab{padding:12px 20px;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
-.tab.active{color:#f97316;border-bottom-color:#f97316}
-
-.filter-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.filter-bar select,.filter-bar input{padding:9px 12px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
-.filter-bar select:focus,.filter-bar input:focus{border-color:#f97316}
-
-.status-sel{padding:5px 10px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:12px;outline:none;cursor:pointer}
-
-.toast{position:fixed;bottom:28px;right:28px;z-index:1000;padding:14px 22px;border-left:3px solid #f97316;background:var(--dark);color:var(--white);font-size:13px;font-weight:600;animation:fadeUp .3s ease;display:none}
-.toast.error{border-left-color:var(--red)}
-.toast.show{display:block}
-
-.item-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px}
-.item-row select,.item-row input{padding:8px 10px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none}
-
+.item-row { display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:8px; align-items:center; margin-bottom:8px; }
+.item-row select, .item-row input { padding:8px 10px; background:var(--dark); border:1px solid var(--border); color:var(--white); font-family:'Barlow',sans-serif; font-size:13px; outline:none; }

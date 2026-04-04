@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout - HIVERCAR AUTOPEÇAS</title>
@@ -8,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/checkout.css">
 </head>
 <body>
@@ -25,6 +27,9 @@
         <i class="fas fa-cart-shopping"></i>
         <span class="cart-badge" id="cartBadge">0</span>
       </a>
+      <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
   </div>
 </nav>
@@ -41,12 +46,12 @@
   </div>
 </div>
 
-<div class="checkout-wrap">
+<main class="checkout-wrap">
   <div class="container">
     <div class="checkout-layout">
 
       <!-- FORMULÁRIO EM STEPS -->
-      <div class="form-panel">
+      <section class="form-panel">
 
         <!-- Step 1 - Dados Pessoais -->
         <div class="step-panel active" id="step1">
@@ -175,7 +180,7 @@
           </div>
         </div>
 
-      </div>
+      </section>
 
       <!-- ASIDE RESUMO -->
       <aside class="aside-panel">
@@ -203,14 +208,14 @@
 
     </div>
   </div>
-</div>
+</main>
 
 <!-- MODAL SUCESSO -->
-<div class="modal" id="modal">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-box">
     <div class="modal-icon"><i class="fas fa-circle-check"></i></div>
     <div class="modal-num" id="pedidoNum">Pedido #00000</div>
-    <p class="modal-text">Seu pedido foi recebido com sucesso!<br>Você receberá a confirmação por e-mail.</p>
+    <p class="modal-text" id="modalTitle">Seu pedido foi recebido com sucesso!<br>Você receberá a confirmação por e-mail.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
       <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Continuar Comprando</a>
@@ -222,9 +227,9 @@
 <footer>
   <div class="bottom-bar" style="margin-top:0">
     <div class="bottom-links">
-      <a href="page404.html" aria-label="Instagram"><i class="fa-brands fa-square-instagram fa-2x"></i></a>
-      <a href="page404.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
-      <a href="page404.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
+      <a href="page-error.html" aria-label="Instagram"><i class="fa-brands fa-square-instagram fa-2x"></i></a>
+      <a href="page-error.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
+      <a href="page-error.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
     </div>
     <div style="font-size:12px;color:var(--muted);text-align:center;line-height:1.8">
       Av. Ataliba Vieira, 1357 - São Luís, MA<br>
@@ -235,6 +240,10 @@
 </footer>
 
 <script type="module" src="./js/checkout.js"></script>
+<script type="module">
+import { initThemeToggle } from './js/utils.js';
+initThemeToggle();
+</script>
 </body>
 </html>
 

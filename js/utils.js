@@ -1,231 +1,212 @@
-// ─── HIVERCAR · utils.js ─────────────────────────────────────────────────────
-// Utilitários puros compartilhados entre ERP e Loja.
-// Sem dependências de projeto — pode ser importado por qualquer módulo.
-//
-// Contém: formatadores, UI helpers, partículas, paginação.
-// Para tratamento de erros com Sentry, use: errorService.js
+// ─── HIVERCAR · utils.js ──────────────────────────────────────────────────────
+// Utilitários compartilhados entre todas as páginas
+// ──────────────────────────────────────────────────────────────────────────────
 
-// ─────────────────────────────────────────────────────────────────────────────
-// FORMATADORES
-// ─────────────────────────────────────────────────────────────────────────────
+// -- Partículas animadas no canvas -----------------------------------------------
+export function initParticles(canvasId = "canvas", color = "38,253,113", count = 55) {
+  const cv = document.getElementById(canvasId);
+  if (!cv) return;
+  const ctx = cv.getContext("2d");
+  let W, H;
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight };
+  resize();
+  addEventListener("resize", resize);
 
-/** Gera número sequencial único para pedido. Formato: YYMMDDHHmmss + 4 dígitos aleatórios.
- *  Exemplo: 26033014324501234
- *  Armazenado em `orders.number` como INTEGER.
- *  JUSTIFICATIVA: Função pura, sem dependências, reutilizável. Timestamp garante
- *  unicidade crescente + tail aleatório previne colisões em requisições simultâneas.
- */
-export function generateOrderNumber() {
-  const now = new Date()
-  const yy  = now.getFullYear().toString().slice(-2)
-  const mm  = String(now.getMonth() + 1).padStart(2, '0')
-  const dd  = String(now.getDate()).padStart(2, '0')
-  const hh  = String(now.getHours()).padStart(2, '0')
-  const min = String(now.getMinutes()).padStart(2, '0')
-  const ss  = String(now.getSeconds()).padStart(2, '0')
-  const rnd = Math.floor(Math.random() * 10000).toString().padStart(4, '0')
-  
-  return parseInt(yy + mm + dd + hh + min + ss + rnd)
-}
-
-/** Formata valor numérico em BRL. */
-export const fmt = v =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v)
-
-/** Placeholder de imagem com texto do produto. */
-export const imgPlaceholder = name =>
-  `https://placehold.co/400x400/111214/26fd71?text=${encodeURIComponent(name || "?")}`
-
-/** Escapa HTML para evitar XSS em templates literais. */
-export const esc = str =>
-  String(str)
-    .replace(/&/g,  "&amp;")
-    .replace(/</g,  "&lt;")
-    .replace(/>/g,  "&gt;")
-    .replace(/"/g,  "&quot;")
-
-// ─────────────────────────────────────────────────────────────────────────────
-// PARTÍCULAS
-// ─────────────────────────────────────────────────────────────────────────────
-
-/** Partículas animadas em canvas — reutilizado em index, loja, login, cart. */
-export function initParticles(canvasId = "canvas", count = 55) {
-  const canvas = document.getElementById(canvasId)
-  if (!canvas) return
-  const ctx = canvas.getContext("2d")
-  let W, H
-  const resize = () => { W = canvas.width = innerWidth; H = canvas.height = innerHeight }
-  resize()
-  addEventListener("resize", resize)
   const pts = Array.from({ length: count }, () => ({
-    x:  Math.random() * 2000,
-    y:  Math.random() * 2000,
-    vx: (Math.random() - .5) * .3,
-    vy: (Math.random() - .5) * .3,
-    r:  Math.random() * 1.4 + .4,
-    a:  Math.random() * .5  + .1,
+    x: Math.random() * 2000,
+    y: Math.random() * 2000,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.4 + 0.4,
+    a: Math.random() * 0.5 + 0.1,
   }));
+
   (function loop() {
-    ctx.clearRect(0, 0, W, H)
+    ctx.clearRect(0, 0, W, H);
     pts.forEach(p => {
-      p.x += p.vx; p.y += p.vy
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(38,253,113,${p.a})`; ctx.fill()
-    })
-    requestAnimationFrame(loop)
-  })()
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${color},${p.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  })();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ANIMAÇÕES / UI
-// ─────────────────────────────────────────────────────────────────────────────
+// -- Toast com acessibilidade ---------------------------------------------------
+let _toastTimer = null;
+export function showToast(message, type = "", container) {
+  const el = container || document.getElementById("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.className = "toast show" + (type ? " " + type : "");
+  el.setAttribute("role", "status");
+  el.setAttribute("aria-live", "polite");
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => {
+    el.classList.remove("show");
+    el.removeAttribute("role");
+    el.removeAttribute("aria-live");
+  }, 3500);
+}
 
-/** Animação de contador numérico. */
-export function animateCount(id, target, suffix = "+") {
-  const el = document.getElementById(id)
-  if (!el) return
-  const dur   = 1400
+// ─── Theme Toggle (centralizado) ─────────────────────────────────────────────
+export function initThemeToggle() {
+  const toggle = document.getElementById('themeToggle');
+  if (!toggle) return;
+  const icon = toggle.querySelector('i');
+  const saved = localStorage.getItem('hivercar-theme');
+
+  // Aplicar tema salvo imediatamente (previne FOUC)
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+  }
+
+  toggle.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light-mode');
+    localStorage.setItem('hivercar-theme', isLight ? 'light' : 'dark');
+    if (icon) {
+      icon.classList.toggle('fa-moon', !isLight);
+      icon.classList.toggle('fa-sun', isLight);
+    }
+  });
+}
+
+// -- Máscaras de input ----------------------------------------------------------
+export function maskCPF(value) {
+  let v = value.replace(/\D/g, "").slice(0, 11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+  return v;
+}
+
+export function maskCelular(value) {
+  let v = value.replace(/\D/g, "").slice(0, 11);
+  if (v.length > 8) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+  else if (v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,5})/, "($1) $2");
+  return v;
+}
+
+export function maskCEP(value) {
+  let v = value.replace(/\D/g, "").slice(0, 8);
+  if (v.length > 5) v = v.replace(/(\d{5})(\d{0,3})/, "$1-$2");
+  return v;
+}
+
+// -- Utilitários gerais ---------------------------------------------------------
+export const $ = (id) => document.getElementById(id);
+
+export function formatBRL(value) {
+  return `R$ ${Number(value || 0).toFixed(2).replace(".", ",")}`;
+}
+
+export function formatDateBR(iso) {
+  return iso ? new Date(iso).toLocaleDateString("pt-BR") : "-";
+}
+
+export function formatDateTimeBR(iso) {
+  return iso ? new Date(iso).toLocaleString("pt-BR") : "-";
+}
+
+export function escapeHTML(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// -- Atalhos usados pelos controllers -------------------------------------------
+export const esc = escapeHTML;
+
+export const fmt = formatBRL;
+
+// -- Placeholder SVG para imagens de produtos -----------------------------------
+export function imgPlaceholder(name = "") {
+  const label = encodeURIComponent((name || "Produto").slice(0, 20));
+  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-family='sans-serif' font-size='18'%3E${label}%3C/text%3E%3C/svg%3E`;
+}
+
+// -- Animação de contagem numérica ----------------------------------------------
+export function animateCount(elementId, target, duration = 800) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
   const start = performance.now();
-  (function tick(now) {
-    const p = Math.min((now - start) / dur, 1)
-    el.textContent = Math.round(p * target)
-    if (p < 1) requestAnimationFrame(tick)
-    else el.textContent = target + suffix
-  })(start)
+  const from = 0;
+  const step = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease-out
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(from + (target - from) * eased).toLocaleString("pt-BR");
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 
-/** Ripple de clique global. */
+// -- Efeito ripple em botões ----------------------------------------------------
 export function initRipple() {
-  document.addEventListener("click", e => {
-    const r = document.createElement("div")
-    r.className = "ripple"
-    r.style.left = e.clientX + "px"
-    r.style.top  = e.clientY + "px"
-    document.body.appendChild(r)
-    setTimeout(() => r.remove(), 700)
-  })
+  document.querySelectorAll(".btn, .add-btn").forEach(btn => {
+    if (btn.dataset.ripple) return;
+    btn.dataset.ripple = "1";
+    btn.style.position = btn.style.position || "relative";
+    btn.style.overflow = "hidden";
+    btn.addEventListener("pointerdown", e => {
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      const size = Math.max(rect.width, rect.height);
+      Object.assign(ripple.style, {
+        position: "absolute",
+        borderRadius: "50%",
+        background: "rgba(255,255,255,0.35)",
+        transform: "scale(0)",
+        animation: "ripple-anim 500ms ease-out",
+        width: size + "px",
+        height: size + "px",
+        left: (e.clientX - rect.left - size / 2) + "px",
+        top: (e.clientY - rect.top - size / 2) + "px",
+        pointerEvents: "none",
+      });
+      btn.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+    });
+  });
+
+  // Injeta keyframe se ainda não existe
+  if (!document.getElementById("ripple-keyframe")) {
+    const style = document.createElement("style");
+    style.id = "ripple-keyframe";
+    style.textContent = "@keyframes ripple-anim{to{transform:scale(2.5);opacity:0}}";
+    document.head.appendChild(style);
+  }
 }
 
-/** Toggle de menu mobile. */
-export function initNavToggle(toggleId = "navToggle", menuId = "navMenu") {
-  const btn  = document.getElementById(toggleId)
-  const menu = document.getElementById(menuId)
-  if (btn && menu) btn.onclick = () => menu.classList.toggle("open")
-}
+// -- Toggle do menu de navegação mobile -----------------------------------------
+export function initNavToggle() {
+  const toggle = document.getElementById("navToggle");
+  const menu = document.getElementById("navMenu");
+  if (!toggle || !menu) return;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PAGINAÇÃO COM PRÉ-CARREGAMENTO
-// ─────────────────────────────────────────────────────────────────────────────
+  toggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
 
-/**
- * Classe para gerenciar paginação com pré-carregamento da próxima página.
- * Útil para listas grandes como pedidos, produtos, etc.
- *
- * @example
- * const paginator = new Paginator(items, 15)
- * console.log(paginator.current()) // primeiros 15 itens
- * paginator.next()
- * console.log(paginator.current()) // próximos 15 itens
- */
-export class Paginator {
-  constructor(items = [], pageSize = 15) {
-    this.items = items
-    this.pageSize = pageSize
-    this.currentPage = 0
-    this.preloadedPage = null
-  }
-
-  /**
-   * Define novo array de itens e reseta paginação.
-   */
-  setItems(items) {
-    this.items = items
-    this.currentPage = 0
-    this.preloadedPage = null
-  }
-
-  /**
-   * Retorna itens da página atual.
-   */
-  current() {
-    const start = this.currentPage * this.pageSize
-    return this.items.slice(start, start + this.pageSize)
-  }
-
-  /**
-   * Pré-carrega próxima página em background e retorna página atual.
-   */
-  preloadNext() {
-    if (this.currentPage + 1 < this.getTotalPages()) {
-      const nextStart = (this.currentPage + 1) * this.pageSize
-      this.preloadedPage = this.items.slice(nextStart, nextStart + this.pageSize)
-    }
-    return this.current()
-  }
-
-  /**
-   * Avança para próxima página (usa pré-carregamento se disponível).
-   */
-  next() {
-    if (this.currentPage + 1 < this.getTotalPages()) {
-      this.currentPage++
-      this.preloadedPage = null
-      return this.current()
-    }
-    return this.current()
-  }
-
-  /**
-   * Volta para página anterior.
-   */
-  prev() {
-    if (this.currentPage > 0) {
-      this.currentPage--
-      this.preloadedPage = null
-      return this.current()
-    }
-    return this.current()
-  }
-
-  /**
-   * Salta para página específica (0-indexed).
-   */
-  goToPage(page) {
-    if (page >= 0 && page < this.getTotalPages()) {
-      this.currentPage = page
-      this.preloadedPage = null
-      return this.current()
-    }
-    return this.current()
-  }
-
-  /**
-   * Retorna número total de páginas.
-   */
-  getTotalPages() {
-    return Math.ceil(this.items.length / this.pageSize)
-  }
-
-  /**
-   * Retorna número da página atual (1-indexed para exibição).
-   */
-  getCurrentPageNumber() {
-    return this.currentPage + 1
-  }
-
-  /**
-   * Retorna métrica de paginação: { current: 1, total: 5, showing: 15, totalItems: 75 }
-   */
-  getInfo() {
-    return {
-      current: this.getCurrentPageNumber(),
-      total: this.getTotalPages(),
-      showing: this.current().length,
-      totalItems: this.items.length,
-      hasNext: this.currentPage + 1 < this.getTotalPages(),
-      hasPrev: this.currentPage > 0,
-    }
-  }
+  // Fecha menu ao clicar em link
+  menu.querySelectorAll("a.nav-link, a.nav-cart").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+  });
 }

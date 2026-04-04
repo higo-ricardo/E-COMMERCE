@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produtos - HIVERCAR ERP</title>
@@ -8,13 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/admin-produtos.css">
 </head>
 <body>
 <div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-brand">
     <div class="brand-dot"></div>
     <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
@@ -22,21 +24,28 @@
   <div class="sidebar-role">Administrador</div>
   <nav>
     <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
     <a href="admin-produtos.html" class="active"><i class="fas fa-box-open"></i> Produtos</a>
     <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
-    <a href="admin-os.html"><i class="fas fa-wrench"></i> Ordens de Serviço</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de ServiÃ§o</a>
+    <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> RelatÃ³rios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
     <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
-    <a href="painel-vendas.html"><i class="fas fa-chart-line"></i> Vendas</a>
     <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
   </nav>
   <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
     <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
   </div>
 </aside>
 
 <div class="main">
   <div class="topbar">
-    <span class="topbar-title">GESTÃO DE PRODUTOS</span>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <span class="topbar-title">GESTÃƒO DE PRODUTOS</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
       <span id="userName">Admin</span>
@@ -45,17 +54,17 @@
   </div>
 
   <div class="content">
-    <!-- Alerta estoque crítico -->
-    <div id="stockAlert" style="display:none;margin-bottom:20px;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;">
+    <!-- Alerta estoque crÃ­tico -->
+    <div id="stockAlert" class="flex items-center gap-3 mb-5" style="display:none;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;">
       <i class="fas fa-triangle-exclamation"></i>
       <span id="stockAlertMsg"></span>
     </div>
 
     <!-- Barra superior -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar produtos por nome…">
+      <input type="text" id="searchInput" placeholder="Buscar produtos por nomeâ€¦" aria-label="Buscar produtos por nome">
       <button class="btn btn-ghost btn-sm" id="clearSearch"><i class="fas fa-xmark"></i></button>
-      <button class="btn btn-ghost btn-sm" id="btnToggleFiltros" title="Filtros avançados">
+      <button class="btn btn-ghost btn-sm" id="btnToggleFiltros" title="Filtros avanÃ§ados">
         <i class="fas fa-filter"></i> Filtros
       </button>
       <button class="btn btn-ghost btn-sm" id="btnRelatorioDuplicatas" title="Verificar SKUs duplicados">
@@ -66,31 +75,31 @@
       </button>
     </div>
 
-    <!-- Barra de Filtros Avançada (inicialmente oculta) -->
-    <div id="filtrosPanel" style="display:none;padding:16px;background:var(--dark);border:1px solid var(--border);margin-bottom:16px;border-radius:6px">
+    <!-- Barra de Filtros AvanÃ§ada (inicialmente oculta) -->
+    <div id="filtrosPanel" class="card p-4 mb-4" style="display:none;border-radius:6px">
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:12px">
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">SKU</label>
+          <label class="text-sm mb-1" style="display:block">SKU</label>
           <input type="text" id="filterSku" placeholder="Ex: VWGOL16" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">NCM</label>
+          <label class="text-sm mb-1" style="display:block">NCM</label>
           <input type="text" id="filterNcm" placeholder="Ex: 8708.30" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">Barcode EAN</label>
+          <label class="text-sm mb-1" style="display:block">Barcode EAN</label>
           <input type="text" id="filterBarcode" placeholder="Ex: 1234567890" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">Preço Mín (R$)</label>
+          <label class="text-sm mb-1" style="display:block">PreÃ§o MÃ­n (R$)</label>
           <input type="number" id="filterPriceMin" placeholder="0.00" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">Preço Máx (R$)</label>
+          <label class="text-sm mb-1" style="display:block">PreÃ§o MÃ¡x (R$)</label>
           <input type="number" id="filterPriceMax" placeholder="999999.99" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label style="font-size:12px;margin-bottom:4px;display:block">Status</label>
+          <label class="text-sm mb-1" style="display:block">Status</label>
           <select id="filterStatus" style="padding:6px 8px;font-size:12px;background:var(--dark);border:1px solid var(--border);color:var(--white);outline:none">
             <option value="">-- Todos --</option>
             <option value="ativo">Apenas Ativos</option>
@@ -99,7 +108,7 @@
           </select>
         </div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <div class="flex gap-2 mt-3" style="justify-content:flex-end">
         <button class="btn btn-ghost btn-sm" id="btnLimparFiltros" style="padding:8px 12px">
           <i class="fas fa-times"></i> Limpar Filtros
         </button>
@@ -110,7 +119,7 @@
     </div>
 
     <!-- Tabela -->
-    <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
+    <div class="panel-wrap card">
       <table class="data-table">
         <thead>
           <tr>
@@ -118,14 +127,14 @@
             <th>Nome</th>
             <th>Categoria</th>
             <th>Marca</th>
-            <th>Preço</th>
+            <th>PreÃ§o</th>
             <th>Estoque</th>
             <th>Status</th>
-            <th style="width:130px">Ações</th>
+            <th style="width:130px">AÃ§Ãµes</th>
           </tr>
         </thead>
         <tbody id="produtosTable">
-          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
+          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
         </tbody>
       </table>
 
@@ -134,8 +143,8 @@
   </div>
 </div>
 
-<!-- ── MODAL PRODUTO ── -->
-<div class="modal-overlay" id="modalOverlay">
+<!-- â”€â”€ MODAL PRODUTO â”€â”€ -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="modalTitle">NOVO PRODUTO</span>
@@ -163,33 +172,33 @@
         </div>
         <!-- Campo de Motor para SKU -->
         <div class="field">
-          <label>Motor / Aplicação</label>
-          <input type="text" id="fMotor" placeholder="Ex: 1.6, 2.0 (obrigatório para gerar SKU)" title="Necessário para gerar o SKU do produto">
+          <label>Motor / AplicaÃ§Ã£o</label>
+          <input type="text" id="fMotor" placeholder="Ex: 1.6, 2.0 (obrigatÃ³rio para gerar SKU)" title="NecessÃ¡rio para gerar o SKU do produto">
         </div>
         <div class="field">
           <label>SKU (Gerado Automaticamente)</label>
-          <div style="display:flex;gap:8px">
+          <div class="flex gap-2">
             <input type="text" id="fSku" placeholder="Ex: VWGOL16001" readonly style="background:var(--dark);opacity:0.7">
             <button type="button" id="btnGerarSku" class="btn btn-ghost btn-sm" style="white-space:nowrap;padding:8px 12px">
               <i class="fas fa-magic"></i> Gerar
             </button>
           </div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">Gerado automaticamente a partir de marca, nome e motor. Clique 'Gerar' para criar novo.</div>
+          <div class="text-xs text-muted" style="margin-top:3px">Gerado automaticamente a partir de marca, nome e motor. Clique 'Gerar' para criar novo.</div>
         </div>
         <div class="field">
-          <label>Código de Barras</label>
+          <label>CÃ³digo de Barras</label>
           <input type="text" id="fBarcode" placeholder="Ex: 1234567890123" maxlength="13">
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">EAN/GTIN do produto</div>
+          <div class="text-xs text-muted" style="margin-top:3px">EAN/GTIN do produto</div>
         </div>
       </div>
       <!-- Coluna direita -->
       <div>
         <div class="field">
-          <label>Preço de Venda (R$) *</label>
+          <label>PreÃ§o de Venda (R$) *</label>
           <input type="number" id="fPreco" placeholder="0.00" min="0" step="0.01">
         </div>
         <div class="field">
-          <label>Preço de Custo (R$) *</label>
+          <label>PreÃ§o de Custo (R$) *</label>
           <input type="number" id="fCostPrice" placeholder="0.00" min="0" step="0.01">
         </div>
         <div class="field">
@@ -201,9 +210,9 @@
           <input type="number" id="fEstoque" placeholder="0" min="0" step="1">
         </div>
         <div class="field">
-          <label>Estoque Mínimo (Alerta)</label>
-          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta será disparado quando estoque cair abaixo deste valor">
-          <div style="font-size:10px;color:var(--muted);margin-top:4px">Deixe em branco para usar o padrão do sistema (5 unidades).</div>
+          <label>Estoque MÃ­nimo (Alerta)</label>
+          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta serÃ¡ disparado quando estoque cair abaixo deste valor">
+          <div class="text-xs text-muted" style="margin-top:4px">Deixe em branco para usar o padrÃ£o do sistema (5 unidades).</div>
         </div>
         <div class="field">
           <label>Imagem do Produto</label>
@@ -215,7 +224,7 @@
             <img id="imgPreview" style="display:none">
           </div>
           <input type="file" id="fImagem" accept="image/*" style="display:none">
-          <div style="display:flex;gap:8px;margin-top:8px;">
+          <div class="flex gap-2 mt-2">
             <button class="btn btn-ghost btn-sm" id="btnSelecionarImg" style="flex:1">
               <i class="fas fa-upload"></i> Selecionar
             </button>
@@ -223,20 +232,20 @@
               <i class="fas fa-trash"></i> Remover
             </button>
           </div>
-          <div id="imgStatus" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+          <div id="imgStatus" class="text-sm text-muted"></div>
         </div>
       </div>
     </div>
 
-    <!-- Descrição full-width -->
+    <!-- DescriÃ§Ã£o full-width -->
     <div class="field">
-      <label>Descrição</label>
-      <textarea id="fDescricao" rows="3" placeholder="Descrição técnica do produto…" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
+      <label>DescriÃ§Ã£o</label>
+      <textarea id="fDescricao" rows="3" placeholder="DescriÃ§Ã£o tÃ©cnica do produtoâ€¦" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
     </div>
 
-    <div id="formError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
+    <div id="formError" class="text-red text-sm mb-3" style="display:none"></div>
 
-    <div style="display:flex;gap:12px;justify-content:flex-end;">
+    <div class="flex gap-3" style="justify-content:flex-end;">
       <button class="btn btn-ghost" id="btnCancelarModal">Cancelar</button>
       <button class="btn btn-primary" id="btnSalvar">
         <i class="fas fa-floppy-disk"></i> Salvar Produto
@@ -245,12 +254,12 @@
   </div>
 </div>
 
-<!-- ── CONFIRM DELETE ── -->
-<div class="confirm-overlay" id="confirmOverlay">
+<!-- â”€â”€ CONFIRM DELETE â”€â”€ -->
+<div class="confirm-overlay" id="confirmOverlay" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
   <div class="confirm-box">
-    <h3><i class="fas fa-triangle-exclamation"></i> EXCLUIR PRODUTO</h3>
-    <p>Esta ação é <strong>irreversível</strong>. O produto e sua imagem serão removidos permanentemente.</p>
-    <p id="confirmNome" style="color:var(--white);font-weight:600;margin-bottom:20px;"></p>
+    <h3 id="confirmTitle"><i class="fas fa-triangle-exclamation"></i> EXCLUIR PRODUTO</h3>
+    <p>Esta aÃ§Ã£o Ã© <strong>irreversÃ­vel</strong>. O produto e sua imagem serÃ£o removidos permanentemente.</p>
+    <p id="confirmNome" class="font-bold text-white mb-5"></p>
     <div class="confirm-actions">
       <button class="btn btn-ghost" id="confirmCancel">Cancelar</button>
       <button class="btn btn-danger" id="confirmDelete">
@@ -260,12 +269,12 @@
   </div>
 </div>
 
-<!-- ── RELATÓRIO DUPLICATAS ── -->
+<!-- â”€â”€ RELATÃ“RIO DUPLICATAS â”€â”€ -->
 <div class="confirm-overlay" id="relatorioDuplicatasOverlay">
-  <div class="confirm-box" style="max-height:80vh;overflow-y:auto;max-width:600px">
-    <h3><i class="fas fa-chart-bar"></i> RELATÓRIO DE SKUs</h3>
+  <div class="confirm-box card" style="max-height:80vh;overflow-y:auto;max-width:600px">
+    <h3><i class="fas fa-chart-bar"></i> RELATÃ“RIO DE SKUs</h3>
     <div id="relatorioDuplicatasContent" style="color:var(--text);font-size:13px;line-height:1.6;margin:16px 0">
-      <span class="spinner"></span> Gerando relatório…
+      <span class="spinner"></span> Gerando relatÃ³rioâ€¦
     </div>
     <div class="confirm-actions">
       <button class="btn btn-primary" id="btnFecharRelatorio">Fechar</button>
@@ -273,903 +282,407 @@
   </div>
 </div>
 
-<!-- ── TOAST ── -->
-<div class="toast" id="toast"></div>
+<!-- â”€â”€ TOAST â”€â”€ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
+import { AdminPage, fmtBRL, esc, Query, ID } from "./js/admin-core.js";
+import { CONFIG } from "./js/config.js";
+import { SKUService } from "./js/skuService.js";
+import { Client, Storage, Permission, Role } from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm";
 
+class ProdutosPage extends AdminPage {
+  currentPage = 1;
+  totalPages = 1;
+  searchTerm = "";
+  editingId = null;
+  deleteTarget = null;
+  selectedFile = null;
+  existingImageURL = null;
+  filtrosAtivos = { sku: "", ncm: "", barcode: "", priceMin: null, priceMax: null, status: "" };
+  cache = new Map();
 
-// ── APPWRITE SDK ─────────────────────────────────────────────────────────────
-import { Client, Databases, Account, Storage, Query, ID, Permission, Role }
-  from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm"
-import { CONFIG } from "./js/config.js"
-import { SKUService } from "./js/skuService.js"
-const client = new Client()
-  .setEndpoint(CONFIG.ENDPOINT)
-  .setProject(CONFIG.PROJECT_ID)
+  get storage() { return new Storage(this.app.client); }
 
-const databases = new Databases(client)
-const account   = new Account(client)
-const storage   = new Storage(client)
-
-// ── GUARD - apenas admin ─────────────────────────────────────────────────────
-;(async () => {
-  try {
-    const user = await account.get()
-    document.getElementById("userName").textContent = user.name || "Admin"
-  } catch {
-    window.location.href = "login.html"
-    return
+  onInit() {
+    this.bindEvents();
+    this.load();
+    this.checkStockAlerts();
   }
 
-  // Verifica role via Mirror
-  // (simplificado - validação completa em userService.js)
-  init()
-})()
+  bindEvents() {
+    document.getElementById("btnNovo").addEventListener("click", async () => { this.clearForm(); await this.openModal(); });
+    document.getElementById("modalClose").addEventListener("click", () => this.closeModal());
+    document.getElementById("btnCancelarModal").addEventListener("click", () => this.closeModal());
+    document.getElementById("modalOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) this.closeModal(); });
+    document.getElementById("btnSalvar").addEventListener("click", () => this.handleSave());
+    document.getElementById("btnGerarSku").addEventListener("click", e => { e.preventDefault(); this.gerarNovoSku(); });
 
-// ── ESTADO ───────────────────────────────────────────────────────────────────
-let currentPage    = 1
-let totalPages     = 1
-let searchTerm     = ""
-let searchTimer    = null
-let editingId      = null       // null = criar novo, string = editar existente
-let deleteTarget   = null       // { $id, name }
-let selectedFile   = null       // File a fazer upload
-let existingImageURL = null      // imageURL já salva no produto em edição
+    document.getElementById("searchInput").addEventListener("input", e => {
+      clearTimeout(this._searchTimer);
+      this._searchTimer = setTimeout(() => { this.searchTerm = e.target.value.trim(); this.currentPage = 1; this.load(); }, 400);
+    });
+    document.getElementById("clearSearch").addEventListener("click", () => {
+      document.getElementById("searchInput").value = ""; this.searchTerm = ""; this.currentPage = 1; this.load();
+    });
 
-// ── FILTROS (para aproveitamento de indexes) ──────────────────────────────────
-let filtrosAtivos = {
-  sku:           "",
-  ncm:           "",
-  barcode:       "",
-  priceMin:      null,
-  priceMax:      null,
-  status:        "",   // "" = ativos, "inativo" = inativos, "todos" = include deleted
-}
+    document.getElementById("btnToggleFiltros").addEventListener("click", () => {
+      const fp = document.getElementById("filtrosPanel");
+      fp.style.display = fp.style.display === "none" ? "block" : "none";
+    });
+    document.getElementById("btnLimparFiltros").addEventListener("click", () => this.limparFiltros());
+    document.getElementById("btnAplicarFiltros").addEventListener("click", () => this.aplicarFiltros());
 
-// ── CACHE (in-memory, mesma lógica do productService.js) ────────────────────
-const cache = new Map()
+    document.getElementById("confirmCancel").addEventListener("click", () => this.closeConfirm());
+    document.getElementById("confirmOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) this.closeConfirm(); });
+    document.getElementById("confirmDelete").addEventListener("click", () => this.handleDelete());
 
-function cacheKey(term, page, filtros) { 
-  // Inclui filtros na chave do cache
-  const filtroStr = JSON.stringify(filtros)
-  return `${term}|${page}|${filtroStr}` 
-}
-function cacheGet(k) {
-  const e = cache.get(k)
-  if (!e) return null
-  if (Date.now() - e.time > CONFIG.CACHE_TTL) { cache.delete(k); return null }
-  return e.data
-}
-function cacheSet(k, d) { cache.set(k, { time: Date.now(), data: d }) }
-function invalidateCache() { cache.clear() }
+    document.getElementById("btnRelatorioDuplicatas").addEventListener("click", () => this.gerarRelatorioDuplicatas());
+    document.getElementById("btnFecharRelatorio").addEventListener("click", () => document.getElementById("relatorioDuplicatasOverlay").classList.remove("open"));
+    document.getElementById("relatorioDuplicatasOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) document.getElementById("relatorioDuplicatasOverlay").classList.remove("open"); });
 
-// ── PRODUTO SERVICE ──────────────────────────────────────────────────────────
-async function listProdutos(page = 1, term = "") {
-  const k = cacheKey(term, page, filtrosAtivos)
-  const c = cacheGet(k)
-  if (c) return c
-
-  const queries = [
-    Query.limit(CONFIG.STORE.PAGE_SIZE),
-    Query.offset((page - 1) * CONFIG.STORE.PAGE_SIZE),
-    Query.orderDesc("$createdAt"),
-  ]
-
-  // Filtro de nome (busca full-text usando index)
-  if (term) queries.push(Query.search("name", term))
-
-  // Filtro de SKU (index: sku_unique)
-  if (filtrosAtivos.sku) queries.push(Query.equal("sku", filtrosAtivos.sku))
-
-  // Filtro de NCM (index: ncm_key)
-  if (filtrosAtivos.ncm) queries.push(Query.equal("ncm", filtrosAtivos.ncm))
-
-  // Filtro de Barcode (index: barcode_key)
-  if (filtrosAtivos.barcode) queries.push(Query.equal("barcode", filtrosAtivos.barcode))
-
-  // Filtro de Preço Mínimo (index: price_key)
-  if (filtrosAtivos.priceMin !== null && filtrosAtivos.priceMin > 0) {
-    queries.push(Query.greaterThanOrEqual("price", filtrosAtivos.priceMin))
+    const imgWrap = document.getElementById("imgWrap");
+    const fileInput = document.getElementById("fImagem");
+    imgWrap?.addEventListener("click", () => fileInput.click());
+    document.getElementById("btnSelecionarImg")?.addEventListener("click", e => { e.stopPropagation(); fileInput.click(); });
+    fileInput?.addEventListener("change", () => this.handleFileChange(fileInput));
+    document.getElementById("btnRemoverImg")?.addEventListener("click", e => { e.stopPropagation(); this.removeImage(); });
   }
 
-  // Filtro de Preço Máximo (index: price_key)
-  if (filtrosAtivos.priceMax !== null && filtrosAtivos.priceMax > 0) {
-    queries.push(Query.lessThanOrEqual("price", filtrosAtivos.priceMax))
+  cacheKey(term, page, filtros) { return `${term}|${page}|${JSON.stringify(filtros)}`; }
+  cacheGet(k) { const e = this.cache.get(k); if (!e) return null; if (Date.now() - e.time > CONFIG.CACHE_TTL) { this.cache.delete(k); return null; } return e.data; }
+  cacheSet(k, d) { this.cache.set(k, { time: Date.now(), data: d }); }
+  invalidateCache() { this.cache.clear(); }
+
+  async listProdutos(page = 1, term = "") {
+    const k = this.cacheKey(term, page, this.filtrosAtivos);
+    const c = this.cacheGet(k);
+    if (c) return c;
+
+    const queries = [Query.limit(CONFIG.STORE.PAGE_SIZE), Query.offset((page - 1) * CONFIG.STORE.PAGE_SIZE), Query.orderDesc("$createdAt")];
+    if (term) queries.push(Query.search("name", term));
+    if (this.filtrosAtivos.sku) queries.push(Query.equal("sku", this.filtrosAtivos.sku));
+    if (this.filtrosAtivos.ncm) queries.push(Query.equal("ncm", this.filtrosAtivos.ncm));
+    if (this.filtrosAtivos.barcode) queries.push(Query.equal("barcode", this.filtrosAtivos.barcode));
+    if (this.filtrosAtivos.priceMin !== null && this.filtrosAtivos.priceMin > 0) queries.push(Query.greaterThanOrEqual("price", this.filtrosAtivos.priceMin));
+    if (this.filtrosAtivos.priceMax !== null && this.filtrosAtivos.priceMax > 0) queries.push(Query.lessThanOrEqual("price", this.filtrosAtivos.priceMax));
+    if (this.filtrosAtivos.status === "ativo") { queries.push(Query.equal("isActive", true)); }
+    else if (this.filtrosAtivos.status === "inativo") { queries.push(Query.equal("isActive", false)); }
+
+    const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, queries);
+    const result = { products: res.documents, total: res.total, pages: Math.ceil(res.total / CONFIG.STORE.PAGE_SIZE), page };
+    this.cacheSet(k, result);
+    return result;
   }
 
-  // Filtro de Status (index: deletedAt_key, isActive pode ter index implícito)
-  if (filtrosAtivos.status === "ativo") {
-    // Ativos: isActive=true e sem deletedAt
-    queries.push(Query.equal("isActive", true))
-    queries.push(Query.isNull("deletedAt"))
-  } else if (filtrosAtivos.status === "inativo") {
-    // Inativos: isActive=false ou com deletedAt
-    queries.push(Query.equal("isActive", false))
-  } else if (filtrosAtivos.status !== "todos") {
-    // Default: mostrar ativos (não deletados)
-    queries.push(Query.isNull("deletedAt"))
-  }
-  // Se "todos", não adiciona filtro de deletedAt
-
-  const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, queries)
-  const result = {
-    products: res.documents,
-    total:    res.total,
-    pages:    Math.ceil(res.total / CONFIG.STORE.PAGE_SIZE),
-    page,
-  }
-  cacheSet(k, result)
-  return result
-}
-
-async function saveProduto(data, fileObj, editId) {
-  let imageURL = data.imageURL ?? null
-
-  const adminTeamId = "69c7e962001466871fcc"
-  // Appwrite Storage (arquivos) aceita somente read/write.
-  const filePerms = [
-    Permission.read(Role.any()),
-    Permission.write(Role.team(adminTeamId)),
-  ]
-  const productPerms = [
-    Permission.read(Role.any()),
-    Permission.write(Role.team(adminTeamId)),
-    Permission.update(Role.team(adminTeamId)),
-    Permission.delete(Role.team(adminTeamId)),
-  ]
-
-  // Upload de imagem se houver arquivo novo
-  if (fileObj) {
+  async load() {
+    const tbody = document.getElementById("produtosTable");
+    tbody.innerHTML = `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>`;
     try {
-      const uploaded = await storage.createFile(CONFIG.BUCKET_ID, ID.unique(), fileObj, filePerms)
-      // Persistir /view para evitar bloqueio de image transformations no /preview.
-      imageURL = storage.getFileView(CONFIG.BUCKET_ID, uploaded.$id).toString()
-    } catch (err) {
-      throw new Error(`Falha no upload da imagem para o bucket ${CONFIG.BUCKET_ID}: ${err.message}`)
-    }
-  }
-
-  const payload = {
-    name:        data.name.trim(),
-    description: data.description?.trim()     || null,
-    category:    data.category?.trim()        || null,
-    brand:       data.brand?.trim()           || null,
-    price:       Number(data.price)           || 0,
-    costPrice:   Number(data.costPrice)       || null,
-    weight:      Number(data.weight)          || null,
-    qtd:         parseInt(data.qtd)           || 0,
-    minStock:    parseInt(data.minStock)      || null,
-    sku:         data.sku?.trim()             || null,
-    ncm:         data.ncm?.replace(/\D/g,"") || null,
-    barcode:     data.barcode?.trim()         || null,
-    motor:       data.motor?.trim()           || null,
-    isActive:    data.isActive               ?? true,
-    imageURL:    imageURL,
-    deletedAt:   null,
-  }
-
-  let saved
-  if (editId) {
-    saved = await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, editId, payload)
-  } else {
-    saved = await databases.createDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, ID.unique(), payload, productPerms)
-  }
-
-  invalidateCache()
-  return saved
-}
-
-async function toggleActive(id, currentValue) {
-  await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, id, { isActive: !currentValue })
-  invalidateCache()
-}
-
-async function deleteProduto(id) {
-  // Soft-delete: registra deletedAt, desativa produto - nunca apaga do banco
-  await databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, id, {
-    deletedAt: new Date().toISOString(),
-    isActive:  false,
-  })
-  invalidateCache()
-}
-
-// ── VALIDAÇÃO SKU ────────────────────────────────────────────────────────────
-async function verificarSkuDuplicado(sku, excludeId = null) {
-  if (!sku) return true // Vazio é permitido
-  
-  try {
-    const result = await databases.listDocuments(
-      CONFIG.DB,
-      CONFIG.COL.PRODUCTS,
-      [Query.equal("sku", sku)]
-    )
-    
-    // Se encontrou e é um ID diferente do que está sendo editado
-    if (result.documents.length > 0 && result.documents[0].$id !== excludeId) {
-      throw new Error(`SKU "${sku}" já existe no sistema! Use outro ou clique em "Gerar" para gerar um novo.`)
-    }
-    
-    return true
-  } catch (err) {
-    if (err.message.includes("já existe")) throw err
-    // Se der erro de Query, significa que SKU não existe (esperado)
-    return true
-  }
-}
-
-// ── RELATÓRIO DE DUPLICATAS ──────────────────────────────────────────────────
-async function gerarRelatorioDuplicatas() {
-  try {
-    const allProducts = await databases.listDocuments(
-      CONFIG.DB,
-      CONFIG.COL.PRODUCTS,
-      [Query.limit(1000)] // Pegue até 1000 produtos
-    )
-    
-    const skuMap = new Map()
-    const duplicatas = []
-    const semSku = []
-    
-    allProducts.documents.forEach(p => {
-      if (p.sku) {
-        if (skuMap.has(p.sku)) {
-          // Encontrou duplicata
-          const existing = skuMap.get(p.sku)
-          duplicatas.push({
-            sku: p.sku,
-            produtos: [
-              { id: existing.id, nome: existing.name },
-              { id: p.$id, nome: p.name }
-            ]
-          })
-          skuMap.delete(p.sku) // Remove para não duplicar no resultado
-        } else {
-          skuMap.set(p.sku, { id: p.$id, name: p.name })
-        }
-      } else {
-        semSku.push({ id: p.$id, nome: p.name })
-      }
-    })
-    
-    return {
-      total: allProducts.documents.length,
-      comSku: skuMap.size,
-      semSku: semSku.length,
-      duplicatas: duplicatas.length,
-      detalhes: {
-        duplicatas,
-        semSku
-      }
-    }
-  } catch (err) {
-    throw new Error(`Erro ao gerar relatório: ${err.message}`)
-  }
-}
-
-// ── ALERTA ESTOQUE CRÍTICO ───────────────────────────────────────────────────
-async function checkStockAlerts() {
-  try {
-    // Busca ativos e filtra client-side usando minStock individual ou STOCK_CRITICAL como fallback
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [
-      Query.equal("isActive", true),
-      Query.isNull("deletedAt"),
-      Query.limit(200),
-    ])
-    const criticos = res.documents.filter(p =>
-      (p.qtd ?? 0) < (p.minStock ?? CONFIG.STOCK_CRITICAL)
-    )
-    const el  = document.getElementById("stockAlert")
-    const msg = document.getElementById("stockAlertMsg")
-    if (criticos.length > 0) {
-      msg.textContent = `${criticos.length} produto(s) com estoque crítico. Acesse Gestão de Estoque para repor.`
-      el.style.display = "flex"
-    } else {
-      el.style.display = "none"
-    }
-  } catch {}
-}
-
-// ── RENDER TABELA ────────────────────────────────────────────────────────────
-function renderTable(products) {
-  const tbody = document.getElementById("produtosTable")
-  if (!products.length) {
-    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--muted);padding:32px;text-align:center"><i class="fas fa-box-open" style="font-size:24px;display:block;margin-bottom:8px"></i>Nenhum produto encontrado.</td></tr>`
-    return
-  }
-
-  tbody.innerHTML = products.map(p => {
-    const imageSrc = p.imageURL ? String(p.imageURL).replace(/\/preview(\?|$)/, "/view$1") : ""
-    const imgHtml = p.imageURL
-      ? `<img src="${imageSrc}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
-      : `<div style="width:44px;height:44px;background:var(--dark);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="fas fa-image"></i></div>`
-
-    const minimo     = p.minStock ?? CONFIG.STOCK_CRITICAL
-    const isCrit     = (p.qtd ?? 0) < minimo
-    const stockClass = isCrit ? "style=\"color:var(--red);font-weight:700\"" : ""
-    const stockIcon  = isCrit ? `<i class="fas fa-triangle-exclamation" title="Abaixo do mínimo (${minimo})" style="margin-left:4px;color:var(--red)"></i>` : ""
-
-    const activeLabel = p.isActive ? "Ativo" : "Inativo"
-    const toggleClass = p.isActive ? "active" : "inactive"
-    
-    // ✅ XSS FIX: Garantir que esc() é usada em TODOS os dados dinâmicos
-    const escapedName = esc(p.name)
-    const escapedNCM = p.ncm ? esc(p.ncm) : ""
-    const escapedCategory = esc(p.category || "-")
-    const escapedBrand = esc(p.brand || "-")
-    const escapedDataName = esc(p.name)
-
-    return `<tr>
-      <td>${imgHtml}</td>
-      <td>
-        <div style="font-weight:600">${escapedName}</div>
-        ${escapedNCM ? `<div style="font-size:11px;color:var(--muted)">NCM: ${escapedNCM}</div>` : ""}
-      </td>
-      <td style="color:var(--muted)">${escapedCategory}</td>
-      <td style="color:var(--muted)">${escapedBrand}</td>
-      <td>R$ ${Number(p.price || 0).toFixed(2)}</td>
-      <td ${stockClass}>${p.qtd ?? 0}${stockIcon}</td>
-      <td>
-        <button class="toggle-btn ${toggleClass}" data-id="${p.$id}" data-active="${p.isActive}">
-          <i class="fas fa-${p.isActive ? "circle-check" : "circle-xmark"}"></i>
-          ${activeLabel}
-        </button>
-      </td>
-      <td>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm edit-btn"
-            data-id="${p.$id}"
-            title="Editar">
-            <i class="fas fa-pen"></i>
-          </button>
-          <button class="btn btn-danger btn-sm del-btn"
-            data-id="${p.$id}"
-            data-name="${escapedDataName}"
-            title="Excluir">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </td>
-    </tr>`
-  }).join("")
-
-  // Toggle ativo/inativo
-  tbody.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const id  = btn.dataset.id
-      const cur = btn.dataset.active === "true"
-      btn.disabled = true
-      try {
-        await toggleActive(id, cur)
-        toast(cur ? "Produto desativado." : "Produto ativado.", !cur ? "" : "error")
-        load()
-      } catch (e) {
-        toast("Erro ao alterar status: " + e.message, "error")
-        btn.disabled = false
-      }
-    })
-  })
-
-  // Editar
-  tbody.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", () => openEditModal(btn.dataset.id))
-  })
-
-  // Excluir
-  tbody.querySelectorAll(".del-btn").forEach(btn => {
-    btn.addEventListener("click", () => openConfirm(btn.dataset.id, btn.dataset.name))
-  })
-}
-
-function renderPagination(page, pages) {
-  const el = document.getElementById("paginacao")
-  if (pages <= 1) { el.innerHTML = ""; return }
-
-  let html = `<button class="page-btn" id="prevBtn" ${page <= 1 ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>`
-
-  const range = []
-  for (let i = 1; i <= pages; i++) {
-    if (i === 1 || i === pages || Math.abs(i - page) <= 2) range.push(i)
-    else if (range[range.length - 1] !== "…") range.push("…")
-  }
-
-  range.forEach(r => {
-    if (r === "…") {
-      html += `<span style="color:var(--muted);padding:0 4px">…</span>`
-    } else {
-      html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`
-    }
-  })
-
-  html += `<button class="page-btn" id="nextBtn" ${page >= pages ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`
-  el.innerHTML = html
-
-  el.querySelector("#prevBtn")?.addEventListener("click", () => { currentPage--; load() })
-  el.querySelector("#nextBtn")?.addEventListener("click", () => { currentPage++; load() })
-  el.querySelectorAll(".page-btn[data-pg]").forEach(b => {
-    b.addEventListener("click", () => { currentPage = +b.dataset.pg; load() })
-  })
-}
-
-// ── LOAD ─────────────────────────────────────────────────────────────────────
-async function load() {
-  document.getElementById("produtosTable").innerHTML =
-    `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>`
-
-  try {
-    const result = await listProdutos(currentPage, searchTerm)
-    totalPages = result.pages
-    renderTable(result.products)
-    renderPagination(currentPage, totalPages)
-  } catch (e) {
-    document.getElementById("produtosTable").innerHTML =
-      `<tr><td colspan="8" style="color:var(--red);padding:24px">Erro ao carregar: ${e.message}</td></tr>`
-  }
-}
-
-// ── MODAL ────────────────────────────────────────────────────────────────────
-async function openModal() {
-  document.getElementById("modalOverlay").classList.add("open")
-}
-
-function closeModal() {
-  document.getElementById("modalOverlay").classList.remove("open")
-  clearForm()
-}
-
-function clearForm() {
-  editingId       = null
-  selectedFile    = null
-  existingImageURL = null
-  ;["fNome","fCategoria","fMarca","fPreco","fCostPrice","fWeight","fEstoque","fMinStock","fSku","fNcm","fBarcode","fDescricao","fMotor"].forEach(id => {
-    const el = document.getElementById(id)
-    if (el) el.value = ""
-  })
-  document.getElementById("imgPreview").style.display = "none"
-  document.getElementById("imgPlaceholder").style.display = "flex"
-  document.getElementById("btnRemoverImg").style.display = "none"
-  document.getElementById("imgStatus").textContent = ""
-  document.getElementById("formError").style.display = "none"
-  document.getElementById("modalTitle").textContent  = "NOVO PRODUTO"
-}
-
-async function openEditModal(productId) {
-  try {
-    const p = await databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId)
-    editingId       = productId
-    existingImageURL = p.imageURL ?? null
-
-    document.getElementById("modalTitle").textContent = "EDITAR PRODUTO"
-    document.getElementById("fNome").value      = p.name        ?? ''
-    document.getElementById("fCategoria").value = p.category    ?? ''
-    document.getElementById("fMarca").value     = p.brand       ?? ''
-    document.getElementById("fPreco").value     = p.price       ?? ''
-    document.getElementById("fCostPrice").value = p.costPrice   ?? ''
-    document.getElementById("fWeight").value    = p.weight      ?? ''
-    document.getElementById("fEstoque").value   = p.qtd       ?? ''
-    document.getElementById("fMinStock").value  = p.minStock    ?? ''
-    document.getElementById("fSku").value       = p.sku         ?? ''
-    document.getElementById("fNcm").value       = p.ncm         ?? ''
-    document.getElementById("fBarcode").value   = p.barcode     ?? ''
-    document.getElementById("fMotor").value     = p.motor       ?? ''
-    document.getElementById("fDescricao").value = p.description ?? ''
-
-    if (p.imageURL) {
-      document.getElementById("imgPreview").src           = p.imageURL
-      document.getElementById("imgPreview").style.display = "block"
-      document.getElementById("imgPlaceholder").style.display = "none"
-      document.getElementById("btnRemoverImg").style.display  = "inline-flex"
-    }
-
-    await openModal()  // ✅ Aguarda o carregamento de filtros
-  } catch (e) {
-    toast("Erro ao carregar produto: " + e.message, "error")
-  }
-}
-
-// ── SALVAR ───────────────────────────────────────────────────────────────────
-async function handleSave() {
-  const nome     = document.getElementById("fNome").value.trim()
-  const categoria= document.getElementById("fCategoria").value.trim()
-  const marca    = document.getElementById("fMarca").value.trim()
-  const preco    = document.getElementById("fPreco").value
-  const custPrice= document.getElementById("fCostPrice").value
-  const estoque  = document.getElementById("fEstoque").value
-  const errEl    = document.getElementById("formError")
-
-  if (!nome || !preco || !custPrice || estoque === "") {
-    errEl.textContent = "Preencha os campos obrigatórios: Nome, Preço, Preço de Custo e Estoque."
-    errEl.style.display = "block"
-    return
-  }
-  errEl.style.display = "none"
-
-  // Auto-gerar SKU se vazio
-  let skuValue = document.getElementById("fSku").value.trim()
-  if (!skuValue) {
-    try {
-      const product = { name: nome, brand: marca }
-      const variaciones = {}
-      const motor = document.getElementById("fMotor").value.trim()
-      if (motor) variaciones.motor = motor
-      
-      skuValue = SKUService.generate(product, variaciones, 1)
-      document.getElementById("fSku").value = skuValue
-    } catch (err) {
-      console.warn("Aviso ao gerar SKU automático:", err.message)
-      // Continue mesmo se falhar
-    }
-  }
-
-  const btn = document.getElementById("btnSalvar")
-  btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Salvando…`
-
-  // Validar SKU duplicado antes de salvar
-  if (skuValue) {
-    try {
-      await verificarSkuDuplicado(skuValue, editingId)
-    } catch (err) {
-      errEl.textContent = "Erro: " + err.message
-      errEl.style.display = "block"
-      btn.disabled = false
-      btn.innerHTML = `<i class="fas fa-floppy-disk"></i> SALVAR PRODUTO`
-      return
-    }
-  }
-
-  try {
-    await saveProduto({
-      name:        nome,
-      description: document.getElementById("fDescricao").value,
-      category:    categoria,
-      brand:       marca,
-      price:       preco,
-      costPrice:   custPrice,
-      weight:      document.getElementById("fWeight").value,
-      qtd:         estoque,
-      minStock:    document.getElementById("fMinStock").value,
-      sku:         skuValue,
-      ncm:         document.getElementById("fNcm").value,
-      barcode:     document.getElementById("fBarcode").value,
-      motor:       document.getElementById("fMotor").value,
-      isActive:    true,
-      imageURL:    existingImageURL,
-      // imageURL atualizado em saveProduto via Storage
-    }, selectedFile, editingId)
-
-    toast(editingId ? "Produto atualizado!" : "Produto criado!")
-    closeModal()
-    load()
-    checkStockAlerts()
-  } catch (e) {
-    errEl.textContent = "Erro: " + e.message
-    errEl.style.display = "block"
-  } finally {
-    btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-floppy-disk"></i> SALVAR PRODUTO`
-  }
-}
-
-// ── CONFIRM DELETE ───────────────────────────────────────────────────────────
-function openConfirm(id, name) {
-  deleteTarget = { $id: id, name }
-  document.getElementById("confirmNome").textContent = name
-  document.getElementById("confirmOverlay").classList.add("open")
-}
-
-function closeConfirm() {
-  deleteTarget = null
-  document.getElementById("confirmOverlay").classList.remove("open")
-}
-
-// ── TOAST ────────────────────────────────────────────────────────────────────
-let toastTimer
-function toast(msg, type = "") {
-  const el = document.getElementById("toast")
-  el.textContent = msg
-  el.className   = "toast show" + (type ? " " + type : "")
-  clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => { el.classList.remove("show") }, 3500)
-}
-
-// ── UTILS ────────────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str ?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-}
-
-// ── RELATÓRIO HANDLER ────────────────────────────────────────────────────────
-async function handleRelatorioDuplicatas() {
-  const overlay = document.getElementById("relatorioDuplicatasOverlay")
-  const content = document.getElementById("relatorioDuplicatasContent")
-  
-  overlay.classList.add("open")
-  content.innerHTML = `<span class="spinner"></span> Gerando relatório…`
-  
-  try {
-    const dados = await gerarRelatorioDuplicatas()
-    
-    // Monta HTML com os resultados
-    let html = `
-      <div style="background:rgba(255,255,255,.05);padding:12px;border-radius:4px;margin-bottom:12px">
-        <strong>Resumo:</strong><br>
-        Total de produtos: <strong>${dados.total}</strong><br>
-        Com SKU: <strong style="color:var(--green)">${dados.comSku}</strong><br>
-        Sem SKU: <strong style="color:var(--yellow)">${dados.semSku}</strong><br>
-        SKUs duplicados: <strong style="color:var(--red)">${dados.duplicatas}</strong>
-      </div>
-    `
-    
-    if (dados.duplicatas > 0) {
-      html += `<div style="color:var(--red);font-weight:600;margin-bottom:8px"><i class="fas fa-triangle-exclamation"></i> Duplicatas encontradas:</div>`
-      dados.detalhes.duplicatas.forEach(dup => {
-        html += `<div style="background:rgba(251,18,48,.1);padding:8px;border-left:3px solid var(--red);margin-bottom:8px">`
-        html += `<strong>${esc(dup.sku)}</strong><br>`
-        dup.produtos.forEach((p, i) => {
-          html += `${i > 0 ? '<br>' : ''}→ ${esc(p.nome)} (${esc(p.id)})`
-        })
-        html += `</div>`
-      })
-    } else {
-      html += `<div style="color:var(--green)"><i class="fas fa-check-circle"></i> Nenhuma duplicata encontrada!</div>`
-    }
-    
-    if (dados.detalhes.semSku.length > 0) {
-      html += `<div style="color:var(--yellow);font-weight:600;margin:12px 0 8px"><i class="fas fa-circle-exclamation"></i> ${dados.detalhes.semSku.length} produto(s) sem SKU:</div>`
-      dados.detalhes.semSku.forEach(p => {
-        html += `<div style="background:rgba(255,193,7,.1);padding:8px;margin-bottom:4px">→ ${esc(p.nome)}</div>`
-      })
-    }
-    
-    content.innerHTML = html
-  } catch (err) {
-    content.innerHTML = `<div style="color:var(--red)"><i class="fas fa-circle-xmark"></i> Erro: ${esc(err.message)}</div>`
-  }
-}
-
-// ── INIT ─────────────────────────────────────────────────────────────────────
-function init() {
-  load()
-  checkStockAlerts()
-
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", async e => {
-    e.preventDefault()
-    await account.deleteSession("current").catch(() => {})
-    window.location.href = "login.html"
-  })
-
-  // Novo produto
-  document.getElementById("btnNovo").addEventListener("click", async () => {
-    clearForm()
-    await openModal()  // ✅ Aguarda o carregamento de filtros
-  })
-
-  // Fechar modal
-  document.getElementById("modalClose").addEventListener("click", closeModal)
-  document.getElementById("btnCancelarModal").addEventListener("click", closeModal)
-  document.getElementById("modalOverlay").addEventListener("click", e => {
-    if (e.target === e.currentTarget) closeModal()
-  })
-
-  // Salvar
-  document.getElementById("btnSalvar").addEventListener("click", handleSave)
-
-  // Gerar SKU
-  function gerarNovoSku() {
-    const nome = document.getElementById("fNome").value.trim()
-    const marca = document.getElementById("fMarca").value.trim()
-    const motor = document.getElementById("fMotor").value.trim()
-
-    if (!nome || !marca) {
-      alert("Preenchha Nome e Marca antes de gerar SKU")
-      return
-    }
-
-    if (!motor) {
-      alert("Preenchha Motor antes de gerar SKU")
-      return
-    }
-
-    try {
-      // Monta objeto produto para SKUService
-      const product = { name: nome, brand: marca }
-      
-      // Monta variações com motor
-      const variaciones = { motor: motor }
-
-      // Gera novo SKU com serial 001
-      const novoSku = SKUService.generate(product, variaciones, 1)
-      document.getElementById("fSku").value = novoSku
-      toast(`SKU gerado: ${novoSku}`, "success")
-    } catch (err) {
-      alert("Erro ao gerar SKU: " + err.message)
-    }
-  }
-
-  document.getElementById("btnGerarSku").addEventListener("click", e => {
-    e.preventDefault()
-    gerarNovoSku()
-  })
-
-  // Busca com debounce
-  document.getElementById("searchInput").addEventListener("input", e => {
-    clearTimeout(searchTimer)
-    searchTimer = setTimeout(() => {
-      searchTerm  = e.target.value.trim()
-      currentPage = 1
-      load()
-    }, 400)
-  })
-  document.getElementById("clearSearch").addEventListener("click", () => {
-    document.getElementById("searchInput").value = ""
-    searchTerm  = ""
-    currentPage = 1
-    load()
-  })
-
-  // ── FILTROS AVANÇADOS ────────────────────────────────────────────────────
-  const filtrosPanel = document.getElementById("filtrosPanel")
-  
-  // Toggle painel de filtros
-  document.getElementById("btnToggleFiltros").addEventListener("click", () => {
-    filtrosPanel.style.display = filtrosPanel.style.display === "none" ? "block" : "none"
-  })
-
-  // Limpar filtros
-  document.getElementById("btnLimparFiltros").addEventListener("click", () => {
-    filtrosAtivos = { sku: "", ncm: "", barcode: "", priceMin: null, priceMax: null, status: "" }
-    document.getElementById("filterSku").value = ""
-    document.getElementById("filterNcm").value = ""
-    document.getElementById("filterBarcode").value = ""
-    document.getElementById("filterPriceMin").value = ""
-    document.getElementById("filterPriceMax").value = ""
-    document.getElementById("filterStatus").value = ""
-    currentPage = 1
-    invalidateCache()
-    load()
-    toast("Filtros limpos")
-  })
-
-  // Aplicar filtros
-  document.getElementById("btnAplicarFiltros").addEventListener("click", () => {
-    // Coleta valores dos inputs
-    filtrosAtivos.sku = document.getElementById("filterSku").value.trim()
-    filtrosAtivos.ncm = document.getElementById("filterNcm").value.trim()
-    filtrosAtivos.barcode = document.getElementById("filterBarcode").value.trim()
-    
-    const priceMin = document.getElementById("filterPriceMin").value
-    filtrosAtivos.priceMin = priceMin ? parseFloat(priceMin) : null
-    
-    const priceMax = document.getElementById("filterPriceMax").value
-    filtrosAtivos.priceMax = priceMax ? parseFloat(priceMax) : null
-    
-    filtrosAtivos.status = document.getElementById("filterStatus").value
-
-    // Reseta para página 1 e invalida cache
-    currentPage = 1
-    invalidateCache()
-    
-    // Carrega com novos filtros
-    load()
-    
-    // Feedback visual
-    const filtroQtd = [
-      filtrosAtivos.sku,
-      filtrosAtivos.ncm,
-      filtrosAtivos.barcode,
-      filtrosAtivos.priceMin,
-      filtrosAtivos.priceMax,
-      filtrosAtivos.status ? filtrosAtivos.status !== "ativo" : false
-    ].filter(x => x).length
-    
-    if (filtroQtd > 0) {
-      document.getElementById("btnToggleFiltros").innerHTML = `<i class="fas fa-filter"></i> Filtros (${filtroQtd})`
-      toast(`${filtroQtd} filtro(s) aplicado(s)`)
-    } else {
-      document.getElementById("btnToggleFiltros").innerHTML = `<i class="fas fa-filter"></i> Filtros`
-    }
-  })
-
-  // Enter nos campos de filtro
-  ;["filterSku", "filterNcm", "filterBarcode", "filterPriceMin", "filterPriceMax"].forEach(id => {
-    document.getElementById(id).addEventListener("keypress", e => {
-      if (e.key === "Enter") document.getElementById("btnAplicarFiltros").click()
-    })
-  })
-
-  // Upload de imagem
-  const imgWrap   = document.getElementById("imgWrap")
-  const fileInput = document.getElementById("fImagem")
-  const imgPreview= document.getElementById("imgPreview")
-  const imgPlaceh = document.getElementById("imgPlaceholder")
-  const imgStatus = document.getElementById("imgStatus")
-
-  imgWrap.addEventListener("click", () => fileInput.click())
-  document.getElementById("btnSelecionarImg").addEventListener("click", e => { e.stopPropagation(); fileInput.click() })
-
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files[0]
-    if (!file) return
-
-    // Validações
-    if (!file.type.startsWith("image/")) {
-      imgStatus.textContent = "Arquivo inválido. Selecione uma imagem."
-      imgStatus.style.color = "var(--red)"
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      imgStatus.textContent = "Imagem muito grande. Máximo 5MB."
-      imgStatus.style.color = "var(--red)"
-      return
-    }
-
-    selectedFile = file
-    imgStatus.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB) - será enviada ao salvar`
-    imgStatus.style.color = "var(--green)"
-
-    const reader = new FileReader()
-    reader.onload = ev => {
-      imgPreview.src           = ev.target.result
-      imgPreview.style.display = "block"
-      imgPlaceh.style.display  = "none"
-      document.getElementById("btnRemoverImg").style.display = "inline-flex"
-    }
-    reader.readAsDataURL(file)
-  })
-
-  document.getElementById("btnRemoverImg").addEventListener("click", e => {
-    e.stopPropagation()
-    selectedFile    = null
-    existingImageURL = null
-    fileInput.value = ""
-    imgPreview.style.display = "none"
-    imgPlaceh.style.display  = "flex"
-    document.getElementById("btnRemoverImg").style.display = "none"
-    imgStatus.textContent = "Imagem removida."
-    imgStatus.style.color = "var(--muted)"
-  })
-
-  // Confirmação de exclusão
-  document.getElementById("confirmCancel").addEventListener("click", closeConfirm)
-  document.getElementById("confirmOverlay").addEventListener("click", e => {
-    if (e.target === e.currentTarget) closeConfirm()
-  })
-
-  document.getElementById("confirmDelete").addEventListener("click", async () => {
-    if (!deleteTarget) return
-    const btn = document.getElementById("confirmDelete")
-    btn.disabled = true
-    btn.innerHTML = `<span class="spinner"></span> Excluindo…`
-    try {
-      await deleteProduto(deleteTarget.$id)
-      toast("Produto excluído.")
-      closeConfirm()
-      if (currentPage > 1) currentPage = 1
-      load()
-      checkStockAlerts()
+      const result = await this.listProdutos(this.currentPage, this.searchTerm);
+      this.totalPages = result.pages;
+      this.renderTable(result.products);
+      this.renderPagination(this.currentPage, this.totalPages);
     } catch (e) {
-      toast("Erro ao excluir: " + e.message, "error")
-    } finally {
-      btn.disabled = false
-      btn.innerHTML = `<i class="fas fa-trash"></i> Excluir Definitivamente`
+      tbody.innerHTML = `<tr><td colspan="8" style="color:var(--red);padding:24px">Erro: ${e.message}</td></tr>`;
     }
-  })
+  }
 
-  // Relatório de duplicatas
-  document.getElementById("btnRelatorioDuplicatas").addEventListener("click", handleRelatorioDuplicatas)
-  document.getElementById("btnFecharRelatorio").addEventListener("click", () => {
-    document.getElementById("relatorioDuplicatasOverlay").classList.remove("open")
-  })
-  document.getElementById("relatorioDuplicatasOverlay").addEventListener("click", e => {
-    if (e.target === e.currentTarget) {
-      document.getElementById("relatorioDuplicatasOverlay").classList.remove("open")
+  renderTable(products) {
+    const tbody = document.getElementById("produtosTable");
+    this.renderTable(tbody, products, p => {
+      const imageSrc = p.imageURL ? String(p.imageURL).replace(/\/preview(\?|$)/, "/view$1") : "";
+      const imgHtml = p.imageURL
+        ? `<img src="${imageSrc}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border)">`
+        : `<div style="width:44px;height:44px;background:var(--dark);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted)"><i class="fas fa-image"></i></div>`;
+      const minimo = p.minStock ?? CONFIG.STOCK_CRITICAL;
+      const isCrit = (p.qtd ?? 0) < minimo;
+      const stockClass = isCrit ? `style="color:var(--red);font-weight:700"` : "";
+      const stockIcon = isCrit ? `<i class="fas fa-triangle-exclamation" style="margin-left:4px;color:var(--red)"></i>` : "";
+      const activeLabel = p.isActive ? "Ativo" : "Inativo";
+      const toggleClass = p.isActive ? "active" : "inactive";
+
+      return `<tr>
+        <td>${imgHtml}</td>
+        <td><div style="font-weight:600">${esc(p.name)}</div>${p.ncm ? `<div style="font-size:11px;color:var(--muted)">NCM: ${esc(p.ncm)}</div>` : ""}</td>
+        <td style="color:var(--muted)">${esc(p.category || "-")}</td>
+        <td style="color:var(--muted)">${esc(p.brand || "-")}</td>
+        <td>R$ ${Number(p.price || 0).toFixed(2)}</td>
+        <td ${stockClass}>${p.qtd ?? 0}${stockIcon}</td>
+        <td><button class="toggle-btn ${toggleClass}" data-id="${p.$id}" data-active="${p.isActive}"><i class="fas fa-${p.isActive ? "circle-check" : "circle-xmark"}"></i> ${activeLabel}</button></td>
+        <td><div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm edit-btn" data-id="${p.$id}"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm del-btn" data-id="${p.$id}" data-name="${esc(p.name)}"><i class="fas fa-trash"></i></button>
+        </div></td>
+      </tr>`;
+    }, "produtosTable");
+
+    tbody.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const cur = btn.dataset.active === "true";
+          await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, btn.dataset.id, { isActive: !cur });
+          this.invalidateCache();
+          this.toast(cur ? "Produto desativado." : "Produto ativado.", "ok");
+          this.load();
+        } catch (e) { this.toast("Erro: " + e.message, "err"); btn.disabled = false; }
+      });
+    });
+    tbody.querySelectorAll(".edit-btn").forEach(btn => { btn.addEventListener("click", () => this.openEditModal(btn.dataset.id)); });
+    tbody.querySelectorAll(".del-btn").forEach(btn => { btn.addEventListener("click", () => this.openConfirm(btn.dataset.id, btn.dataset.name)); });
+  }
+
+  renderPagination(page, pages) {
+    const el = document.getElementById("paginacao");
+    if (pages <= 1) { el.innerHTML = ""; return; }
+    let html = `<button class="page-btn" id="prevBtn" ${page <= 1 ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>`;
+    const range = [];
+    for (let i = 1; i <= pages; i++) {
+      if (i === 1 || i === pages || Math.abs(i - page) <= 2) range.push(i);
+      else if (range[range.length - 1] !== "â€¦") range.push("â€¦");
     }
-  })
+    range.forEach(r => {
+      if (r === "â€¦") html += `<span style="color:var(--muted);padding:0 4px">â€¦</span>`;
+      else html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`;
+    });
+    html += `<button class="page-btn" id="nextBtn" ${page >= pages ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`;
+    el.innerHTML = html;
+
+    el.querySelector("#prevBtn")?.addEventListener("click", () => { this.currentPage--; this.load(); });
+    el.querySelector("#nextBtn")?.addEventListener("click", () => { this.currentPage++; this.load(); });
+    el.querySelectorAll(".page-btn[data-pg]").forEach(b => { b.addEventListener("click", () => { this.currentPage = +b.dataset.pg; this.load(); }); });
+  }
+
+  async openModal() { document.getElementById("modalOverlay").classList.add("open"); }
+  closeModal() { document.getElementById("modalOverlay").classList.remove("open"); this.clearForm(); }
+
+  clearForm() {
+    this.editingId = null; this.selectedFile = null; this.existingImageURL = null;
+    ["fNome", "fCategoria", "fMarca", "fPreco", "fCostPrice", "fWeight", "fEstoque", "fMinStock", "fSku", "fNcm", "fBarcode", "fDescricao", "fMotor"].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = "";
+    });
+    document.getElementById("imgPreview").style.display = "none";
+    document.getElementById("imgPlaceholder").style.display = "flex";
+    document.getElementById("btnRemoverImg").style.display = "none";
+    document.getElementById("imgStatus").textContent = "";
+    document.getElementById("formError").style.display = "none";
+    document.getElementById("modalTitle").textContent = "NOVO PRODUTO";
+  }
+
+  async openEditModal(productId) {
+    try {
+      const p = await this.app.databases.getDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, productId);
+      this.editingId = productId; this.existingImageURL = p.imageURL ?? null;
+      document.getElementById("modalTitle").textContent = "EDITAR PRODUTO";
+      document.getElementById("fNome").value = p.name ?? '';
+      document.getElementById("fCategoria").value = p.category ?? '';
+      document.getElementById("fMarca").value = p.brand ?? '';
+      document.getElementById("fPreco").value = p.price ?? '';
+      document.getElementById("fCostPrice").value = p.costPrice ?? '';
+      document.getElementById("fWeight").value = p.weight ?? '';
+      document.getElementById("fEstoque").value = p.qtd ?? '';
+      document.getElementById("fMinStock").value = p.minStock ?? '';
+      document.getElementById("fSku").value = p.sku ?? '';
+      document.getElementById("fNcm").value = p.ncm ?? '';
+      document.getElementById("fBarcode").value = p.barcode ?? '';
+      document.getElementById("fMotor").value = p.motor ?? '';
+      document.getElementById("fDescricao").value = p.description ?? '';
+      if (p.imageURL) {
+        document.getElementById("imgPreview").src = p.imageURL;
+        document.getElementById("imgPreview").style.display = "block";
+        document.getElementById("imgPlaceholder").style.display = "none";
+        document.getElementById("btnRemoverImg").style.display = "inline-flex";
+      }
+      await this.openModal();
+    } catch (e) { this.toast("Erro ao carregar: " + e.message, "err"); }
+  }
+
+  async handleSave() {
+    const nome = document.getElementById("fNome").value.trim();
+    const preco = document.getElementById("fPreco").value;
+    const custPrice = document.getElementById("fCostPrice").value;
+    const estoque = document.getElementById("fEstoque").value;
+    const errEl = document.getElementById("formError");
+
+    if (!nome || !preco || !custPrice || estoque === "") {
+      errEl.textContent = "Preencha: Nome, PreÃ§o, PreÃ§o de Custo e Estoque.";
+      errEl.style.display = "block";
+      return;
+    }
+    errEl.style.display = "none";
+
+    let skuValue = document.getElementById("fSku").value.trim();
+    if (!skuValue) {
+      try {
+        skuValue = SKUService.generate({ name: nome, brand: document.getElementById("fMarca").value.trim() }, { motor: document.getElementById("fMotor").value.trim() }, 1);
+        document.getElementById("fSku").value = skuValue;
+      } catch (err) { console.warn("SKU auto:", err); }
+    }
+
+    const btn = document.getElementById("btnSalvar");
+    this.setLoading(btn, true);
+
+    if (skuValue) {
+      try { await this.verificarSkuDuplicado(skuValue, this.editingId); }
+      catch (err) { errEl.textContent = err.message; errEl.style.display = "block"; this.setLoading(btn, false); return; }
+    }
+
+    try {
+      let imageURL = this.existingImageURL;
+      if (this.selectedFile) {
+        const uploaded = await this.storage.createFile(CONFIG.BUCKET_ID, ID.unique(), this.selectedFile);
+        imageURL = this.storage.getFileView(CONFIG.BUCKET_ID, uploaded.$id).toString();
+      }
+
+      const payload = {
+        name: nome.trim(), description: document.getElementById("fDescricao").value?.trim() || null,
+        category: document.getElementById("fCategoria").value.trim() || null,
+        brand: document.getElementById("fMarca").value.trim() || null,
+        price: Number(preco) || 0, costPrice: Number(custPrice) || null,
+        weight: Number(document.getElementById("fWeight").value) || null,
+        qtd: parseInt(estoque) || 0, minStock: parseInt(document.getElementById("fMinStock").value) || null,
+        sku: skuValue?.trim() || null, ncm: document.getElementById("fNcm").value.replace(/\D/g, "") || null,
+        barcode: document.getElementById("fBarcode").value.trim() || null,
+        motor: document.getElementById("fMotor").value.trim() || null,
+        isActive: true, imageURL, deletedAt: null,
+      };
+
+      if (this.editingId) {
+        await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, this.editingId, payload);
+      } else {
+        await this.app.databases.createDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, ID.unique(), payload);
+      }
+
+      this.invalidateCache();
+      this.toast(this.editingId ? "Produto atualizado!" : "Produto criado!", "ok");
+      this.closeModal(); this.load(); this.checkStockAlerts();
+    } catch (e) {
+      errEl.textContent = "Erro: " + e.message; errEl.style.display = "block";
+    } finally { this.setLoading(btn, false); }
+  }
+
+  async verificarSkuDuplicado(sku, excludeId = null) {
+    if (!sku) return true;
+    const result = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [Query.equal("sku", sku)]);
+    if (result.documents.length > 0 && result.documents[0].$id !== excludeId) throw new Error(`SKU "${sku}" jÃ¡ existe!`);
+    return true;
+  }
+
+  gerarNovoSku() {
+    const nome = document.getElementById("fNome").value.trim();
+    const marca = document.getElementById("fMarca").value.trim();
+    const motor = document.getElementById("fMotor").value.trim();
+    if (!nome || !marca || !motor) { this.toast("Preencha Nome, Marca e Motor.", "err"); return; }
+    try {
+      const sku = SKUService.generate({ name: nome, brand: marca }, { motor }, 1);
+      document.getElementById("fSku").value = sku;
+      this.toast(`SKU gerado: ${sku}`, "ok");
+    } catch (err) { this.toast("Erro ao gerar SKU: " + err.message, "err"); }
+  }
+
+  handleFileChange(fileInput) {
+    const file = fileInput.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { document.getElementById("imgStatus").textContent = "Arquivo invÃ¡lido."; return; }
+    if (file.size > 5 * 1024 * 1024) { document.getElementById("imgStatus").textContent = "MÃ¡ximo 5MB."; return; }
+    this.selectedFile = file;
+    document.getElementById("imgStatus").textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById("imgPreview").src = ev.target.result;
+      document.getElementById("imgPreview").style.display = "block";
+      document.getElementById("imgPlaceholder").style.display = "none";
+      document.getElementById("btnRemoverImg").style.display = "inline-flex";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage() {
+    this.selectedFile = null; this.existingImageURL = null;
+    document.getElementById("fImagem").value = "";
+    document.getElementById("imgPreview").style.display = "none";
+    document.getElementById("imgPlaceholder").style.display = "flex";
+    document.getElementById("btnRemoverImg").style.display = "none";
+    document.getElementById("imgStatus").textContent = "Imagem removida.";
+  }
+
+  limparFiltros() {
+    this.filtrosAtivos = { sku: "", ncm: "", barcode: "", priceMin: null, priceMax: null, status: "" };
+    document.getElementById("filterSku").value = "";
+    document.getElementById("filterNcm").value = "";
+    document.getElementById("filterBarcode").value = "";
+    document.getElementById("filterPriceMin").value = "";
+    document.getElementById("filterPriceMax").value = "";
+    document.getElementById("filterStatus").value = "";
+    this.currentPage = 1; this.invalidateCache(); this.load();
+    this.toast("Filtros limpos.", "ok");
+  }
+
+  aplicarFiltros() {
+    this.filtrosAtivos.sku = document.getElementById("filterSku").value.trim();
+    this.filtrosAtivos.ncm = document.getElementById("filterNcm").value.trim();
+    this.filtrosAtivos.barcode = document.getElementById("filterBarcode").value.trim();
+    this.filtrosAtivos.priceMin = parseFloat(document.getElementById("filterPriceMin").value) || null;
+    this.filtrosAtivos.priceMax = parseFloat(document.getElementById("filterPriceMax").value) || null;
+    this.filtrosAtivos.status = document.getElementById("filterStatus").value;
+    this.currentPage = 1; this.invalidateCache(); this.load();
+  }
+
+  openConfirm(id, name) { this.deleteTarget = { $id: id, name }; document.getElementById("confirmNome").textContent = name; document.getElementById("confirmOverlay").classList.add("open"); }
+  closeConfirm() { this.deleteTarget = null; document.getElementById("confirmOverlay").classList.remove("open"); }
+
+  async handleDelete() {
+    if (!this.deleteTarget) return;
+    const btn = document.getElementById("confirmDelete");
+    this.setLoading(btn, true);
+    try {
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, this.deleteTarget.$id, { deletedAt: new Date().toISOString(), isActive: false });
+      this.invalidateCache();
+      this.toast("Produto excluÃ­do.", "ok");
+      this.closeConfirm();
+      if (this.currentPage > 1) this.currentPage = 1;
+      this.load(); this.checkStockAlerts();
+    } catch (e) { this.toast("Erro ao excluir: " + e.message, "err"); }
+    finally { this.setLoading(btn, false); }
+  }
+
+  async gerarRelatorioDuplicatas() {
+    document.getElementById("relatorioDuplicatasOverlay").classList.add("open");
+    document.getElementById("relatorioDuplicatasContent").innerHTML = `<span class="spinner"></span> Gerandoâ€¦`;
+    try {
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [Query.limit(1000)]);
+      const skuMap = new Map(); const duplicatas = []; const semSku = [];
+      res.documents.forEach(p => {
+        if (p.sku) {
+          if (skuMap.has(p.sku)) { duplicatas.push({ sku: p.sku, produtos: [skuMap.get(p.sku), { id: p.$id, nome: p.name }] }); skuMap.delete(p.sku); }
+          else skuMap.set(p.sku, { id: p.$id, name: p.name });
+        } else semSku.push({ id: p.$id, nome: p.name });
+      });
+      let html = `<div style="padding:12px;background:rgba(255,255,255,.05);border-radius:4px;margin-bottom:12px"><strong>Resumo:</strong><br>Total: <strong>${res.total}</strong><br>Com SKU: <strong style="color:var(--green)">${skuMap.size}</strong><br>Sem SKU: <strong style="color:var(--yellow)">${semSku.length}</strong><br>Duplicados: <strong style="color:var(--red)">${duplicatas.length}</strong></div>`;
+      if (duplicatas.length > 0) {
+        html += `<div style="color:var(--red);font-weight:600;margin-bottom:8px"><i class="fas fa-triangle-exclamation"></i> Duplicatas:</div>`;
+        duplicatas.forEach(d => { html += `<div style="background:rgba(251,18,48,.1);padding:8px;border-left:3px solid var(--red);margin-bottom:8px"><strong>${esc(d.sku)}</strong><br>${d.produtos.map((p, i) => `${i > 0 ? '<br>' : ''}â†’ ${esc(p.nome)}`).join('')}</div>`; });
+      }
+      document.getElementById("relatorioDuplicatasContent").innerHTML = html;
+    } catch (e) { document.getElementById("relatorioDuplicatasContent").innerHTML = `<div style="color:var(--red)">Erro: ${e.message}</div>`; }
+  }
+
+  async checkStockAlerts() {
+    try {
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [Query.equal("isActive", true), Query.limit(200)]);
+      const criticos = res.documents.filter(p => (p.qtd ?? 0) < (p.minStock ?? CONFIG.STOCK_CRITICAL));
+      const el = document.getElementById("stockAlert");
+      const msg = document.getElementById("stockAlertMsg");
+      if (criticos.length > 0) { msg.textContent = `${criticos.length} produto(s) com estoque crÃ­tico.`; el.style.display = "flex"; }
+      else el.style.display = "none";
+    } catch {}
+  }
 }
+
+const page = new ProdutosPage();
+page.init();
 </script>
 </body>
 </html>
-
-
 

@@ -15,7 +15,7 @@
 
 import { AuthService }           from "./authService.js"
 import { CartService }            from "./cartService.js"
-import { OrderRepository }        from "./orderRepository.js"
+import { OrderRepository }        from "./repositories.js"
 import { DocumentNumberService } from "./documentNumberService.js"
 import { CONFIG }                 from "./config.js"
 

@@ -7,7 +7,7 @@
 //   - invalidateCacheKey()  → remove entrada específica
 //   - DEBUG_CACHE = true    → loga hits, misses e invalidações no console
 
-import { ProductRepository } from "./productRepository.js"
+import { ProductRepository } from "./repositories.js"
 import { CONFIG }            from "./config.js"
 
 const cache = new Map()

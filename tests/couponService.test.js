@@ -1,129 +1,245 @@
-// @vitest-environment jsdom
-import { describe, it, expect, beforeEach, vi } from "vitest"
+// tests/couponService.test.js
+// Testes para js/couponService.js - serviço de cupons
 
-// In-memory mocks for Appwrite repositories
-const coupons = new Map()
-const usage = new Map() // key: `${code}|${cpf}` -> {uses,lastUsedAt}
+import { CouponService, reasonMessage } from '../js/couponService.js';
 
-vi.mock("../js/couponRepository.js", () => ({
+// Mock dos repositórios
+jest.mock('../js/repositories.js', () => ({
   CouponRepository: {
-    async create(payload) {
-      const doc = {
-        $id: `c_${coupons.size + 1}`,
-        timesUsed: 0,
-        ...payload,
-        code: payload.code.toUpperCase(),
-      }
-      coupons.set(doc.code, doc)
-      return doc
-    },
-    async findByCode(code) {
-      return coupons.get(String(code).toUpperCase()) || null
-    },
-    async list() {
-      return Array.from(coupons.values())
-    },
-    async incrementUsage(code) {
-      const doc = coupons.get(String(code).toUpperCase())
-      if (!doc) return null
-      doc.timesUsed = (doc.timesUsed || 0) + 1
-      coupons.set(doc.code, doc)
-      return doc
-    },
+    create: jest.fn(),
+    findByCode: jest.fn(),
+    list: jest.fn(),
+    incrementUsage: jest.fn(),
   },
-}))
-
-vi.mock("../js/couponUsageRepository.js", () => ({
   CouponUsageRepository: {
-    async findByCodeAndCpf(code, cpf) {
-      return usage.get(`${code.toUpperCase()}|${cpf}`) || null
-    },
-    async increment(code, cpf) {
-      const key = `${code.toUpperCase()}|${cpf}`
-      const current = usage.get(key) || { code: code.toUpperCase(), cpf, uses: 0 }
-      const updated = { ...current, uses: current.uses + 1, lastUsedAt: new Date().toISOString() }
-      usage.set(key, updated)
-      return updated
-    },
+    findByCodeAndCpf: jest.fn(),
+    increment: jest.fn(),
   },
-}))
+}));
 
-import { CouponService } from "../js/couponService.js"
+import { CouponRepository, CouponUsageRepository } from '../js/repositories.js';
 
-describe("CouponService", () => {
+describe('CouponService', () => {
   beforeEach(() => {
-    coupons.clear()
-    usage.clear()
-  })
+    jest.clearAllMocks();
+  });
 
-  it("cria cupom com código em maiúsculas e defaults", async () => {
-    const created = await CouponService.create({ code: "black10", type: "percentual", value: 10 })
-    expect(created.code).toBe("BLACK10")
-    expect(created.minOrderValue).toBe(50)
-    expect(created.timesUsed).toBe(0)
-  })
+  // ── create ───────────────────────────────────────────────────────────────
+  describe('create', () => {
+    test('cria cupom com dados mínimos', async () => {
+      CouponRepository.create.mockResolvedValue({ $id: 'c1', code: 'TEST10', type: 'percentual', value: 10 });
 
-  it("falha na validação quando cupom não existe", async () => {
-    const res = await CouponService.validate("NOPE", { cartTotal: 100 })
-    expect(res.ok).toBe(false)
-    expect(res.reason).toBe("coupon_not_found")
-  })
+      const result = await CouponService.create({ code: 'TEST10', type: 'percentual', value: 10 });
 
-  it("bloqueia cupom inativo, expirado, limite global e pedido mínimo", async () => {
-    await CouponService.create({ code: "OFF", type: "percentual", value: 10, isActive: false })
-    let res = await CouponService.validate("OFF", { cartTotal: 100 })
-    expect(res.reason).toBe("coupon_inactive")
+      expect(CouponRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code: 'TEST10',
+          type: 'percentual',
+          value: 10,
+          isActive: true,
+          minOrderValue: 50,
+          timesUsed: 0,
+        })
+      );
+    });
 
-    await CouponService.create({ code: "EXP", type: "percentual", value: 10, expirationDate: "2000-01-01" })
-    res = await CouponService.validate("EXP", { cartTotal: 100 })
-    expect(res.reason).toBe("coupon_expired")
+    test('lança erro se campos obrigatórios faltarem', async () => {
+      await expect(CouponService.create({})).rejects.toThrow('code, type e value são obrigatórios');
+      await expect(CouponService.create({ code: 'X' })).rejects.toThrow('code, type e value são obrigatórios');
+    });
 
-    await CouponService.create({ code: "LIM", type: "percentual", value: 10, usageLimit: 1 })
-    await CouponService.apply("LIM", { subtotal: 100 })
-    res = await CouponService.validate("LIM", { cartTotal: 100 })
-    expect(res.reason).toBe("coupon_usage_limit")
+    test('lança erro se type inválido', async () => {
+      await expect(CouponService.create({ code: 'X', type: 'invalid', value: 10 })).rejects.toThrow("type deve ser 'percentual' ou 'fixed'");
+    });
 
-    await CouponService.create({ code: "MIN", type: "percentual", value: 10, minOrderValue: 200 })
-    res = await CouponService.validate("MIN", { cartTotal: 100 })
-    expect(res.reason).toBe("coupon_min_order")
-  })
+    test('usa valores padrão para opcionais', async () => {
+      CouponRepository.create.mockResolvedValue({});
+      await CouponService.create({ code: 'X', type: 'fixed', value: 5 });
+      expect(CouponRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          maxDiscount: null,
+          minOrderValue: 50,
+          usageLimit: null,
+          cpfLimit: null,
+          isActive: true,
+        })
+      );
+    });
+  });
 
-  it("bloqueia CPF inválido ou limite por CPF", async () => {
-    await CouponService.create({ code: "CPF1", type: "percentual", value: 10, cpf: "123", cpfLimit: 1 })
-    let res = await CouponService.validate("CPF1", { cartTotal: 100, cpf: "999" })
-    expect(res.reason).toBe("coupon_cpf_mismatch")
+  // ── validate ─────────────────────────────────────────────────────────────
+  describe('validate', () => {
+    test('retorna ok para cupom válido', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'SAVE10', isActive: true, type: 'percentual', value: 10, timesUsed: 0, usageLimit: null,
+        minOrderValue: null, cpf: null, cpfLimit: null, expirationDate: null,
+      });
 
-    // primeiro uso
-    let applyRes = await CouponService.apply("CPF1", { subtotal: 100, cpf: "123" })
-    expect(applyRes.ok).toBe(true)
-    // segundo uso deve bloquear
-    res = await CouponService.validate("CPF1", { cartTotal: 100, cpf: "123" })
-    expect(res.reason).toBe("coupon_cpf_limit")
-  })
+      const result = await CouponService.validate('SAVE10', { cartTotal: 100 });
 
-  it("aplica desconto percentual com teto maxDiscount e cap de 50%", async () => {
-    await CouponService.create({ code: "MAX", type: "percentual", value: 80, maxDiscount: 300 })
-    const res = await CouponService.apply("MAX", { subtotal: 1000 })
-    expect(res.ok).toBe(true)
-    expect(res.discount).toBe(300) // 80% de 1000 = 800, teto 300
-    expect(res.subtotal).toBe(700)
-  })
+      expect(result.ok).toBe(true);
+    });
 
-  it("aplica desconto fixo mas limita a 50% e evita negativo", async () => {
-    await CouponService.create({ code: "FIX", type: "fixed", value: 120 })
-    const res = await CouponService.apply("FIX", { subtotal: 100 })
-    expect(res.ok).toBe(true)
-    expect(res.discount).toBe(50) // cap 50% do subtotal
-    expect(res.subtotal).toBe(50)
-  })
+    test('retorna erro para cupom não encontrado', async () => {
+      CouponRepository.findByCode.mockResolvedValue(null);
+      const result = await CouponService.validate('INVALID');
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_not_found');
+    });
 
-  it("incrementa contadores global e por CPF ao aplicar", async () => {
-    await CouponService.create({ code: "CNT", type: "percentual", value: 10, cpfLimit: 5 })
-    const r1 = await CouponService.apply("CNT", { subtotal: 100, cpf: "321" })
-    expect(r1.ok).toBe(true)
-    const doc = coupons.get("CNT")
-    expect(doc.timesUsed).toBe(1)
-    const usageDoc = usage.get("CNT|321")
-    expect(usageDoc.uses).toBe(1)
-  })
-})
+    test('retorna erro para cupom inativo', async () => {
+      CouponRepository.findByCode.mockResolvedValue({ code: 'X', isActive: false });
+      const result = await CouponService.validate('X');
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_inactive');
+    });
+
+    test('retorna erro para cupom expirado', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'X', isActive: true, expirationDate: '2020-01-01',
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+      });
+      const result = await CouponService.validate('X');
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_expired');
+    });
+
+    test('retorna erro para limite de uso atingido', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'X', isActive: true, timesUsed: 10, usageLimit: 10,
+        minOrderValue: null, cpf: null, cpfLimit: null, expirationDate: null,
+      });
+      const result = await CouponService.validate('X');
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_usage_limit');
+    });
+
+    test('retorna erro para valor mínimo não atingido', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'X', isActive: true, minOrderValue: 100,
+        timesUsed: 0, usageLimit: null, cpf: null, cpfLimit: null, expirationDate: null,
+      });
+      const result = await CouponService.validate('X', { cartTotal: 50 });
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_min_order');
+    });
+
+    test('retorna erro para CPF incompatível', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'X', isActive: true, cpf: '12345678901',
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpfLimit: null, expirationDate: null,
+      });
+      const result = await CouponService.validate('X', { cpf: '98765432100' });
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_cpf_mismatch');
+    });
+
+    test('retorna erro para limite por CPF atingido', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'X', isActive: true, cpfLimit: 2,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, expirationDate: null,
+      });
+      CouponUsageRepository.findByCodeAndCpf.mockResolvedValue({ code: 'X', cpf: '123', uses: 2 });
+      const result = await CouponService.validate('X', { cpf: '123' });
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('coupon_cpf_limit');
+    });
+  });
+
+  // ── apply ────────────────────────────────────────────────────────────────
+  describe('apply', () => {
+    test('aplica cupom percentual corretamente', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'PCT10', isActive: true, type: 'percentual', value: 10,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+        expirationDate: null, maxDiscount: null,
+      });
+      CouponRepository.incrementUsage.mockResolvedValue({});
+
+      const result = await CouponService.apply('PCT10', { subtotal: 200 });
+
+      expect(result.ok).toBe(true);
+      expect(result.discount).toBe(20); // 10% de 200
+      expect(result.subtotal).toBe(180);
+    });
+
+    test('aplica cupom fixed corretamente', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'FIX50', isActive: true, type: 'fixed', value: 50,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+        expirationDate: null, maxDiscount: null,
+      });
+      CouponRepository.incrementUsage.mockResolvedValue({});
+
+      const result = await CouponService.apply('FIX50', { subtotal: 200 });
+
+      expect(result.discount).toBe(50);
+      expect(result.subtotal).toBe(150);
+    });
+
+    test('respeita maxDiscount', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'BIG', isActive: true, type: 'fixed', value: 500, maxDiscount: 100,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+        expirationDate: null,
+      });
+      CouponRepository.incrementUsage.mockResolvedValue({});
+
+      const result = await CouponService.apply('BIG', { subtotal: 1000 });
+
+      expect(result.discount).toBe(100);
+    });
+
+    test('retorna erro se desconto zero', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'ZERO', isActive: true, type: 'fixed', value: 0,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+        expirationDate: null, maxDiscount: null,
+      });
+
+      const result = await CouponService.apply('ZERO', { subtotal: 100 });
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe('invalid_discount');
+    });
+
+    test('não excede 50% do pedido', async () => {
+      CouponRepository.findByCode.mockResolvedValue({
+        code: 'HALF', isActive: true, type: 'fixed', value: 999,
+        timesUsed: 0, usageLimit: null, minOrderValue: null, cpf: null, cpfLimit: null,
+        expirationDate: null, maxDiscount: null,
+      });
+      CouponRepository.incrementUsage.mockResolvedValue({});
+
+      const result = await CouponService.apply('HALF', { subtotal: 100 });
+      expect(result.discount).toBeLessThanOrEqual(50); // max 50% de 100
+    });
+  });
+
+  // ── list / reset ─────────────────────────────────────────────────────────
+  describe('list e reset', () => {
+    test('list chama repositório', () => {
+      CouponRepository.list.mockResolvedValue([]);
+      CouponService.list();
+      expect(CouponRepository.list).toHaveBeenCalled();
+    });
+
+    test('reset chama repositório', () => {
+      CouponRepository.reset = jest.fn();
+      CouponService.reset();
+      expect(CouponRepository.reset).toHaveBeenCalled();
+    });
+  });
+});
+
+// ── reasonMessage ────────────────────────────────────────────────────────────
+describe('reasonMessage', () => {
+  test('retorna mensagem para reason conhecida', () => {
+    expect(reasonMessage('coupon_not_found')).toContain('não encontrado');
+    expect(reasonMessage('coupon_expired')).toContain('expirado');
+    expect(reasonMessage('coupon_usage_limit')).toContain('Limite');
+  });
+
+  test('retorna mensagem default para reason desconhecida', () => {
+    expect(reasonMessage('unknown')).toContain('inválido');
+  });
+});

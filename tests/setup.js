@@ -1,12 +1,20 @@
-// ─── HIVERCAR · tests/setup.js ───────────────────────────────────────────────
-// Setup global executado antes de cada arquivo de teste.
-//
-// Com environment:"jsdom" no vitest.config.js, localStorage já existe nativamente.
-// Este arquivo apenas garante que o localStorage é limpo antes de cada teste,
-// evitando vazamento de estado entre testes do cartService.
+// HIVERCAR - tests/setup.js
+// Setup global para testes com Jest (jsdom environment)
 
 beforeEach(() => {
-  if (typeof localStorage !== "undefined") {
-    localStorage.clear()
+  // Limpar localStorage antes de cada teste
+  localStorage.clear();
+  sessionStorage.clear();
+
+  // Limpar document.body
+  document.body.innerHTML = "";
+
+  // Reset mocks
+  if (global.mockFetch) {
+    global.mockFetch.mockReset();
   }
-})
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});

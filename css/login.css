@@ -1,4 +1,5 @@
-﻿/* ---- moved from login.html on 2026-03-28 23:47:02 ---- */
+﻿/* login.css — componentes únicos (não presentes em loja.css) */
+
 html, body { height: 100%; overflow: hidden; background: var(--black); }
 body { display: flex; align-items: center; justify-content: center; }
 
@@ -36,50 +37,10 @@ body { display: flex; align-items: center; justify-content: center; }
 .auth-right .ok   { color:rgba(38,253,113,.5); }
 .auth-right .err  { color:rgba(251,18,48,.5); }
 .auth-right .warn { color:rgba(255,199,44,.7); }
-
-/* â”€â”€ Card â”€â”€ */
-.auth-box {
-  position:relative; z-index:10;
-  background:var(--panel); border:1px solid var(--border);
-  padding:40px 36px; animation:fadeUp .6s ease both;
-}
-.auth-box::before,.auth-box::after {
-  content:''; position:absolute; width:16px; height:16px;
-  border-color:var(--green); border-style:solid; opacity:.5;
-}
-.auth-box::before { top:-1px; left:-1px; border-width:2px 0 0 2px; }
-.auth-box::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
-
-.auth-brand { display:flex; align-items:center; gap:10px; margin-bottom:28px; text-decoration:none; }
-.auth-brand-name { font-size:11px; font-weight:600; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
-
-.auth-box h1 {
-  font-family:'Bebas Neue',sans-serif; font-size:30px;
-  letter-spacing:.06em; color:var(--white); margin-bottom:4px;
-}
-.auth-box h1 em { font-style:normal; color:var(--green); text-shadow:0 0 24px var(--glow-g); }
-.auth-sub2 { font-size:12px; color:var(--muted); margin-bottom:24px; }
-
-#msgBox {
-  margin-top:12px; font-size:13px; text-align:center;
-  min-height:20px; line-height:1.5;
-}
-#msgBox.error   { color:var(--red); }
-#msgBox.success { color:var(--green); }
-#msgBox.warning { color:var(--danger); }
-
 #countdown {
   margin-top:8px; font-size:12px; color:var(--danger);
   text-align:center; letter-spacing:.05em; min-height:18px;
 }
-
-.auth-footer-links {
-  margin-top:16px; display:flex; justify-content:space-between;
-  font-size:12px; color:var(--muted);
-}
-.auth-footer-links a { color:var(--green); text-decoration:none; }
-.auth-footer-links a:hover { text-decoration:underline; }
-
 .auth-footer { margin-top:12px; text-align:center; font-size:12px; color:var(--muted); }
 .auth-footer a { color:var(--green); text-decoration:none; }
 
@@ -98,3 +59,15 @@ body { display: flex; align-items: center; justify-content: center; }
   .auth-box { width:100%; max-width:420px; }
 }
 
+@media (max-width: 480px) {
+  html, body { overflow: auto; }
+  .auth-scene { padding: 30px 16px; }
+  .auth-box { padding: 28px 20px; }
+  .auth-box h1 { font-size: 24px; }
+  .auth-footer-links { flex-direction: column; gap: 8px; align-items: center; }
+}
+
+@media (max-width: 768px) {
+  .auth-scene { padding: 40px 24px; }
+  .auth-box { max-width: 480px; }
+}

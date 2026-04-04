@@ -4,16 +4,16 @@
   "description": "HIVERCAR AUTOPEÇAS — ERP + Loja",
   "type": "module",
   "scripts": {
-    "lint:text":     "node scripts/check-text-integrity.mjs",
-    "test":          "vitest run",
-    "test:watch":    "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:ui":       "vitest --ui"
+    "lint:text": "node scripts/check-text-integrity.mjs",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "vitest":              "^1.4.0",
-    "@vitest/coverage-v8": "^1.4.0",
-    "@vitest/ui":          "^1.4.0",
-    "jsdom":               "^24.0.0"
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "babel-jest": "^30.3.0",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0"
   }
 }

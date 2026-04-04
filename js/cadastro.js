@@ -349,5 +349,19 @@ function reset() {
 $("btnCadastrar").onclick = doCadastro
 $("confirm").onkeydown = e => { if (e.key === "Enter") doCadastro() }
 
+// -- Toggle visibilidade de senha -----------------------------------------------
+document.querySelectorAll('.password-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const input = document.getElementById(btn.dataset.target);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    const icon = btn.querySelector('i');
+    icon.classList.toggle('fa-eye', !isPassword);
+    icon.classList.toggle('fa-eye-slash', isPassword);
+    btn.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+  });
+});
+
 
 

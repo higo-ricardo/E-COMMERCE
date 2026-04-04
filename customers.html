@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clientes - HIVERCAR ERP</title>
@@ -8,34 +9,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/customers.css">
 </head>
 <body>
 <div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-brand">
     <div class="brand-dot"></div>
     <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
   </a>
   <div class="sidebar-role">Administrador</div>
   <nav>
-    <a href="dashboard.html">    <i class="fas fa-gauge-high"></i>  Dashboard</a>
-    <a href="admin-produtos.html"><i class="fas fa-box-open"></i>    Produtos</a>
-    <a href="admin-estoque.html"> <i class="fas fa-warehouse"></i>   Estoque</a>
-    <a href="admin-os.html">      <i class="fas fa-wrench"></i>      O. de Serviço</a>
-    <a href="customers.html" class="active"><i class="fas fa-users"></i> Clientes</a>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
     <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
-    <a href="loja.html">          <i class="fas fa-store"></i>       Loja</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html" class="active"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
   </nav>
   <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
     <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
   </div>
 </aside>
 
 <div class="main">
   <div class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <span class="topbar-title">GESTÃO DE CLIENTES</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
@@ -46,7 +55,7 @@
 
   <div class="content">
     <!-- Métricas -->
-    <div class="metrics-grid" style="margin-bottom:24px">
+    <div class="metrics-grid mb-5">
       <div class="metric-card"><div class="metric-value" id="mTotal">-</div><div class="metric-label">Total de Clientes</div></div>
       <div class="metric-card"><div class="metric-value" id="mAtivos">-</div><div class="metric-label">Contas Ativas</div></div>
       <div class="metric-card red"><div class="metric-value" id="mBloqueados">-</div><div class="metric-label">Bloqueados</div></div>
@@ -56,10 +65,10 @@
     <!-- Busca -->
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Buscar por nome, e-mail ou CPF…">
-      <select id="filterStatus" style="padding:10px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none">
+      <select id="filterStatus" class="form-input">
         <option value="">Todos</option>
-        <option value="active">Ativos</option>
-        <option value="blocked">Bloqueados</option>
+        <option value="ativos">Ativos</option>
+        <option value="bloqueados">Bloqueados</option>
       </select>
       <button class="btn btn-ghost btn-sm" id="btnRefresh">
         <i class="fas fa-arrows-rotate"></i>
@@ -67,7 +76,7 @@
     </div>
 
     <!-- Tabela -->
-    <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
+    <div class="panel-wrap card">
       <table class="data-table">
         <thead>
           <tr>
@@ -91,302 +100,189 @@
 </div>
 
 <!-- Modal detalhe do cliente -->
-<div class="modal-overlay" id="modalOverlay">
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="modalTitle">CLIENTE</span>
       <button class="modal-close" id="modalClose"><i class="fas fa-xmark"></i></button>
     </div>
     <div id="modalBody"></div>
-    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end" id="modalActions"></div>
+    <div class="flex gap-3 mt-5 justify-end" id="modalActions"></div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-// ── CONFIG (inline) ───────────────────────────────────────────────────────────
-const CONFIG = {
-  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
-  PROJECT_ID: "69c7e94a003a1c86b7ca",
-  DB:         "69c7e9af00296b17179e",
-  COL_USERS:  "users",
-  PAGE_SIZE:  20,
-}
+import { AdminPage, fmtDate, fmtDateTime, esc, Query } from "./js/admin-core.js";
+import { initParticles } from "./js/utils.js";
 
-import { Client, Databases, Account, Query }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+class CustomersPage extends AdminPage {
+  allCustomers = [];
+  filtered = [];
+  currentPage = 1;
+  PAGE_SIZE = 20;
 
-const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
-const databases = new Databases(client)
-const account   = new Account(client)
-
-// ── GUARD ─────────────────────────────────────────────────────────────────────
-;(async () => {
-  try {
-    const user = await account.get()
-    document.getElementById("userName").textContent = user.name || "Admin"
-  } catch {
-    window.location.href = "login.html"; return
-  }
-  init()
-})()
-
-// ── ESTADO ────────────────────────────────────────────────────────────────────
-let allCustomers = []
-let filtered     = []
-let currentPage  = 1
-const PAGE_SIZE  = CONFIG.PAGE_SIZE
-
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s ?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-}
-let toastT
-function toast(msg, type="") {
-  const el = document.getElementById("toast")
-  el.textContent = msg
-  el.className = "toast show" + (type?" "+type:"")
-  clearTimeout(toastT)
-  toastT = setTimeout(()=>el.classList.remove("show"), 3500)
-}
-function fmtDate(iso) {
-  if (!iso) return "-"
-  return new Date(iso).toLocaleDateString("pt-BR")
-}
-function fmtDateTime(iso) {
-  if (!iso) return "-"
-  const d = new Date(iso)
-  return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
-}
-
-// ── LOAD ──────────────────────────────────────────────────────────────────────
-async function loadCustomers() {
-  try {
-    const res = await databases.listDocuments(CONFIG.DB, CONFIG.COL_USERS, [
-      Query.equal("role", ["cliente", "USERS"]),
-      Query.orderDesc("$createdAt"),
-      Query.limit(200),
-    ])
-    allCustomers = res.documents
-
-    // Métricas
-    const today     = new Date(); today.setHours(0,0,0,0)
-    const ativos    = allCustomers.filter(c => c.isActive !== false)
-    const bloqueados= allCustomers.filter(c => c.isActive === false || (c.blockedUntil && new Date(c.blockedUntil) > new Date()))
-    const hoje      = allCustomers.filter(c => new Date(c.createdAt || c.$createdAt) >= today)
-
-    document.getElementById("mTotal").textContent     = allCustomers.length
-    document.getElementById("mAtivos").textContent    = ativos.length
-    document.getElementById("mBloqueados").textContent= bloqueados.length
-    document.getElementById("mHoje").textContent      = hoje.length
-
-    applyFilter()
-  } catch (e) {
-    document.getElementById("customersTable").innerHTML =
-      `<tr><td colspan="8" style="color:var(--red);padding:24px">Erro ao carregar: ${e.message}</td></tr>`
-  }
-}
-
-function applyFilter() {
-  const search = document.getElementById("searchInput").value.toLowerCase()
-  const status = document.getElementById("filterStatus").value
-
-  filtered = allCustomers.filter(c => {
-    const matchSearch = !search ||
-      (c.name || '').toLowerCase().includes(search) ||
-      (c.email || '').toLowerCase().includes(search) ||
-      (c.cpf   || '-').includes(search)
-
-    const isBlocked = c.isActive === false ||
-      (c.blockedUntil && new Date(c.blockedUntil) > new Date())
-
-    const matchStatus = !status ||
-      (status === "active"  && !isBlocked) ||
-      (status === "blocked" &&  isBlocked)
-
-    return matchSearch && matchStatus
-  })
-
-  currentPage = 1
-  renderPage()
-}
-
-function renderPage() {
-  const start   = (currentPage - 1) * PAGE_SIZE
-  const slice   = filtered.slice(start, start + PAGE_SIZE)
-  const pages   = Math.ceil(filtered.length / PAGE_SIZE)
-
-  const tbody = document.getElementById("customersTable")
-  if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--muted);padding:28px;text-align:center">
-      <i class="fas fa-users" style="font-size:22px;display:block;margin-bottom:8px"></i>
-      Nenhum cliente encontrado.
-    </td></tr>`
-    document.getElementById("paginacao").innerHTML = ""
-    return
+  onInit() {
+    initParticles();
+    this.bindEvents();
+    this.loadCustomers();
   }
 
-  tbody.innerHTML = slice.map(c => {
-    const blocked = c.isActive === false ||
-      (c.blockedUntil && new Date(c.blockedUntil) > new Date())
-
-    const badge = blocked
-      ? `<span class="badge badge-red">Bloqueado</span>`
-      : `<span class="badge badge-green">Ativo</span>`
-
-    return `<tr>
-      <td style="font-weight:600">${esc(c.name||"-")}</td>
-      <td style="color:var(--muted);font-size:12px">${esc(c.email||"-")}</td>
-      <td style="color:var(--muted);font-size:12px">${esc(c.cpf||"-")}</td>
-      <td style="color:var(--muted)">${esc(c.city||"-")}</td>
-      <td style="color:var(--muted);font-size:12px">${fmtDate(c.createdAt||c.$createdAt)}</td>
-      <td style="color:var(--muted);font-size:12px">${fmtDate(c.lastLogin)}</td>
-      <td>${badge}</td>
-      <td>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm ver-btn" data-id="${c.$id}" title="Ver detalhes">
-            <i class="fas fa-eye"></i>
-          </button>
-          <button class="btn ${blocked ? 'btn-primary' : 'btn-danger'} btn-sm toggle-btn"
-            data-id="${c.$id}" data-blocked="${blocked}"
-            title="${blocked ? 'Desbloquear' : 'Bloquear'}">
-            <i class="fas fa-${blocked ? 'lock-open' : 'lock'}"></i>
-          </button>
-        </div>
-      </td>
-    </tr>`
-  }).join("")
-
-  // Eventos
-  tbody.querySelectorAll(".ver-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const c = allCustomers.find(x => x.$id === btn.dataset.id)
-      if (c) openDetalhe(c)
-    })
-  })
-  tbody.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => toggleBlock(btn.dataset.id, btn.dataset.blocked === "true"))
-  })
-
-  // Paginação
-  renderPagination(currentPage, pages)
-}
-
-function renderPagination(page, pages) {
-  const el = document.getElementById("paginacao")
-  if (pages <= 1) { el.innerHTML = ""; return }
-
-  let html = `<button class="page-btn" id="prevBtn" ${page<=1?"disabled":""}><i class="fas fa-chevron-left"></i></button>`
-  for (let i = 1; i <= pages; i++) {
-    html += `<button class="page-btn ${i===page?"active":""}" data-pg="${i}">${i}</button>`
+  bindEvents() {
+    document.getElementById("btnRefresh").addEventListener("click", () => this.loadCustomers());
+    document.getElementById("searchInput").addEventListener("input", () => this.applyFilter());
+    document.getElementById("filterStatus").addEventListener("change", () => this.applyFilter());
+    document.getElementById("modalClose").addEventListener("click", () => {
+      document.getElementById("modalOverlay").classList.remove("open");
+    });
+    document.getElementById("modalOverlay").addEventListener("click", e => {
+      if (e.target === e.currentTarget) {
+        document.getElementById("modalOverlay").classList.remove("open");
+      }
+    });
   }
-  html += `<button class="page-btn" id="nextBtn" ${page>=pages?"disabled":""}><i class="fas fa-chevron-right"></i></button>`
-  el.innerHTML = html
 
-  el.querySelector("#prevBtn")?.addEventListener("click", () => { currentPage--; renderPage() })
-  el.querySelector("#nextBtn")?.addEventListener("click", () => { currentPage++; renderPage() })
-  el.querySelectorAll(".page-btn[data-pg]").forEach(b => {
-    b.addEventListener("click", () => { currentPage = +b.dataset.pg; renderPage() })
-  })
-}
+  async loadCustomers() {
+    try {
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL_USERS, [
+        Query.orderDesc("$createdAt"),
+        Query.limit(200),
+      ]);
+      this.allCustomers = res.documents;
+      this.applyFilter();
+    } catch (e) {
+      console.error("[Customers] Erro ao carregar:", e);
+      this.toast("Erro ao carregar clientes.", "err");
+    }
+  }
 
-// ── DETALHE ───────────────────────────────────────────────────────────────────
-function openDetalhe(c) {
-  const blocked = c.isActive === false ||
-    (c.blockedUntil && new Date(c.blockedUntil) > new Date())
+  applyFilter() {
+    const search = document.getElementById("searchInput").value.trim().toLowerCase();
+    const status = document.getElementById("filterStatus").value;
+    this.filtered = this.allCustomers.filter(c => {
+      if (search) {
+        const name = (c.name || "").toLowerCase();
+        const email = (c.email || "").toLowerCase();
+        const cpf = (c.cpf || "").replace(/\D/g, "");
+        const q = search.replace(/\D/g, "");
+        if (!name.includes(search) && !email.includes(search) && !cpf.includes(q)) return false;
+      }
+      if (status === "ativos" && c.isActive === false) return false;
+      if (status === "bloqueados" && c.isActive !== false) return false;
+      return true;
+    });
+    this.currentPage = 1;
+    this.renderPage();
+  }
 
-  document.getElementById("modalTitle").textContent = c.name || "Cliente"
+  renderPage() {
+    const start = (this.currentPage - 1) * this.PAGE_SIZE;
+    const page = this.filtered.slice(start, start + this.PAGE_SIZE);
+    const pages = Math.ceil(this.filtered.length / this.PAGE_SIZE);
 
-  document.getElementById("modalBody").innerHTML = `
-    <div class="detail-row"><span class="detail-label">Nome</span><span>${esc(c.name||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">E-mail</span><span>${esc(c.email||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">CPF</span><span>${esc(c.cpf||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">Celular</span><span>${esc(c.mobile||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">Endereço</span>
-      <span>${esc([c.address, c.number, c.complement].filter(Boolean).join(", ")||"-")}</span>
-    </div>
-    <div class="detail-row"><span class="detail-label">Bairro</span><span>${esc(c.district||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">Cidade/UF</span><span>${esc((c.city|| '-') + (c.state ? "-" + c.state : "")||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">CEP</span><span>${esc(c.cep||"-")}</span></div>
-    <div class="detail-row"><span class="detail-label">Cadastro</span><span>${fmtDateTime(c.createdAt||c.$createdAt)}</span></div>
-    <div class="detail-row"><span class="detail-label">Último Login</span><span>${fmtDateTime(c.lastLogin)}</span></div>
-    <div class="detail-row"><span class="detail-label">Logins</span><span>${c.loginCounter ?? 0}</span></div>
-    <div class="detail-row"><span class="detail-label">Tentativas Falhas</span>
-      <span style="${(c.failedLogin||0) >= 5 ? 'color:var(--red);font-weight:700' : ''}">${c.failedLogin ?? 0}</span>
-    </div>
-    <div class="detail-row"><span class="detail-label">Status</span>
-      <span>${blocked
-        ? `<span class="badge badge-red">Bloqueado</span>`
-        : `<span class="badge badge-green">Ativo</span>`}
-      </span>
-    </div>
-    ${c.blockedUntil && blocked ? `
-    <div class="detail-row"><span class="detail-label">Bloqueado até</span>
-      <span style="color:var(--red)">${fmtDateTime(c.blockedUntil)}</span>
-    </div>` : ""}
-  `
+    // Metrics
+    document.getElementById("mTotal").textContent = this.allCustomers.length;
+    document.getElementById("mAtivos").textContent = this.allCustomers.filter(c => c.isActive !== false).length;
+    document.getElementById("mBloqueados").textContent = this.allCustomers.filter(c => c.isActive === false).length;
+    document.getElementById("mHoje").textContent = this.allCustomers.filter(c => {
+      if (!c.$createdAt) return false;
+      return new Date(c.$createdAt).toDateString() === new Date().toDateString();
+    }).length;
 
-  document.getElementById("modalActions").innerHTML = `
-    <button class="btn btn-ghost btn-sm" id="modalFechar">Fechar</button>
-    <button class="btn ${blocked ? 'btn-primary' : 'btn-danger'} btn-sm" id="modalToggle">
-      <i class="fas fa-${blocked ? 'lock-open' : 'lock'}"></i>
-      ${blocked ? "Desbloquear Conta" : "Bloquear Conta"}
-    </button>
-  `
-  document.getElementById("modalFechar").addEventListener("click", () => {
-    document.getElementById("modalOverlay").classList.remove("open")
-  })
-  document.getElementById("modalToggle").addEventListener("click", () => {
-    document.getElementById("modalOverlay").classList.remove("open")
-    toggleBlock(c.$id, blocked)
-  })
+    // Table
+    this.renderTable(document.getElementById("customersTable"), page, c => `
+      <tr>
+        <td class="font-semibold text-sm">${esc(c.name || "Sem nome")}</td>
+        <td class="text-xs">${esc(c.email || "-")}</td>
+        <td class="text-xs text-muted" style="font-family:monospace">${esc(c.cpf || "-")}</td>
+        <td><span class="badge ${c.isActive !== false ? 'badge-green' : 'badge-red'}">${c.isActive !== false ? 'Ativo' : 'Bloqueado'}</span></td>
+        <td class="text-xs text-muted">${fmtDate(c.lastLogin)}</td>
+        <td class="text-xs">${fmtDate(c.$createdAt)}</td>
+        <td class="text-center">
+          <button class="btn btn-ghost btn-sm btn-detalhe" data-id="${c.$id}"><i class="fas fa-eye"></i></button>
+        </td>
+      </tr>
+    `);
 
-  document.getElementById("modalOverlay").classList.add("open")
-}
+    // Pagination
+    this.renderPagination(this.currentPage, pages);
 
-// ── TOGGLE BLOQUEIO ────────────────────────────────────────────────────────────
-async function toggleBlock(id, isCurrentlyBlocked) {
-  try {
-    const patch = isCurrentlyBlocked
-      ? { isActive: true, blockedUntil: null, failedLogin: 0 }
-      : { isActive: false, blockedUntil: new Date(Date.now() + 99*365*24*3600000).toISOString() }
+    // Bind detail buttons
+    document.querySelectorAll(".btn-detalhe").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const customer = this.filtered.find(c => c.$id === btn.dataset.id);
+        if (customer) this.openDetalhe(customer);
+      });
+    });
+  }
 
-    await databases.updateDocument(CONFIG.DB, CONFIG.COL_USERS, id, patch)
-    toast(isCurrentlyBlocked ? "Conta desbloqueada." : "Conta bloqueada.")
-    await loadCustomers()
-  } catch (e) {
-    toast("Erro: " + e.message, "error")
+  renderPagination(page, pages) {
+    const el = document.getElementById("paginacao");
+    if (!el) return;
+    if (pages <= 1) { el.innerHTML = ""; return; }
+    let html = `<button class="btn btn-ghost btn-sm" ${page <= 1 ? "disabled" : ""} id="pagPrev"><i class="fas fa-chevron-left"></i></button>`;
+    for (let i = 1; i <= pages; i++) {
+      html += `<button class="btn btn-sm ${i === page ? 'btn-primary' : 'btn-ghost'} pag-num" data-p="${i}">${i}</button>`;
+    }
+    html += `<button class="btn btn-ghost btn-sm" ${page >= pages ? "disabled" : ""} id="pagNext"><i class="fas fa-chevron-right"></i></button>`;
+    el.innerHTML = html;
+
+    document.getElementById("pagPrev")?.addEventListener("click", () => { this.currentPage--; this.renderPage(); });
+    document.getElementById("pagNext")?.addEventListener("click", () => { this.currentPage++; this.renderPage(); });
+    document.querySelectorAll(".pag-num").forEach(b => {
+      b.addEventListener("click", () => { this.currentPage = parseInt(b.dataset.p); this.renderPage(); });
+    });
+  }
+
+  openDetalhe(c) {
+    document.getElementById("modalTitle").textContent = c.name || "Cliente";
+    const blocked = c.isActive === false;
+    document.getElementById("modalBody").innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><strong>Email:</strong> ${esc(c.email)}</div>
+        <div><strong>CPF:</strong> ${esc(c.cpf || "-")}</div>
+        <div><strong>Celular:</strong> ${esc(c.mobile || "-")}</div>
+        <div><strong>Nascimento:</strong> ${esc(c.dayBirth || "-")}</div>
+        <div><strong>Cidade:</strong> ${esc(c.city || "-")}</div>
+        <div><strong>Estado:</strong> ${esc(c.state || "-")}</div>
+        <div><strong>Último Login:</strong> ${fmtDateTime(c.lastLogin)}</div>
+        <div><strong>Tentativas:</strong> ${c.failedLogin || 0}</div>
+        <div><strong>IP:</strong> ${esc(c.lastIP || "-")}</div>
+        <div><strong>Role:</strong> ${esc(c.role || "-")}</div>
+      </div>
+    `;
+    document.getElementById("modalActions").innerHTML = `
+      <button class="btn btn-ghost btn-sm" id="modalFechar">Fechar</button>
+      <button class="btn ${blocked ? 'btn-primary' : 'btn-danger'} btn-sm" id="modalToggle">
+        ${blocked ? "Desbloquear" : "Bloquear"}
+      </button>
+    `;
+    document.getElementById("modalFechar").addEventListener("click", () => {
+      document.getElementById("modalOverlay").classList.remove("open");
+    });
+    document.getElementById("modalToggle").addEventListener("click", async () => {
+      await this.toggleBlock(c.$id, blocked);
+      document.getElementById("modalOverlay").classList.remove("open");
+    });
+    document.getElementById("modalOverlay").classList.add("open");
+  }
+
+  async toggleBlock(id, isCurrentlyBlocked) {
+    try {
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL_USERS, id, {
+        isActive: isCurrentlyBlocked,
+      });
+      this.toast(isCurrentlyBlocked ? "Cliente desbloqueado." : "Cliente bloqueado.", "success");
+      this.loadCustomers();
+    } catch (e) {
+      this.toast("Erro ao atualizar: " + e.message, "err");
+    }
   }
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-function init() {
-  document.getElementById("logoutBtn").addEventListener("click", async e => {
-    e.preventDefault()
-    await account.deleteSession("current").catch(()=>{})
-    window.location.href = "login.html"
-  })
-
-  document.getElementById("modalClose").addEventListener("click", () => {
-    document.getElementById("modalOverlay").classList.remove("open")
-  })
-  document.getElementById("modalOverlay").addEventListener("click", e => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove("open")
-  })
-
-  let searchTimer
-  document.getElementById("searchInput").addEventListener("input", () => {
-    clearTimeout(searchTimer)
-    searchTimer = setTimeout(applyFilter, 300)
-  })
-  document.getElementById("filterStatus").addEventListener("change", applyFilter)
-  document.getElementById("btnRefresh").addEventListener("click", loadCustomers)
-
-  loadCustomers()
-}
+const page = new CustomersPage();
+page.init();
 </script>
 </body>
 </html>
-
-

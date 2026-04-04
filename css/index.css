@@ -1,4 +1,25 @@
 
+/* THEME TOGGLE */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--white);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.theme-toggle:hover {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* TRANSIÇÃO SUAVE */
+body, .hero, .feature-card, .cat-card, .cta-banner, .bottom-bar, .navbar {
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 /* HERO */
 .hero {
   position: relative; z-index: 10;
@@ -56,7 +77,7 @@
 }
 .hero-desc strong { color: var(--red); font-weight: 600; }
 .hero-cta { display: flex; gap: 15px; flex-wrap: wrap; align-items: center;}
-.hero-cta a{ color: var(--red);}
+.hero-cta a:not(.btn) { color: var(--red); }
 .hero-stats {
   display: flex; gap: 40px; margin-top: 64px;
   padding-top: 40px; border-top: 1px solid var(--red);
@@ -258,4 +279,111 @@ color: var(--red);
   .hero h1 { font-size: clamp(44px, 12vw, 80px); }
   .hero-stats { gap: 24px; }
   .cta-content { flex-direction: column; }
+}
+
+/* ================================================================
+   RESPONSIVO MOBILE-FIRST COMPLETO — Adicionado 2026-04-03
+   ================================================================ */
+
+/* ── Mobile Small (até 480px) ── */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero { min-height: auto; padding: 20px 0; }
+  .hero-content { padding: 30px 0; }
+  .hero h1 { font-size: clamp(36px, 10vw, 52px); margin-bottom: 16px; }
+  .hero-eyebrow { margin-bottom: 16px; }
+  .hero-eyebrow span { font-size: 10px; }
+  .hero-desc { font-size: 14px; margin-bottom: 28px; max-width: 100%; }
+  .hero-cta { flex-direction: column; }
+  .hero-cta .btn { width: 100%; justify-content: center; min-height: 48px; }
+  .hero-stats { flex-direction: column; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: none; }
+  .hero-stat-val { font-size: 26px; }
+  .hero-stat-label { font-size: 10px; }
+  .hero-bg-text { font-size: clamp(40px, 16vw, 80px); }
+
+  /* Features */
+  .features-section { padding: 40px 0; }
+  .section-header h2 { font-size: clamp(24px, 6vw, 36px); }
+  .feature-card { padding: 20px 16px; }
+  .feature-icon { width: 40px; height: 40px; font-size: 16px; margin-bottom: 12px; }
+  .feature-title { font-size: 17px; }
+  .feature-desc { font-size: 12px; }
+
+  /* Categorias */
+  .cats-section { padding: 40px 0; }
+  .cats-grid { grid-template-columns: 1fr; }
+  .cat-card { padding: 20px 16px; flex-direction: row; align-items: center; }
+  .cat-icon { width: 40px; height: 40px; font-size: 16px; margin-bottom: 0; margin-right: 14px; }
+  .cat-name { font-size: 16px; margin-bottom: 0; }
+  .cat-count { font-size: 10px; }
+
+  /* Destaques */
+  .destaques-section { padding: 40px 0; }
+  .destaques-grid { grid-template-columns: 1fr; }
+  .section-header { margin-bottom: 24px; }
+
+  /* CTA Banner */
+  .cta-banner { padding: 40px 0; }
+  .cta-left h2 { font-size: clamp(24px, 7vw, 36px); }
+  .cta-left p { font-size: 13px; max-width: 100%; }
+  .cta-right { flex-direction: column; }
+  .cta-right .btn { width: 100%; justify-content: center; min-height: 48px; }
+
+  /* Marquee */
+  .marquee-wrap { padding: 8px 0; }
+  .marquee-track span { padding: 0 14px; font-size: 10px; }
+
+  /* WhatsApp float */
+  .wa-float { width: 48px; height: 48px; font-size: 22px; bottom: 16px; right: 16px; }
+
+  /* Footer */
+  .bottom-bar { margin-top: 32px; }
+  .bottom-links { gap: 24px; }
+}
+
+/* ── Mobile/Tablet (até 768px) ── */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { min-height: auto; }
+  .hero-content { padding: 50px 0; }
+  .hero h1 { font-size: clamp(44px, 12vw, 80px); }
+  .hero-bg-text { font-size: clamp(60px, 18vw, 120px); }
+  .hero-desc { font-size: 15px; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .hero-stat-val { font-size: 32px; }
+
+  /* Features section */
+  .features-section { padding: 60px 0; }
+  .features-grid { grid-template-columns: 1fr; gap: 1px; }
+  .feature-card { padding: 24px 20px; }
+
+  /* Categorias */
+  .cats-section { padding: 60px 0; }
+  .cats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Destaques */
+  .destaques-section { padding: 60px 0; }
+  .destaques-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* CTA */
+  .cta-banner { padding: 60px 0; }
+  .cta-content { gap: 28px; }
+  .cta-left h2 { font-size: clamp(28px, 6vw, 42px); }
+
+  /* Section headers */
+  .section-header { margin-bottom: 36px; }
+}
+
+/* ── Tablet pequeno (até 1024px) ── */
+@media (max-width: 1024px) {
+  .cats-grid { grid-template-columns: repeat(3, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .destaques-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .hero-content { max-width: 100%; }
+  .hero-stats { gap: 32px; }
+}
+
+/* ── Desktop (769px+) — manter estilos originais ── */
+@media (min-width: 769px) {
+  /* Nada a alterar — estilos desktop já definidos acima */
 }

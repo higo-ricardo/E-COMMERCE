@@ -1,51 +1,45 @@
 /* HIVERCAR · Dashboard de Cupons (UI final) */
-:root{
-  --bg:#0f1012;--panel:#131517;--border:#252a2e;--muted:#9ca3af;--muted2:#6b7280;
-  --green:#26fd71;--red:#fb1230;--amber:#f59e0b;--blue:#3b82f6;--white:#eeecea;
-  --radius:10px;
+
+/* Variáveis — usam as do loja.css como fallback */
+:root {
+  --radius: 10px;
 }
-*{box-sizing:border-box;}
-body{
-  font-family:'Barlow',Arial,sans-serif;
-  background:var(--bg);
-  color:var(--white);
-  margin:0;
-  padding:24px;
+
+* { box-sizing: border-box; }
+
+/* Dashboard grid layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 18px;
 }
-header{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:14px;
+
+@media (max-width: 900px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
 }
-header h1{
-  margin:0;
-  letter-spacing:.05em;
+
+/* Card style para sections */
+.card {
+  background: var(--panel, #131517);
+  border: 1px solid var(--border, #252a2e);
+  border-radius: var(--radius);
+  padding: 18px;
 }
-header .meta{
-  color:var(--muted);
-  font-size:12px;
+
+/* Topbar title */
+.topbar-title {
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
-.grid{
-  display:grid;
-  grid-template-columns:420px 1fr;
-  gap:18px;
+
+/* Topbar meta text */
+.topbar .small, .topbar .meta {
+  color: var(--muted, #9ca3af);
+  font-size: 12px;
 }
-@media(max-width:1024px){
-  .grid{grid-template-columns:1fr;}
-}
-section{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:18px;
-}
-section h2{
-  margin:0 0 12px;
-  font-size:18px;
-  letter-spacing:.02em;
-}
+
+/* Removido: .grid e section duplicados — agora usa .dashboard-grid e .card */
 form .row{
   display:grid;
   grid-template-columns:1fr 1fr;

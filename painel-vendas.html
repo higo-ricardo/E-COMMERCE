@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel de Vendas - HIVERCAR</title>
@@ -8,30 +9,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/painel-vendas.css">
 </head>
 <body>
 <div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-brand">
     <div class="brand-dot"></div>
     <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
   </a>
   <div class="sidebar-role">Vendedor</div>
   <nav>
-    <a href="painel-vendas.html" class="active"><i class="fas fa-chart-line"></i> Painel</a>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="painel-vendas.html" class="active"><i class="fas fa-list"></i> Painel de Vendas</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
     <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
-    <a href="loja.html">                        <i class="fas fa-store"></i>      Loja</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
   </nav>
   <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
     <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
   </div>
 </aside>
 
 <div class="main">
   <div class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <span class="topbar-title">PAINEL DE VENDAS</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
@@ -42,7 +56,7 @@
 
   <div class="content">
     <!-- Métricas -->
-    <div class="metrics-grid" style="margin-bottom:24px">
+    <div class="metrics-grid mb-5">
       <div class="metric-card"><div class="metric-value" id="mMes">-</div><div class="metric-label">Vendas do Mês</div></div>
       <div class="metric-card"><div class="metric-value" id="mTotal">-</div><div class="metric-label">Pedidos Total</div></div>
       <div class="metric-card"><div class="metric-value" id="mPendentes">-</div><div class="metric-label">Novos</div></div>
@@ -59,19 +73,19 @@
       <div class="filter-bar">
         <select id="filterStatus">
           <option value="">Todos os status</option>
-          <option value="NOVO">Novo</option>
-          <option value="PAGO">Pago</option>
-          <option value="CONFIRMADO">Confirmado</option>
-          <option value="EM_PREPARO">Em Preparo</option>
-          <option value="ENVIADO">Enviado</option>
-          <option value="ENTREGUE">Entregue</option>
-          <option value="CANCELADO">Cancelado</option>
+          <option value="novo">Novo</option>
+          <option value="pago">Pago</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="em_preparo">Em Preparo</option>
+          <option value="enviado">Enviado</option>
+          <option value="entregue">Entregue</option>
+          <option value="cancelado">Cancelado</option>
         </select>
         <input type="date" id="filterData">
         <button class="btn btn-ghost btn-sm" id="btnFiltrar"><i class="fas fa-filter"></i> Filtrar</button>
       </div>
 
-      <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
+      <div class="table-wrap">
         <table class="data-table">
           <thead>
             <tr>
@@ -88,11 +102,11 @@
       </div>
 
       <!-- Paginação -->
-      <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:12px;padding:12px;background:var(--dark);border:1px solid var(--border);border-radius:4px">
-        <div style="font-size:11px;color:var(--muted)">
+      <div class="flex items-center gap-3 justify-between mt-3 p-3 card">
+        <div class="text-xs text-muted">
           Página <span id="currentPage">1</span> de <span id="totalPages">1</span> | <span id="paginationInfo">15 de 15 pedidos</span>
         </div>
-        <div style="display:flex;gap:8px">
+        <div class="flex gap-2">
           <button class="btn btn-ghost btn-sm" id="btnPrevPage" title="Página anterior">
             <i class="fas fa-chevron-left"></i> Anterior
           </button>
@@ -102,8 +116,8 @@
         </div>
       </div>
 
-      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:16px;padding:0 0 16px 0">
-        <div id="selectionError" style="color:var(--red);font-size:12px;margin-right:auto;display:none">
+      <div class="flex gap-3 justify-end mt-4">
+        <div id="selectionError" class="text-red text-sm" style="display:none">
           <i class="fas fa-exclamation-circle"></i> Selecione um pedido para continuar
         </div>
         <button class="btn btn-ghost" id="btnCancelarPedido" style="color:var(--red);border-color:rgba(239,68,68,.3)">
@@ -117,274 +131,183 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-const CONFIG = {
-  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
-  PROJECT_ID: "69c7e94a003a1c86b7ca",
-  DB:         "69c7e9af00296b17179e",
-  COL_ORDERS:   "orders",
-  COL_PRODUCTS: "produtos",
-  COL_USERS:    "users",
-  TAX_RATE:  0.12,
-}
+import { AdminPage, fmtBRL, fmtDate, esc, statusBadge, STATUS_CLS, Query } from "./js/admin-core.js";
+import { Paginator } from "./js/utils.js";
 
-import { Client, Databases, Account, Query, ID }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
-import { Paginator } from "./js/utils.js"
+class PainelVendasPage extends AdminPage {
+  allOrders = [];
+  paginator = new Paginator([], 15);
 
-const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
-const databases = new Databases(client)
-const account   = new Account(client)
-
-let currentUser = null
-
-// ── GUARD - admin ou vendedor ──────────────────────────────────────────────────
-;(async () => {
-  try {
-    currentUser = await account.get()
-    document.getElementById("userName").textContent = currentUser.name || "Vendedor"
-  } catch {
-    window.location.href = "login.html"; return
-  }
-  init()
-})()
-
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function esc(s){ return String(s?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
-let toastT
-function toast(msg,type=""){
-  const el=document.getElementById("toast"); el.textContent=msg
-  el.className="toast show"+(type?" "+type:""); clearTimeout(toastT)
-  toastT=setTimeout(()=>el.classList.remove("show"),3500)
-}
-function fmtBRL(v){ return "R$ "+Number(v||0).toFixed(2).replace(".",",") }
-function fmtDate(iso){ return iso?new Date(iso).toLocaleDateString("pt-BR"):"-" }
-
-const STATUS_CLS = {
-  NOVO:"badge-green", PAGO:"badge-green", CONFIRMADO:"badge-green", EM_PREPARO:"badge-muted",
-  ENVIADO:"badge-muted", ENTREGUE:"badge-muted", CANCELADO:"badge-red",
-}
-function statusBadge(s){
-  return `<span class="badge ${STATUS_CLS[s]||'badge-muted'}">${s||"-"}</span>`
-}
-
-let allOrders = []
-let paginator = new Paginator([], 15)
-
-// ── LOAD ORDERS ───────────────────────────────────────────────────────────────
-async function loadOrders() {
-  const statusFilt = document.getElementById("filterStatus").value
-  const dataFilt   = document.getElementById("filterData").value
-
-  const queries = [Query.orderDesc("$createdAt"), Query.limit(100)]
-  if (statusFilt) queries.push(Query.equal("status", statusFilt))
-
-  const res    = await databases.listDocuments(CONFIG.DB, CONFIG.COL_ORDERS, queries)
-  let orders   = res.documents
-
-  if (dataFilt) {
-    const d = new Date(dataFilt + "T00:00:00")
-    const e = new Date(dataFilt + "T23:59:59")
-    orders = orders.filter(o => { const t = new Date(o.$createdAt); return t >= d && t <= e })
+  onInit() {
+    this.bindEvents();
+    this.loadOrders();
   }
 
-  // Métricas
-  const mes    = new Date().getMonth()
-  const hoje   = new Date(); hoje.setHours(0,0,0,0)
-  const doMes  = orders.filter(o => new Date(o.$createdAt).getMonth()===mes)
-  const deHoje = orders.filter(o => new Date(o.$createdAt) >= hoje)
-  const pend   = orders.filter(o => o.status === "NOVO")
+  bindEvents() {
+    document.getElementById("btnFiltrar").addEventListener("click", () => this.loadOrders());
+    document.getElementById("btnCancelarPedido").addEventListener("click", () => this.cancelarPedido());
+    document.getElementById("btnConfirmarPagamento").addEventListener("click", () => this.confirmarPagamento());
+    document.getElementById("btnPrevPage").addEventListener("click", () => { this.paginator.prev(); this.renderOrdersPage(); });
+    document.getElementById("btnNextPage").addEventListener("click", () => { this.paginator.next(); this.renderOrdersPage(); });
 
-  document.getElementById("mMes").textContent     = fmtBRL(doMes.reduce((s,o)=>s+Number(o.total||0),0))
-  document.getElementById("mTotal").textContent   = res.total
-  document.getElementById("mPendentes").textContent = pend.length
-  document.getElementById("mHoje").textContent    = deHoje.length
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.style.display = "none");
+        tab.classList.add("active");
+        const id = "tab-" + tab.dataset.tab;
+        document.getElementById(id).style.display = "block";
+      });
+    });
 
-  allOrders = orders
-  paginator.setItems(orders)
-
-  const tbody = document.getElementById("pedidosTable")
-  const selectAllCheckbox = document.getElementById("selectAllOrders")
-  selectAllCheckbox.checked = false
-  selectAllCheckbox.indeterminate = false
-
-  if (!orders.length) {
-    tbody.innerHTML = `<tr><td colspan="14" style="color:var(--muted);padding:24px;text-align:center">Nenhum pedido encontrado.</td></tr>`
-    document.getElementById("currentPage").textContent = "0"
-    document.getElementById("totalPages").textContent = "0"
-    document.getElementById("paginationInfo").textContent = "0 de 0 pedidos"
-    return
+    document.getElementById("selectAllOrders").addEventListener("change", e => {
+      document.querySelectorAll(".order-checkbox").forEach(cb => { cb.checked = e.target.checked; });
+    });
   }
 
-  renderOrdersPage()
-}
+  async loadOrders() {
+    const statusFilt = document.getElementById("filterStatus").value;
+    const dataFilt = document.getElementById("filterData").value;
 
-function renderOrdersPage() {
-  const currentOrders = paginator.current()
-  const info = paginator.getInfo()
-  const tbody = document.getElementById("pedidosTable")
-  const selectAllCheckbox = document.getElementById("selectAllOrders")
+    const queries = [Query.orderDesc("$createdAt"), Query.limit(100)];
+    if (statusFilt) queries.push(Query.equal("status", statusFilt));
 
-  selectAllCheckbox.checked = false
-  selectAllCheckbox.indeterminate = false
+    try {
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL_ORDERS, queries);
+      let orders = res.documents;
 
-  tbody.innerHTML = currentOrders.map((o, idx) => {
-    const itemsCount = o.items ? (typeof o.items === 'string' ? JSON.parse(o.items).length : o.items.length) : 0
-    return `<tr>
-      <td style="width:40px;text-align:center"><input type="checkbox" class="order-checkbox" data-id="${o.$id}" data-idx="${idx}"></td>
-      <td style="font-family:monospace;font-size:10px;font-weight:600">${esc(o.number||"-")}</td>
-      <td style="font-weight:600;font-size:12px">${esc(o.user||o.name||"-")}</td>
-      <td style="font-size:10px;color:var(--muted)">${esc(o.mobile||"-")}</td>
-      <td style="font-size:11px;text-align:right;color:#f97316;font-weight:600">${fmtBRL(o.total||0)}</td>
-      <td style="font-size:10px;color:var(--muted);text-transform:uppercase">${esc(o.payment||"-")}</td>
-      <td>${statusBadge(o.status)}</td>
-      <td style="font-size:10px;color:var(--muted);text-transform:uppercase">${esc(o.modalFrete||"-")}</td>
-      <td style="font-size:10px;color:var(--muted)">${esc(o.couponCode||"-")}</td>
-      <td style="font-size:9px;color:var(--muted)">${fmtDate(o.$createdAt)}</td>
-      <td style="font-size:9px;color:var(--muted)">${fmtDate(o.updatedAt)}</td>
-      <td style="font-size:9px;color:var(--red)">${fmtDate(o.canceledAt)}</td>
-      <td style="font-size:9px;color:var(--green)">${fmtDate(o.paidAt)}</td>
-      <td style="font-size:10px;text-align:center;font-weight:600" title="${itemsCount} itens">${itemsCount}</td>
-    </tr>`
-  }).join("")
+      if (dataFilt) {
+        const d = new Date(dataFilt + "T00:00:00");
+        const e = new Date(dataFilt + "T23:59:59");
+        orders = orders.filter(o => { const t = new Date(o.$createdAt); return t >= d && t <= e; });
+      }
 
-  // Atualizar info de paginação
-  document.getElementById("currentPage").textContent = info.current
-  document.getElementById("totalPages").textContent = info.total
-  document.getElementById("paginationInfo").textContent = `${info.showing} de ${info.totalItems} pedidos`
+      const mes = new Date().getMonth();
+      const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+      const doMes = orders.filter(o => new Date(o.$createdAt).getMonth() === mes);
+      const deHoje = orders.filter(o => new Date(o.$createdAt) >= hoje);
+      const pend = orders.filter(o => o.status === "novo");
 
-  // Atualizar estado dos botões de paginação
-  document.getElementById("btnPrevPage").disabled = !info.hasPrev
-  document.getElementById("btnNextPage").disabled = !info.hasNext
+      document.getElementById("mMes").textContent = fmtBRL(doMes.reduce((s, o) => s + Number(o.total || 0), 0));
+      document.getElementById("mTotal").textContent = res.total;
+      document.getElementById("mPendentes").textContent = pend.length;
+      document.getElementById("mHoje").textContent = deHoje.length;
 
-  // Selecionar todos
-  selectAllCheckbox.addEventListener("change", (e) => {
+      this.allOrders = orders;
+      this.paginator.setItems(orders);
+      this.renderOrdersPage();
+    } catch (e) {
+      console.error("[PainelVendas] Erro ao carregar pedidos:", e);
+      this.toast("Erro ao carregar pedidos.", "err");
+    }
+  }
+
+  renderOrdersPage() {
+    const currentOrders = this.paginator.current();
+    const info = this.paginator.getInfo();
+    const tbody = document.getElementById("pedidosTable");
+
+    document.getElementById("currentPage").textContent = info.current;
+    document.getElementById("totalPages").textContent = info.total;
+    document.getElementById("paginationInfo").textContent = `${info.showing} de ${info.totalItems} pedidos`;
+    document.getElementById("btnPrevPage").disabled = !info.hasPrev;
+    document.getElementById("btnNextPage").disabled = !info.hasNext;
+
+    this.renderTable(tbody, currentOrders, (o) => {
+      const itemsCount = o.items ? (typeof o.items === "string" ? JSON.parse(o.items).length : o.items.length) : 0;
+      return `<tr>
+        <td class="text-center" style="width:40px"><input type="checkbox" class="order-checkbox" data-id="${o.$id}"></td>
+        <td class="font-mono text-xs font-bold" style="font-family:monospace">${esc(o.number || "-")}</td>
+        <td class="font-bold text-sm">${esc(o.user || o.name || "-")}</td>
+        <td class="text-xs text-muted">${esc(o.mobile || "-")}</td>
+        <td class="text-sm text-right font-semibold" style="color:#f97316">${fmtBRL(o.total || 0)}</td>
+        <td class="text-xs text-muted uppercase">${esc(o.payment || "-")}</td>
+        <td>${statusBadge(o.status)}</td>
+        <td class="text-xs text-muted uppercase">${esc(o.modalFrete || "-")}</td>
+        <td class="text-xs text-muted">${esc(o.couponCode || "-")}</td>
+        <td class="text-xs text-muted">${fmtDate(o.$createdAt)}</td>
+        <td class="text-xs text-muted">${fmtDate(o.updatedAt)}</td>
+        <td class="text-xs text-red">${fmtDate(o.canceledAt)}</td>
+        <td class="text-xs text-green">${fmtDate(o.paidAt)}</td>
+        <td class="text-sm text-center font-bold">${itemsCount}</td>
+      </tr>`;
+    });
+
+    // Rebind selectAll
     document.querySelectorAll(".order-checkbox").forEach(cb => {
-      cb.checked = e.target.checked
-    })
-  })
-
-  // Atualizar estado do checkbox geral quando um individual é marcado/desmarcado
-  document.querySelectorAll(".order-checkbox").forEach(cb => {
-    cb.addEventListener("change", () => {
-      const allChecked = Array.from(document.querySelectorAll(".order-checkbox")).every(c => c.checked)
-      const someChecked = Array.from(document.querySelectorAll(".order-checkbox")).some(c => c.checked)
-      selectAllCheckbox.checked = allChecked
-      selectAllCheckbox.indeterminate = someChecked && !allChecked
-    })
-  })
-}
-
-function getSelectedOrderIds() {
-  return Array.from(document.querySelectorAll(".order-checkbox:checked")).map(cb => cb.dataset.id)
-}
-
-function getSelectedOrder() {
-  const ids = getSelectedOrderIds()
-  if (ids.length === 0) return null
-  return allOrders.find(o => o.$id === ids[0])
-}
-
-async function cancelarPedido() {
-  const order = getSelectedOrder()
-  if (!order) {
-    document.getElementById("selectionError").style.display="block"
-    setTimeout(() => { document.getElementById("selectionError").style.display="none" }, 4000)
-    return
+      cb.addEventListener("change", () => {
+        const all = Array.from(document.querySelectorAll(".order-checkbox"));
+        const allChecked = all.every(c => c.checked);
+        const someChecked = all.some(c => c.checked);
+        const sel = document.getElementById("selectAllOrders");
+        sel.checked = allChecked;
+        sel.indeterminate = someChecked && !allChecked;
+      });
+    });
   }
-  document.getElementById("selectionError").style.display="none"
 
-  const btn = document.getElementById("btnCancelarPedido")
-  btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Cancelando…`
-
-  try {
-    const updated = await databases.updateDocument(CONFIG.DB, CONFIG.COL_ORDERS, order.$id, {
-      status: "CANCELADO",
-      canceledAt: new Date().toISOString()
-    })
-    console.log("Pedido cancelado. updatedAt:", updated.$updatedAt)
-    toast("Pedido cancelado com sucesso")
-    document.querySelectorAll(".order-checkbox:checked").forEach(cb => cb.checked = false)
-    loadOrders()
-  } catch(e) {
-    toast("Erro ao cancelar: " + e.message, "error")
-  } finally {
-    btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-ban"></i> Cancelar Pedido`
+  getSelectedOrder() {
+    const ids = Array.from(document.querySelectorAll(".order-checkbox:checked")).map(cb => cb.dataset.id);
+    if (ids.length === 0) return null;
+    return this.allOrders.find(o => o.$id === ids[0]);
   }
-}
 
-async function confirmarPagamento() {
-  const order = getSelectedOrder()
-  if (!order) {
-    document.getElementById("selectionError").style.display="block"
-    setTimeout(() => { document.getElementById("selectionError").style.display="none" }, 4000)
-    return
+  async cancelarPedido() {
+    const order = this.getSelectedOrder();
+    if (!order) {
+      document.getElementById("selectionError").style.display = "block";
+      setTimeout(() => { document.getElementById("selectionError").style.display = "none"; }, 4000);
+      return;
+    }
+    document.getElementById("selectionError").style.display = "none";
+
+    const btn = document.getElementById("btnCancelarPedido");
+    this.setLoading(btn, true);
+    try {
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL_ORDERS, order.$id, {
+        status: "cancelado",
+        canceledAt: new Date().toISOString(),
+      });
+      this.toast("Pedido cancelado com sucesso.", "ok");
+      this.loadOrders();
+    } catch (e) {
+      this.toast("Erro ao cancelar: " + e.message, "err");
+    } finally {
+      this.setLoading(btn, false);
+    }
   }
-  document.getElementById("selectionError").style.display="none"
 
-  const btn = document.getElementById("btnConfirmarPagamento")
-  btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Confirmando…`
+  async confirmarPagamento() {
+    const order = this.getSelectedOrder();
+    if (!order) {
+      document.getElementById("selectionError").style.display = "block";
+      setTimeout(() => { document.getElementById("selectionError").style.display = "none"; }, 4000);
+      return;
+    }
+    document.getElementById("selectionError").style.display = "none";
 
-  try {
-    const updated = await databases.updateDocument(CONFIG.DB, CONFIG.COL_ORDERS, order.$id, {
-      status: "PAGO",
-      paidAt: new Date().toISOString()
-    })
-    console.log("Pagamento confirmado. updatedAt:", updated.$updatedAt)
-    toast("Pagamento confirmado com sucesso")
-    document.querySelectorAll(".order-checkbox:checked").forEach(cb => cb.checked = false)
-    loadOrders()
-  } catch(e) {
-    toast("Erro ao confirmar: " + e.message, "error")
-  } finally {
-    btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-check-circle"></i> Confirmar Pagamento`
+    const btn = document.getElementById("btnConfirmarPagamento");
+    this.setLoading(btn, true);
+    try {
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL_ORDERS, order.$id, {
+        status: "pago",
+        paidAt: new Date().toISOString(),
+      });
+      this.toast("Pagamento confirmado com sucesso.", "ok");
+      this.loadOrders();
+    } catch (e) {
+      this.toast("Erro ao confirmar: " + e.message, "err");
+    } finally {
+      this.setLoading(btn, false);
+    }
   }
 }
 
-
-// ── INIT ──────────────────────────────────────────────────────────────────────
-async function init() {
-  document.getElementById("logoutBtn").addEventListener("click", async e=>{
-    e.preventDefault()
-    await account.deleteSession("current").catch(()=>{})
-    window.location.href="login.html"
-  })
-
-  // Tabs
-  document.querySelectorAll(".tab").forEach(tab=>{
-    tab.addEventListener("click",()=>{
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"))
-      document.querySelectorAll(".tab-panel").forEach(p=>p.style.display="none")
-      tab.classList.add("active")
-      const id="tab-"+tab.dataset.tab
-      document.getElementById(id).style.display="block"
-    })
-  })
-
-  document.getElementById("btnFiltrar").addEventListener("click", loadOrders)
-
-  // Botões de ação de pedidos
-  document.getElementById("btnCancelarPedido").addEventListener("click", cancelarPedido)
-  document.getElementById("btnConfirmarPagamento").addEventListener("click", confirmarPagamento)
-
-  // Botões de paginação
-  document.getElementById("btnPrevPage").addEventListener("click", () => {
-    paginator.prev()
-    renderOrdersPage()
-  })
-  document.getElementById("btnNextPage").addEventListener("click", () => {
-    paginator.next()
-    renderOrdersPage()
-  })
-
-  loadOrders()
-}
+const page = new PainelVendasPage();
+page.init();
 </script>
 </body>
 </html>

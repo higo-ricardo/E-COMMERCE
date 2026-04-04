@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fiscal - HIVERCAR ERP</title>
@@ -8,35 +9,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/admin-fiscal.css">
 </head>
 <body>
 <div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-brand">
     <div class="brand-dot"></div>
     <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
   </a>
   <div class="sidebar-role">Administrador</div>
   <nav>
-    <a href="dashboard.html">      <i class="fas fa-gauge-high"></i>  Dashboard</a>
-    <a href="admin-produtos.html"> <i class="fas fa-box-open"></i>    Produtos</a>
-    <a href="admin-estoque.html">  <i class="fas fa-warehouse"></i>   Estoque</a>
-    <a href="admin-os.html">       <i class="fas fa-wrench"></i>      O. de Serviço</a>
-    <a href="customers.html">      <i class="fas fa-users"></i>       Clientes</a>
-    <a href="painel-vendas.html">  <i class="fas fa-chart-line"></i>  Vendas</a>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
     <a href="admin-fiscal.html" class="active"><i class="fas fa-receipt"></i> Fiscal</a>
-    <a href="loja.html">           <i class="fas fa-store"></i>       Loja</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
   </nav>
   <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
     <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
   </div>
 </aside>
 
 <div class="main">
   <div class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <span class="topbar-title">MÓDULO FISCAL</span>
     <div class="topbar-user">
       <div class="topbar-avatar"><i class="fas fa-user"></i></div>
@@ -57,13 +65,13 @@
         obrigações acessórias (SPED, DCTF, EFD, GIA-ICMS etc). As alíquotas CBS/IBS estão em
         estimativa - <strong>aguardam regulamentação via Lei Complementar (EC 132/2023)</strong>.
         Ambiente configurado:
-        <strong id="ambienteTag" style="color:var(--amber)">homologação</strong>.
+        <strong id="ambienteTag" class="text-yellow">homologação</strong>.
       </div>
     </div>
 
     <!-- ── SELETOR DE PERÍODO ── -->
     <div class="periodo-bar">
-      <select id="selMes">
+      <select id="selMes" aria-label="Mês de referência para apuração fiscal">
         <option value="1">Janeiro</option><option value="2">Fevereiro</option>
         <option value="3">Março</option><option value="4">Abril</option>
         <option value="5">Maio</option><option value="6">Junho</option>
@@ -71,7 +79,7 @@
         <option value="9">Setembro</option><option value="10">Outubro</option>
         <option value="11">Novembro</option><option value="12">Dezembro</option>
       </select>
-      <input type="number" id="selAno" value="2026" min="2024" max="2030" style="width:90px">
+      <input type="number" id="selAno" value="2026" min="2024" max="2030" aria-label="Ano de referência para apuração fiscal" style="width:90px">
       <button class="btn btn-primary btn-sm" id="btnApurar">
         <i class="fas fa-calculator"></i> Apurar
       </button>
@@ -81,7 +89,7 @@
     </div>
 
     <!-- ── MÉTRICAS PRINCIPAIS ── -->
-    <div class="metrics-grid" style="margin-bottom:1px">
+    <div class="metrics-grid mb-1">
       <div class="metric-card">
         <div class="metric-value" id="mFaturamento">-</div>
         <div class="metric-label">Faturamento Bruto</div>
@@ -147,10 +155,10 @@
 
     <!-- ── TAB: NF-e EMITIDAS ── -->
     <div class="tab-panel active" id="tab-nfe">
-      <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div class="panel-wrap card">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
           <div class="section-title" style="margin:0">NF-e do Período</div>
-          <div style="display:flex;gap:8px">
+          <div class="flex gap-2">
             <button class="btn btn-ghost btn-sm" id="btnExportNFeCSV">
               <i class="fas fa-table"></i> Exportar CSV
             </button>
@@ -169,7 +177,7 @@
             </tr>
           </thead>
           <tbody id="nfeBody">
-            <tr><td colspan="7" style="color:var(--muted);padding:24px">Clique em Apurar para carregar as NF-e.</td></tr>
+            <tr><td colspan="7" class="text-muted" style="padding:24px">Clique em Apurar para carregar as NF-e.</td></tr>
           </tbody>
         </table>
       </div>
@@ -177,9 +185,9 @@
 
     <!-- ── TAB: EVOLUÇÃO MENSAL ── -->
     <div class="tab-panel" id="tab-evolucao">
-      <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
+      <div class="panel-wrap card">
         <div class="section-title">Evolução dos Últimos 6 Meses</div>
-        <p style="color:var(--muted);font-size:12px;margin-bottom:16px">
+        <p class="text-muted text-sm mb-4">
           Faturamento bruto e carga tributária mês a mês.
         </p>
         <table class="data-table" id="evolucaoTable">
@@ -187,7 +195,7 @@
             <tr><th>Período</th><th>Pedidos</th><th>Faturamento</th><th>Impostos</th><th>Alíquota Efetiva</th><th>NF-e</th></tr>
           </thead>
           <tbody id="evolucaoBody">
-            <tr><td colspan="6" style="color:var(--muted);padding:24px">Carregando…</td></tr>
+            <tr><td colspan="6" class="text-muted" style="padding:24px">Carregando…</td></tr>
           </tbody>
         </table>
       </div>
@@ -195,343 +203,265 @@
 
     <!-- ── TAB: SPED FISCAL ── -->
     <div class="tab-panel" id="tab-sped">
-      <div class="panel-wrap" style="background:var(--panel);border:1px solid var(--border)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div class="panel-wrap card">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
           <div class="section-title" style="margin:0">Geração de SPED Fiscal (EFD ICMS/IPI)</div>
           <button class="btn btn-primary btn-sm" id="btnGerarSped">
             <i class="fas fa-file-code"></i> Gerar SPED
           </button>
         </div>
-        <div style="padding:12px 16px;background:rgba(251,18,48,.06);border:1px solid rgba(251,18,48,.2);margin-bottom:16px;font-size:12px;color:var(--muted2)">
-          <i class="fas fa-triangle-exclamation" style="color:var(--red);margin-right:6px"></i>
-          <strong style="color:var(--white)">Atenção:</strong> O arquivo SPED gerado é uma <strong>implementação de referência</strong>.
+        <div class="p-4 mb-4 text-sm text-muted" style="background:rgba(251,18,48,.06);border:1px solid rgba(251,18,48,.2)">
+          <i class="fas fa-triangle-exclamation text-red" style="margin-right:6px"></i>
+          <strong class="text-white">Atenção:</strong> O arquivo SPED gerado é uma <strong>implementação de referência</strong>.
           Deve ser revisado e validado pelo contador antes de transmissão ao SPED Receita Federal.
           Campos como inscrição estadual, CFOP e CST precisam ser conferidos.
         </div>
-        <button class="btn btn-ghost btn-sm" id="btnDownloadSped" style="display:none;margin-bottom:12px">
+        <button class="btn btn-ghost btn-sm mb-3" id="btnDownloadSped" style="display:none">
           <i class="fas fa-download"></i> Baixar arquivo .txt
         </button>
-        <textarea class="sped-area" id="spedArea" readonly placeholder="Clique em 'Gerar SPED' para gerar o arquivo EFD do período selecionado…"></textarea>
+        <textarea class="sped-area" id="spedArea" readonly aria-label="Conteúdo do arquivo SPED Fiscal gerado" placeholder="Clique em 'Gerar SPED' para gerar o arquivo EFD do período selecionado…"></textarea>
       </div>
     </div>
 
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-const CONFIG_INLINE = {
-  ENDPOINT:   "https://tor.cloud.appwrite.io/v1",
-  PROJECT_ID: "69c7e94a003a1c86b7ca",
-  DB:         "69c7e9af00296b17179e",
-  COL_ORDERS: "orders",
-  COL_NFE:    "nfe_documents",
-}
+import { AdminPage, fmtBRL, fmtDate, esc, Query } from "./js/admin-core.js";
+import { CONFIG } from "./js/config.js";
 
-import { Client, Databases, Account, Query }
-  from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+class FiscalPage extends AdminPage {
+  apuracaoAtual = null;
 
-const client    = new Client().setEndpoint(CONFIG_INLINE.ENDPOINT).setProject(CONFIG_INLINE.PROJECT_ID)
-const databases = new Databases(client)
-const account   = new Account(client)
-
-// ── GUARD ─────────────────────────────────────────────────────────────────────
-;(async () => {
-  try {
-    const user = await account.get()
-    document.getElementById("userName").textContent = user.name || "Admin"
-  } catch {
-    window.location.href = "login.html"; return
-  }
-  init()
-})()
-
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function esc(s){ return String(s?? '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
-let toastT
-function toast(msg,type=""){
-  const el=document.getElementById("toast")
-  el.textContent=msg; el.className="toast show"+(type?" "+type:"")
-  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),3500)
-}
-function fmtBRL(v){ return "R$ "+Number(v||0).toFixed(2).replace(".",",") }
-function fmtDate(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : "-" }
-
-// ── APURAR PERÍODO ────────────────────────────────────────────────────────────
-let apuracaoAtual = null
-
-async function apurar() {
-  const mes = parseInt(document.getElementById("selMes").value)
-  const ano = parseInt(document.getElementById("selAno").value)
-
-  const btn = document.getElementById("btnApurar")
-  btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Apurando…`
-
-  try {
-    // Período
-    const inicio = new Date(ano, mes - 1, 1).toISOString()
-    const fim    = new Date(ano, mes, 0, 23, 59, 59).toISOString()
-
-    // Pedidos
-    const ordersRes = await databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_ORDERS, [
-      Query.greaterThanEqual("createdAt", inicio),
-      Query.lessThanEqual("createdAt", fim),
-      Query.notEqual("status", "CANCELADO"),
-      Query.limit(500),
-    ])
-
-    // NF-e
-    const nfeRes = await databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_NFE, [
-      Query.greaterThanEqual("emitidaEm", inicio),
-      Query.lessThanEqual("emitidaEm", fim),
-      Query.limit(500),
-    ])
-
-    const orders = ordersRes.documents
-    const nfes   = nfeRes.documents
-
-    let faturamento = 0, totalImpostos = 0
-    const impostos  = { IPI:0, ICMS:0, PIS:0, COFINS:0, CBS:0, IBS:0 }
-
-    orders.forEach(o => {
-      faturamento   += Number(o.subtotal || 0)
-      totalImpostos += Number(o.taxes    || 0)
-      let tb = {}
-      try { tb = JSON.parse(o.taxBreakdown || "{}") } catch {}
-      Object.keys(impostos).forEach(k => { impostos[k] += Number(tb[k] || 0) })
-    })
-
-    const aliqEfetiva = faturamento > 0
-      ? ((totalImpostos / faturamento) * 100).toFixed(1)
-      : "0.0"
-
-    apuracaoAtual = { mes, ano, faturamento, totalImpostos, impostos, nfes, orders, aliqEfetiva }
-
-    // Métricas
-    document.getElementById("mFaturamento").textContent = fmtBRL(faturamento)
-    document.getElementById("mImpostos").textContent    = fmtBRL(totalImpostos)
-    document.getElementById("mAliq").textContent        = aliqEfetiva + "%"
-    document.getElementById("mNFe").textContent         = nfes.length
-
-    // Breakdown impostos
-    Object.keys(impostos).forEach(k => {
-      const el = document.getElementById("v" + k)
-      if (el) el.textContent = fmtBRL(impostos[k])
-    })
-
-    // NF-e table
-    renderNFe(nfes)
-
-    toast(`Apuração ${String(mes).padStart(2,"0")}/${ano} concluída.`)
-
-  } catch (e) {
-    toast("Erro na apuração: " + e.message, "error")
-  } finally {
-    btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-calculator"></i> Apurar`
-  }
-}
-
-// ── RENDER NF-e ───────────────────────────────────────────────────────────────
-function renderNFe(nfes) {
-  const tbody = document.getElementById("nfeBody")
-  if (!nfes.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:24px;text-align:center">
-      Nenhuma NF-e emitida neste período.
-    </td></tr>`
-    return
+  onInit() {
+    this.bindEvents();
+    this.apurar();
   }
 
-  tbody.innerHTML = nfes.map(n => `<tr>
-    <td style="font-family:'Bebas Neue',sans-serif;font-size:14px">${esc(n.numero || n.$id.slice(-8).toUpperCase())}</td>
-    <td style="color:var(--muted);font-size:12px">${fmtDate(n.emitidaEm)}</td>
-    <td style="color:var(--muted);font-size:12px">${esc(n.destinatarioCpf ? "CPF: " + n.destinatarioCpf : "Consumidor Final")}</td>
-    <td style="color:var(--green)">${fmtBRL(n.totalNota)}</td>
-    <td class="nfe-chave" title="${esc(n.chaveAcesso)}">${esc(n.chaveAcesso || "-")}</td>
-    <td>
-      <span class="badge ${n.ambiente === 'producao' ? 'badge-green' : 'badge-muted'}" style="font-size:9px">
-        ${n.ambiente === 'producao' ? 'PRODUÇÃO' : 'HOMOLOG.'}
-      </span>
-    </td>
-    <td>
-      ${n.pdfUrl
-        ? `<a href="${esc(n.pdfUrl)}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-file-pdf"></i> PDF</a>`
-        : `<span style="color:var(--muted);font-size:11px">-</span>`
-      }
-    </td>
-  </tr>`).join("")
-}
+  bindEvents() {
+    document.getElementById("btnApurar").addEventListener("click", () => this.apurar());
+    document.getElementById("btnGerarSped").addEventListener("click", () => this.gerarSped());
+    document.getElementById("btnExportNFeCSV").addEventListener("click", () => this.exportarNFeCSV());
+    document.getElementById("btnPrint").addEventListener("click", () => window.print());
 
-// ── EVOLUÇÃO MENSAL ──────────────────────────────────────────────────────────
-async function loadEvolucao() {
-  const tbody = document.getElementById("evolucaoBody")
-  tbody.innerHTML = `<tr><td colspan="6" class="loading-state"><span class="spinner"></span> Calculando…</td></tr>`
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
+        if (tab.dataset.tab === "evolucao" && !document.getElementById("evolucaoBody").children.length) {
+          this.loadEvolucao();
+        }
+      });
+    });
+  }
 
-  const resultados = []
-  const agora      = new Date()
+  async apurar() {
+    const mes = parseInt(document.getElementById("selMes").value) || new Date().getMonth() + 1;
+    const ano = parseInt(document.getElementById("selAno").value) || new Date().getFullYear();
 
-  for (let i = 5; i >= 0; i--) {
-    const d   = new Date(agora.getFullYear(), agora.getMonth() - i, 1)
-    const mes = d.getMonth() + 1
-    const ano = d.getFullYear()
-    const ini = new Date(ano, mes - 1, 1).toISOString()
-    const fim = new Date(ano, mes, 0, 23, 59, 59).toISOString()
+    const btn = document.getElementById("btnApurar");
+    this.setLoading(btn, true);
 
     try {
-      const [ordRes, nfeRes] = await Promise.all([
-        databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_ORDERS, [
-          Query.greaterThanEqual("createdAt", ini),
+      const inicio = new Date(ano, mes - 1, 1).toISOString();
+      const fim = new Date(ano, mes, 0, 23, 59, 59).toISOString();
+
+      const [ordersRes, nfeRes] = await Promise.all([
+        this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, [
+          Query.greaterThanEqual("createdAt", inicio),
           Query.lessThanEqual("createdAt", fim),
           Query.notEqual("status", "CANCELADO"),
-          Query.limit(200),
+          Query.limit(500),
         ]),
-        databases.listDocuments(CONFIG_INLINE.DB, CONFIG_INLINE.COL_NFE, [
-          Query.greaterThanEqual("emitidaEm", ini),
+        this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.NFE, [
+          Query.greaterThanEqual("emitidaEm", inicio),
           Query.lessThanEqual("emitidaEm", fim),
-          Query.limit(200),
+          Query.limit(500),
         ]),
-      ])
+      ]);
 
-      const fat = ordRes.documents.reduce((s,o) => s + Number(o.subtotal||0), 0)
-      const imp = ordRes.documents.reduce((s,o) => s + Number(o.taxes||0), 0)
-      const alq = fat > 0 ? ((imp / fat) * 100).toFixed(1) : "0.0"
+      const orders = ordersRes.documents;
+      const nfes = nfeRes.documents;
 
-      resultados.push({
-        periodo: `${String(mes).padStart(2,"0")}/${ano}`,
-        qtd:     ordRes.total,
-        fat:     +fat.toFixed(2),
-        imp:     +imp.toFixed(2),
-        alq,
-        nfe:     nfeRes.total,
-      })
-    } catch {
-      resultados.push({ periodo: `${String(mes).padStart(2,"0")}/${ano}`, qtd:0, fat:0, imp:0, alq:"0.0", nfe:0 })
+      let faturamento = 0, totalImpostos = 0;
+      const impostos = { IPI: 0, ICMS: 0, PIS: 0, COFINS: 0, CBS: 0, IBS: 0 };
+
+      orders.forEach(o => {
+        faturamento += Number(o.subtotal || 0);
+        totalImpostos += Number(o.taxes || 0);
+        let tb = {};
+        try { tb = JSON.parse(o.taxBreakdown || "{}"); } catch {}
+        Object.keys(impostos).forEach(k => { impostos[k] += Number(tb[k] || 0); });
+      });
+
+      const aliqEfetiva = faturamento > 0
+        ? ((totalImpostos / faturamento) * 100).toFixed(1)
+        : "0.0";
+
+      Object.keys(impostos).forEach(k => { impostos[k] = +impostos[k].toFixed(2); });
+
+      this.apuracaoAtual = { mes, ano, faturamento, totalImpostos, impostos, nfes, orders, aliqEfetiva };
+
+      document.getElementById("mFaturamento").textContent = fmtBRL(faturamento);
+      document.getElementById("mImpostos").textContent = fmtBRL(totalImpostos);
+      document.getElementById("mAliq").textContent = aliqEfetiva + "%";
+      document.getElementById("mNFe").textContent = nfes.length;
+
+      document.getElementById("vIPI").textContent = fmtBRL(impostos.IPI);
+      document.getElementById("vICMS").textContent = fmtBRL(impostos.ICMS);
+      document.getElementById("vPIS").textContent = fmtBRL(impostos.PIS);
+      document.getElementById("vCOFINS").textContent = fmtBRL(impostos.COFINS);
+      document.getElementById("vCBS").textContent = fmtBRL(impostos.CBS);
+      document.getElementById("vIBS").textContent = fmtBRL(impostos.IBS);
+
+      this.renderNFe(nfes);
+      this.loadEvolucao();
+
+      this.toast(`Apuração ${String(mes).padStart(2, "0")}/${ano} concluída.`);
+    } catch (e) {
+      console.error("[Fiscal] Erro na apuração:", e);
+      this.toast("Erro na apuração: " + e.message, "err");
+    } finally {
+      this.setLoading(btn, false, '<i class="fas fa-calculator"></i> Apurar');
     }
   }
 
-  tbody.innerHTML = resultados.map(r => `<tr>
-    <td style="font-family:'Bebas Neue',sans-serif;font-size:14px">${r.periodo}</td>
-    <td style="color:var(--muted)">${r.qtd}</td>
-    <td style="color:var(--green)">${fmtBRL(r.fat)}</td>
-    <td style="color:var(--red)">${fmtBRL(r.imp)}</td>
-    <td>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="flex:1;height:4px;background:var(--border);position:relative;overflow:hidden">
-          <div style="position:absolute;left:0;top:0;height:100%;background:var(--red);width:${Math.min(parseFloat(r.alq),50)*2}%"></div>
-        </div>
-        <span style="font-size:11px;color:var(--muted2)">${r.alq}%</span>
-      </div>
-    </td>
-    <td style="color:var(--muted)">${r.nfe}</td>
-  </tr>`).join("")
-}
-
-// ── SPED ──────────────────────────────────────────────────────────────────────
-async function gerarSped() {
-  const mes = parseInt(document.getElementById("selMes").value)
-  const ano = parseInt(document.getElementById("selAno").value)
-
-  const btn = document.getElementById("btnGerarSped")
-  btn.disabled = true
-  btn.innerHTML = `<span class="spinner"></span> Gerando…`
-
-  try {
-    // Chamar fiscalReportService via import dinâmico
-    const { FiscalReportService } = await import("./js/fiscalReportService.js")
-    const sped = await FiscalReportService.gerarSpedFiscal({ mes, ano })
-
-    const area = document.getElementById("spedArea")
-    area.value = sped
-
-    const dlBtn = document.getElementById("btnDownloadSped")
-    dlBtn.style.display = "inline-flex"
-    dlBtn.onclick = () => {
-      const blob = new Blob([sped], { type: "text/plain;charset=utf-8;" })
-      const url  = URL.createObjectURL(blob)
-      const a    = Object.assign(document.createElement("a"), {
-        href:     url,
-        download: `sped_${String(mes).padStart(2,"0")}_${ano}.txt`,
-      })
-      a.click(); URL.revokeObjectURL(url)
+  renderNFe(nfes) {
+    const tbody = document.getElementById("nfeBody");
+    if (!nfes.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-center" style="padding:24px">Nenhuma NF-e emitida neste período.</td></tr>`;
+      return;
     }
-
-    toast("SPED gerado! Revise e valide com contador antes de transmitir.")
-  } catch (e) {
-    toast("Erro ao gerar SPED: " + e.message, "error")
-  } finally {
-    btn.disabled = false
-    btn.innerHTML = `<i class="fas fa-file-code"></i> Gerar SPED`
+    tbody.innerHTML = nfes.map(n => `<tr>
+      <td style="font-family:'Bebas Neue',sans-serif;font-size:14px">${esc(n.numero || n.$id.slice(-8).toUpperCase())}</td>
+      <td class="text-muted text-sm">${fmtDate(n.emitidaEm)}</td>
+      <td class="text-muted text-sm">${esc(n.destinatarioCpf ? "CPF: " + n.destinatarioCpf : "Consumidor Final")}</td>
+      <td class="text-green">${fmtBRL(n.totalNota)}</td>
+      <td class="nfe-chave" title="${esc(n.chaveAcesso)}">${esc(n.chaveAcesso || "-")}</td>
+      <td><span class="badge ${n.ambiente === 'producao' ? 'badge-green' : 'badge-muted'} text-xs">${n.ambiente === 'producao' ? 'PRODUÇÃO' : 'HOMOLOG.'}</span></td>
+      <td>${n.pdfUrl ? `<a href="${esc(n.pdfUrl)}" target="_blank" class="btn btn-ghost btn-sm"><i class="fas fa-file-pdf"></i> PDF</a>` : `<span class="text-muted text-xs">-</span>`}</td>
+    </tr>`).join("");
   }
-}
 
-// ── EXPORTAR CSV NF-e ─────────────────────────────────────────────────────────
-function exportarNFeCSV() {
-  if (!apuracaoAtual?.nfes.length) { toast("Nenhuma NF-e para exportar.", "error"); return }
+  async loadEvolucao() {
+    try {
+      const tbody = document.getElementById("evolucaoBody");
+      tbody.innerHTML = `<tr><td colspan="6" class="text-muted" style="padding:24px"><span class="spinner"></span> Calculando…</td></tr>`;
 
-  const header = "Numero,Data Emissão,Destinatário,Total Nota,Chave de Acesso,Ambiente\n"
-  const rows   = apuracaoAtual.nfes.map(n =>
-    `"${n.numero||n.$id.slice(-8).toUpperCase()}","${fmtDate(n.emitidaEm)}","${n.destinatarioCpf||"Consumidor Final"}","${n.totalNota}","${n.chaveAcesso|| '-'}","${n.ambiente|| '-'}"`
-  ).join("\n")
+      const agora = new Date();
+      const dados = [];
 
-  const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" })
-  const url  = URL.createObjectURL(blob)
-  const a    = Object.assign(document.createElement("a"), {
-    href:     url,
-    download: `nfe_${String(apuracaoAtual.mes).padStart(2,"0")}_${apuracaoAtual.ano}.csv`,
-  })
-  a.click(); URL.revokeObjectURL(url)
-  toast("CSV exportado!")
-}
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(agora.getFullYear(), agora.getMonth() - i, 1);
+        const m = d.getMonth() + 1;
+        const a = d.getFullYear();
+        const ini = new Date(a, m - 1, 1).toISOString();
+        const fim = new Date(a, m, 0, 23, 59, 59).toISOString();
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-function init() {
-  // Ambiente
-  const ambTag = document.getElementById("ambienteTag")
-  // CONFIG.FISCAL vem do config.js - aqui usamos valor fixo para compatibilidade inline
-  ambTag.textContent = "homologação"
-  ambTag.style.color = "var(--amber)"
+        try {
+          const [ordRes, nfeRes] = await Promise.all([
+            this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, [
+              Query.greaterThanEqual("createdAt", ini),
+              Query.lessThanEqual("createdAt", fim),
+              Query.notEqual("status", "CANCELADO"),
+              Query.limit(200),
+            ]),
+            this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.NFE, [
+              Query.greaterThanEqual("emitidaEm", ini),
+              Query.lessThanEqual("emitidaEm", fim),
+              Query.limit(200),
+            ]),
+          ]);
 
-  // Pré-selecionar mês atual
-  const agora = new Date()
-  document.getElementById("selMes").value = agora.getMonth() + 1
-  document.getElementById("selAno").value = agora.getFullYear()
+          const fat = ordRes.documents.reduce((s, o) => s + Number(o.subtotal || 0), 0);
+          const imp = ordRes.documents.reduce((s, o) => s + Number(o.taxes || 0), 0);
+          const alq = fat > 0 ? ((imp / fat) * 100).toFixed(1) : "0.0";
 
-  document.getElementById("logoutBtn").addEventListener("click", async e => {
-    e.preventDefault()
-    await account.deleteSession("current").catch(() => {})
-    window.location.href = "login.html"
-  })
-
-  // Tabs
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
-      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"))
-      tab.classList.add("active")
-      document.getElementById("tab-" + tab.dataset.tab).classList.add("active")
-      if (tab.dataset.tab === "evolucao" && !document.getElementById("evolucaoBody").children.length) {
-        loadEvolucao()
+          dados.push({
+            periodo: `${String(m).padStart(2, "0")}/${a}`,
+            qtd: ordRes.total,
+            fat: +fat.toFixed(2),
+            imp: +imp.toFixed(2),
+            alq,
+            nfe: nfeRes.total,
+          });
+        } catch {
+          dados.push({ periodo: `${String(m).padStart(2, "0")}/${a}`, qtd: 0, fat: 0, imp: 0, alq: "0.0", nfe: 0 });
+        }
       }
-    })
-  })
 
-  document.getElementById("btnApurar").addEventListener("click", apurar)
-  document.getElementById("btnPrint").addEventListener("click", () => window.print())
-  document.getElementById("btnGerarSped").addEventListener("click", gerarSped)
-  document.getElementById("btnExportNFeCSV").addEventListener("click", exportarNFeCSV)
+      tbody.innerHTML = dados.map(r => `<tr>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:14px">${r.periodo}</td>
+        <td class="text-muted">${r.qtd}</td>
+        <td class="text-green">${fmtBRL(r.fat)}</td>
+        <td class="text-red">${fmtBRL(r.imp)}</td>
+        <td>
+          <div class="flex items-center gap-2">
+            <div class="flex-1" style="height:4px;background:var(--border);position:relative;overflow:hidden">
+              <div style="position:absolute;left:0;top:0;height:100%;background:var(--red);width:${Math.min(parseFloat(r.alq), 50) * 2}%"></div>
+            </div>
+            <span class="text-xs text-muted">${r.alq}%</span>
+          </div>
+        </td>
+        <td class="text-muted">${r.nfe}</td>
+      </tr>`).join("");
+    } catch (e) {
+      console.error("[Fiscal] Erro ao carregar evolução:", e);
+    }
+  }
 
-  // Carregar evolução na tab inicial
-  loadEvolucao()
+  async gerarSped() {
+    const { FiscalReportService } = await import("./js/fiscalReportService.js");
+    if (!this.apuracaoAtual) { this.toast("Realize a apuração primeiro.", "err"); return; }
 
-  // Apurar mês atual automaticamente
-  apurar()
+    const mes = this.apuracaoAtual.mes;
+    const ano = this.apuracaoAtual.ano;
+
+    const btn = document.getElementById("btnGerarSped");
+    this.setLoading(btn, true);
+
+    try {
+      const sped = await FiscalReportService.gerarSpedFiscal({ mes, ano });
+      document.getElementById("spedArea").value = sped;
+
+      const dlBtn = document.getElementById("btnDownloadSped");
+      dlBtn.style.display = "inline-flex";
+      dlBtn.onclick = () => {
+        const blob = new Blob([sped], { type: "text/plain;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement("a"), {
+          href: url,
+          download: `sped_${String(mes).padStart(2, "0")}_${ano}.txt`,
+        });
+        a.click(); URL.revokeObjectURL(url);
+      };
+
+      this.toast("SPED gerado! Revise e valide com contador antes de transmitir.");
+    } catch (e) {
+      this.toast("Erro ao gerar SPED: " + e.message, "err");
+    } finally {
+      this.setLoading(btn, false, '<i class="fas fa-file-code"></i> Gerar SPED');
+    }
+  }
+
+  exportarNFeCSV() {
+    if (!this.apuracaoAtual?.nfes.length) { this.toast("Nenhuma NF-e para exportar.", "err"); return; }
+
+    const header = "Numero,Data Emissao,Destinatario,Total Nota,Chave de Acesso,Ambiente\n";
+    const rows = this.apuracaoAtual.nfes.map(n =>
+      `"${n.numero || n.$id.slice(-8).toUpperCase()}","${fmtDate(n.emitidaEm)}","${n.destinatarioCpf || "Consumidor Final"}","${n.totalNota}","${n.chaveAcesso || '-'}","${n.ambiente || '-'}"`
+    ).join("\n");
+
+    this.exportCSV(header + rows, `nfe_${String(this.apuracaoAtual.mes).padStart(2, "0")}_${this.apuracaoAtual.ano}.csv`);
+  }
 }
+
+const page = new FiscalPage();
+page.init();
 </script>
 </body>
 </html>
-
-
-
-

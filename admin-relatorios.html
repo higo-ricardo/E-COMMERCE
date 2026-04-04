@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatórios - HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/reports.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
+  </a>
+  <div class="sidebar-role">Administrador</div>
+  <nav>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
+    <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
+    <a href="admin-relatorios.html" class="active"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
+    <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <span class="topbar-title">RELATÓRIOS</span>
+    <div class="topbar-user">
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+      <span id="userName">Admin</span>
+      <div class="status-dot green"></div>
+    </div>
+  </div>
+
+  <div class="content-admin">
+    <!-- Filtros -->
+    <div class="filter-panel mb-5 p-4 card">
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex flex-col gap-1">
+          <label class="form-label">De</label>
+          <input type="date" id="filterDateFrom" aria-label="Data inicial do relatório" class="form-input">
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="form-label">Até</label>
+          <input type="date" id="filterDateTo" aria-label="Data final do relatório" class="form-input">
+        </div>
+        <button class="btn btn-primary" id="btnGerar">
+          <i class="fas fa-chart-line"></i> Gerar Relatório
+        </button>
+        <button class="btn btn-ghost" id="btnLimpar">
+          <i class="fas fa-undo"></i> Limpar
+        </button>
+        <div class=""></div>
+        <button class="btn btn-ghost btn-sm" id="btnExportPDF">
+          <i class="fas fa-file-pdf"></i> PDF
+        </button>
+        <button class="btn btn-ghost btn-sm" id="btnExportExcel">
+          <i class="fas fa-file-excel"></i> Excel
+        </button>
+        <button class="btn btn-ghost btn-sm" id="btnImprimir">
+          <i class="fas fa-print"></i> Imprimir
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs de Relatórios -->
+    <div class="tabs mb-4">
+      <div class="tab active" data-tab="vendas"><i class="fas fa-dollar-sign"></i> Vendas</div>
+      <div class="tab" data-tab="status"><i class="fas fa-tasks"></i> Pedidos por Status</div>
+      <div class="tab" data-tab="produtos"><i class="fas fa-box"></i> Produtos Mais Vendidos</div>
+    </div>
+
+    <!-- Relatório de Vendas -->
+    <div class="tab-panel active" id="tab-vendas">
+      <!-- Cards de Métricas -->
+      <div class="metrics-grid mb-4">
+        <div class="metric-card">
+          <div class="metric-value" id="vendasTotal">-</div>
+          <div class="metric-label">Total Vendas</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="vendasPedidos">-</div>
+          <div class="metric-label">Pedidos</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="vendasTicket">-</div>
+          <div class="metric-label">Ticket Médio</div>
+        </div>
+      </div>
+
+      <!-- Vendas por Mês -->
+      <div class="panel-wrap mb-4">
+        <div class="section-title">Vendas por Mês</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Mês</th><th class="text-right">Total</th><th class="text-right">Pedidos</th></tr>
+          </thead>
+          <tbody id="vendasPorMesTable">
+            <tr><td colspan="3" class="text-muted text-center">Selecione um período e clique em "Gerar Relatório"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vendas por Pagamento -->
+      <div class="panel-wrap">
+        <div class="section-title">Vendas por Forma de Pagamento</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Pagamento</th><th class="text-right">Total</th><th class="text-right">Pedidos</th></tr>
+          </thead>
+          <tbody id="vendasPorPagamentoTable">
+            <tr><td colspan="3" class="text-muted text-center">Aguardando geração do relatório</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Relatório de Pedidos por Status -->
+    <div class="tab-panel" id="tab-status">
+      <div class="panel-wrap">
+        <div class="section-title">Pedidos por Status</div>
+        <div id="statusChart" class="mb-4">
+          <div class="text-muted text-center">Selecione um período e clique em "Gerar Relatório"</div>
+        </div>
+        <table class="data-table mt-4">
+          <thead>
+            <tr><th>Status</th><th class="text-right">Quantidade</th><th class="text-right">Percentual</th><th class="text-right">Total</th></tr>
+          </thead>
+          <tbody id="statusTable">
+            <tr><td colspan="4" class="text-muted text-center">Aguardando geração do relatório</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Produtos Mais Vendidos -->
+    <div class="tab-panel" id="tab-produtos">
+      <div class="panel-wrap">
+        <div class="section-title">Top 20 Produtos Mais Vendidos</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Produto</th><th>SKU</th><th class="text-right">Qtd</th><th class="text-right">Total</th></tr>
+          </thead>
+          <tbody id="topProdutosTable">
+            <tr><td colspan="5" class="text-muted text-center">Selecione um período e clique em "Gerar Relatório"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { AdminPage, fmtBRL, renderStatusChart } from "./js/admin-core.js";
+import { ReportsService } from "./js/reportsService.js";
+
+class RelatoriosPage extends AdminPage {
+  currentReport = null;
+  currentTab = "vendas";
+
+  onInit() {
+    this.bindEvents();
+    this.setDefaultDates();
+  }
+
+  bindEvents() {
+    document.getElementById("btnGerar").addEventListener("click", () => this.gerarRelatorio());
+    document.getElementById("btnLimpar").addEventListener("click", () => this.limparFiltros());
+    document.getElementById("btnExportPDF").addEventListener("click", () => this.exportPDF());
+    document.getElementById("btnExportExcel").addEventListener("click", () => this.exportCSV());
+    document.getElementById("btnImprimir").addEventListener("click", () => this.imprimir());
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => this.switchTab(tab.dataset.tab));
+    });
+  }
+
+  switchTab(tab) {
+    this.currentTab = tab;
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.style.display = "none");
+    document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add("active");
+    document.getElementById(`tab-${tab}`)?.style.setProperty("display", "block");
+  }
+
+  setDefaultDates() {
+    const hoje = new Date();
+    const trinta = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
+    document.getElementById("filterDateTo").value = hoje.toISOString().split("T")[0];
+    document.getElementById("filterDateFrom").value = trinta.toISOString().split("T")[0];
+  }
+
+  async gerarRelatorio() {
+    const dateFrom = document.getElementById("filterDateFrom").value;
+    const dateTo = document.getElementById("filterDateTo").value;
+    const filters = {};
+    if (dateFrom) filters.dateFrom = dateFrom;
+    if (dateTo) filters.dateTo = dateTo;
+
+    try {
+      document.getElementById("vendasTotal").textContent = "...";
+      document.getElementById("vendasPedidos").textContent = "...";
+      document.getElementById("vendasTicket").textContent = "...";
+
+      const [salesReport, statusReport, topProductsReport] = await Promise.all([
+        ReportsService.getSalesReport(filters),
+        ReportsService.getOrdersByStatusReport(filters),
+        ReportsService.getTopProductsReport(filters),
+      ]);
+
+      this.currentReport = { sales: salesReport, status: statusReport, products: topProductsReport, filters };
+      this.renderSalesReport(salesReport);
+      this.renderStatusReport(statusReport);
+      this.renderTopProductsReport(topProductsReport);
+      this.toast("Relatorio gerado com sucesso!", "ok");
+    } catch (e) {
+      console.error("[Relatorios] Erro ao gerar:", e);
+      this.toast("Erro ao gerar relatorio: " + e.message, "err");
+    }
+  }
+
+  renderSalesReport(data) {
+    document.getElementById("vendasTotal").textContent = fmtBRL(data.resumo.totalVendas);
+    document.getElementById("vendasPedidos").textContent = data.resumo.totalPedidos;
+    document.getElementById("vendasTicket").textContent = fmtBRL(data.resumo.ticketMedio);
+
+    const mesTable = document.getElementById("vendasPorMesTable");
+    if (data.vendasPorMes?.length) {
+      this.renderTable(mesTable, data.vendasPorMes, m => `
+        <tr>
+          <td style="font-weight:600">${m.mes}</td>
+          <td style="text-align:right;color:#f97316;font-weight:600">${fmtBRL(m.total)}</td>
+          <td style="text-align:right">${m.pedidos}</td>
+        </tr>
+      `);
+    } else {
+      mesTable.innerHTML = `<tr><td colspan="3" style="color:var(--muted);padding:24px;text-align:center">Sem dados</td></tr>`;
+    }
+
+    const pagTable = document.getElementById("vendasPorPagamentoTable");
+    if (data.vendasPorPagamento?.length) {
+      this.renderTable(pagTable, data.vendasPorPagamento, p => `
+        <tr>
+          <td style="text-transform:uppercase;font-size:11px">${p.pagamento}</td>
+          <td style="text-align:right;color:#f97316;font-weight:600">${fmtBRL(p.total)}</td>
+          <td style="text-align:right">${p.pedidos}</td>
+        </tr>
+      `);
+    } else {
+      pagTable.innerHTML = `<tr><td colspan="3" style="color:var(--muted);padding:24px;text-align:center">Sem dados</td></tr>`;
+    }
+  }
+
+  renderStatusReport(data) {
+    const statusCount = {};
+    data.porStatus?.forEach(s => { statusCount[s.status] = s.quantidade; });
+    renderStatusChart("statusChart", statusCount);
+
+    const tableEl = document.getElementById("statusTable");
+    if (data.porStatus?.length) {
+      this.renderTable(tableEl, data.porStatus, s => `
+        <tr>
+          <td><span class="badge badge-green">${s.status}</span></td>
+          <td style="text-align:right;font-weight:600">${s.quantidade}</td>
+          <td style="text-align:right;color:var(--muted)">${s.percentual}%</td>
+          <td style="text-align:right;color:#f97316;font-weight:600">${fmtBRL(s.total)}</td>
+        </tr>
+      `);
+    } else {
+      tableEl.innerHTML = `<tr><td colspan="4" style="color:var(--muted);padding:24px;text-align:center">Sem dados</td></tr>`;
+    }
+  }
+
+  renderTopProductsReport(data) {
+    const tableEl = document.getElementById("topProdutosTable");
+    if (data.topProdutos?.length) {
+      this.renderTable(tableEl, data.topProdutos.map((p, i) => ({ ...p, rank: i + 1 })), p => `
+        <tr>
+          <td style="font-family:'Bebas Neue';font-size:18px;color:var(--muted)">${p.rank}</td>
+          <td style="font-weight:600">${p.nome}</td>
+          <td style="font-size:10px;color:var(--muted);font-family:monospace">${p.sku}</td>
+          <td style="text-align:right;font-weight:600">${p.quantidade}</td>
+          <td style="text-align:right;color:#f97316;font-weight:600">${fmtBRL(p.total)}</td>
+        </tr>
+      `);
+    } else {
+      tableEl.innerHTML = `<tr><td colspan="5" style="color:var(--muted);padding:24px;text-align:center">Sem dados</td></tr>`;
+    }
+  }
+
+  limparFiltros() {
+    document.getElementById("filterDateFrom").value = "";
+    document.getElementById("filterDateTo").value = "";
+    this.currentReport = null;
+    this.toast("Filtros limpos.", "ok");
+  }
+
+  exportPDF() {
+    if (!this.currentReport) { this.toast("Gere um relatorio primeiro.", "err"); return; }
+    const w = window.open("", "_blank");
+    w.document.write(ReportsService.preparePrintHTML("Relatorio de Vendas", this.currentReport.sales));
+    w.document.close();
+  }
+
+  exportCSV() {
+    if (!this.currentReport) { this.toast("Gere um relatorio primeiro.", "err"); return; }
+    const data = this.currentReport.sales.vendasPorMes || [];
+    if (!data.length) { this.toast("Sem dados para exportar.", "err"); return; }
+    const csv = ReportsService.exportToCSV(data, ["mes", "total", "pedidos"]);
+    this.exportCSV(csv, `relatorio-vendas-${new Date().toISOString().split("T")[0]}.csv`);
+  }
+
+  imprimir() {
+    if (!this.currentReport) { this.toast("Gere um relatorio primeiro.", "err"); return; }
+    const w = window.open("", "_blank");
+    w.document.write(ReportsService.preparePrintHTML("Relatorio de Vendas", this.currentReport.sales));
+    w.document.close();
+  }
+}
+
+const page = new RelatoriosPage();
+page.init();
+</script>
+</body>
+</html>

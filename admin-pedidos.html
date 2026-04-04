@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Pedidos - HIVERCAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/painel-vendas.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
+  </a>
+  <div class="sidebar-role">Vendedor</div>
+  <nav>
+    <a href="admin-pedidos.html" class="active"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="painel-vendas.html"><i class="fas fa-list"></i> Painel de Vendas</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
+    <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
+    <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <span class="topbar-title">DASHBOARD DE PEDIDOS</span>
+    <div class="topbar-user">
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+      <span id="userName">Vendedor</span>
+      <div class="status-dot green"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- US-77, US-78: Métricas de Pedidos -->
+    <div class="metrics-grid mb-5">
+      <div class="metric-card">
+        <div class="metric-value" id="mTotalVendas">-</div>
+        <div class="metric-label">Total de Vendas</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mQtdPedidos">-</div>
+        <div class="metric-label">Quantidade de Pedidos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mTicketMedio">-</div>
+        <div class="metric-label">Ticket Médio</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-value" id="mEntregues">-</div>
+        <div class="metric-label">Entregues</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-value" id="mEmPreparo">-</div>
+        <div class="metric-label">Em Preparo</div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-value" id="mCancelados">-</div>
+        <div class="metric-label">Cancelados</div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-bar mb-4">
+      <input type="date" id="filterDataFrom" title="Data inicial" aria-label="Data inicial para filtro de pedidos">
+      <input type="date" id="filterDataTo" title="Data final" aria-label="Data final para filtro de pedidos">
+      <select id="filterStatus" aria-label="Filtrar pedidos por status">
+        <option value="">Todos os status</option>
+        <option value="novo">Novo</option>
+        <option value="pago">Pago</option>
+        <option value="confirmado">Confirmado</option>
+        <option value="em_preparo">Em Preparo</option>
+        <option value="enviado">Enviado</option>
+        <option value="entregue">Entregue</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="devolvido">Devolvido</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" id="btnFiltrar"><i class="fas fa-filter"></i> Filtrar</button>
+      <button class="btn btn-ghost btn-sm" id="btnLimpar"><i class="fas fa-undo"></i> Limpar</button>
+    </div>
+
+    <!-- Gráfico de Status -->
+    <div class="panel-wrap mb-4">
+      <div class="section-title">Pedidos por Status</div>
+      <div id="statusChart">
+        <!-- Preenchido via JS -->
+      </div>
+    </div>
+
+    <!-- Tabela de Pedidos -->
+    <div class="panel-wrap">
+      <div class="section-title">Últimos Pedidos</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Pagamento</th>
+            <th>Status</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="pedidosTable">
+          <tr><td colspan="6" class="text-muted text-center">Carregando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- US-82: Total de Produtos -->
+    <div class="mt-4 p-4 card flex items-center gap-3">
+      <i class="fas fa-box" style="font-size:20px;color:var(--blue)"></i>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)">Total de Produtos</div>
+        <div style="font-size:24px;font-family:'Bebas Neue';color:var(--white)" id="mTotalProdutos">-</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { AdminPage, fmtBRL, fmtDate, esc, statusBadge, STATUS_COLORS, renderStatusChart, Query } from "./js/admin-core.js";
+import { ProductService } from "./js/productService.js";
+import { initParticles } from "./js/utils.js";
+
+class PedidosPage extends AdminPage {
+  allOrders = [];
+
+  onInit() {
+    initParticles();
+    this.bindEvents();
+    this.loadOrders();
+    this.loadTotalProdutos();
+  }
+
+  bindEvents() {
+    document.getElementById("btnFiltrar").addEventListener("click", () => this.loadOrders());
+    document.getElementById("btnLimpar").addEventListener("click", () => this.resetFilters());
+  }
+
+  async loadOrders() {
+    const statusFilt = document.getElementById("filterStatus").value;
+    const dataFrom = document.getElementById("filterDataFrom").value;
+    const dataTo = document.getElementById("filterDataTo").value;
+
+    const queries = [Query.orderDesc("$createdAt"), Query.limit(100)];
+    if (statusFilt) queries.push(Query.equal("status", statusFilt));
+
+    try {
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL_ORDERS, queries);
+      let orders = res.documents;
+
+      if (dataFrom || dataTo) {
+        const from = dataFrom ? new Date(dataFrom + "T00:00:00") : null;
+        const to = dataTo ? new Date(dataTo + "T23:59:59") : null;
+        orders = orders.filter(o => {
+          const t = new Date(o.$createdAt);
+          if (from && t < from) return false;
+          if (to && t > to) return false;
+          return true;
+        });
+      }
+
+      this.allOrders = orders;
+      this.updateDashboard(orders);
+    } catch (e) {
+      console.error("[Pedidos] Erro ao carregar pedidos:", e);
+      this.toast("Erro ao carregar pedidos: " + e.message, "err");
+    }
+  }
+
+  updateDashboard(orders) {
+    const totalVendas = orders.reduce((s, o) => s + Number(o.total || 0), 0);
+    document.getElementById("mTotalVendas").textContent = fmtBRL(totalVendas);
+    document.getElementById("mQtdPedidos").textContent = orders.length;
+
+    const ticketMedio = orders.length > 0 ? totalVendas / orders.length : 0;
+    document.getElementById("mTicketMedio").textContent = fmtBRL(ticketMedio);
+
+    const statusCount = {};
+    orders.forEach(o => {
+      const s = (o.status || "novo").toLowerCase();
+      statusCount[s] = (statusCount[s] || 0) + 1;
+    });
+
+    document.getElementById("mEntregues").textContent = statusCount["entregue"] || 0;
+    document.getElementById("mEmPreparo").textContent = statusCount["em_preparo"] || 0;
+    document.getElementById("mCancelados").textContent = statusCount["cancelado"] || 0;
+
+    renderStatusChart("statusChart", statusCount);
+
+    const tbody = document.getElementById("pedidosTable");
+    this.renderTable(tbody, orders.slice(0, 20), o => `
+      <tr>
+        <td style="font-family:monospace;font-size:10px;font-weight:600">${esc(o.number || "-")}</td>
+        <td style="font-weight:600;font-size:12px">${esc(o.user || o.name || "-")}</td>
+        <td style="font-size:11px;text-align:right;color:#f97316;font-weight:600">${fmtBRL(o.total || 0)}</td>
+        <td style="font-size:10px;color:var(--muted);text-transform:uppercase">${esc(o.payment || "-")}</td>
+        <td>${statusBadge(o.status)}</td>
+        <td style="font-size:9px;color:var(--muted)">${fmtDate(o.$createdAt)}</td>
+      </tr>
+    `);
+  }
+
+  async loadTotalProdutos() {
+    try {
+      const products = await ProductService.getAllProducts();
+      document.getElementById("mTotalProdutos").textContent = products.length || 0;
+    } catch (e) {
+      console.error("[Pedidos] Erro ao carregar produtos:", e);
+      document.getElementById("mTotalProdutos").textContent = "-";
+    }
+  }
+
+  resetFilters() {
+    document.getElementById("filterDataFrom").value = "";
+    document.getElementById("filterDataTo").value = "";
+    document.getElementById("filterStatus").value = "";
+    this.loadOrders();
+  }
+}
+
+const page = new PedidosPage();
+page.init();
+</script>
+</body>
+</html>

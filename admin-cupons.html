@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupons — HIVERCAR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/dashboard-cupons.css">
+</head>
+<body class="dashboard">
+<div class="grid-bg"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <a href="index.html" class="sidebar-brand">
+    <div class="brand-dot"></div>
+    <span class="sidebar-brand-text">HIVER<em>CAR</em></span>
+  </a>
+  <div class="sidebar-role">Administrador</div>
+  <nav>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a>
+    <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
+    <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
+    <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
+    <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+    <a href="admin-cupons.html" class="active"><i class="fas fa-tags"></i> Cupons</a>
+    <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
+    <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="theme-toggle sidebar-theme" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+      <i class="fas fa-moon"></i>
+    </button>
+    <a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Sair</a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <h1 class="topbar-title">Cupons & Promoções</h1>
+    <div class="small" id="statusText">Pronto</div>
+  </header>
+  <div class="content-admin">
+    <div class="dashboard-grid">
+    <section id="coupon-form" class="card">
+      <div class="flex-between">
+        <h2>Novo cupom</h2>
+        <button class="ghost" id="btnResetForm">Limpar</button>
+      </div>
+      <form id="formCupom">
+        <div class="row">
+          <div>
+            <label for="code">Código (maiúsculas)</label>
+            <input id="code" name="code" maxlength="32" placeholder="BLACK50" required>
+          </div>
+          <div>
+            <label for="type">Tipo</label>
+            <select id="type" name="type" required>
+              <option value="percentual">Percentual (%)</option>
+              <option value="fixed">Valor fixo (R$)</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="value">Valor</label>
+            <input id="value" name="value" type="number" min="1" placeholder="Ex.: 50">
+          </div>
+          <div>
+            <label for="maxDiscount">Teto (R$) opcional</label>
+            <input id="maxDiscount" name="maxDiscount" type="number" min="0" step="0.01" placeholder="Ex.: 200">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="minOrderValue">Pedido mínimo (R$)</label>
+            <input id="minOrderValue" name="minOrderValue" type="number" min="0" step="0.01" value="50">
+          </div>
+          <div>
+            <label for="expirationDate">Validade (opcional)</label>
+            <input id="expirationDate" name="expirationDate" type="date">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="usageLimit">Limite global (opcional)</label>
+            <input id="usageLimit" name="usageLimit" type="number" min="0" placeholder="Ex.: 100">
+          </div>
+          <div>
+            <label for="cpfLimit">Limite por CPF (opcional)</label>
+            <input id="cpfLimit" name="cpfLimit" type="number" min="0" placeholder="Ex.: 1">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="cpf">CPF restrito (opcional)</label>
+            <input id="cpf" name="cpf" maxlength="14" placeholder="Somente números">
+          </div>
+          <div class="flex items-center gap-3" style="margin-top:24px;">
+            <input id="isActive" name="isActive" type="checkbox" checked>
+            <label for="isActive" style="margin:0;">Ativo</label>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" id="btnSalvar">Salvar cupom</button>
+          <div class="msg" id="formMsg"></div>
+        </div>
+      </form>
+    </section>
+
+    <section id="coupon-list">
+      <div class="flex-between">
+        <h2>Lista de cupons</h2>
+        <button class="ghost" id="btnReload">Recarregar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Uso</th>
+              <th>Validade</th>
+              <th>CPF</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7" class="muted">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="msg" id="listMsg"></div>
+    </section>
+    </div><!-- /dashboard-grid -->
+  </div><!-- /content-admin -->
+</div><!-- /main -->
+
+<script type="module">
+import { AdminPage, fmtBRL } from "./js/admin-core.js";
+import { CouponService } from "./js/couponService.js";
+
+class CuponsPage extends AdminPage {
+  onInit() {
+    this.bindEvents();
+    this.renderList();
+  }
+
+  bindEvents() {
+    document.getElementById("formCupom").addEventListener("submit", e => this.handleSubmit(e));
+    document.getElementById("btnResetForm").addEventListener("click", () => this.resetForm());
+    document.getElementById("btnReload").addEventListener("click", () => this.renderList());
+  }
+
+  async renderList() {
+    try {
+      const list = await CouponService.list();
+      const tbody = document.getElementById("tableBody");
+      const msgEl = document.getElementById("listMsg");
+
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-center" style="padding:24px">Nenhum cupom cadastrado.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(c => `
+        <tr>
+          <td class="text-green text-sm font-bold" style="font-family:monospace">${c.code}</td>
+          <td class="uppercase text-xs">${c.type}</td>
+          <td class="text-right font-semibold">${c.type === "percentage" ? c.value + "%" : fmtBRL(c.value)}</td>
+          <td class="text-right text-xs">${c.maxDiscount ? fmtBRL(c.maxDiscount) : "-"}</td>
+          <td class="text-right text-xs">${c.minOrderValue ? fmtBRL(c.minOrderValue) : "-"}</td>
+          <td><span class="badge ${c.isActive ? 'badge-green' : 'badge-red'}">${c.isActive ? "Ativo" : "Inativo"}</span></td>
+          <td class="text-xs text-muted">${c.expirationDate ? new Date(c.expirationDate).toLocaleDateString("pt-BR") : "-"}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("statusText").textContent = `${list.length} cupom(ns) carregado(s)`;
+      msgEl.textContent = "";
+    } catch (e) {
+      console.error("[Cupons] Erro ao carregar:", e);
+      document.getElementById("listMsg").textContent = "Erro ao carregar cupons.";
+    }
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById("formCupom");
+    const formData = new FormData(form);
+
+    const payload = {
+      code: formData.get("code")?.trim().toUpperCase(),
+      type: formData.get("type"),
+      value: parseFloat(formData.get("value")) || 0,
+      maxDiscount: parseFloat(formData.get("maxDiscount")) || null,
+      minOrderValue: parseFloat(formData.get("minOrderValue")) || null,
+      expirationDate: formData.get("expirationDate") || null,
+      usageLimit: parseInt(formData.get("usageLimit")) || null,
+      cpfLimit: parseInt(formData.get("cpfLimit")) || null,
+      cpf: formData.get("cpf")?.replace(/\D/g, "") || null,
+      isActive: formData.get("isActive") !== null,
+    };
+
+    if (!payload.code) {
+      document.getElementById("formMsg").textContent = "Código é obrigatório.";
+      document.getElementById("formMsg").className = "msg err";
+      return;
+    }
+
+    const btn = document.getElementById("btnSalvar");
+    this.setLoading(btn, true);
+
+    try {
+      await CouponService.create(payload);
+      document.getElementById("formMsg").textContent = "Cupom salvo com sucesso!";
+      document.getElementById("formMsg").className = "msg ok";
+      form.reset();
+      this.renderList();
+    } catch (e) {
+      document.getElementById("formMsg").textContent = "Erro ao salvar: " + e.message;
+      document.getElementById("formMsg").className = "msg err";
+    } finally {
+      this.setLoading(btn, false);
+    }
+  }
+
+  resetForm() {
+    document.getElementById("formCupom").reset();
+    document.getElementById("formMsg").textContent = "";
+  }
+}
+
+const page = new CuponsPage();
+page.init();
+</script>
+</body>
+</html>

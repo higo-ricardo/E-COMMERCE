@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Produto - HIVERCAR AUTOPEÇAS</title>
@@ -9,12 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/produto.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>
 <div class="grid-bg"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- Zoom modal -->
 <div class="zoom-modal" id="zoomModal" onclick="this.classList.remove('open')">
@@ -37,21 +39,23 @@
         <i class="fa-solid fa-cart-shopping fa-2x"></i>
         <span class="cart-badge" id="cartBadge">0</span>
       </a>
+      <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
   </div>
 </nav>
 
-<!-- PRODUTO -->
-<div class="produto-wrap">
+<main class="produto-wrap">
   <div class="container">
 
     <!-- Loading state -->
-    <div id="loadingState" class="loading-state">
+    <section id="loadingState" class="loading-state">
       <div class="spinner"></div> Carregando produto…
-    </div>
+    </section>
 
     <!-- Conteúdo do produto -->
-    <div id="produtoContent" style="display:none">
+    <section id="produtoContent" style="display:none">
 
       <div class="produto-grid">
         <!-- Imagem -->
@@ -123,30 +127,30 @@
         </div>
       </div>
 
-    </div>
+    </section>
 
     <!-- Produto não encontrado -->
-    <div id="notFound" style="display:none;text-align:center;padding:80px 20px;color:var(--muted)">
+    <section id="notFound" style="display:none;text-align:center;padding:80px 20px;color:var(--muted)">
       <i class="fas fa-box-open" style="font-size:48px;display:block;margin-bottom:16px;opacity:.3"></i>
       <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:8px">Produto não encontrado</h2>
       <p style="margin-bottom:24px">Este produto pode ter sido removido ou o link está incorreto.</p>
       <a href="loja.html" class="btn btn-primary"><i class="fas fa-store"></i> Voltar à Loja</a>
-    </div>
+    </section>
 
   </div>
-</div>
+</main>
 
 <!-- PRODUTOS RELACIONADOS -->
-<div class="relacionados" id="relacionadosSection" style="display:none">
+<section class="relacionados" id="relacionadosSection" style="display:none">
   <div class="container">
     <div class="rel-label">Mesma Categoria</div>
     <h2 class="rel-title">VOCÊ TAMBÉM PODE GOSTAR</h2>
     <div class="rel-grid products-grid" id="relacionadosGrid"></div>
   </div>
-</div>
+</section>
 
 <!-- FOOTER -->
-<div class="bottom-bar">
+<footer class="bottom-bar">
   <div class="bottom-links">
     <a href="index.html">Home</a>
     <a href="loja.html">Loja</a>
@@ -157,7 +161,7 @@
 
 <script type="module">
 import { CartService }    from "./js/cartService.js"
-import { fmt, esc, imgPlaceholder, initParticles, initNavToggle } from "./js/utils.js"
+import { fmt, esc, imgPlaceholder, initParticles, initNavToggle, initThemeToggle } from "./js/utils.js"
 import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
 import { CONFIG } from "./js/config.js"
 
@@ -369,6 +373,7 @@ async function loadRelacionados(category, currentId) {
 // ── INIT ────────────────────────────────────────────────────────────────────
 initParticles()
 initNavToggle()
+initThemeToggle()
 loadProduto()
 </script>
 </body>

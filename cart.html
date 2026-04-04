@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carrinho - HIVERCAR AUTOPEÇAS</title>
@@ -8,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/loja.css">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/cart.css">
 </head>
 <body>
@@ -16,6 +18,7 @@
 
 <nav class="navbar">
   <div class="container">
+    <a href="loja.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar à Loja</a>
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
       <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
@@ -28,6 +31,9 @@
         <i class="fas fa-cart-shopping"></i>
         <span class="cart-badge" id="cartBadge">0</span>
       </a>
+      <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
   </div>
 </nav>
@@ -39,7 +45,7 @@
   </div>
 </div>
 
-<div class="cart-wrap">
+<main class="cart-wrap">
   <div class="container">
     <div class="cart-layout">
 
@@ -90,28 +96,30 @@
 
     </div>
   </div>
-</div>
+</main>
 
-<div class="bottom-bar">
+<footer class="bottom-bar">
   <div class="bottom-links">
     <a href="index.html">Home</a>
     <a href="loja.html">Loja</a>
     <a href="https://wa.me/5598981168787">Suporte</a>
   </div>
   <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
-</div>
+</footer>
 
 <script type="module">
 import { CartService }                               from "./js/cartService.js"
 import { AuthService }                               from "./js/authService.js"
-import { fmt, initParticles, initNavToggle }         from "./js/utils.js"
+import { fmt, initParticles, initNavToggle, initThemeToggle } from "./js/utils.js"
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 initParticles()
 initNavToggle()
+initThemeToggle()
 
 // ── UTILITÁRIO ────────────────────────────────────────────────────────────────
 const fmtBRL = v => "R$ " + Number(v).toFixed(2).replace(".", ",")
+let discount = 0
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function render() {
@@ -170,9 +178,11 @@ function render() {
 
 function updateTotals(sub) {
   const frete = Number(document.getElementById("freteSelect").value) || 0
+  const tax = sub * 0.12
   const effectiveDiscount = Math.min(sub, discount || 0)
-  const total = Math.max(0, sub - effectiveDiscount + frete)
+  const total = Math.max(0, sub - effectiveDiscount + frete + tax)
   document.getElementById("rSub").textContent   = fmtBRL(sub)
+  document.getElementById("rTax").textContent   = fmtBRL(tax)
   document.getElementById("rDisc").textContent  = "− " + fmtBRL(effectiveDiscount)
   document.getElementById("rTotal").textContent = fmtBRL(total)
 }
@@ -205,14 +215,17 @@ document.getElementById("cupomBtn").onclick = async () => {
     const res = await CouponService.apply(code, { subtotal })
     if (!res.ok) {
       CartService.clearCoupon()
+      discount = 0
       if (msg) { msg.className = "cupom-msg err"; msg.textContent = res.message || "Cupom inválido."; }
     } else {
       CartService.setCoupon({ code, discount: res.discount, message: res.message })
+      discount = res.discount
       if (msg) { msg.className = "cupom-msg ok"; msg.textContent = `✓ Cupom ${code} aplicado!` }
     }
     updateTotals(CartService.total())
   } catch (err) {
     CartService.clearCoupon()
+    discount = 0
     if (msg) { msg.className = "cupom-msg err"; msg.textContent = "Erro ao aplicar cupom."; }
     console.error("Erro ao aplicar cupom:", err)
   } finally {

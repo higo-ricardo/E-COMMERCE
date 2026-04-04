@@ -2,8 +2,8 @@
 // Service responsável por validação, aplicação e contadores de cupons.
 // Integração com Appwrite (collection COUPONS + COUPON_USAGE).
 
-import { CouponRepository } from "./couponRepository.js"
-import { CouponUsageRepository } from "./couponUsageRepository.js"
+import { CouponRepository } from "./repositories.js"
+import { CouponUsageRepository } from "./repositories.js"
 import { CONFIG } from "./config.js"
 
 const REASON_MESSAGES = {

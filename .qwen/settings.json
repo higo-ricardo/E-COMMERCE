@@ -3,7 +3,18 @@
     "allow": [
       "Bash(powershell *)",
       "Bash(python *)",
-      "Bash(del *)"
+      "Bash(del *)",
+      "Bash(node *)",
+      "Bash(rmdir *)",
+      "Bash(npm uninstall *)",
+      "Read(c:\\Users\\hig0\\.vscode\\extensions\\qwenlm.qwen-code-vscode-ide-companion-0.14.0-win32-x64\\dist\\qwen-cli\\bundled\\qc-helper\\docs\\features/**)",
+      "Read(c:\\Users\\hig0\\.vscode\\extensions\\qwenlm.qwen-code-vscode-ide-companion-0.14.0-win32-x64\\dist\\qwen-cli\\bundled\\qc-helper\\docs/**)",
+      "Bash(mkdir *)",
+      "Bash(move *)",
+      "Bash(git checkout *)",
+      "Bash(npx *)",
+      "Bash(dir *)",
+      "Bash(findstr *)"
     ]
   },
   "$version": 3

@@ -75,3 +75,17 @@ export const CONFIG = {
     MAX_DISCOUNT_PERCENT: 0.5,  // Limite máximo de desconto: 50% do pedido
   },
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXPORTS NOMEADOS PARA HTML (substitui config-provider.js)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const COLLECTIONS = CONFIG.COL
+export const AUTH_CONFIG = CONFIG.AUTH
+export const STORE_CONFIG = CONFIG.STORE
+export const FISCAL_CONFIG = CONFIG.FISCAL
+export const COUPON_CONFIG = CONFIG.COUPON
+export const WHATSAPP = CONFIG.WHATSAPP
+export const ENDPOINT = CONFIG.ENDPOINT
+export const PROJECT_ID = CONFIG.PROJECT_ID
+export const DB = CONFIG.DB

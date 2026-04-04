@@ -1,4 +1,8 @@
-﻿/* ---- moved from frete.html on 2026-03-28 23:47:02 ---- */
+/* ============================================================
+   page-institucional.css — Frete, Garantia, Privacidade, Termos
+   CSS unificado para todas as páginas institucionais HIVERCAR
+   ============================================================ */
+
 :root {
   --black:  #0a0a0a;
   --dark:   #111214;
@@ -11,8 +15,10 @@
   --glow-r: rgba(251,18,48,0.35);
   --glow-g: rgba(38,253,113,0.25);
 }
+
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
+
 body {
   background:var(--black);
   color:var(--white);
@@ -21,10 +27,12 @@ body {
   line-height:1.75;
   min-height:100vh;
 }
+
+/* BG NOISE + SCANLINES */
 body::before {
   content:'';
   position:fixed; inset:0; z-index:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   opacity:0.03; pointer-events:none;
 }
 body::after {
@@ -33,7 +41,9 @@ body::after {
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
   pointer-events:none;
 }
+
 canvas#canvas { position:fixed; inset:0; z-index:0; }
+
 .grid-bg {
   position:fixed; inset:0; z-index:0;
   background-image:
@@ -42,7 +52,7 @@ canvas#canvas { position:fixed; inset:0; z-index:0; }
   background-size:60px 60px;
 }
 
-/* â”€â”€ TOP BAR â”€â”€ */
+/* ── TOP BAR ── */
 .top-bar {
   position:sticky; top:0; z-index:100;
   background:rgba(10,10,10,0.92);
@@ -60,7 +70,7 @@ canvas#canvas { position:fixed; inset:0; z-index:0; }
 .back-link svg { transition:transform 0.2s; }
 .back-link:hover svg { transform:translateX(-4px); }
 
-/* â”€â”€ PAGE HERO â”€â”€ */
+/* ── PAGE HERO (institucional) ── */
 .hero {
   position:relative; z-index:10;
   padding:80px 8% 50px;
@@ -92,7 +102,7 @@ canvas#canvas { position:fixed; inset:0; z-index:0; }
   max-width:480px;
 }
 
-/* â”€â”€ LAYOUT â”€â”€ */
+/* ── LAYOUT ── */
 .page-wrap {
   position:relative; z-index:10;
   display:grid;
@@ -107,7 +117,7 @@ canvas#canvas { position:fixed; inset:0; z-index:0; }
   .sidebar { order:2; }
 }
 
-/* â”€â”€ CONTENT â”€â”€ */
+/* ── CONTENT ── */
 .content { padding-right:60px; }
 @media(max-width:900px){ .content { padding-right:0; } }
 
@@ -143,9 +153,12 @@ canvas#canvas { position:fixed; inset:0; z-index:0; }
   width:6px; height:6px; border-radius:50%;
   background:var(--green); opacity:0.7;
 }
+/* Garantia: lista de exclusoes (no-go) */
+.section-block ul.no-go li::before { background:var(--red); }
+
 strong { color:var(--white); font-weight:600; }
 
-/* â”€â”€ SIDEBAR â”€â”€ */
+/* ── SIDEBAR ── */
 .sidebar { display:flex; flex-direction:column; gap:24px; }
 .sidebar-panel {
   background:var(--panel);
@@ -162,6 +175,8 @@ strong { color:var(--white); font-weight:600; }
 .info-label { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
 .info-val { font-size:13px; color:var(--white); font-weight:300; }
 .info-val.green { color:var(--green); }
+.info-val.red { color:var(--red); }
+
 .cta-btn {
   display:flex; align-items:center; justify-content:center; gap:8px;
   padding:12px 20px;
@@ -171,6 +186,7 @@ strong { color:var(--white); font-weight:600; }
   transition:box-shadow 0.3s; margin-top:4px;
 }
 .cta-btn:hover { box-shadow:0 0 24px var(--glow-g); }
+
 .nav-links { display:flex; flex-direction:column; gap:2px; }
 .nav-links a {
   display:flex; align-items:center; justify-content:space-between;
@@ -183,7 +199,19 @@ strong { color:var(--white); font-weight:600; }
 .nav-links a.active { color:var(--green); border-color:var(--border); background:rgba(38,253,113,0.04); }
 .nav-links a svg { opacity:0.4; }
 
-/* â”€â”€ BOTTOM BAR â”€â”€ */
+/* ── BADGE (privacidade) ── */
+.badge {
+  display:inline-block;
+  padding:3px 8px;
+  font-size:10px; font-weight:600;
+  letter-spacing:0.15em; text-transform:uppercase;
+  background:rgba(38,253,113,0.1);
+  color:var(--green);
+  border:1px solid rgba(38,253,113,0.2);
+  margin-top:8px;
+}
+
+/* ── BOTTOM BAR ── */
 .bottom-bar {
   position:relative; z-index:10;
   border-top:1px solid var(--border);
@@ -195,7 +223,7 @@ strong { color:var(--white); font-weight:600; }
 .bottom-links a:hover { color:var(--white); }
 .bottom-right { font-size:12px; color:var(--muted); }
 
-/* â”€â”€ ANIMATIONS â”€â”€ */
+/* ── ANIMATIONS ── */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(16px); }
   to   { opacity:1; transform:translateY(0); }
@@ -205,7 +233,7 @@ strong { color:var(--white); font-weight:600; }
   50%     { box-shadow:0 0 20px var(--green); opacity:0.7; }
 }
 
-/* â”€â”€ RIPPLE â”€â”€ */
+/* ── RIPPLE ── */
 .ripple {
   position:fixed; pointer-events:none; border-radius:50%;
   border:1px solid rgba(38,253,113,0.4);
@@ -214,6 +242,7 @@ strong { color:var(--white); font-weight:600; }
 }
 @keyframes rippleOut { to { width:60px; height:60px; margin:-30px 0 0 -30px; opacity:0; } }
 
+/* ── RESPONSIVO ── */
 @media(max-width:768px){
   .hero { padding:60px 5% 36px; }
   .page-wrap { padding:40px 5% 80px; }
@@ -221,3 +250,151 @@ strong { color:var(--white); font-weight:600; }
   .bottom-bar { padding:16px 5%; }
 }
 
+/* ================================================================
+   MODO CLARO — Tema Light (completo)
+   ================================================================ */
+
+/* Transicao suave */
+body, .top-bar, .hero, .sidebar-panel, .content, .bottom-bar {
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body.light-mode {
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+body.light-mode::before,
+body.light-mode::after { display: none; }
+body.light-mode .grid-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+body.light-mode .top-bar {
+  background: #ffffff;
+  border-bottom-color: #ddd;
+}
+body.light-mode .brand-name { color: #666; }
+body.light-mode .brand-dot {
+  background: #006400;
+  box-shadow: 0 0 10px rgba(0,100,0,0.4);
+}
+body.light-mode .back-link { color: #666; }
+body.light-mode .back-link:hover { color: #1a1a1a; }
+
+body.light-mode .theme-toggle {
+  border-color: #ccc;
+  color: #333;
+}
+body.light-mode .theme-toggle:hover {
+  color: #006400;
+  border-color: #006400;
+}
+
+body.light-mode .hero { border-bottom-color: #ddd; }
+body.light-mode .page-label::before {
+  background: #006400;
+  box-shadow: 0 0 8px rgba(0,100,0,0.3);
+}
+body.light-mode .page-label span { color: #006400; }
+body.light-mode .hero h1 { color: #1a1a1a; }
+body.light-mode .hero h1 em { color: #006400; text-shadow: none; }
+body.light-mode .hero-sub { color: #666; }
+
+body.light-mode .content { color: #333; }
+body.light-mode .section-block h2 {
+  color: #1a1a1a;
+  border-bottom-color: #ddd;
+}
+body.light-mode .section-block h2::before {
+  background: #006400;
+  box-shadow: 0 0 8px rgba(0,100,0,0.3);
+}
+body.light-mode .section-block p { color: #555; }
+body.light-mode .section-block ul { color: #555; }
+body.light-mode .section-block ul li { border-bottom-color: #eee; }
+body.light-mode .section-block ul li::before { background: #006400; }
+body.light-mode .section-block ul.no-go li::before { background: #c4001d; }
+body.light-mode strong { color: #1a1a1a; }
+
+body.light-mode .sidebar-panel {
+  background: #ffffff;
+  border-color: #ddd;
+}
+body.light-mode .sidebar-panel h3 {
+  color: #1a1a1a;
+  border-bottom-color: #ddd;
+}
+body.light-mode .info-label { color: #666; }
+body.light-mode .info-val { color: #333; }
+body.light-mode .info-val.green { color: #006400; }
+body.light-mode .info-val.red { color: #c4001d; }
+body.light-mode .cta-btn {
+  background: #006400;
+  color: #fff;
+}
+body.light-mode .cta-btn:hover { box-shadow: 0 0 24px rgba(0,100,0,0.3); }
+body.light-mode .nav-links a { color: #666; }
+body.light-mode .nav-links a:hover {
+  color: #1a1a1a;
+  border-color: #ddd;
+  background: rgba(0,0,0,0.03);
+}
+body.light-mode .nav-links a.active {
+  color: #006400;
+  border-color: #ddd;
+  background: rgba(0,100,0,0.06);
+}
+
+body.light-mode .badge {
+  background: rgba(0,100,0,0.08);
+  color: #006400;
+  border-color: rgba(0,100,0,0.2);
+}
+
+body.light-mode .bottom-bar {
+  border-top-color: #ddd;
+}
+body.light-mode .bottom-links a { color: #666; }
+body.light-mode .bottom-links a:hover { color: #1a1a1a; }
+body.light-mode .bottom-right { color: #666; }
+
+body.light-mode .ripple { border-color: rgba(0,100,0,0.4); }
+
+/* ================================================================
+   WCAG AA — Acessibilidade
+   ================================================================ */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--green);
+  color: var(--black);
+  padding: 8px 16px;
+  z-index: 10000;
+  font-weight: 600;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.skip-link:focus { top: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
