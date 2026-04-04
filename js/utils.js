@@ -1,6 +1,8 @@
 // ─── HIVERCAR · utils.js ──────────────────────────────────────────────────────
 // Utilitários compartilhados entre todas as páginas
 // ──────────────────────────────────────────────────────────────────────────────
+// Anti-FOUC: movido para inline <script> no <head> de cada página HTML.
+// Este módulo é carregado como defer, então o fix inline já executou antes.
 
 // -- Partículas animadas no canvas -----------------------------------------------
 export function initParticles(canvasId = "canvas", color = "38,253,113", count = 55) {

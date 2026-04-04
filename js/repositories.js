@@ -5,8 +5,9 @@
 // Unifica: orderRepository, productRepository, couponRepository, couponUsageRepository
 // Reduz de 4 arquivos para 1, mantendo mesma interface de exports
 
-import { databases, ID, Query, Permission, Role } from "./appwriteClient.js"
+import { databases, ID, Query, Permission, Role } from "./db.js"
 import { CONFIG } from "./config.js"
+import { apiService } from "./apiService.js"
 
 const { DB, COL } = CONFIG
 
@@ -17,12 +18,12 @@ const { DB, COL } = CONFIG
 export const OrderRepository = {
 
   async create(order, userId) {
-    const permissions = [
-      Permission.read(Role.user(userId)),
-      Permission.update(Role.user(userId)),
-      Permission.delete(Role.user(userId)),
-    ]
-    return databases.createDocument(DB, COL.ORDERS, ID.unique(), order, permissions)
+    // Usa proxy API para evitar exposição de credenciais
+    // Permissões são gerenciadas server-side na função Appwrite
+    return apiService.createOrder({
+      ...order,
+      _ownerId: userId, // referência para auditoria
+    })
   },
 
   async getById(id) {
@@ -105,12 +106,10 @@ export const OrderRepository = {
 export const ProductRepository = {
 
   async create(product) {
-    const permissions = [
-      Permission.read(Role.any),
-      Permission.update(Role.user("admin")),
-      Permission.delete(Role.user("admin")),
-    ]
-    return databases.createDocument(DB, COL.PRODUCTS, ID.unique(), product, permissions)
+    // Permissões herdadas da collection "products" configurada no Appwrite Console:
+    // - Read: any (público para vitrine da loja)
+    // - Write/Update/Delete: role "admins"
+    return databases.createDocument(DB, COL.PRODUCTS, ID.unique(), product)
   },
 
   async getById(id) {
@@ -119,108 +118,25 @@ export const ProductRepository = {
 
   /**
    * Lista produtos com paginação por página e filtros opcionais.
+   * Usa proxy API para evitar exposição de credenciais.
    * @param {number} page - Página (1-based)
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
   async list(page = 1, filters = {}) {
-    const PAGE_SIZE = 15
-    const queries = [
-      Query.limit(PAGE_SIZE),
-      Query.offset((page - 1) * PAGE_SIZE),
-      Query.orderDesc("$createdAt"),
-    ]
-
-    if (filters.category) {
-      queries.push(Query.equal("category", filters.category))
-    }
-    if (filters.brand) {
-      queries.push(Query.equal("brand", filters.brand))
-    }
-    if (filters.vehicle) {
-      queries.push(Query.search("compatibleVehicles", filters.vehicle))
-    }
-
-    const res = await databases.listDocuments(DB, COL.PRODUCTS, queries)
-    const pages = Math.ceil(res.total / PAGE_SIZE)
-
-    return {
-      products: res.documents,
-      total: res.total,
-      page,
-      pages: Math.max(1, pages),
-    }
+    return apiService.getProducts(page, filters)
   },
 
   /**
    * Busca produtos por termo + filtros opcionais.
+   * Usa proxy API para evitar exposição de credenciais.
    * @param {string} term - Termo de busca
    * @param {number} page - Página (1-based)
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
   async search(term, page = 1, filters = {}) {
-    const PAGE_SIZE = 15
-    const queries = [
-      Query.limit(PAGE_SIZE),
-      Query.offset((page - 1) * PAGE_SIZE),
-      Query.orderDesc("$createdAt"),
-    ]
-
-    if (filters.category) {
-      queries.push(Query.equal("category", filters.category))
-    }
-    if (filters.brand) {
-      queries.push(Query.equal("brand", filters.brand))
-    }
-    if (filters.vehicle) {
-      queries.push(Query.search("compatibleVehicles", filters.vehicle))
-    }
-
-    // Busca em múltiplos campos — Appwrite search index pode não cobrir todos
-    // Fallback: filtro em memória após buscar todos
-    const searchLower = term.toLowerCase()
-
-    // Tenta usar o índice de busca do Appwrite
-    let res
-    try {
-      res = await databases.listDocuments(DB, COL.PRODUCTS, [
-        Query.search("name", term),
-        ...queries,
-      ])
-    } catch {
-      // Se o índice de busca não existir, busca tudo e filtra em memória
-      const all = await databases.listDocuments(DB, COL.PRODUCTS, [
-        Query.limit(500),
-        ...queries,
-      ])
-      res = {
-        ...all,
-        documents: all.documents.filter(doc => {
-          const name = (doc.name || "").toLowerCase()
-          const ncm = (doc.ncm || "").toLowerCase()
-          const brand = (doc.brand || "").toLowerCase()
-          const category = (doc.category || "").toLowerCase()
-          const description = (doc.description || "").toLowerCase()
-          return name.includes(searchLower) ||
-                 ncm.includes(searchLower) ||
-                 brand.includes(searchLower) ||
-                 category.includes(searchLower) ||
-                 description.includes(searchLower)
-        }),
-        total: 0, // Será recalculado
-      }
-      res.total = res.documents.length
-    }
-
-    const pages = Math.ceil(res.total / PAGE_SIZE)
-
-    return {
-      products: res.documents,
-      total: res.total,
-      page,
-      pages: Math.max(1, pages),
-    }
+    return apiService.searchProducts(term, page, filters)
   },
 
   /**
@@ -331,12 +247,10 @@ export const ProductRepository = {
 export const CouponRepository = {
 
   async create(coupon) {
-    const permissions = [
-      Permission.read(Role.any),
-      Permission.update(Role.user("admin")),
-      Permission.delete(Role.user("admin")),
-    ]
-    return databases.createDocument(DB, COL.COUPONS, ID.unique(), coupon, permissions)
+    // Permissões herdadas da collection "coupons" configurada no Appwrite Console:
+    // - Read: any (público para validação no checkout)
+    // - Write/Update/Delete: role "admins" (via Appwrite Console → Database → coupons → Settings → Permissions)
+    return databases.createDocument(DB, COL.COUPONS, ID.unique(), coupon)
   },
 
   async findByCode(code) {
@@ -371,6 +285,14 @@ export const CouponRepository = {
     ])
     return res.documents
   },
+
+  async list() {
+    const res = await databases.listDocuments(DB, COL.COUPONS, [
+      Query.orderDesc("$createdAt"),
+      Query.limit(200),
+    ])
+    return res.documents
+  },
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -380,16 +302,15 @@ export const CouponRepository = {
 export const CouponUsageRepository = {
 
   async create(code, cpf) {
-    const permissions = [
-      Permission.read(Role.any),
-      Permission.update(Role.user("admin")),
-    ]
+    // Permissões herdadas da collection "coupon_usage" configurada no Appwrite Console:
+    // - Read: role "admins" (dados sensíveis com CPF)
+    // - Write: role "admins"
     return databases.createDocument(DB, COL.COUPON_USAGE, ID.unique(), {
       code,
       cpf,
       uses: 1,
       lastUsed: new Date().toISOString(),
-    }, permissions)
+    })
   },
 
   async findByCodeAndCpf(code, cpf) {

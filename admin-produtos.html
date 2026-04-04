@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produtos - HIVERCAR ERP</title>
@@ -12,7 +13,7 @@
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/admin-produtos.css">
 </head>
-<body>
+<body class="dashboard">
 <div class="grid-bg"></div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -27,9 +28,9 @@
     <a href="admin-pedidos.html"><i class="fas fa-chart-line"></i> Pedidos</a>
     <a href="admin-produtos.html" class="active"><i class="fas fa-box-open"></i> Produtos</a>
     <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
-    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de ServiÃ§o</a>
+    <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
     <a href="admin-fiscal.html"><i class="fas fa-receipt"></i> Fiscal</a>
-    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> RelatÃ³rios</a>
+    <a href="admin-relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
     <a href="admin-cupons.html"><i class="fas fa-tags"></i> Cupons</a>
     <a href="customers.html"><i class="fas fa-users"></i> Clientes</a>
     <a href="loja.html"><i class="fas fa-store"></i> Loja</a>
@@ -43,18 +44,14 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
-    <span class="topbar-title">GESTÃƒO DE PRODUTOS</span>
-    <div class="topbar-user">
-      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
-      <span id="userName">Admin</span>
-      <div class="status-dot green"></div>
-    </div>
-  </div>
+    <h1 class="topbar-title">Gestão de Produtos</h1>
+    <div class="small" id="statusText">Pronto</div>
+  </header>
 
   <div class="content">
-    <!-- Alerta estoque crÃ­tico -->
+    <!-- Alerta estoque crítico -->
     <div id="stockAlert" class="flex items-center gap-3 mb-5" style="display:none;padding:14px 20px;border:1px solid rgba(251,18,48,.4);background:rgba(251,18,48,.06);color:var(--red);font-size:13px;font-weight:600;">
       <i class="fas fa-triangle-exclamation"></i>
       <span id="stockAlertMsg"></span>
@@ -62,20 +59,23 @@
 
     <!-- Barra superior -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Buscar produtos por nomeâ€¦" aria-label="Buscar produtos por nome">
-      <button class="btn btn-ghost btn-sm" id="clearSearch"><i class="fas fa-xmark"></i></button>
-      <button class="btn btn-ghost btn-sm" id="btnToggleFiltros" title="Filtros avanÃ§ados">
-        <i class="fas fa-filter"></i> Filtros
+      <div class="search-bar-input-wrap">
+        <i class="fas fa-search search-bar-icon"></i>
+        <input type="search" id="searchInput" placeholder="Buscar produtos…" aria-label="Buscar produtos por nome" autocomplete="off">
+      </div>
+      <button class="btn btn-ghost btn-sm" id="clearSearch" aria-label="Limpar busca" title="Limpar busca"><i class="fas fa-xmark"></i></button>
+      <button class="btn btn-ghost btn-sm" id="btnToggleFiltros" aria-expanded="false" aria-controls="filtrosPanel" title="Filtros avançados">
+        <i class="fas fa-filter"></i><span class="btn-label"> Filtros</span>
       </button>
-      <button class="btn btn-ghost btn-sm" id="btnRelatorioDuplicatas" title="Verificar SKUs duplicados">
-        <i class="fas fa-exclamation-triangle"></i> Duplicatas
+      <button class="btn btn-ghost btn-sm" id="btnRelatorioDuplicatas" title="Verificar SKUs duplicados" aria-label="Relatório de duplicatas">
+        <i class="fas fa-exclamation-triangle"></i><span class="btn-label"> Duplicatas</span>
       </button>
-      <button class="btn btn-primary btn-sm" id="btnNovo">
-        <i class="fas fa-plus"></i> Novo Produto
+      <button class="btn btn-primary btn-sm" id="btnNovo" aria-label="Adicionar novo produto">
+        <i class="fas fa-plus"></i><span class="btn-label"> Novo</span>
       </button>
     </div>
 
-    <!-- Barra de Filtros AvanÃ§ada (inicialmente oculta) -->
+    <!-- Barra de Filtros Avançada (inicialmente oculta) -->
     <div id="filtrosPanel" class="card p-4 mb-4" style="display:none;border-radius:6px">
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:12px">
         <div class="field" style="margin:0">
@@ -91,11 +91,11 @@
           <input type="text" id="filterBarcode" placeholder="Ex: 1234567890" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label class="text-sm mb-1" style="display:block">PreÃ§o MÃ­n (R$)</label>
+          <label class="text-sm mb-1" style="display:block">Preço Mín (R$)</label>
           <input type="number" id="filterPriceMin" placeholder="0.00" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
-          <label class="text-sm mb-1" style="display:block">PreÃ§o MÃ¡x (R$)</label>
+          <label class="text-sm mb-1" style="display:block">Preço Máx (R$)</label>
           <input type="number" id="filterPriceMax" placeholder="999999.99" min="0" step="0.01" style="padding:6px 8px;font-size:12px">
         </div>
         <div class="field" style="margin:0">
@@ -119,7 +119,7 @@
     </div>
 
     <!-- Tabela -->
-    <div class="panel-wrap card">
+    <div class="table-wrap">
       <table class="data-table">
         <thead>
           <tr>
@@ -127,14 +127,14 @@
             <th>Nome</th>
             <th>Categoria</th>
             <th>Marca</th>
-            <th>PreÃ§o</th>
+            <th>Preço</th>
             <th>Estoque</th>
             <th>Status</th>
-            <th style="width:130px">AÃ§Ãµes</th>
+            <th style="width:130px">Ações</th>
           </tr>
         </thead>
         <tbody id="produtosTable">
-          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>
+          <tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregando…</td></tr>
         </tbody>
       </table>
 
@@ -143,122 +143,122 @@
   </div>
 </div>
 
-<!-- â”€â”€ MODAL PRODUTO â”€â”€ -->
-<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal">
+<!-- ── MODAL PRODUTO ── -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+  <span id="modalDesc" class="sr-only">Formulário para criar ou editar produtos no catálogo.</span>
+  <div class="modal" role="document">
     <div class="modal-header">
       <span class="modal-title" id="modalTitle">NOVO PRODUTO</span>
-      <button class="modal-close" id="modalClose"><i class="fas fa-xmark"></i></button>
+      <button class="modal-close" id="modalClose" aria-label="Fechar formulário"><i class="fas fa-xmark"></i></button>
     </div>
 
+    <form id="produtoForm" novalidate>
     <div class="form-grid-2">
       <!-- Coluna esquerda -->
       <div>
         <div class="field">
-          <label>Nome *</label>
-          <input type="text" id="fNome" placeholder="Ex: Pastilha de Freio Brembo">
+          <label for="fNome">Nome <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+          <input type="text" id="fNome" placeholder="Ex: Pastilha de Freio Brembo" required aria-required="true" autocomplete="off">
         </div>
         <div class="field">
-          <label>Categoria</label>
-          <input type="text" id="fCategoria" placeholder="Ex: Freios">
+          <label for="fCategoria">Categoria</label>
+          <input type="text" id="fCategoria" placeholder="Ex: Freios" autocomplete="off">
         </div>
         <div class="field">
-          <label>Marca</label>
-          <input type="text" id="fMarca" placeholder="Ex: Brembo">
+          <label for="fMarca">Marca</label>
+          <input type="text" id="fMarca" placeholder="Ex: Brembo" autocomplete="off">
         </div>
         <div class="field">
-          <label>NCM</label>
-          <input type="text" id="fNcm" placeholder="Ex: 8708.30.90" maxlength="12">
-        </div>
-        <!-- Campo de Motor para SKU -->
-        <div class="field">
-          <label>Motor / AplicaÃ§Ã£o</label>
-          <input type="text" id="fMotor" placeholder="Ex: 1.6, 2.0 (obrigatÃ³rio para gerar SKU)" title="NecessÃ¡rio para gerar o SKU do produto">
+          <label for="fNcm">NCM</label>
+          <input type="text" id="fNcm" placeholder="Ex: 8708.30.90" maxlength="12" autocomplete="off">
         </div>
         <div class="field">
-          <label>SKU (Gerado Automaticamente)</label>
+          <label for="fMotor">Motor / Aplicação</label>
+          <input type="text" id="fMotor" placeholder="Ex: 1.6, 2.0" title="Necessário para gerar o SKU do produto" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="fSku">SKU <span class="text-xs text-muted">(gerado automaticamente)</span></label>
           <div class="flex gap-2">
-            <input type="text" id="fSku" placeholder="Ex: VWGOL16001" readonly style="background:var(--dark);opacity:0.7">
-            <button type="button" id="btnGerarSku" class="btn btn-ghost btn-sm" style="white-space:nowrap;padding:8px 12px">
+            <input type="text" id="fSku" placeholder="Ex: VWGOL16001" readonly aria-readonly="true" style="background:var(--dark);opacity:0.7;flex:1">
+            <button type="button" id="btnGerarSku" class="btn btn-ghost btn-sm" style="white-space:nowrap;padding:8px 12px" aria-label="Gerar novo SKU">
               <i class="fas fa-magic"></i> Gerar
             </button>
           </div>
-          <div class="text-xs text-muted" style="margin-top:3px">Gerado automaticamente a partir de marca, nome e motor. Clique 'Gerar' para criar novo.</div>
         </div>
         <div class="field">
-          <label>CÃ³digo de Barras</label>
-          <input type="text" id="fBarcode" placeholder="Ex: 1234567890123" maxlength="13">
-          <div class="text-xs text-muted" style="margin-top:3px">EAN/GTIN do produto</div>
+          <label for="fBarcode">Código de Barras <span class="text-xs text-muted">(EAN/GTIN)</span></label>
+          <input type="text" id="fBarcode" placeholder="Ex: 1234567890123" maxlength="13" inputmode="numeric" autocomplete="off">
         </div>
       </div>
       <!-- Coluna direita -->
       <div>
         <div class="field">
-          <label>PreÃ§o de Venda (R$) *</label>
-          <input type="number" id="fPreco" placeholder="0.00" min="0" step="0.01">
+          <label for="fPreco">Preço de Venda (R$) <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+          <input type="number" id="fPreco" placeholder="0,00" min="0" step="0.01" required aria-required="true" inputmode="decimal">
         </div>
         <div class="field">
-          <label>PreÃ§o de Custo (R$) *</label>
-          <input type="number" id="fCostPrice" placeholder="0.00" min="0" step="0.01">
+          <label for="fCostPrice">Preço de Custo (R$) <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+          <input type="number" id="fCostPrice" placeholder="0,00" min="0" step="0.01" required aria-required="true" inputmode="decimal">
         </div>
         <div class="field">
-          <label>Peso (kg)</label>
-          <input type="number" id="fWeight" placeholder="0.00" min="0" step="0.01">
+          <label for="fWeight">Peso (kg)</label>
+          <input type="number" id="fWeight" placeholder="0,00" min="0" step="0.01" inputmode="decimal">
         </div>
         <div class="field">
-          <label>Estoque *</label>
-          <input type="number" id="fEstoque" placeholder="0" min="0" step="1">
+          <label for="fEstoque">Estoque <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+          <input type="number" id="fEstoque" placeholder="0" min="0" step="1" required aria-required="true" inputmode="numeric">
         </div>
         <div class="field">
-          <label>Estoque MÃ­nimo (Alerta)</label>
-          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta serÃ¡ disparado quando estoque cair abaixo deste valor">
-          <div class="text-xs text-muted" style="margin-top:4px">Deixe em branco para usar o padrÃ£o do sistema (5 unidades).</div>
+          <label for="fMinStock">Estoque Mínimo <span class="text-xs text-muted">(alerta)</span></label>
+          <input type="number" id="fMinStock" placeholder="Ex: 5" min="0" step="1" title="Alerta quando estoque cair abaixo deste valor" inputmode="numeric">
+          <div class="text-xs text-muted" style="margin-top:4px">Padrão do sistema: 5 unidades.</div>
         </div>
         <div class="field">
-          <label>Imagem do Produto</label>
-          <div class="img-preview-wrap" id="imgWrap" title="Clique para selecionar imagem">
+          <label for="fImagem">Imagem do Produto</label>
+          <div class="img-preview-wrap" id="imgWrap" title="Clique para selecionar imagem" role="button" tabindex="0" aria-label="Selecionar imagem do produto">
             <div class="img-placeholder" id="imgPlaceholder">
-              <i class="fas fa-image"></i>
+              <i class="fas fa-image" aria-hidden="true"></i>
               Clique para selecionar
             </div>
-            <img id="imgPreview" style="display:none">
+            <img id="imgPreview" style="display:none" alt="Pré-visualização do produto">
           </div>
-          <input type="file" id="fImagem" accept="image/*" style="display:none">
+          <input type="file" id="fImagem" accept="image/*" style="display:none" aria-label="Selecionar arquivo de imagem">
           <div class="flex gap-2 mt-2">
-            <button class="btn btn-ghost btn-sm" id="btnSelecionarImg" style="flex:1">
-              <i class="fas fa-upload"></i> Selecionar
+            <button type="button" class="btn btn-ghost btn-sm" id="btnSelecionarImg" style="flex:1">
+              <i class="fas fa-upload" aria-hidden="true"></i> Selecionar
             </button>
-            <button class="btn btn-ghost btn-sm" id="btnRemoverImg" style="flex:1;display:none">
-              <i class="fas fa-trash"></i> Remover
+            <button type="button" class="btn btn-ghost btn-sm" id="btnRemoverImg" style="flex:1;display:none" aria-label="Remover imagem selecionada">
+              <i class="fas fa-trash" aria-hidden="true"></i> Remover
             </button>
           </div>
-          <div id="imgStatus" class="text-sm text-muted"></div>
+          <div id="imgStatus" class="text-sm text-muted" aria-live="polite"></div>
         </div>
       </div>
     </div>
 
-    <!-- DescriÃ§Ã£o full-width -->
+    <!-- Descrição full-width -->
     <div class="field">
-      <label>DescriÃ§Ã£o</label>
-      <textarea id="fDescricao" rows="3" placeholder="DescriÃ§Ã£o tÃ©cnica do produtoâ€¦" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
+      <label for="fDescricao">Descrição</label>
+      <textarea id="fDescricao" rows="3" placeholder="Descrição técnica do produto…" style="width:100%;padding:12px 14px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
     </div>
 
-    <div id="formError" class="text-red text-sm mb-3" style="display:none"></div>
+    <div id="formError" class="text-red text-sm mb-3" role="alert" aria-live="assertive" style="display:none"></div>
 
     <div class="flex gap-3" style="justify-content:flex-end;">
-      <button class="btn btn-ghost" id="btnCancelarModal">Cancelar</button>
-      <button class="btn btn-primary" id="btnSalvar">
-        <i class="fas fa-floppy-disk"></i> Salvar Produto
+      <button type="button" class="btn btn-ghost" id="btnCancelarModal">Cancelar</button>
+      <button type="submit" class="btn btn-primary" id="btnSalvar">
+        <i class="fas fa-floppy-disk" aria-hidden="true"></i> Salvar Produto
       </button>
     </div>
+    </form>
   </div>
 </div>
 
-<!-- â”€â”€ CONFIRM DELETE â”€â”€ -->
+<!-- ── CONFIRM DELETE ── -->
 <div class="confirm-overlay" id="confirmOverlay" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
   <div class="confirm-box">
     <h3 id="confirmTitle"><i class="fas fa-triangle-exclamation"></i> EXCLUIR PRODUTO</h3>
-    <p>Esta aÃ§Ã£o Ã© <strong>irreversÃ­vel</strong>. O produto e sua imagem serÃ£o removidos permanentemente.</p>
+    <p>Esta ação é <strong>irreversível</strong>. O produto e sua imagem serão removidos permanentemente.</p>
     <p id="confirmNome" class="font-bold text-white mb-5"></p>
     <div class="confirm-actions">
       <button class="btn btn-ghost" id="confirmCancel">Cancelar</button>
@@ -269,12 +269,12 @@
   </div>
 </div>
 
-<!-- â”€â”€ RELATÃ“RIO DUPLICATAS â”€â”€ -->
+<!-- ── RELATÓRIO DUPLICATAS ── -->
 <div class="confirm-overlay" id="relatorioDuplicatasOverlay">
   <div class="confirm-box card" style="max-height:80vh;overflow-y:auto;max-width:600px">
-    <h3><i class="fas fa-chart-bar"></i> RELATÃ“RIO DE SKUs</h3>
+    <h3><i class="fas fa-chart-bar"></i> RELATÓRIO DE SKUs</h3>
     <div id="relatorioDuplicatasContent" style="color:var(--text);font-size:13px;line-height:1.6;margin:16px 0">
-      <span class="spinner"></span> Gerando relatÃ³rioâ€¦
+      <span class="spinner"></span> Gerando relatório…
     </div>
     <div class="confirm-actions">
       <button class="btn btn-primary" id="btnFecharRelatorio">Fechar</button>
@@ -282,14 +282,14 @@
   </div>
 </div>
 
-<!-- â”€â”€ TOAST â”€â”€ -->
+<!-- ── TOAST ── -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-import { AdminPage, fmtBRL, esc, Query, ID } from "./js/admin-core.js";
+import { AdminPage, fmtBRL, esc, Query } from "./js/admin-core.js";
 import { CONFIG } from "./js/config.js";
 import { SKUService } from "./js/skuService.js";
-import { Client, Storage, Permission, Role } from "https://cdn.jsdelivr.net/npm/appwrite@16.0.0/+esm";
+import { storage, Permission, Role, ID } from "./js/db.js";
 
 class ProdutosPage extends AdminPage {
   currentPage = 1;
@@ -302,7 +302,7 @@ class ProdutosPage extends AdminPage {
   filtrosAtivos = { sku: "", ncm: "", barcode: "", priceMin: null, priceMax: null, status: "" };
   cache = new Map();
 
-  get storage() { return new Storage(this.app.client); }
+  get storage() { return storage; }
 
   onInit() {
     this.bindEvents();
@@ -315,7 +315,11 @@ class ProdutosPage extends AdminPage {
     document.getElementById("modalClose").addEventListener("click", () => this.closeModal());
     document.getElementById("btnCancelarModal").addEventListener("click", () => this.closeModal());
     document.getElementById("modalOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) this.closeModal(); });
-    document.getElementById("btnSalvar").addEventListener("click", () => this.handleSave());
+
+    // Form submit (acessibilidade: Enter no último campo salva)
+    const form = document.getElementById("produtoForm");
+    form.addEventListener("submit", e => { e.preventDefault(); this.handleSave(); });
+
     document.getElementById("btnGerarSku").addEventListener("click", e => { e.preventDefault(); this.gerarNovoSku(); });
 
     document.getElementById("searchInput").addEventListener("input", e => {
@@ -328,7 +332,9 @@ class ProdutosPage extends AdminPage {
 
     document.getElementById("btnToggleFiltros").addEventListener("click", () => {
       const fp = document.getElementById("filtrosPanel");
-      fp.style.display = fp.style.display === "none" ? "block" : "none";
+      const isOpen = fp.style.display === "block";
+      fp.style.display = isOpen ? "none" : "block";
+      document.getElementById("btnToggleFiltros").setAttribute("aria-expanded", String(!isOpen));
     });
     document.getElementById("btnLimparFiltros").addEventListener("click", () => this.limparFiltros());
     document.getElementById("btnAplicarFiltros").addEventListener("click", () => this.aplicarFiltros());
@@ -377,12 +383,14 @@ class ProdutosPage extends AdminPage {
 
   async load() {
     const tbody = document.getElementById("produtosTable");
-    tbody.innerHTML = `<tr><td colspan="8" class="loading-state"><span class="spinner"></span> Carregandoâ€¦</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="text-muted text-center" style="padding:24px"><span class="spinner"></span> Carregando…</td></tr>`;
     try {
       const result = await this.listProdutos(this.currentPage, this.searchTerm);
       this.totalPages = result.pages;
       this.renderTable(result.products);
       this.renderPagination(this.currentPage, this.totalPages);
+      const statusEl = document.getElementById("statusText");
+      if (statusEl) statusEl.textContent = `${result.total} produto(s)`;
     } catch (e) {
       tbody.innerHTML = `<tr><td colspan="8" style="color:var(--red);padding:24px">Erro: ${e.message}</td></tr>`;
     }
@@ -440,10 +448,10 @@ class ProdutosPage extends AdminPage {
     const range = [];
     for (let i = 1; i <= pages; i++) {
       if (i === 1 || i === pages || Math.abs(i - page) <= 2) range.push(i);
-      else if (range[range.length - 1] !== "â€¦") range.push("â€¦");
+      else if (range[range.length - 1] !== "…") range.push("…");
     }
     range.forEach(r => {
-      if (r === "â€¦") html += `<span style="color:var(--muted);padding:0 4px">â€¦</span>`;
+      if (r === "…") html += `<span style="color:var(--muted);padding:0 4px">…</span>`;
       else html += `<button class="page-btn ${r === page ? "active" : ""}" data-pg="${r}">${r}</button>`;
     });
     html += `<button class="page-btn" id="nextBtn" ${page >= pages ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`;
@@ -506,7 +514,7 @@ class ProdutosPage extends AdminPage {
     const errEl = document.getElementById("formError");
 
     if (!nome || !preco || !custPrice || estoque === "") {
-      errEl.textContent = "Preencha: Nome, PreÃ§o, PreÃ§o de Custo e Estoque.";
+      errEl.textContent = "Preencha: Nome, Preço, Preço de Custo e Estoque.";
       errEl.style.display = "block";
       return;
     }
@@ -565,7 +573,7 @@ class ProdutosPage extends AdminPage {
   async verificarSkuDuplicado(sku, excludeId = null) {
     if (!sku) return true;
     const result = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [Query.equal("sku", sku)]);
-    if (result.documents.length > 0 && result.documents[0].$id !== excludeId) throw new Error(`SKU "${sku}" jÃ¡ existe!`);
+    if (result.documents.length > 0 && result.documents[0].$id !== excludeId) throw new Error(`SKU "${sku}" já existe!`);
     return true;
   }
 
@@ -584,8 +592,8 @@ class ProdutosPage extends AdminPage {
   handleFileChange(fileInput) {
     const file = fileInput.files[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) { document.getElementById("imgStatus").textContent = "Arquivo invÃ¡lido."; return; }
-    if (file.size > 5 * 1024 * 1024) { document.getElementById("imgStatus").textContent = "MÃ¡ximo 5MB."; return; }
+    if (!file.type.startsWith("image/")) { document.getElementById("imgStatus").textContent = "Arquivo inválido."; return; }
+    if (file.size > 5 * 1024 * 1024) { document.getElementById("imgStatus").textContent = "Máximo 5MB."; return; }
     this.selectedFile = file;
     document.getElementById("imgStatus").textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
     const reader = new FileReader();
@@ -639,7 +647,7 @@ class ProdutosPage extends AdminPage {
     try {
       await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.PRODUCTS, this.deleteTarget.$id, { deletedAt: new Date().toISOString(), isActive: false });
       this.invalidateCache();
-      this.toast("Produto excluÃ­do.", "ok");
+      this.toast("Produto excluído.", "ok");
       this.closeConfirm();
       if (this.currentPage > 1) this.currentPage = 1;
       this.load(); this.checkStockAlerts();
@@ -649,7 +657,7 @@ class ProdutosPage extends AdminPage {
 
   async gerarRelatorioDuplicatas() {
     document.getElementById("relatorioDuplicatasOverlay").classList.add("open");
-    document.getElementById("relatorioDuplicatasContent").innerHTML = `<span class="spinner"></span> Gerandoâ€¦`;
+    document.getElementById("relatorioDuplicatasContent").innerHTML = `<span class="spinner"></span> Gerando…`;
     try {
       const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.PRODUCTS, [Query.limit(1000)]);
       const skuMap = new Map(); const duplicatas = []; const semSku = [];
@@ -662,7 +670,7 @@ class ProdutosPage extends AdminPage {
       let html = `<div style="padding:12px;background:rgba(255,255,255,.05);border-radius:4px;margin-bottom:12px"><strong>Resumo:</strong><br>Total: <strong>${res.total}</strong><br>Com SKU: <strong style="color:var(--green)">${skuMap.size}</strong><br>Sem SKU: <strong style="color:var(--yellow)">${semSku.length}</strong><br>Duplicados: <strong style="color:var(--red)">${duplicatas.length}</strong></div>`;
       if (duplicatas.length > 0) {
         html += `<div style="color:var(--red);font-weight:600;margin-bottom:8px"><i class="fas fa-triangle-exclamation"></i> Duplicatas:</div>`;
-        duplicatas.forEach(d => { html += `<div style="background:rgba(251,18,48,.1);padding:8px;border-left:3px solid var(--red);margin-bottom:8px"><strong>${esc(d.sku)}</strong><br>${d.produtos.map((p, i) => `${i > 0 ? '<br>' : ''}â†’ ${esc(p.nome)}`).join('')}</div>`; });
+        duplicatas.forEach(d => { html += `<div style="background:rgba(251,18,48,.1);padding:8px;border-left:3px solid var(--red);margin-bottom:8px"><strong>${esc(d.sku)}</strong><br>${d.produtos.map((p, i) => `${i > 0 ? '<br>' : ''}→ ${esc(p.nome)}`).join('')}</div>`; });
       }
       document.getElementById("relatorioDuplicatasContent").innerHTML = html;
     } catch (e) { document.getElementById("relatorioDuplicatasContent").innerHTML = `<div style="color:var(--red)">Erro: ${e.message}</div>`; }
@@ -674,7 +682,7 @@ class ProdutosPage extends AdminPage {
       const criticos = res.documents.filter(p => (p.qtd ?? 0) < (p.minStock ?? CONFIG.STOCK_CRITICAL));
       const el = document.getElementById("stockAlert");
       const msg = document.getElementById("stockAlertMsg");
-      if (criticos.length > 0) { msg.textContent = `${criticos.length} produto(s) com estoque crÃ­tico.`; el.style.display = "flex"; }
+      if (criticos.length > 0) { msg.textContent = `${criticos.length} produto(s) com estoque crítico.`; el.style.display = "flex"; }
       else el.style.display = "none";
     } catch {}
   }

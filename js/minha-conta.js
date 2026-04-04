@@ -1,5 +1,5 @@
 import { CONFIG } from "./config.js"
-import { Client, Databases, Account, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+import { account, databases, Query, Permission, Role } from "./db.js"
 
 const CFG = {
   DB: CONFIG.DB,
@@ -7,10 +7,6 @@ const CFG = {
   ORDERS: CONFIG.COL.ORDERS,
   RECOVERY_URL: window.location.origin + "/login.html",
 }
-
-const client = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
-const databases = new Databases(client)
-const account = new Account(client)
 
 let mirror = null
 let authUser = null
@@ -75,7 +71,12 @@ async function createMirrorForUser(user) {
     cep: 65500000,
   }
   try {
-    return await databases.createDocument(CFG.DB, CFG.USERS, user.$id, payload)
+    const perms = [
+      Permission.read(Role.user(user.$id)),
+      Permission.update(Role.user(user.$id)),
+      Permission.delete(Role.user(user.$id)),
+    ]
+    return await databases.createDocument(CFG.DB, CFG.USERS, user.$id, payload, perms)
   } catch (err) {
     console.warn("[Minha Conta] Nao foi possivel criar mirror automaticamente:", err?.message || err)
     return null
@@ -408,7 +409,7 @@ async function loadPedidos() {
             <div style="font-size:12px;color:var(--muted)">${fmtDate(o.$createdAt)} - ${fmtBRL(o.total)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:12px">
-            <span class="order-status ${stClass(o.status)}">${o.status || "NOVO"}</span>
+            <span class="order-status ${stClass(o.status)}">${esc(o.status || "NOVO")}</span>
             <i class="fas fa-chevron-down acc-icon"></i>
           </div>
         </div>
@@ -444,7 +445,7 @@ async function loadPedidos() {
       })
       .join("")
   } catch (e) {
-    container.innerHTML = `<div style="color:var(--red);padding:20px">Erro ao carregar pedidos: ${e.message}</div>`
+    container.textContent = `Erro ao carregar pedidos: ${e.message || "desconhecido"}`
   }
 }
 
@@ -452,4 +453,3 @@ window.toggleAcc = (id) => {
   const el = document.getElementById("acc-" + id)
   el?.classList.toggle("open")
 }
-

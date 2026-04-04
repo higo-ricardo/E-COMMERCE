@@ -41,7 +41,7 @@
 .pay-check { margin-left:auto; color:var(--border); transition:.2s; }
 .pay-option.selected .pay-check { color:var(--green); }
 
-.timer-card { margin-top:20px; padding:14px; background:rgba(251,18,48,.06); border:1px solid green; text-align:center; }
+.timer-card { margin-top:20px; padding:14px; background:rgba(251,18,48,.06); border:1px solid var(--green); text-align:center; }
 .timer-display { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--red); letter-spacing:.1em; margin:4px 0; }
 .timer-label { font-size:10px; color:var(--red); letter-spacing:.12em; text-transform:uppercase; }
 
@@ -52,6 +52,22 @@
 .modal-num { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:.1em; margin-bottom:8px; }
 .modal-text { font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
 .modal-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+/* ── Resumo do Pedido ── */
+.resumo-row { display:flex; justify-content:space-between; padding:8px 0; font-size:13px; color:var(--muted); border-bottom:1px solid var(--border); }
+.resumo-row span:last-child { color:var(--white); }
+.resumo-total { display:flex; justify-content:space-between; padding:14px 0; font-size:14px; font-weight:700; border-top:2px solid var(--border); margin-top:8px; }
+.resumo-total .total-val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--green); }
+
+/* ── Cupom ── */
+.cupom-row { display:flex; gap:0; margin:16px 0; }
+.cupom-input { flex:1; background:var(--dark); border:1px solid var(--border); border-right:none; padding:10px 14px; color:var(--white); font-size:13px; }
+.cupom-input:focus { outline:none; border-color:var(--green); }
+.cupom-input::placeholder { color:var(--muted); }
+.cupom-btn { background:var(--green); color:var(--black); border:none; padding:10px 16px; font-weight:600; cursor:pointer; font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+.cupom-btn:hover { opacity:.9; }
+.cupom-btn:disabled { opacity:.5; cursor:not-allowed; }
+.cupom-msg { font-size:12px; margin-bottom:12px; min-height:18px; }
 
 /* ── Responsivo checkout ── */
 @media (max-width: 480px) {

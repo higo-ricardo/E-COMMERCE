@@ -16,7 +16,7 @@
 //
 // Camada: Domain / Service - importado por painel-vendas.html e orderService.js
 
-import { databases, ID, Query } from "./appwriteClient.js"
+import { databases, ID, Query, Permission, Role } from "./db.js"
 import { CONFIG }               from "./config.js"
 
 const { DB, COL, ORDER_STATUS_FLOW } = CONFIG
@@ -72,6 +72,12 @@ export async function changeOrderStatus(orderId, oldStatus, newStatus, changedBy
   if (!ok) throw new Error(reason)
 
   // 2. Registra no histórico
+  const perms = [
+    Permission.read(Role.user(changedBy)),
+    Permission.read(Role.team("admins")),
+    Permission.update(Role.team("admins")),
+    Permission.delete(Role.team("admins")),
+  ]
   const historyDoc = await databases.createDocument(
     DB,
     COL.ORDER_HISTORY,
@@ -84,6 +90,7 @@ export async function changeOrderStatus(orderId, oldStatus, newStatus, changedBy
       changedAt: new Date().toISOString(),
       note:      note || null,
     },
+    perms,
   )
 
   // 3. Atualiza o pedido

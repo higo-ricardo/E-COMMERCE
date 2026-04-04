@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clientes - HIVERCAR ERP</title>
@@ -12,7 +13,7 @@
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/customers.css">
 </head>
-<body>
+<body class="dashboard">
 <div class="grid-bg"></div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -115,6 +116,7 @@
 
 <script type="module">
 import { AdminPage, fmtDate, fmtDateTime, esc, Query } from "./js/admin-core.js";
+import { CONFIG } from "./js/config.js";
 import { initParticles } from "./js/utils.js";
 
 class CustomersPage extends AdminPage {
@@ -145,7 +147,7 @@ class CustomersPage extends AdminPage {
 
   async loadCustomers() {
     try {
-      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL_USERS, [
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.USERS, [
         Query.orderDesc("$createdAt"),
         Query.limit(200),
       ]);
@@ -270,7 +272,7 @@ class CustomersPage extends AdminPage {
 
   async toggleBlock(id, isCurrentlyBlocked) {
     try {
-      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL_USERS, id, {
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.USERS, id, {
         isActive: isCurrentlyBlocked,
       });
       this.toast(isCurrentlyBlocked ? "Cliente desbloqueado." : "Cliente bloqueado.", "success");

@@ -1,17 +1,17 @@
-// ─── HIVERCAR · documentNumberService.js ─────────────────────────────────────
+// ─── HIVERCAR · docNumService.js ─────────────────────────────────────────────
 // Serviço centralizado para geração de números de documentos (pedidos, notas,
 // ordens de serviço, boletos, recibos, etc).
 //
 // Objetivo: Consolidar lógica de sequenciamento espalhada no código.
 // Antes: generateOrderNumber() em utils.js
-// Depois: DocumentNumberService com suporte a múltiplos tipos
+// Depois: docNumService com suporte a múltiplos tipos
 //
 // Camada: Domain / Service
 // Zero dependências externas (apenas Date)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * DocumentNumberService - Gerador centralizado de números de documentos
+ * docNumService - Gerador centralizado de números de documentos
  *
  * Tipos suportados:
  * • order        → Pedido de compra
@@ -23,7 +23,7 @@
  * • cte          → Conhecimento de transporte
  * • nfse         → Nota de serviço eletrônica
  */
-export const DocumentNumberService = {
+export const docNumService = {
   // ─────────────────────────────────────────────────────────────────────────
   // 📄 PEDIDOS
   // ─────────────────────────────────────────────────────────────────────────
@@ -444,8 +444,8 @@ export const DocumentNumberService = {
 // ─────────────────────────────────────────────────────────────────────────
 
 /**
- * @deprecated Use DocumentNumberService.order() em vez disso
+ * @deprecated Use docNumService.order() em vez disso
  */
 export function generateOrderNumber() {
-  return DocumentNumberService.order()
+  return docNumService.order()
 }

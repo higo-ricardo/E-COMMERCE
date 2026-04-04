@@ -14,7 +14,7 @@
 //
 // Camada: Domain / Service - importado por login.html e cadastro.html
 
-import { databases, Query, ID } from "./appwriteClient.js"
+import { databases, Query, ID, Permission, Role } from "./db.js"
 import { CONFIG }               from "./config.js"
 
 const { DB, COL, AUTH } = CONFIG
@@ -141,31 +141,6 @@ export async function recordFailedLogin(mirror) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIRROR - ATUALIZAÇÃO PÓS-LOGIN BEM-SUCEDIDO
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * Atualiza lastLogin, lastIP, loginCounter e reseta failedLogin/blockedUntil.
- * Chamado SEMPRE após Auth.createSession() bem-sucedido.
- */
-export async function recordSuccessLogin(docId, ip = "unknown") {
-  try {
-    const mirror = await getMirrorById(docId)
-    if (!mirror) return null
-
-    return await databases.updateDocument(DB, COL.USERS, docId, {
-      lastLogin:    new Date().toISOString(),
-      lastIP:       ip,
-      loginCounter: (mirror.loginCounter ?? 0) + 1,
-      failedLogin:  0,
-      blockedUntil: null,
-    })
-  } catch {
-    return null
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // MIRROR - CRIAÇÃO (Cadastro)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -177,6 +152,14 @@ export async function recordSuccessLogin(docId, ip = "unknown") {
  * @param {string} authId  ID gerado para o Auth (ID.unique()).
  */
 export async function createMirror(data, authId) {
+  const perms = [
+    Permission.read(Role.user(authId)),
+    Permission.update(Role.user(authId)),
+    Permission.delete(Role.user(authId)),
+    Permission.read(Role.team("admins")),
+    Permission.update(Role.team("admins")),
+    Permission.delete(Role.team("admins")),
+  ]
   return databases.createDocument(DB, COL.USERS, authId, {
     name:         data.name.trim(),
     email:        normalizeEmail(data.email),
@@ -202,7 +185,7 @@ export async function createMirror(data, authId) {
     failedLogin:  0,
     blockedUntil: null,
     createdAt:    new Date().toISOString(),
-  })
+  }, perms)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -239,20 +222,136 @@ export function redirectByRole(role) {
  * @returns {Promise<string>} IP do cliente
  */
 export async function getClientIP() {
-  try {
-    // Tenta API pública gratuita
-    const response = await fetch('https://api.ipify.org?format=json')
-    const data = await response.json()
-    return data.ip || 'unknown'
-  } catch {
-    // Fallback: tenta outra API
+  const isValidIp = (value) => {
+    const v = String(value ?? '').trim()
+    const ipv4 = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/
+    const ipv6 = /^[a-fA-F0-9:]+$/
+    return ipv4.test(v) || ipv6.test(v)
+  }
+
+  const tryFetchText = async (url, timeoutMs = 2500) => {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {
-      const response = await fetch('https://ipapi.co/json/')
-      const data = await response.json()
-      return data.ip || 'unknown'
+      const res = await fetch(url, { signal: controller.signal, cache: "no-store" })
+      if (!res.ok) return null
+      const text = (await res.text()).trim()
+      return isValidIp(text) ? text : null
     } catch {
-      return 'unknown'
+      return null
+    } finally {
+      clearTimeout(timer)
     }
+  }
+
+  return (
+    (await tryFetchText("https://api64.ipify.org")) ||
+    (await tryFetchText("https://ipapi.co/ip/")) ||
+    "unknown"
+  )
+}
+
+/**
+ * Garante que o usuário autenticado tem um Mirror no banco.
+ * Se não existir, cria automaticamente (autorepair).
+ * @param {Object} authUser - Usuário do Appwrite Auth
+ * @param {Object} mirrorHint - Mirror já existente (opcional)
+ * @returns {Promise<Object>} Mirror do usuário
+ */
+export async function ensureMirrorForUser(authUser, mirrorHint = null) {
+  if (!authUser) return null
+  if (mirrorHint) return mirrorHint
+
+  const email = String(authUser.email || '').toLowerCase().trim()
+  let mirror = await getMirrorByEmail(email)
+  if (mirror) return mirror
+
+  const fallbackName = String(authUser.name || email.split("@")[0] || "Usuario")
+
+  try {
+    const perms = [
+      Permission.read(Role.user(authUser.$id)),
+      Permission.update(Role.user(authUser.$id)),
+      Permission.delete(Role.user(authUser.$id)),
+      Permission.read(Role.team("admins")),
+      Permission.update(Role.team("admins")),
+      Permission.delete(Role.team("admins")),
+    ]
+    await databases.createDocument(DB, COL.USERS, authUser.$id, {
+      name: fallbackName,
+      email,
+      cpf: null,
+      mobile: null,
+      dayBirth: null,
+      isActive: true,
+      isVerified: !!authUser.emailVerification,
+      role: "USERS",
+      lastLogin: null,
+      loginCounter: 0,
+      lastIP: null,
+      failedLogin: 0,
+      blockedUntil: null,
+      address: null,
+      district: "CENTRO",
+      number: null,
+      complement: null,
+      city: "CHAPADINHA",
+      state: "MA",
+      cep: 65500000,
+    }, perms)
+  } catch (err) {
+    console.warn("[USER] não foi possível criar Mirror:", err?.message || err)
+  }
+
+  mirror = await getMirrorByEmail(email)
+  return mirror ?? null
+}
+
+/**
+ * Registra login bem-sucedido: atualiza lastLogin, lastIP, loginCounter.
+ * @param {Object} authUser - Usuário do Auth
+ * @param {Object} mirrorHint - Mirror já obtido (opcional)
+ * @returns {Promise<boolean>} Sucesso
+ */
+export async function recordSuccessLogin(authUser, mirrorHint = null) {
+  const timestamp = new Date().toISOString()
+  const clientIp = await getClientIP()
+  const candidateDocIds = []
+  if (mirrorHint?.$id) candidateDocIds.push(mirrorHint.$id)
+  if (authUser?.$id && !candidateDocIds.includes(authUser.$id)) {
+    candidateDocIds.push(authUser.$id)
+  }
+
+  for (const docId of candidateDocIds) {
+    try {
+      const mirror = await getMirrorById(docId)
+      await databases.updateDocument(DB, COL.USERS, docId, {
+        lastLogin: timestamp,
+        lastIP: clientIp,
+        loginCounter: (mirror?.loginCounter ?? 0) + 1,
+        failedLogin: 0,
+        blockedUntil: null,
+      })
+      return true
+    } catch (err) {
+      console.warn("[USER] falha ao atualizar lastLogin por docId:", docId, err?.message || err)
+    }
+  }
+
+  try {
+    const mirrorByEmail = await getMirrorByEmail(authUser?.email || '-')
+    if (!mirrorByEmail?.$id) return false
+    await databases.updateDocument(DB, COL.USERS, mirrorByEmail.$id, {
+      lastLogin: timestamp,
+      lastIP: clientIp,
+      loginCounter: (mirrorByEmail?.loginCounter ?? 0) + 1,
+      failedLogin: 0,
+      blockedUntil: null,
+    })
+    return true
+  } catch (err) {
+    console.warn("[USER] falha final ao atualizar lastLogin:", err?.message || err)
+    return false
   }
 }
 

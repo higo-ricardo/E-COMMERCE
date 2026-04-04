@@ -10,15 +10,13 @@
 // Sprint 07 - US-79, US-80, US-81:
 //   + login() agora retorna usuário para chamar recordSuccessLogin() com IP
 
-import { account, ID } from "./appwriteClient.js"
+import { account, ID } from "./db.js"
+import { getCurrentUser } from "./authGuard.js"
 
 export const AuthService = {
 
   /** Retorna usuário logado (Auth) ou null - nunca lança. */
-  async getUser() {
-    try   { return await account.get() }
-    catch { return null }
-  },
+  getUser: getCurrentUser,
 
   /**
    * Cria sessão por e-mail + senha.

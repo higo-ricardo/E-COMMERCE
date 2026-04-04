@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Produto - HIVERCAR AUTOPEÇAS</title>
@@ -162,13 +163,10 @@
 <script type="module">
 import { CartService }    from "./js/cartService.js"
 import { fmt, esc, imgPlaceholder, initParticles, initNavToggle, initThemeToggle } from "./js/utils.js"
-import { Client, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+import { databases, Query } from "./js/db.js"
 import { CONFIG } from "./js/config.js"
 
 // ── APPWRITE ───────────────────────────────────────────────────────────────
-const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
-const databases = new Databases(client)
-
 // ── BADGE ──────────────────────────────────────────────────────────────────
 const badge = document.getElementById("cartBadge")
 if (badge) badge.textContent = CartService.count()
@@ -195,6 +193,12 @@ async function loadProduto() {
   const loading  = document.getElementById("loadingState")
   const content  = document.getElementById("produtoContent")
   const notFound = document.getElementById("notFound")
+  const resolveImage = (p) => {
+    const fileId = p.imageURL || p.imageUrl || p.imageId || p.image || p.fileId
+    if (!fileId) return null
+    if (String(fileId).startsWith("http")) return fileId
+    return `${CONFIG.ENDPOINT}/storage/buckets/${CONFIG.BUCKET_ID}/files/${fileId}/view?project=${CONFIG.PROJECT_ID}`
+  }
 
   if (!productId) {
     loading.style.display  = "none"
@@ -210,16 +214,17 @@ async function loadProduto() {
     document.getElementById("pageDesc").content = p.description || `${p.name} - peça original HIVERCAR`
 
     // ── Imagem ────────────────────────────────────────────────────────────
-    if (p.imageURL) {
+    const resolvedImg = resolveImage(p)
+    if (resolvedImg) {
       const img = document.getElementById("prodImg")
-      img.src             = p.imageURL
+      img.src             = resolvedImg
       img.alt             = p.name
       img.style.display   = "block"
       document.getElementById("imgPlaceholderIcon").style.display = "none"
       const btnZoom = document.getElementById("btnZoom")
       btnZoom.style.display = "flex"
       btnZoom.onclick = () => {
-        document.getElementById("zoomImg").src = p.imageURL
+        document.getElementById("zoomImg").src = resolvedImg
         document.getElementById("zoomModal").classList.add("open")
       }
     }
@@ -378,7 +383,5 @@ loadProduto()
 </script>
 </body>
 </html>
-
-
 
 

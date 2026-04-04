@@ -14,7 +14,7 @@
 // Camada: Domain / Service
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { databases, Query } from "./appwriteClient.js"
+import { databases, Query } from "./db.js"
 import { CONFIG }           from "./config.js"
 
 const { DB, COL } = CONFIG

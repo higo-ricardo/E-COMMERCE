@@ -1,6 +1,6 @@
 // ─── HIVERCAR · config.js ────────────────────────────────────────────────────
 // Configuração centralizada do sistema - ÚNICA FONTE DE VERDADE
-// Importado por: appwriteClient.js, services, repositories, funções
+// Importado por: db.js, services, repositories, funções
 // Usado também em HTML via import ou window.CONFIG
 
 export const CONFIG = {

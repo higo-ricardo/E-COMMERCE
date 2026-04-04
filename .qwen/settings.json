@@ -14,7 +14,12 @@
       "Bash(git checkout *)",
       "Bash(npx *)",
       "Bash(dir *)",
-      "Bash(findstr *)"
+      "Bash(findstr *)",
+      "Read(c:\\Users\\hig0\\Desktop\\AI\\SKILL/**)",
+      "WebSearch",
+      "Bash(chcp)",
+      "Bash(type *)",
+      "Bash(git *)"
     ]
   },
   "$version": 3

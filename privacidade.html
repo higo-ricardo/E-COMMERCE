@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Privacidade | HIVERCAR AUTOPEÇAS</title>

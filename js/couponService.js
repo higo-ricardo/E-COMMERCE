@@ -29,8 +29,8 @@ export const CouponService = {
     if (!code || !type || value == null) {
       throw new Error("code, type e value são obrigatórios")
     }
-    if (!["percentual", "fixed", "valor"].includes(type)) {
-      throw new Error("type deve ser 'percentual' ou 'fixed'")
+    if (!["percentage", "fixed"].includes(type)) {
+      throw new Error("type deve ser 'percentage' ou 'fixed'")
     }
     const body = {
       ...payload,
@@ -106,7 +106,7 @@ export const CouponService = {
 
     const coupon = validation.coupon
     let discount = 0
-    if (coupon.type === "percentual") {
+    if (coupon.type === "percentage" || coupon.type === "percentual") {
       discount = (subtotal * (coupon.value / 100))
     } else {
       discount = coupon.value

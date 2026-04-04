@@ -1,39 +1,14 @@
 // ─── HIVERCAR · admin-core.js ────────────────────────────────────────────────
-// Arquitetura em camadas: Singleton + Template Method + Service Layer
 // Camada: Controller Base + Data Access + Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { Client, Account, Databases, Query } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm";
-import { CONFIG } from "./config.js";
+import { account, databases, Query } from "./db.js";
+import { requireAuth } from "./authGuard.js";
 
 // ═════════════════════════════════════════════════════════════════════════════
-// 1. SINGLETON — Appwrite Client (Data Access Layer)
 // ═════════════════════════════════════════════════════════════════════════════
 
-class AppwriteClient {
-  static #instance;
-
-  client;
-  databases;
-  account;
-
-  constructor() {
-    if (AppwriteClient.#instance) return AppwriteClient.#instance;
-
-    this.client = new Client()
-      .setEndpoint(CONFIG.ENDPOINT)
-      .setProject(CONFIG.PROJECT_ID);
-
-    this.databases = new Databases(this.client);
-    this.account = new Account(this.client);
-
-    AppwriteClient.#instance = this;
-  }
-
-  static getInstance() {
-    return new AppwriteClient();
-  }
-}
+const APPWRITE = { account, databases };
 
 // ═════════════════════════════════════════════════════════════════════════════
 // 2. ABSTRACT BASE CLASS — AdminPage (Controller Layer)
@@ -44,8 +19,7 @@ export class AdminPage {
   #isLoaded = false;
   #isDestroyed = false;
 
-  // ── Acesso ao Singleton ─────────────────────────────────────────────────
-  get app() { return AppwriteClient.getInstance(); }
+  get app() { return APPWRITE; }
   get isLoaded() { return this.#isLoaded; }
   get isDestroyed() { return this.#isDestroyed; }
 
@@ -67,7 +41,8 @@ export class AdminPage {
   // ── Auth Guard (obrigatório para todas as páginas) ──────────────────────
   async setupAuth() {
     try {
-      const user = await this.app.account.get();
+      // requireAuth(true) já redireciona para login.html se não autenticado
+      const user = await requireAuth(true);
       const nameEl = document.getElementById("userName");
       if (nameEl) nameEl.textContent = user.name || "Usuário";
 
@@ -77,8 +52,7 @@ export class AdminPage {
         roleEl.textContent = user.prefs.role;
       }
     } catch {
-      window.location.href = "login.html";
-      throw new Error("Não autenticado");
+      // requireAuth já fez o redirect; não faz double-redirect
     }
   }
 
@@ -164,7 +138,7 @@ export class AdminPage {
     if (!btn) return;
 
     if (loading) {
-      btn.dataset.original = original || btn.innerHTML;
+      btn.dataset.original = originalHTML || btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span> Processando…';
     } else {
@@ -301,5 +275,3 @@ export function renderStatusChart(container, statusCount, colors = STATUS_COLORS
 // ── Expor Query para uso nas subclasses (evita import duplicado) ──────────
 export { Query };
 
-// ── Exportar Singleton para uso direto se necessário ──────────────────────
-export { AppwriteClient };

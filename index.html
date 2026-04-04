@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>document.documentElement.classList.add("js-ready")</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HIVERCAR AUTOPEÇAS - Peças Novas e Originais</title>
 <meta name="description" content="Autopeças novas e originais para seu veículo. Entrega rápida, qualidade garantida.">
 <script>
-(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();
+(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">

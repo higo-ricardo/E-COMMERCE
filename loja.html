@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja — HIVERCAR AUTOPEÇAS</title>
+<title>Loja � HIVERCAR AUTOPE�AS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -20,7 +21,7 @@
   <div class="container">
     <a href="index.html" class="nav-brand">
       <div class="brand-dot"></div>
-      <span class="nav-brand-text">HIVERCAR <em>AUTOPEÇAS</em></span>
+      <span class="nav-brand-text">HIVERCAR <em>AUTOPE�AS</em></span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
     <div class="nav-links" id="navMenu">
@@ -39,8 +40,8 @@
 
 <div class="page-hero">
   <div class="container">
-    <div class="page-label"><span>Catálogo Premium</span></div>
-    <h1>PEÇAS<em>&nbsp;NOVAS&nbsp;E&nbsp;ORIGINAIS</em></h1>
+    <div class="page-label"><span>Cat�logo Premium</span></div>
+    <h1>PE�AS<em>&nbsp;NOVAS&nbsp;E&nbsp;ORIGINAIS</em></h1>
   </div>
 </div>
 
@@ -58,7 +59,7 @@
       </div>
     </div>
 
-    <!-- Filtros: categoria, marca, veículo -->
+    <!-- Filtros: categoria, marca, ve�culo -->
     <div class="filters-bar">
       <div class="filter-group">
         <span class="filter-label"><i class="fas fa-tag"></i> Categoria</span>
@@ -73,8 +74,8 @@
         </select>
       </div>
       <div class="filter-group">
-        <span class="filter-label"><i class="fas fa-car"></i> Veículo</span>
-        <input type="text" id="filterVehicle" class="filter-input" placeholder="Ex: Corolla, HB20..." aria-label="Filtrar por veículo">
+        <span class="filter-label"><i class="fas fa-car"></i> Ve�culo</span>
+        <input type="text" id="filterVehicle" class="filter-input" placeholder="Ex: Corolla, HB20..." aria-label="Filtrar por ve�culo">
       </div>
       <button id="clearFilters" class="btn-clear-filters">
         <i class="fas fa-xmark"></i> Limpar
@@ -99,7 +100,7 @@
     <a href="page-error.html" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x"></i></a>
     <a href="page-error.html" aria-label="TikTok"><i class="fa-brands fa-tiktok fa-2x"></i></a>
   </div>
-  <div class="bottom-copy">© 2026 HIVERCAR AUTOPEÇAS LTDA</div>
+  <div class="bottom-copy">� 2026 HIVERCAR AUTOPE�AS LTDA</div>
 </footer>
 <script type="module" src="./js/loja.js"></script>
 <script type="module">

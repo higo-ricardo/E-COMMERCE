@@ -1,7 +1,10 @@
 ﻿/* cadastro.css — componentes únicos (não presentes em loja.css) */
 
 html, body { background: var(--black); min-height: 100%; }
-body { display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px; }
+body {
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 16px;
+}
 
 .reg-wrap {
   position: relative; z-index: 10;
@@ -11,7 +14,8 @@ body { display: flex; align-items: flex-start; justify-content: center; padding:
 /* -- Card -- */
 .auth-box {
   position: relative; background: var(--panel); border: 1px solid var(--border);
-  padding: 40px 36px;
+  padding: 28px 20px;
+  border-radius: var(--ds-radius-lg);
 }
 .auth-box::before,.auth-box::after {
   content:''; position:absolute; width:16px; height:16px;
@@ -20,73 +24,189 @@ body { display: flex; align-items: flex-start; justify-content: center; padding:
 .auth-box::before { top:-1px; left:-1px; border-width:2px 0 0 2px; }
 .auth-box::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
 
-.auth-brand { display:flex; align-items:center; gap:10px; margin-bottom:24px; text-decoration:none; }
+.auth-brand { display:flex; align-items:center; gap:10px; margin-bottom:20px; text-decoration:none; }
 .auth-brand-name { font-size:11px; font-weight:600; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
 
 .auth-box h1 {
-  font-family:'Bebas Neue',sans-serif; font-size:28px;
+  font-family:'Bebas Neue',sans-serif; font-size:26px;
   letter-spacing:.06em; color:var(--white); margin-bottom:4px;
 }
 .auth-box h1 em { font-style:normal; color:var(--green); text-shadow:0 0 24px var(--glow-g); }
-.auth-sub2 { font-size:12px; color:var(--muted); margin-bottom:20px; }
+.auth-sub2 { font-size:13px; color:var(--muted); margin-bottom:18px; line-height: 1.5; }
 
 /* -- Seção -- */
 .section-label {
   font-size:10px; font-weight:600; letter-spacing:.3em;
-  text-transform:uppercase; color:var(--red); margin:20px 0 10px;
+  text-transform:uppercase; color:var(--red); margin:18px 0 8px;
   display:flex; align-items:center; gap:8px;
 }
 .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
 
 /* -- Grid de campos -- */
-.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.field-grid { display:grid; grid-template-columns:1fr; gap:10px; }
 .field-grid .full { grid-column:1/-1; }
+
+/* -- Campos de formulário (mobile-first: touch targets grandes) -- */
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 12px;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: var(--ds-radius);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  font-size: 16px; /* Previne zoom automático no iOS */
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(38,253,113,.15);
+}
+.field input::placeholder { color: var(--text-muted); }
+.field select { appearance: none; cursor: pointer; }
 
 /* -- Força da senha -- */
 .pass-strength { margin-top:6px; }
 .strength-bar { display:flex; gap:3px; margin-bottom:4px; }
-.strength-seg { flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s; }
+.strength-seg { flex:1; height:4px; border-radius:2px; background:var(--border); transition:background .3s; }
 .strength-seg.weak   { background:var(--red); }
 .strength-seg.medium { background:var(--danger); }
 .strength-seg.strong { background:var(--green); }
 .strength-txt { font-size:11px; color:var(--muted); }
 
+/* -- Botões -- */
+.btn {
+  min-height: 48px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--ds-radius);
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary {
+  background: var(--green);
+  color: var(--black);
+  border-color: var(--green);
+}
+.btn-primary:hover, .btn-primary:focus-visible {
+  background: #1fe06a;
+  box-shadow: 0 0 0 3px rgba(38,253,113,.25);
+}
+.btn-primary:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 /* -- Feedback -- */
 #msgBox {
-  margin-top:14px; font-size:13px; text-align:center;
+  margin-top:14px; font-size:14px; text-align:center;
   min-height:20px; line-height:1.5;
+  padding: 10px 14px;
+  border-radius: var(--ds-radius);
 }
-#msgBox.error   { color:var(--red); }
-#msgBox.success { color:var(--green); }
-#msgBox.warning { color:var(--danger); }
+#msgBox.error   { color:var(--red); background: rgba(251,18,48,.08); border: 1px solid rgba(251,18,48,.2); }
+#msgBox.success { color:var(--green); background: rgba(38,253,113,.08); border: 1px solid rgba(38,253,113,.2); }
+#msgBox.warning { color:var(--danger); background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2); }
 
 .auth-footer-links {
   margin-top:18px; text-align:center;
-  font-size:12px; color:var(--muted);
+  font-size:13px; color:var(--muted);
 }
-.auth-footer-links a { color:var(--green); text-decoration:none; }
+.auth-footer-links a { color:var(--green); text-decoration:none; font-weight: 600; }
+.auth-footer-links a:hover, .auth-footer-links a:focus-visible { text-decoration: underline; }
 
 /* -- Termos -- */
 .checkbox-row {
   display:flex; align-items:flex-start; gap:10px;
-  font-size:12px; color:var(--muted); margin-top:10px;
+  font-size:13px; color:var(--muted); margin-top:10px;
+  line-height: 1.5;
 }
-.checkbox-row input[type="checkbox"] { margin-top:2px; accent-color:var(--green); }
-.checkbox-row a { color:var(--green); text-decoration:none; }
+.checkbox-row input[type="checkbox"] {
+  margin-top:3px; accent-color:var(--green);
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.checkbox-row a { color:var(--green); text-decoration:none; font-weight: 600; }
+.checkbox-row a:hover, .checkbox-row a:focus-visible { text-decoration: underline; }
 
-@media (max-width: 480px) {
-  body { padding: 24px 12px; }
-  .auth-box { padding: 24px 16px; }
-  .auth-box h1 { font-size: 24px; }
-  .field-grid { grid-template-columns: 1fr; gap: 8px; }
-  .field-grid .full { grid-column: 1; }
-  .field input, .field select { font-size: 16px; padding: 14px 12px; }
-  .btn { min-height: 48px; width: 100%; justify-content: center; }
-  .checkbox-row { font-size: 11px; }
+/* -- Password toggle -- */
+.password-input-wrapper { position: relative; }
+.password-input-wrapper input { padding-right: 48px; }
+.password-toggle {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--muted);
+  width: 40px; height: 40px; display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer; border-radius: var(--ds-radius);
+  transition: color .2s;
+}
+.password-toggle:hover, .password-toggle:focus-visible {
+  color: var(--green);
+  background: rgba(38,253,113,.1);
 }
 
-@media (max-width: 768px) {
-  body { padding: 40px 20px; }
-  .reg-wrap { max-width: 480px; }
-  .auth-box { padding: 32px 24px; }
+/* -- Focus visible global -- */
+*:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLET (≥600px)
+   ═══════════════════════════════════════════════════════════════ */
+@media(min-width:600px) {
+  body { padding: 40px 24px; }
+  .reg-wrap { max-width: 560px; }
+  .auth-box { padding: 36px 32px; }
+  .auth-box h1 { font-size: 30px; }
+  .field-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-grid .full { grid-column: 1/-1; }
+  .field input,
+  .field select,
+  .field textarea { font-size: 14px; padding: 12px 14px; }
+  .btn { min-height: 44px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP (≥900px)
+   ═══════════════════════════════════════════════════════════════ */
+@media(min-width:900px) {
+  body { padding: 60px 20px; }
+  .auth-box { padding: 40px 36px; }
+  .auth-box h1 { font-size: 32px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REDUÇÃO DE MOVIMENTO
+   ═══════════════════════════════════════════════════════════════ */
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

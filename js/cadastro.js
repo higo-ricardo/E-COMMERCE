@@ -1,10 +1,5 @@
-import { Client, Account, Databases, ID } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm"
+import { account, databases, ID, Permission, Role } from "./db.js"
 import { CONFIG } from "./config.js"
-
-// -- Appwrite ------------------------------------------------------------------
-const client    = new Client().setEndpoint(CONFIG.ENDPOINT).setProject(CONFIG.PROJECT_ID)
-const account   = new Account(client)
-const databases = new Databases(client)
 
 // -- Partículas ----------------------------------------------------------------
 ;(function() {
@@ -199,7 +194,15 @@ async function createMirrorWithSchemaFallback(docId, payload) {
 
   for (let i = 0; i < 10; i++) {
     try {
-      return await databases.createDocument(CONFIG.DB, CONFIG.COL.USERS, docId, data)
+      const perms = [
+        Permission.read(Role.user(docId)),
+        Permission.update(Role.user(docId)),
+        Permission.delete(Role.user(docId)),
+        Permission.read(Role.team("admins")),
+        Permission.update(Role.team("admins")),
+        Permission.delete(Role.team("admins")),
+      ]
+      return await databases.createDocument(CONFIG.DB, CONFIG.COL.USERS, docId, data, perms)
     } catch (err) {
       const msg = String(err?.message || '')
       const m = msg.match(/Unknown attribute:\s*"([^"]+)"/i)
@@ -362,6 +365,3 @@ document.querySelectorAll('.password-toggle').forEach(btn => {
     btn.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
   });
 });
-
-
-

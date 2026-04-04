@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){var t=localStorage.getItem('hivercar-theme');if(t==='light')document.body.className='light-mode';})();</script>
+<script>document.documentElement.classList.add("js-ready")</script>
+<script>(function(){const apply=()=>{const body=document.body; if(!body) return; if(localStorage.getItem('hivercar-theme')==='light') body.classList.add('light-mode');}; if (document.body) apply(); else document.addEventListener('DOMContentLoaded', apply);})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cupons — HIVERCAR</title>
@@ -50,103 +51,103 @@
   </header>
   <div class="content-admin">
     <div class="dashboard-grid">
-    <section id="coupon-form" class="card">
+    <section id="coupon-form" class="card" aria-labelledby="formHeading">
       <div class="flex-between">
-        <h2>Novo cupom</h2>
-        <button class="ghost" id="btnResetForm">Limpar</button>
+        <h2 id="formHeading">Novo cupom</h2>
+        <button class="ghost" id="btnResetForm" aria-label="Limpar formulário">Limpar</button>
       </div>
-      <form id="formCupom">
+      <form id="formCupom" novalidate>
         <div class="row">
           <div>
-            <label for="code">Código (maiúsculas)</label>
-            <input id="code" name="code" maxlength="32" placeholder="BLACK50" required>
+            <label for="code">Código (maiúsculas) <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+            <input id="code" name="code" maxlength="32" placeholder="BLACK50" required aria-required="true" autocomplete="off" style="text-transform:uppercase">
           </div>
           <div>
-            <label for="type">Tipo</label>
-            <select id="type" name="type" required>
-              <option value="percentual">Percentual (%)</option>
+            <label for="type">Tipo <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+            <select id="type" name="type" required aria-required="true">
+              <option value="percentage">Percentual (%)</option>
               <option value="fixed">Valor fixo (R$)</option>
             </select>
           </div>
         </div>
         <div class="row">
           <div>
-            <label for="value">Valor</label>
-            <input id="value" name="value" type="number" min="1" placeholder="Ex.: 50">
+            <label for="value">Valor <span aria-hidden="true">*</span><span class="sr-only"> (obrigatório)</span></label>
+            <input id="value" name="value" type="number" min="1" placeholder="Ex.: 50" required aria-required="true" inputmode="decimal">
           </div>
           <div>
-            <label for="maxDiscount">Teto (R$) opcional</label>
-            <input id="maxDiscount" name="maxDiscount" type="number" min="0" step="0.01" placeholder="Ex.: 200">
+            <label for="maxDiscount">Teto (R$) <span class="text-muted">(opcional)</span></label>
+            <input id="maxDiscount" name="maxDiscount" type="number" min="0" step="0.01" placeholder="Ex.: 200" inputmode="decimal">
           </div>
         </div>
         <div class="row">
           <div>
             <label for="minOrderValue">Pedido mínimo (R$)</label>
-            <input id="minOrderValue" name="minOrderValue" type="number" min="0" step="0.01" value="50">
+            <input id="minOrderValue" name="minOrderValue" type="number" min="0" step="0.01" value="50" inputmode="decimal">
           </div>
           <div>
-            <label for="expirationDate">Validade (opcional)</label>
+            <label for="expirationDate">Validade <span class="text-muted">(opcional)</span></label>
             <input id="expirationDate" name="expirationDate" type="date">
           </div>
         </div>
         <div class="row">
           <div>
-            <label for="usageLimit">Limite global (opcional)</label>
-            <input id="usageLimit" name="usageLimit" type="number" min="0" placeholder="Ex.: 100">
+            <label for="usageLimit">Limite global <span class="text-muted">(opcional)</span></label>
+            <input id="usageLimit" name="usageLimit" type="number" min="0" placeholder="Ex.: 100" inputmode="numeric">
           </div>
           <div>
-            <label for="cpfLimit">Limite por CPF (opcional)</label>
-            <input id="cpfLimit" name="cpfLimit" type="number" min="0" placeholder="Ex.: 1">
+            <label for="cpfLimit">Limite por CPF <span class="text-muted">(opcional)</span></label>
+            <input id="cpfLimit" name="cpfLimit" type="number" min="0" placeholder="Ex.: 1" inputmode="numeric">
           </div>
         </div>
         <div class="row">
           <div>
-            <label for="cpf">CPF restrito (opcional)</label>
-            <input id="cpf" name="cpf" maxlength="14" placeholder="Somente números">
+            <label for="cpf">CPF restrito <span class="text-muted">(opcional)</span></label>
+            <input id="cpf" name="cpf" maxlength="14" placeholder="000.000.000-00" inputmode="numeric">
           </div>
           <div class="flex items-center gap-3" style="margin-top:24px;">
             <input id="isActive" name="isActive" type="checkbox" checked>
-            <label for="isActive" style="margin:0;">Ativo</label>
+            <label for="isActive" style="margin:0; cursor:pointer">Ativo</label>
           </div>
         </div>
         <div class="actions">
           <button type="submit" id="btnSalvar">Salvar cupom</button>
-          <div class="msg" id="formMsg"></div>
+          <div class="msg" id="formMsg" role="alert" aria-live="polite"></div>
         </div>
       </form>
     </section>
 
-    <section id="coupon-list">
+    <section id="coupon-list" aria-labelledby="listHeading">
       <div class="flex-between">
-        <h2>Lista de cupons</h2>
-        <button class="ghost" id="btnReload">Recarregar</button>
+        <h2 id="listHeading">Lista de cupons</h2>
+        <button class="ghost" id="btnReload" aria-label="Recarregar lista">Recarregar</button>
       </div>
-      <div class="table-wrap">
+      <div class="table-wrap" role="region" aria-label="Tabela de cupons" tabindex="0">
         <table>
           <thead>
             <tr>
-              <th>Código</th>
-              <th>Tipo</th>
-              <th>Valor</th>
-              <th>Status</th>
-              <th>Uso</th>
-              <th>Validade</th>
-              <th>CPF</th>
+              <th scope="col">Código</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Status</th>
+              <th scope="col">Uso</th>
+              <th scope="col">Validade</th>
+              <th scope="col">CPF</th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr><td colspan="7" class="muted">Carregando…</td></tr>
+            <tr><td colspan="7" class="text-muted text-center" style="padding:24px">Carregando…</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="msg" id="listMsg"></div>
+      <div class="msg" id="listMsg" role="alert" aria-live="polite"></div>
     </section>
     </div><!-- /dashboard-grid -->
   </div><!-- /content-admin -->
 </div><!-- /main -->
 
 <script type="module">
-import { AdminPage, fmtBRL } from "./js/admin-core.js";
+import { AdminPage, fmtBRL, esc } from "./js/admin-core.js";
 import { CouponService } from "./js/couponService.js";
 
 class CuponsPage extends AdminPage {
@@ -174,13 +175,13 @@ class CuponsPage extends AdminPage {
 
       tbody.innerHTML = list.map(c => `
         <tr>
-          <td class="text-green text-sm font-bold" style="font-family:monospace">${c.code}</td>
-          <td class="uppercase text-xs">${c.type}</td>
-          <td class="text-right font-semibold">${c.type === "percentage" ? c.value + "%" : fmtBRL(c.value)}</td>
-          <td class="text-right text-xs">${c.maxDiscount ? fmtBRL(c.maxDiscount) : "-"}</td>
-          <td class="text-right text-xs">${c.minOrderValue ? fmtBRL(c.minOrderValue) : "-"}</td>
+          <td class="text-green text-sm font-bold" style="font-family:monospace">${esc(c.code)}</td>
+          <td class="uppercase text-xs">${esc(c.type)}</td>
+          <td class="font-semibold">${c.type === "percentage" || c.type === "percentual" ? c.value + "%" : fmtBRL(c.value)}</td>
           <td><span class="badge ${c.isActive ? 'badge-green' : 'badge-red'}">${c.isActive ? "Ativo" : "Inativo"}</span></td>
+          <td class="text-xs text-muted">${c.timesUsed || 0}${c.usageLimit ? ' / ' + c.usageLimit : ''}</td>
           <td class="text-xs text-muted">${c.expirationDate ? new Date(c.expirationDate).toLocaleDateString("pt-BR") : "-"}</td>
+          <td class="text-xs text-muted">${c.cpf || "-"}</td>
         </tr>
       `).join("");
 
@@ -238,6 +239,15 @@ class CuponsPage extends AdminPage {
     document.getElementById("formMsg").textContent = "";
   }
 }
+
+// Máscara CPF
+document.getElementById("cpf")?.addEventListener("input", e => {
+  let v = e.target.value.replace(/\D/g,"").slice(0,11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d+)/,"$1.$2.$3");
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/,"$1.$2");
+  e.target.value = v;
+});
 
 const page = new CuponsPage();
 page.init();

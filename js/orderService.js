@@ -16,7 +16,8 @@
 import { AuthService }           from "./authService.js"
 import { CartService }            from "./cartService.js"
 import { OrderRepository }        from "./repositories.js"
-import { DocumentNumberService } from "./documentNumberService.js"
+import { docNumService } from "./docNumService.js"
+import { apiService }             from "./apiService.js"
 import { CONFIG }                 from "./config.js"
 
 export const OrderService = {
@@ -37,7 +38,7 @@ export const OrderService = {
     const total = Math.max(0, +(totalWithDiscount + frete).toFixed(2))
 
     const authUser = await AuthService.getUser()
-    if (!authUser) throw new Error("Usuário não autenticado. Faça login para continuar.")
+    if (!authUser || !authUser.$id) throw new Error("Usuário não autenticado. Faça login para continuar.")
 
     const customerName = (customerData.nome || customerData.name)?.trim() || authUser?.name || authUser?.email || "CONSUMIDOR FINAL"
 
@@ -54,7 +55,7 @@ export const OrderService = {
     }
 
     const order = {
-      number:         DocumentNumberService.order(),
+      number:         docNumService.order(),
       user:           customerName,
       email:          (customerData.email || customerData.emailAddress || "").trim(),
       mobile:         (customerData.telefone || customerData.mobile || "").trim() || null,
@@ -123,7 +124,7 @@ export const OrderService = {
     }
 
     const order = {
-      number:         DocumentNumberService.order(),
+      number:         docNumService.order(),
       user:           (orderData.customerName || "CONSUMIDOR FINAL").trim(),
       email:          (orderData.customerEmail || "").trim(),
       mobile:         (orderData.customerMobile || "").trim() || null,
@@ -196,11 +197,11 @@ export const OrderService = {
 
   // ─── SPRINT 07 — US-87: Gerar Números Únicos de Pedido ─────────────────────
   /**
-   * Gera um número único de pedido (wrapper para DocumentNumberService).
+   * Gera um número único de pedido (wrapper para docNumService).
    * @returns {string} Número do pedido
    */
   generateOrderNumber() {
-    return DocumentNumberService.order()
+    return docNumService.order()
   },
 
   // ─── SPRINT 07 — US-85: CHECKOUT INTELIGENTE ───────────────────────────────
@@ -257,6 +258,34 @@ export const OrderService = {
     } catch (e) {
       // Erro ao buscar mirror → começa do step 1
       return { canCheckout: true, step: 1, message: "Complete seus dados." }
+    }
+  },
+
+  /**
+   * Valida se todos os itens do carrinho estão disponíveis e com preços atualizados.
+   * Usa proxy API para evitar exposição de credenciais.
+   * @returns {Promise<{valid: boolean, validations: Array, message?: string}>}
+   */
+  async validateCart() {
+    const cart = CartService.get()
+    if (!cart || cart.length === 0) {
+      return { valid: false, validations: [], message: "Carrinho vazio" }
+    }
+
+    try {
+      const result = await apiService.validateCart(cart)
+      return result
+    } catch (error) {
+      console.error("[OrderService] Erro ao validar carrinho:", error)
+      return {
+        valid: false,
+        validations: cart.map(item => ({
+          id: item.$id,
+          valid: false,
+          error: "Erro de validação"
+        })),
+        message: "Erro ao validar carrinho"
+      }
     }
   },
 }

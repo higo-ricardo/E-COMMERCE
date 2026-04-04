@@ -8,7 +8,7 @@
 //   - getCustomerList() lê da collection USERS (Auth Mirror)
 //   + getRecentStockMovements()
 
-import { databases, ID, Query } from "./appwriteClient.js"
+import { databases, ID, Query, Permission, Role } from "./db.js"
 import { CONFIG }               from "./config.js"
 
 const { DB, COL } = CONFIG
@@ -88,10 +88,15 @@ export const AdminService = {
   },
 
   async createServiceOrder(clienteName, placa, modelo, tecnico, descricao) {
+    const perms = [
+      Permission.read(Role.team("admins")),
+      Permission.update(Role.team("admins")),
+      Permission.delete(Role.team("admins")),
+    ]
     return databases.createDocument(DB, COL.SERVICE_ORDERS, ID.unique(), {
       clienteName, placa, modelo, tecnico, descricao,
       status: "aberta", maoObra: 0, pecas: "[]",
-    })
+    }, perms)
   },
 
   async updateServiceOrderStatus(id, status) {
