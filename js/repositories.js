@@ -18,10 +18,8 @@ export const OrderRepository = {
 
   async create(order, userId) {
     // Permissões herdadas da collection "orders" configurada no Appwrite Console.
-    return databases.createDocument(DB, COL.ORDERS, ID.unique(), {
-      ...order,
-      _ownerId: userId,
-    })
+    // userId não é passado como atributo do documento — o `order.user` já contém o nome.
+    return databases.createDocument(DB, COL.ORDERS, ID.unique(), order)
   },
 
   async getById(id) {

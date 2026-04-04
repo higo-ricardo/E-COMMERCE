@@ -10,9 +10,22 @@ An e-commerce platform for automotive parts with a complete admin panel. Built w
 - **Typecheck:** Not applicable
 - **Lint:** `npm run lint:text` (text integrity check)
 
+## Agents
+
+This project includes specialized Kilo agents for development tasks:
+
+- **hivercar**: Primary agent for HIVECAR-specific tasks (frontend, backend, testing).
+- **scrum-orchestrator**: Multiagent orchestrator simulating Scrum process (Product Owner → Scrum Master → Developer → Reviewer → Tester).
+- **product-owner**: Subagent for creating Product Backlogs.
+- **scrum-master**: Subagent for planning Sprint Backlogs.
+- **developer**: Subagent for code implementation.
+- **reviewer**: Subagent for code review.
+- **tester**: Subagent for testing validation.
+
 ## Detailed Instructions
 
 For specific guidelines, see:
 - [Architecture](docs/ARCHITECTURE.md)
 - [Testing](README.md#testing)
 - [Configuration](README.md#configuration)
+- [Agents](AGENTS.md#agents)

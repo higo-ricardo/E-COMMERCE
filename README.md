@@ -41,6 +41,10 @@ npm test -- --coverage # With coverage report
 | **Testing** | 127 Jest unit tests across 6 suites |
 | **Architecture** | OOP with inheritance (`AdminPage` base class), service layer isolation, singleton pattern |
 
+## Multiagent Scrum System
+
+This project includes a Kilo-based multiagent system that simulates a complete Scrum development process. See [docs/SCRUM-MULTIAGENT.md](docs/SCRUM-MULTIAGENT.md) for details on the orchestrator and specialized agents.
+
 ## Project Structure
 
 ```
