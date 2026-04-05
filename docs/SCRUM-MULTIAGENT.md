@@ -26,8 +26,10 @@ O sistema orquestra agentes especializados para executar desenvolvimento ágil:
 
 ## Agentes Criados
 
+Os agentes estão disponíveis tanto no projeto atual quanto globalmente em `~/.config/kilo/agent/` para uso em outros projetos.
+
 ### scrum-orchestrator
-- **Arquivo**: `.kilo/agent/scrum-orchestrator.md`
+- **Arquivo**: `~/.config/kilo/agent/scrum-orchestrator.md` (global) / `.kilo/agent/scrum-orchestrator.md` (projeto)
 - **Modo**: primary
 - **Função**: Coordena todo o processo usando Task tool
 

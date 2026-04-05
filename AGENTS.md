@@ -12,9 +12,13 @@ An e-commerce platform for automotive parts with a complete admin panel. Built w
 
 ## Agents
 
-This project includes specialized Kilo agents for development tasks:
+This project includes specialized Kilo agents for development tasks. The Scrum multiagent system is also available globally for use in other projects.
 
+### Project-Specific Agents
 - **hivercar**: Primary agent for HIVECAR-specific tasks (frontend, backend, testing).
+
+### Global Scrum Multiagent System
+Available in `~/.config/kilo/agent/` for all projects:
 - **scrum-orchestrator**: Multiagent orchestrator simulating Scrum process (Product Owner → Scrum Master → Developer → Reviewer → Tester).
 - **product-owner**: Subagent for creating Product Backlogs.
 - **scrum-master**: Subagent for planning Sprint Backlogs.
