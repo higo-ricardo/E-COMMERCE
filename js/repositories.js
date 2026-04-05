@@ -378,15 +378,13 @@ export const CouponRepository = {
 
 export const CouponUsageRepository = {
 
-  async create(code, cpf) {
-    // Permissões herdadas da collection "coupon_usage" configurada no Appwrite Console:
-    // - Read: role "admins" (dados sensíveis com CPF)
-    // - Write: role "admins"
+  async create(code, cpf, couponCreatedAt) {
     return databases.createDocument(DB, COL.COUPON_USAGE, ID.unique(), {
       code,
-      cpf,
+      cpf: cpf || null,
       uses: 1,
-      lastUsed: new Date().toISOString(),
+      lastUsedAt: new Date().toISOString(),
+      createdAt: couponCreatedAt || null,
     })
   },
 
@@ -399,16 +397,18 @@ export const CouponUsageRepository = {
     return res.documents[0] ?? null
   },
 
-  async increment(code, cpf) {
-    const usage = await this.findByCodeAndCpf(code, cpf)
-    
-    if (!usage) {
-      return this.create(code, cpf)
+  async increment(code, cpf, couponCreatedAt) {
+    if (cpf) {
+      const usage = await this.findByCodeAndCpf(code, cpf)
+      if (!usage) {
+        return this.create(code, cpf, couponCreatedAt)
+      }
+      return databases.updateDocument(DB, COL.COUPON_USAGE, usage.$id, {
+        uses: (usage.uses || 0) + 1,
+        lastUsedAt: new Date().toISOString(),
+      })
     }
-    
-    return databases.updateDocument(DB, COL.COUPON_USAGE, usage.$id, {
-      uses: (usage.uses || 0) + 1,
-      lastUsed: new Date().toISOString(),
-    })
+    // Sem CPF: cria registro sem cpf
+    return this.create(code, null, couponCreatedAt)
   },
 }

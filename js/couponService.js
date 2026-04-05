@@ -132,7 +132,6 @@ export const CouponService = {
     try {
       await CouponRepository.incrementUsage(code)
     } catch (err) {
-      // Erro de race condition ou limite atingido
       return {
         ok: false,
         subtotal,
@@ -142,20 +141,13 @@ export const CouponService = {
         coupon,
       }
     }
-    
-    if (cart?.cpf && coupon.cpfLimit) {
+
+    // Registra uso na collection coupon_usage (sempre que há CPF)
+    if (cart?.cpf) {
       try {
-        await CouponUsageRepository.increment(code, cart.cpf, coupon.cpfLimit)
+        await CouponUsageRepository.increment(code, cart.cpf, coupon.$createdAt)
       } catch (err) {
-        // Erro de race condition ou limite por CPF atingido
-        return {
-          ok: false,
-          subtotal,
-          discount: 0,
-          reason: "coupon_cpf_limit",
-          message: err.message || "Limite de uso por CPF atingido.",
-          coupon,
-        }
+        console.warn("[CouponService] Falha ao registrar uso por CPF:", err?.message || err)
       }
     }
 
