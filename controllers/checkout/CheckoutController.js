@@ -360,7 +360,7 @@ export class CheckoutController {
       const result = await CouponService.apply(code, { subtotal, items: cart, cpf: this.data.cpf })
 
       if (!result.ok) {
-        this.dom.cupomMsg.innerHTML = `<span style="color:var(--red)">${result.message || "Cupom inválido"}</span>`
+        this.dom.cupomMsg.innerHTML = `<span style="color:var(--red)">${esc(result.message || "Cupom inválido")}</span>`
         ErrorService.handle(new Error(result.message || "Cupom inválido"), "CheckoutController.applyCoupon", { silent: true })
         return
       }

@@ -1,12 +1,14 @@
 ﻿/* painel-vendas.css — componentes únicos (não presentes em loja.css) */
 
-/* Sidebar laranja para vendedor */
-.sidebar-role { color: #f97316 !important; }
-.sidebar nav a.active { color: #f97316 !important; border-left-color: #f97316 !important; background: rgba(249,115,22,.04) !important; }
-.sidebar nav a:hover  { color: var(--white); }
-.brand-dot { background: #f97316 !important; box-shadow: 0 0 12px #f97316 !important; }
-.metric-card::after { background: linear-gradient(90deg, #f97316, transparent) !important; }
-.metric-value { color: #f97316 !important; text-shadow: 0 0 20px rgba(249,115,22,.4) !important; }
+/* Sidebar laranja para vendedor (apenas em painel-vendas.html) */
+body.painel-vendas .sidebar-role { color: #f97316 !important; }
+body.painel-vendas .sidebar nav a.active { color: #f97316 !important; border-left-color: #f97316 !important; background: rgba(249,115,22,.04) !important; }
+body.painel-vendas .sidebar nav a:hover  { color: var(--white); }
+body.painel-vendas .brand-dot { background: #f97316 !important; box-shadow: 0 0 12px #f97316 !important; }
+
+/* Override de métricas apenas para painel-vendas.html */
+body.painel-vendas .metric-card::after { background: linear-gradient(90deg, #f97316, transparent) !important; }
+body.painel-vendas .metric-value { color: #f97316 !important; text-shadow: 0 0 20px rgba(249,115,22,.4) !important; }
 
 .status-sel { padding:5px 10px; background:var(--dark); border:1px solid var(--border); color:var(--white); font-family:'Barlow',sans-serif; font-size:12px; outline:none; cursor:pointer; }
 

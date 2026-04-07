@@ -48,6 +48,17 @@ let busy = false
 let uiTry = 0
 let lockTimer = null
 
+// -- Validação de redirect para prevenir open redirect -----------------------
+function isValidRedirect(url) {
+  if (!url) return false
+  try {
+    const parsed = new URL(url, location.origin)
+    return parsed.origin === location.origin
+  } catch {
+    return false
+  }
+}
+
 const setMsg = (txt, cls = "error") => {
   msgBox.textContent = txt
   msgBox.className = cls
@@ -100,7 +111,7 @@ function lockUI(ms) {
     if (!user) return
 
     // Verifica se a sessão ainda é válida antes de redirecionar
-    if (redirectUrl) {
+    if (isValidRedirect(redirectUrl)) {
       window.location.href = redirectUrl
       return
     }
@@ -177,7 +188,7 @@ async function doLogin() {
     const redirectUrl = params.get("redirect")
 
     setTimeout(() => {
-      if (redirectUrl) {
+      if (isValidRedirect(redirectUrl)) {
         window.location.href = redirectUrl
         return
       }

@@ -62,23 +62,59 @@
       <a href="admin-estoque.html" style="color:var(--red);margin-left:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-decoration:underline">Gerenciar →</a>
     </div>
 
-    <!-- Métricas principais -->
-    <div class="metrics-grid mb-1">
+    <!-- Métricas de Pedidos -->
+    <div class="metrics-grid mb-5">
       <div class="metric-card">
-        <div class="metric-value" id="mSalesToday">-</div>
-        <div class="metric-label">Vendas Hoje</div>
+        <div class="metric-value" id="mFaturamento">-</div>
+        <div class="metric-label">Faturamento (Ano)</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value" id="mOrders">-</div>
-        <div class="metric-label">Pedidos Total</div>
-      </div>
-      <div class="metric-card red">
-        <div class="metric-value" id="mStock">-</div>
-        <div class="metric-label">Estoque Crítico</div>
+        <div class="metric-value" id="mVendasDoDia">-</div>
+        <div class="metric-label">Vendas do Dia</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value" id="mOS">-</div>
-        <div class="metric-label">OS Abertas</div>
+        <div class="metric-value" id="mQtdPedidos">-</div>
+        <div class="metric-label">Quantidade de Pedidos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mTicketMedio">-</div>
+        <div class="metric-label">Ticket Médio</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mNovos">-</div>
+        <div class="metric-label">Novos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mPagos">-</div>
+        <div class="metric-label">Pagos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mEmPreparo">-</div>
+        <div class="metric-label">Em Preparo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mEntregues">-</div>
+        <div class="metric-label">Entregues</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mEnviados">-</div>
+        <div class="metric-label">Enviados</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mCancelados">-</div>
+        <div class="metric-label">Cancelados</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mGiro">-</div>
+        <div class="metric-label">Giro</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mEstoqueTotal">-</div>
+        <div class="metric-label">Estoque Total</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" id="mROI">-</div>
+        <div class="metric-label">ROI</div>
       </div>
     </div>
 
@@ -90,52 +126,51 @@
       <a href="customers.html"      class="btn btn-ghost btn-sm"><i class="fas fa-users"></i> Clientes</a>
     </div>
 
-    <!-- Tabelas -->
-    <div class="panels-row">
-      <div class="panel-wrap">
-        <div class="section-title">Pedidos Recentes</div>
-        <table class="data-table">
-          <thead><tr><th>ID</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
-          <tbody id="ordersTable">
-            <tr><td colspan="4" class="text-muted" style="padding:20px">Carregando…</td></tr>
-          </tbody>
-        </table>
-        <div class="mt-3">
-          <a href="painel-vendas.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
-            Ver todos os pedidos →
-          </a>
-        </div>
-      </div>
-      <div class="panel-wrap">
-        <div class="section-title">Estoque Baixo</div>
-        <table class="data-table">
-          <thead><tr><th>Produto</th><th>Qtd</th></tr></thead>
-          <tbody id="stockTable">
-            <tr><td colspan="2" class="text-muted" style="padding:20px">Carregando…</td></tr>
-          </tbody>
-        </table>
-        <div class="mt-3">
-          <a href="admin-estoque.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
-            Gerenciar estoque →
-          </a>
-        </div>
+    <!-- Pedidos Recentes -->
+    <div class="panel-wrap mb-5">
+      <div class="section-title">Pedidos Recentes</div>
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
+        <tbody id="ordersTable">
+          <tr><td colspan="4" class="text-muted" style="padding:20px">Carregando…</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3">
+        <a href="admin-pedidos.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+          Ver todos os pedidos →
+        </a>
       </div>
     </div>
 
-    <div class="mt-1">
-      <div class="panel-wrap card p-6">
-        <div class="section-title">Ordens de Serviço Abertas</div>
-        <table class="data-table">
-          <thead><tr><th>ID</th><th>Cliente</th><th>Veículo</th><th>Técnico</th><th>Status</th></tr></thead>
-          <tbody id="osTable">
-            <tr><td colspan="5" class="text-muted" style="padding:20px">Carregando…</td></tr>
-          </tbody>
-        </table>
-        <div class="mt-3">
-          <a href="admin-os.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
-            Ver todas as OS →
-          </a>
-        </div>
+    <!-- Estoque Baixo -->
+    <div class="panel-wrap mb-5">
+      <div class="section-title">Estoque Baixo</div>
+      <table class="data-table">
+        <thead><tr><th>Produto</th><th>Qtd</th><th>Mín</th></tr></thead>
+        <tbody id="stockTable">
+          <tr><td colspan="3" class="text-muted" style="padding:20px">Carregando…</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3">
+        <a href="admin-estoque.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+          Gerenciar estoque →
+        </a>
+      </div>
+    </div>
+
+    <!-- Ordens de Serviço Abertas -->
+    <div class="panel-wrap">
+      <div class="section-title">Ordens de Serviço Abertas</div>
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Cliente</th><th>Veículo</th><th>Status</th></tr></thead>
+        <tbody id="osTable">
+          <tr><td colspan="4" class="text-muted" style="padding:20px">Carregando…</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3">
+        <a href="admin-os.html" style="font-size:11px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none">
+          Ver todas as OS →
+        </a>
       </div>
     </div>
   </div>
@@ -144,20 +179,37 @@
 <script type="module">
 import { AdminPage, fmtBRL, fmtDate, statusBadge, Query } from "./js/admin-core.js";
 import { AdminService } from "./js/adminService.js";
+import { ProductService } from "./js/productService.js";
+import { CONFIG } from "./js/config.js";
 
 class DashboardPage extends AdminPage {
   onInit() {
     this.loadMetrics();
+    this.loadFaturamentoAno();
+    this.loadVendasDoDia();
+    this.loadEstoqueTotal();
   }
 
   async loadMetrics() {
     try {
       const m = await AdminService.getMetrics();
 
-      document.getElementById("mSalesToday").textContent = fmtBRL(m.salesToday || 0);
-      document.getElementById("mOrders").textContent = m.totalOrders || 0;
-      document.getElementById("mStock").textContent = m.lowStock || 0;
-      document.getElementById("mOS").textContent = m.openOS || 0;
+      document.getElementById("mQtdPedidos").textContent = m.totalOrders || 0;
+      document.getElementById("mTicketMedio").textContent = fmtBRL(m.salesToday || 0);
+
+      // Contar por status
+      const statusCount = {};
+      (m.recentOrders || []).forEach(o => {
+        const s = this.normalizeStatus(o.status);
+        statusCount[s] = (statusCount[s] || 0) + 1;
+      });
+
+      document.getElementById("mNovos").textContent = statusCount["novo"] || 0;
+      document.getElementById("mPagos").textContent = statusCount["pago"] || 0;
+      document.getElementById("mEmPreparo").textContent = statusCount["em_separacao"] || 0;
+      document.getElementById("mEnviados").textContent = statusCount["enviado"] || 0;
+      document.getElementById("mEntregues").textContent = statusCount["entregue"] || 0;
+      document.getElementById("mCancelados").textContent = statusCount["cancelado"] || 0;
 
       // Stock alert
       const stockAlert = document.getElementById("stockAlert");
@@ -196,6 +248,96 @@ class DashboardPage extends AdminPage {
     } catch (e) {
       console.error("[Dashboard] Erro ao carregar métricas:", e);
       this.toast("Erro ao carregar dashboard.", "err");
+    }
+  }
+
+  /** Normaliza o status para formato interno */
+  normalizeStatus(status) {
+    if (!status) return "novo";
+    const map = {
+      "NOVO": "novo",
+      "PAGO": "pago",
+      "EM SEPARAÇÃO": "em_separacao",
+      "ENVIADO": "enviado",
+      "ENTREGUE": "entregue",
+      "CANCELADO": "cancelado",
+      "DEVOLVIDO": "devolvido"
+    };
+    const upper = status.toUpperCase();
+    return map[upper] || upper.toLowerCase().replace(/\s+/g, "_");
+  }
+
+  async loadFaturamentoAno() {
+    try {
+      const anoAtual = new Date().getFullYear();
+      const inicioAno = `${anoAtual}-01-01T00:00:00`;
+      let faturamento = 0;
+      let offset = 0;
+      const limit = 100;
+
+      while (true) {
+        const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, [
+          Query.greaterThanEqual("$createdAt", inicioAno),
+          Query.limit(limit),
+          Query.offset(offset)
+        ]);
+
+        if (res.documents.length === 0) break;
+        faturamento += res.documents.reduce((s, o) => s + Number(o.total || 0), 0);
+        offset += limit;
+        if (res.documents.length < limit) break;
+      }
+
+      document.getElementById("mFaturamento").textContent = fmtBRL(faturamento);
+    } catch (e) {
+      console.error("[Dashboard] Erro ao carregar faturamento:", e);
+      document.getElementById("mFaturamento").textContent = "-";
+    }
+  }
+
+  async loadVendasDoDia() {
+    try {
+      const hoje = new Date();
+      const inicioDia = hoje.toISOString().split("T")[0] + "T00:00:00";
+      const fimDia = hoje.toISOString().split("T")[0] + "T23:59:59";
+
+      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, [
+        Query.greaterThanEqual("$createdAt", inicioDia),
+        Query.lessThanEqual("$createdAt", fimDia),
+        Query.limit(500)
+      ]);
+
+      const vendasDia = res.documents.reduce((s, o) => s + Number(o.total || 0), 0);
+      document.getElementById("mVendasDoDia").textContent = fmtBRL(vendasDia);
+    } catch (e) {
+      console.error("[Dashboard] Erro ao carregar vendas do dia:", e);
+      document.getElementById("mVendasDoDia").textContent = "-";
+    }
+  }
+
+  async loadEstoqueTotal() {
+    try {
+      let estoqueTotal = 0;
+      let page = 1;
+
+      while (true) {
+        const result = await ProductService.list(page, {});
+        if (result.products.length === 0) break;
+
+        result.products.forEach(p => {
+          const custo = Number(p.costPrice || 0);
+          const qtd = Number(p.stock || 0);
+          estoqueTotal += custo * qtd;
+        });
+
+        if (page >= result.pages) break;
+        page++;
+      }
+
+      document.getElementById("mEstoqueTotal").textContent = fmtBRL(estoqueTotal);
+    } catch (e) {
+      console.error("[Dashboard] Erro ao carregar estoque total:", e);
+      document.getElementById("mEstoqueTotal").textContent = "-";
     }
   }
 }

@@ -25,7 +25,6 @@
   <div class="sidebar-role">Vendedor</div>
   <nav>
     <a href="admin-pedidos.html" class="active"><i class="fas fa-chart-line"></i> Pedidos</a>
-    <a href="painel-vendas.html"><i class="fas fa-list"></i> Painel de Vendas</a>
     <a href="admin-produtos.html"><i class="fas fa-box-open"></i> Produtos</a>
     <a href="admin-estoque.html"><i class="fas fa-warehouse"></i> Estoque</a>
     <a href="admin-os.html"><i class="fas fa-wrench"></i> O. de Serviço</a>
@@ -55,59 +54,22 @@
   </div>
 
   <div class="content">
-    <!-- US-77, US-78: Métricas de Pedidos -->
-    <div class="metrics-grid mb-5">
-      <div class="metric-card">
-        <div class="metric-value" id="mTotalVendas">-</div>
-        <div class="metric-label">Total de Vendas</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="mQtdPedidos">-</div>
-        <div class="metric-label">Quantidade de Pedidos</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="mTicketMedio">-</div>
-        <div class="metric-label">Ticket Médio</div>
-      </div>
-      <div class="metric-card green">
-        <div class="metric-value" id="mEntregues">-</div>
-        <div class="metric-label">Entregues</div>
-      </div>
-      <div class="metric-card amber">
-        <div class="metric-value" id="mEmPreparo">-</div>
-        <div class="metric-label">Em Preparo</div>
-      </div>
-      <div class="metric-card red">
-        <div class="metric-value" id="mCancelados">-</div>
-        <div class="metric-label">Cancelados</div>
-      </div>
-    </div>
-
     <!-- Filtros -->
     <div class="filter-bar mb-4">
       <input type="date" id="filterDataFrom" title="Data inicial" aria-label="Data inicial para filtro de pedidos">
       <input type="date" id="filterDataTo" title="Data final" aria-label="Data final para filtro de pedidos">
       <select id="filterStatus" aria-label="Filtrar pedidos por status">
         <option value="">Todos os status</option>
-        <option value="novo">Novo</option>
-        <option value="pago">Pago</option>
-        <option value="confirmado">Confirmado</option>
-        <option value="em_preparo">Em Preparo</option>
-        <option value="enviado">Enviado</option>
-        <option value="entregue">Entregue</option>
-        <option value="cancelado">Cancelado</option>
-        <option value="devolvido">Devolvido</option>
+        <option value="NOVO">Novo</option>
+        <option value="PAGO">Pago</option>
+        <option value="EM SEPARAÇÃO">Em Preparo</option>
+        <option value="ENVIADO">Enviado</option>
+        <option value="ENTREGUE">Entregue</option>
+        <option value="CANCELADO">Cancelado</option>
+        <option value="DEVOLVIDO">Devolvido</option>
       </select>
       <button class="btn btn-ghost btn-sm" id="btnFiltrar"><i class="fas fa-filter"></i> Filtrar</button>
       <button class="btn btn-ghost btn-sm" id="btnLimpar"><i class="fas fa-undo"></i> Limpar</button>
-    </div>
-
-    <!-- Gráfico de Status -->
-    <div class="panel-wrap mb-4">
-      <div class="section-title">Pedidos por Status</div>
-      <div id="statusChart">
-        <!-- Preenchido via JS -->
-      </div>
     </div>
 
     <!-- Tabela de Pedidos -->
@@ -122,46 +84,96 @@
             <th>Pagamento</th>
             <th>Status</th>
             <th>Data</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody id="pedidosTable">
-          <tr><td colspan="6" class="text-muted text-center">Carregando…</td></tr>
+          <tr><td colspan="7" class="text-muted text-center">Carregando…</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- US-82: Total de Produtos -->
-    <div class="mt-4 p-4 card flex items-center gap-3">
-      <i class="fas fa-box" style="font-size:20px;color:var(--blue)"></i>
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)">Total de Produtos</div>
-        <div style="font-size:24px;font-family:'Bebas Neue';color:var(--white)" id="mTotalProdutos">-</div>
-      </div>
+      <div id="pagination" class="pagination" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:16px;"></div>
     </div>
   </div>
 </div>
 
+<style>
+.btn-status {
+  padding: 4px 8px;
+  font-size: 11px;
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+.btn-status:hover { opacity: 1; transform: scale(1.05); }
+.btn-status:active { transform: scale(0.95); }
+
+.btn-pago { color: #22c55e; border-color: #22c55e; }
+.btn-pago:hover { background: #22c55e; color: #fff; }
+
+.btn-preparo { color: #f59e0b; border-color: #f59e0b; }
+.btn-preparo:hover { background: #f59e0b; color: #fff; }
+
+.btn-enviado { color: #3b82f6; border-color: #3b82f6; }
+.btn-enviado:hover { background: #3b82f6; color: #fff; }
+
+.btn-entregue { color: #10b981; border-color: #10b981; }
+.btn-entregue:hover { background: #10b981; color: #fff; }
+
+.btn-cancelado { color: #ef4444; border-color: #ef4444; }
+.btn-cancelado:hover { background: #ef4444; color: #fff; }
+
+.btn-devolvido { color: #8b5cf6; border-color: #8b5cf6; }
+.btn-devolvido:hover { background: #8b5cf6; color: #fff; }
+
+/* Garante que o conteúdo tenha altura total e barra de rolagem */
+.content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Garante que a tabela ocupe espaço adequado */
+.panel-wrap {
+  margin-bottom: 16px;
+}
+</style>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-import { AdminPage, fmtBRL, fmtDate, esc, statusBadge, STATUS_COLORS, renderStatusChart, Query } from "./js/admin-core.js";
+import { AdminPage, fmtBRL, fmtDate, esc, statusBadge, Query } from "./js/admin-core.js";
 import { CONFIG } from "./js/config.js";
-import { ProductService } from "./js/productService.js";
 import { initParticles } from "./js/utils.js";
 
 class PedidosPage extends AdminPage {
   allOrders = [];
+  currentPage = 1;
+  pageSize = 15;
 
   onInit() {
     initParticles();
     this.bindEvents();
     this.loadOrders();
-    this.loadTotalProdutos();
   }
 
   bindEvents() {
-    document.getElementById("btnFiltrar").addEventListener("click", () => this.loadOrders());
+    document.getElementById("btnFiltrar").addEventListener("click", () => {
+      this.currentPage = 1;
+      this.loadOrders();
+    });
     document.getElementById("btnLimpar").addEventListener("click", () => this.resetFilters());
+    
+    // Event delegation para botões de status
+    document.getElementById("pedidosTable").addEventListener("click", (e) => {
+      const btn = e.target.closest(".btn-status");
+      if (!btn) return;
+      
+      const id = btn.dataset.id;
+      const status = btn.dataset.status;
+      this.updateOrderStatus(id, status);
+    });
   }
 
   async loadOrders() {
@@ -169,26 +181,48 @@ class PedidosPage extends AdminPage {
     const dataFrom = document.getElementById("filterDataFrom").value;
     const dataTo = document.getElementById("filterDataTo").value;
 
-    const queries = [Query.orderDesc("$createdAt"), Query.limit(100)];
-    if (statusFilt) queries.push(Query.equal("status", statusFilt));
-
     try {
-      const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, queries);
-      let orders = res.documents;
+      let allOrders = [];
+      let offset = 0;
+      const limit = 100;
 
-      if (dataFrom || dataTo) {
-        const from = dataFrom ? new Date(dataFrom + "T00:00:00") : null;
-        const to = dataTo ? new Date(dataTo + "T23:59:59") : null;
-        orders = orders.filter(o => {
-          const t = new Date(o.$createdAt);
-          if (from && t < from) return false;
-          if (to && t > to) return false;
-          return true;
-        });
+      // Carrega todos os pedidos com paginação
+      while (true) {
+        const queries = [
+          Query.orderAsc("$createdAt"), // Mais antigos primeiro
+          Query.limit(limit),
+          Query.offset(offset)
+        ];
+
+        if (statusFilt) queries.push(Query.equal("status", statusFilt));
+
+        const res = await this.app.databases.listDocuments(CONFIG.DB, CONFIG.COL.ORDERS, queries);
+
+        if (res.documents.length === 0) break;
+
+        let orders = res.documents;
+
+        // Filtra por data se necessário
+        if (dataFrom || dataTo) {
+          const from = dataFrom ? new Date(dataFrom + "T00:00:00") : null;
+          const to = dataTo ? new Date(dataTo + "T23:59:59") : null;
+          orders = orders.filter(o => {
+            const t = new Date(o.$createdAt);
+            if (from && t < from) return false;
+            if (to && t > to) return false;
+            return true;
+          });
+        }
+
+        allOrders = allOrders.concat(orders);
+        offset += limit;
+
+        if (res.documents.length < limit) break;
       }
 
-      this.allOrders = orders;
-      this.updateDashboard(orders);
+      this.allOrders = allOrders;
+      this.updateDashboard(allOrders);
+      this.renderPagination();
     } catch (e) {
       console.error("[Pedidos] Erro ao carregar pedidos:", e);
       this.toast("Erro ao carregar pedidos: " + e.message, "err");
@@ -196,27 +230,12 @@ class PedidosPage extends AdminPage {
   }
 
   updateDashboard(orders) {
-    const totalVendas = orders.reduce((s, o) => s + Number(o.total || 0), 0);
-    document.getElementById("mTotalVendas").textContent = fmtBRL(totalVendas);
-    document.getElementById("mQtdPedidos").textContent = orders.length;
-
-    const ticketMedio = orders.length > 0 ? totalVendas / orders.length : 0;
-    document.getElementById("mTicketMedio").textContent = fmtBRL(ticketMedio);
-
-    const statusCount = {};
-    orders.forEach(o => {
-      const s = (o.status || "novo").toLowerCase();
-      statusCount[s] = (statusCount[s] || 0) + 1;
-    });
-
-    document.getElementById("mEntregues").textContent = statusCount["entregue"] || 0;
-    document.getElementById("mEmPreparo").textContent = statusCount["em_preparo"] || 0;
-    document.getElementById("mCancelados").textContent = statusCount["cancelado"] || 0;
-
-    renderStatusChart("statusChart", statusCount);
-
     const tbody = document.getElementById("pedidosTable");
-    this.renderTable(tbody, orders.slice(0, 20), o => `
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    const pageOrders = orders.slice(start, end);
+
+    this.renderTable(tbody, pageOrders, o => `
       <tr>
         <td style="font-family:monospace;font-size:10px;font-weight:600">${esc(o.number || "-")}</td>
         <td style="font-weight:600;font-size:12px">${esc(o.user || o.name || "-")}</td>
@@ -224,17 +243,113 @@ class PedidosPage extends AdminPage {
         <td style="font-size:10px;color:var(--muted);text-transform:uppercase">${esc(o.payment || "-")}</td>
         <td>${statusBadge(o.status)}</td>
         <td style="font-size:9px;color:var(--muted)">${fmtDate(o.$createdAt)}</td>
+        <td>
+          <div class="status-actions" style="display:flex;gap:4px;flex-wrap:wrap;">
+            <button class="btn-status btn-pago" data-id="${o.$id}" data-status="PAGO" title="Marcar como Pago">
+              <i class="fas fa-dollar-sign"></i>
+            </button>
+            <button class="btn-status btn-preparo" data-id="${o.$id}" data-status="EM SEPARAÇÃO" title="Marcar como Em Preparo">
+              <i class="fas fa-box-open"></i>
+            </button>
+            <button class="btn-status btn-enviado" data-id="${o.$id}" data-status="ENVIADO" title="Marcar como Enviado">
+              <i class="fas fa-truck"></i>
+            </button>
+            <button class="btn-status btn-entregue" data-id="${o.$id}" data-status="ENTREGUE" title="Marcar como Entregue">
+              <i class="fas fa-check-circle"></i>
+            </button>
+            <button class="btn-status btn-cancelado" data-id="${o.$id}" data-status="CANCELADO" title="Marcar como Cancelado">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <button class="btn-status btn-devolvido" data-id="${o.$id}" data-status="DEVOLVIDO" title="Marcar como Devolvido">
+              <i class="fas fa-undo"></i>
+            </button>
+          </div>
+        </td>
       </tr>
     `);
   }
 
-  async loadTotalProdutos() {
+  renderPagination() {
+    const totalPages = Math.ceil(this.allOrders.length / this.pageSize);
+    const pagination = document.getElementById("pagination");
+    
+    if (totalPages <= 1) {
+      pagination.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+    
+    // Botão Anterior
+    html += `<button class="btn btn-ghost btn-sm" ${this.currentPage === 1 ? "disabled" : ""} onclick="window.pedidosPage.goToPage(${this.currentPage - 1})">
+      <i class="fas fa-chevron-left"></i>
+    </button>`;
+    
+    // Números das páginas
+    const maxVisible = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+    
+    if (endPage - startPage < maxVisible - 1) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+    
+    if (startPage > 1) {
+      html += `<button class="btn btn-ghost btn-sm" onclick="window.pedidosPage.goToPage(1)">1</button>`;
+      if (startPage > 2) html += `<span style="color:var(--muted);padding:0 4px">...</span>`;
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const active = i === this.currentPage ? "style='background:var(--green);color:var(--dark)'" : "";
+      html += `<button class="btn btn-ghost btn-sm" ${active} onclick="window.pedidosPage.goToPage(${i})">${i}</button>`;
+    }
+    
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) html += `<span style="color:var(--muted);padding:0 4px">...</span>`;
+      html += `<button class="btn btn-ghost btn-sm" onclick="window.pedidosPage.goToPage(${totalPages})">${totalPages}</button>`;
+    }
+    
+    // Botão Próximo
+    html += `<button class="btn btn-ghost btn-sm" ${this.currentPage === totalPages ? "disabled" : ""} onclick="window.pedidosPage.goToPage(${this.currentPage + 1})">
+      <i class="fas fa-chevron-right"></i>
+    </button>`;
+    
+    pagination.innerHTML = html;
+  }
+
+  goToPage(page) {
+    const totalPages = Math.ceil(this.allOrders.length / this.pageSize);
+    if (page < 1 || page > totalPages) return;
+    
+    this.currentPage = page;
+    this.updateDashboard(this.allOrders);
+    this.renderPagination();
+    
+    // Scroll para o topo da tabela
+    document.querySelector(".panel-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /** Normaliza o status para formato interno (minúsculas com underscore) */
+  normalizeStatus(status) {
+    if (!status) return "novo";
+    const map = {
+      "NOVO": "novo", "PAGO": "pago", "EM SEPARAÇÃO": "em_separacao",
+      "ENVIADO": "enviado", "ENTREGUE": "entregue", "CANCELADO": "cancelado", "DEVOLVIDO": "devolvido"
+    };
+    const upper = status.toUpperCase();
+    return map[upper] || upper.toLowerCase().replace(/\s+/g, "_");
+  }
+
+  async updateOrderStatus(id, newStatus) {
     try {
-      const products = await ProductService.getAllProducts();
-      document.getElementById("mTotalProdutos").textContent = products.length || 0;
+      await this.app.databases.updateDocument(CONFIG.DB, CONFIG.COL.ORDERS, id, {
+        status: newStatus
+      });
+      this.toast(`Status atualizado para: ${newStatus}`, "ok");
+      await this.loadOrders();
     } catch (e) {
-      console.error("[Pedidos] Erro ao carregar produtos:", e);
-      document.getElementById("mTotalProdutos").textContent = "-";
+      console.error("[Pedidos] Erro ao atualizar status:", e);
+      this.toast("Erro ao atualizar status: " + e.message, "err");
     }
   }
 
@@ -247,6 +362,7 @@ class PedidosPage extends AdminPage {
 }
 
 const page = new PedidosPage();
+window.pedidosPage = page;
 page.init();
 </script>
 </body>
