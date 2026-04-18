@@ -19,7 +19,15 @@
       "WebSearch",
       "Bash(chcp)",
       "Bash(type *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA/**)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA\\CLAUDE-SKILL/**)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA\\CLAUDE-SKILL\\advogado-consumerista/**)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA\\CLAUDE-SKILL\\analista-de-acoes-B3/**)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA\\CLAUDE-SKILL\\simulador-prova/**)",
+      "Read(c:\\Users\\hig0\\Desktop\\IA\\CLAUDE-SKILL\\advogado-consumerista\\minutas/**)",
+      "Bash(xcopy *)",
+      "Bash(start *)"
     ]
   },
   "$version": 3

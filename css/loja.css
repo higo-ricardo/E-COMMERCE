@@ -25,7 +25,7 @@ body {
   font-family: 'Barlow', sans-serif;
   font-size: 14px;
   line-height: 1.7;
-  background: var(--white);
+  background: var(--black);
   color: var(--white);
   min-height: 100vh;
 }
@@ -143,8 +143,8 @@ body::after {
 .nav-cart:hover{ color:var(--glow-g); }
 .cart-badge {
   position:absolute;
-  top: -4px;
-  right: -8px;
+  top: -8px;
+  right: -4px;
   min-width:15px; height:15px;
   background:var(--glow-g); color:var(--white);
   font-size:12px; font-weight:700;
@@ -1335,6 +1335,7 @@ body.light-mode .skeleton {
   /* Filters */
   .filters-bar { flex-direction: column; }
   .filter-group { min-width: 100%; }
+  .filter-select, .filter-input, #sortOrder { padding: 14px 12px; font-size: 16px; min-height: 44px; }
 
   /* Search bar */
   .search-bar { flex-direction: column; }
@@ -1448,7 +1449,7 @@ body.light-mode .skeleton {
   .bottom-links { justify-content: center; }
 
   /* Cart badge position fix */
-  .cart-badge { position: relative; top: auto; right: auto; }
+  .cart-badge { position: absolute; top: -6px; right: -6px; }
 
   /* Hero bg text menor */
   .hero-bg-text { font-size: clamp(60px, 18vw, 120px); }
@@ -1513,6 +1514,7 @@ body.light-mode .skeleton {
   body.light-mode .bottom-bar { flex-direction: column; text-align: center; }
   body.light-mode .filters-bar { flex-direction: column; }
   body.light-mode .filter-group { min-width: 100%; }
+  body.light-mode .filter-select, body.light-mode .filter-input, body.light-mode #sortOrder { padding: 14px 12px; font-size: 16px; min-height: 44px; }
   body.light-mode .search-bar { flex-direction: column; }
   body.light-mode .search-bar input { border-right: 1px solid #ccc; border-bottom: none; }
   body.light-mode .store-header { flex-direction: column; align-items: stretch; }

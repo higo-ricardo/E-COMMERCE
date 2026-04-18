@@ -77,6 +77,16 @@
         <span class="filter-label"><i class="fas fa-car"></i> Ve�culo</span>
         <input type="text" id="filterVehicle" class="filter-input" placeholder="Ex: Corolla, HB20..." aria-label="Filtrar por ve�culo">
       </div>
+      <div class="filter-group">
+        <span class="filter-label"><i class="fas fa-sort"></i> Ordenar</span>
+        <select id="sortOrder" class="filter-select" aria-label="Ordenar produtos">
+          <option value="name-asc">Nome: A-Z</option>
+          <option value="name-desc">Nome: Z-A</option>
+          <option value="price-asc">Preço: Menor para Maior</option>
+          <option value="price-desc">Preço: Maior para Menor</option>
+          <option value="created-desc">Mais Recentes</option>
+        </select>
+      </div>
       <button id="clearFilters" class="btn-clear-filters">
         <i class="fas fa-xmark"></i> Limpar
       </button>

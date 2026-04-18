@@ -1,10 +1,69 @@
-import { ProductRepository } from "../../js/repositories.js"
+import { ProductRepository, OrderRepository } from "../../js/repositories.js"
 import { esc, fmt, imgPlaceholder } from "../../js/utils.js"
 import { CONFIG } from "../../js/config.js"
 
 export class HomeController {
   async init() {
     await this.loadProducts()
+    await this.loadStats()
+    this.initPromoBanner()
+  }
+
+  async loadStats() {
+    try {
+      // Carregar total de produtos
+      const { total: totalProducts } = await ProductRepository.list(1, {})
+      const statProdEl = document.getElementById('statProd')
+      if (statProdEl) {
+        statProdEl.textContent = totalProducts.toLocaleString('pt-BR')
+      }
+
+      // Carregar total de pedidos
+      const { total: totalOrders } = await OrderRepository.list({})
+      const statOrdersEl = document.getElementById('statOrders')
+      if (statOrdersEl) {
+        statOrdersEl.textContent = totalOrders.toLocaleString('pt-BR')
+      }
+    } catch (err) {
+      console.error('[Home] Falha ao carregar estatísticas:', err)
+      // Fallback: manter "Carregando..." ou definir valores padrão
+      const statProdEl = document.getElementById('statProd')
+      if (statProdEl && statProdEl.textContent === 'Carregando...') {
+        statProdEl.textContent = 'N/A'
+      }
+      const statOrdersEl = document.getElementById('statOrders')
+      if (statOrdersEl && statOrdersEl.textContent === 'Carregando...') {
+        statOrdersEl.textContent = 'N/A'
+      }
+    }
+  }
+
+  initPromoBanner() {
+    const promos = [
+      { title: "OFERTA ESPECIAL", desc: "10% OFF em Freios - Apenas hoje!", icon: "fa-fire" },
+      { title: "DESCONTO RELÂMPAGO", desc: "20% OFF em Óleos e Filtros!", icon: "fa-bolt" },
+      { title: "PROMO MECÂNICO", desc: "15% OFF em Peças de Motor!", icon: "fa-cog" },
+      { title: "FRETE GRÁTIS", desc: "Em compras acima de R$ 500!", icon: "fa-truck" }
+    ];
+
+    let currentIndex = 0;
+    const titleEl = document.getElementById('promoTitle');
+    const descEl = document.getElementById('promoDesc');
+    const iconEl = document.querySelector('.promo-icon i');
+
+    if (!titleEl || !descEl || !iconEl) return;
+
+    const updatePromo = () => {
+      const promo = promos[currentIndex];
+      titleEl.textContent = promo.title;
+      descEl.textContent = promo.desc;
+      iconEl.className = `fas ${promo.icon}`;
+      currentIndex = (currentIndex + 1) % promos.length;
+    };
+
+    // Rotate promos every 10 seconds
+    updatePromo();
+    setInterval(updatePromo, 10000);
   }
 
   async loadProducts() {

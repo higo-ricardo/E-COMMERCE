@@ -381,6 +381,81 @@ color: var(--red);
   .destaques-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
   .hero-content { max-width: 100%; }
   .hero-stats { gap: 32px; }
+  .promo-content { flex-direction: column; text-align: center; gap: 16px; }
+  .promo-title { font-size: 20px; }
+  .promo-desc { font-size: 13px; }
+}
+
+/* PROMO BANNER */
+.promo-banner-section {
+  position: relative;
+  z-index: 10;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+.promo-banner {
+  position: relative;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--panel) 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.promo-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.promo-icon {
+  font-size: 32px;
+  color: var(--red);
+  animation: pulse-red 2s infinite;
+}
+.promo-text {
+  flex: 1;
+  min-width: 200px;
+}
+.promo-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--red);
+  letter-spacing: 0.05em;
+}
+.promo-desc {
+  font-size: 18px;
+  color: var(--white);
+  margin-top: 4px;
+}
+
+.promo-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(38,253,113,0.05) 50%, transparent 70%);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes pulse-red {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* RESPONSIVO PARA PROMO BANNER */
+@media (max-width: 768px) {
+  .promo-content { flex-direction: column; text-align: center; gap: 16px; }
+  .promo-title { font-size: 26px; }
+  .promo-desc { font-size: 16px; }
 }
 
 /* ── Desktop (769px+) — manter estilos originais ── */

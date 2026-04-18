@@ -118,14 +118,33 @@ export const ProductRepository = {
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
-  async list(page = 1, filters = {}) {
+  async list(page = 1, filters = {}, sort = "created-desc") {
     const PAGE_SIZE = 15
     const queries = [
       Query.limit(PAGE_SIZE),
       Query.offset((page - 1) * PAGE_SIZE),
-      Query.orderDesc("$createdAt"),
       Query.isNull("deletedAt"),  // soft-delete: nunca exibe produtos excluídos
     ]
+
+    // Ordenação
+    switch (sort) {
+      case "name-asc":
+        queries.push(Query.orderAsc("name"))
+        break
+      case "name-desc":
+        queries.push(Query.orderDesc("name"))
+        break
+      case "price-asc":
+        queries.push(Query.orderAsc("price"))
+        break
+      case "price-desc":
+        queries.push(Query.orderDesc("price"))
+        break
+      case "created-desc":
+      default:
+        queries.push(Query.orderDesc("$createdAt"))
+        break
+    }
 
     if (filters.category) {
       queries.push(Query.equal("category", filters.category))
@@ -155,14 +174,33 @@ export const ProductRepository = {
    * @param {Object} filters - Filtros: {category, brand, vehicle}
    * @returns {Promise<{products: Array, total: number, page: number, pages: number}>}
    */
-  async search(term, page = 1, filters = {}) {
+  async search(term, page = 1, filters = {}, sort = "created-desc") {
     const PAGE_SIZE = 15
     const queries = [
       Query.limit(PAGE_SIZE),
       Query.offset((page - 1) * PAGE_SIZE),
-      Query.orderDesc("$createdAt"),
       Query.isNull("deletedAt"),  // soft-delete
     ]
+
+    // Ordenação
+    switch (sort) {
+      case "name-asc":
+        queries.push(Query.orderAsc("name"))
+        break
+      case "name-desc":
+        queries.push(Query.orderDesc("name"))
+        break
+      case "price-asc":
+        queries.push(Query.orderAsc("price"))
+        break
+      case "price-desc":
+        queries.push(Query.orderDesc("price"))
+        break
+      case "created-desc":
+      default:
+        queries.push(Query.orderDesc("$createdAt"))
+        break
+    }
 
     if (filters.category) {
       queries.push(Query.equal("category", filters.category))

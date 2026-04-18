@@ -24,7 +24,7 @@ html.js-ready body {
   --ds-purple:     #8b5cf6;
   
   /* Superfícies */
-  --ds-bg:         #0a0a0a;
+  --ds-bg:         var(--ds-border);
   --ds-surface:    #111214;
   --ds-surface-2:  #161819;
   --ds-border:     #252729;

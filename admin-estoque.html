@@ -315,6 +315,7 @@
 <script type="module">
 import { AdminPage, fmtBRL, fmtDate, esc, Query, ID } from "./js/admin-core.js";
 import { CONFIG } from "./js/config.js";
+import { initThemeToggle } from "./js/utils.js";
 
 class EstoquePage extends AdminPage {
   allProducts = [];
@@ -322,6 +323,7 @@ class EstoquePage extends AdminPage {
   impRows = [];
 
   onInit() {
+    initThemeToggle();
     this.bindEvents();
     this.loadProducts();
     this.loadHistory();

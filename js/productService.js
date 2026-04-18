@@ -29,8 +29,8 @@ function log(type, key) {
 }
 
 // ── Helpers de cache ─────────────────────────────────────────────────────────
-function cacheKey(prefix, term, page, filters) {
-  return `${prefix}|${term}|${page}|${JSON.stringify(filters)}`
+function cacheKey(prefix, term, page, filters, sort = "created-desc") {
+  return `${prefix}|${term}|${page}|${JSON.stringify(filters)}|${sort}`
 }
 
 function cacheGet(key) {
@@ -50,23 +50,23 @@ function cacheSet(key, data) {
 export const ProductService = {
 
   /** Lista paginada com filtros opcionais {category, brand, vehicle}. */
-  async list(page = 1, filters = {}) {
-    const key    = cacheKey("list", "", page, filters)
+  async list(page = 1, filters = {}, sort = "created-desc") {
+    const key    = cacheKey("list", "", page, filters, sort)
     const cached = cacheGet(key)
     if (cached) return cached
-    const result = await ProductRepository.list(page, filters)
+    const result = await ProductRepository.list(page, filters, sort)
     cacheSet(key, result)
     return result
   },
 
   /** Busca por termo + filtros opcionais. */
-  async search(term, page = 1, filters = {}) {
+  async search(term, page = 1, filters = {}, sort = "created-desc") {
     const trimmed = term.trim()
-    if (!trimmed) return this.list(page, filters)
-    const key    = cacheKey("search", trimmed, page, filters)
+    if (!trimmed) return this.list(page, filters, sort)
+    const key    = cacheKey("search", trimmed, page, filters, sort)
     const cached = cacheGet(key)
     if (cached) return cached
-    const result = await ProductRepository.search(trimmed, page, filters)
+    const result = await ProductRepository.search(trimmed, page, filters, sort)
     cacheSet(key, result)
     return result
   },

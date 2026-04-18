@@ -16,14 +16,18 @@
 <body>
 <canvas id="canvas"></canvas>
 <div class="grid-bg"></div>
+<a href="index.html" class="back-link-fixed" aria-label="Voltar à Loja">
+  <i class="fas fa-arrow-left"></i> Voltar
+</a>
+<button class="theme-toggle-fixed" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+  <i class="fas fa-moon"></i>
+</button>
 
 <main class="auth-scene">
 
   <div class="auth-left">
-    <button class="nav-link theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema" style="position:absolute;top:20px;right:20px;background:none;border:none;color:var(--green);font-size:18px;cursor:pointer;padding:4px"><i class="fas fa-moon"></i></button>
-    <a href="index.html" class="back-link" style="position:absolute;top:20px;left:20px;color:var(--green);text-decoration:none;font-size:13px"><i class="fas fa-arrow-left"></i> Voltar à Loja</a>
     <div class="auth-label"><span>Acesso Restrito - HIVERCAR</span></div>
-    <h1 class="auth-h1">PAINEL<br>DE <em>CONTROLE</em></h1>
+    <h1 class="auth-h1">PORTAL<br>DE <em>ACESSO</em></h1>
     <p class="auth-sub">Área exclusiva para colaboradores, vendedores e administradores.</p>
   </div>
 
@@ -32,7 +36,7 @@
       <div class="brand-dot"></div>
       <span class="auth-brand-name">HIVERCAR AUTOPEÇAS</span>
     </a>
-    <h1>ENTRAR <em>AGORA</em></h1>
+    <h1>ENTRAR</h1>
     <p class="auth-sub2">Informe suas credenciais para continuar.</p>
 
     <div class="field">
@@ -65,8 +69,12 @@
     <div id="countdown"></div>
 
     <div class="auth-footer-links">
-      <a href="javascript:void(0)" id="btnForgot"><i class="fas fa-key"></i> Esqueceu a senha?</a>
-      <a href="cadastro.html"><i class="fas fa-user-plus"></i> Criar conta</a>
+      <a href="javascript:void(0)" id="btnForgot" class="auth-link">
+        <i class="fas fa-key"></i> Esqueceu a senha?
+      </a>
+      <a href="cadastro.html" class="auth-link">
+        <i class="fas fa-user-plus"></i> Criar conta
+      </a>
     </div>
     <div class="auth-footer">
       Problemas? <a href="https://wa.me/5598981168787" target="_blank">Falar com suporte</a>

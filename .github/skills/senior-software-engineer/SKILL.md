@@ -81,18 +81,53 @@ Produz um relatório estruturado e ações sobre arquivos afetados, incluindo:
 
 - Esta skill usa arquivos no repositório: `.github/skills/senior-software-engineer/SKILL.md`, `.github/prompts/senior-software-engineer.prompt.md`, `.github/instructions/senior-software-engineer.instructions.md`.
 - Mantém lógica idempotente e expansível; em bloqueios, solicita dados adicionais antes de prosseguir.
-
-## Integração com Ferramentas Externas e Internas do Kilo
-
-- Executa validações usando ferramentas internas do Kilo (ex.: grep "padrão de segurança" para busca de riscos, codesearch "melhores práticas TypeScript" para consultas).
-- Roda testes via integração com frameworks externos como Jest ou Mocha, ou simulações via Kilo (tool: use bash para execução automatizada).
-- Integra com Git para commits atômicos e rollback, utilizando bash tool (ex.: bash "git commit -m 'mensagem'"; bash "git rollback" para reversão).
-- Suporta ferramentas externas como Docker para isolamento (tool: bash "docker run comando"), ou bibliotecas via codesearch para reutilização.
-- Ferramentas de benchmark: Usa websearch para métricas de performance (ex.: "benchmarks React 2026"), grep para análise de cobertura, e validações internas via read/edit tools.
-- Em caso de bloqueios, pausa e sugere uso de websearch ou codesearch para alternativas (ex.: websearch "fallback API").
+- As ferramentas disponíveis variam conforme o LLM em uso. Consulte o **Roteador de Ferramentas por LLM** abaixo.
 
 ## Anotações de uso
 
-- Execute como comando de skill no Copilot Chat:
- `/senior-software-engineer`.
+- Invoque a skill via extensão do VS Code (Kilo Code, Qwen Code) ou Copilot Chat com modelo Codex.
 - Gerencie mudanças de arquivo com escrita atômica e rollback seguro.
+
+---
+
+## Roteador de Ferramentas por LLM
+
+Esta skill funciona como uma **roteadora** que identifica o LLM em uso e carrega o catálogo de ferramentas correspondente. Consulte o arquivo de ferramentas adequado antes de executar qualquer tarefa.
+
+### Detecção automática
+
+| Indicador | LLM Detectado | Arquivo de Ferramentas |
+|---|---|---|
+| Extensão "Kilo Code" ativa no VS Code | **Kilo Code** | [`tools-kilo.md`](tools-kilo.md) |
+| Extensão "GitHub Copilot Chat" com modelo Codex | **Codex GPT** | [`tools-codex.md`](tools-codex.md) |
+| Extensão "Qwen Code" ativa no VS Code | **Qwen Code** | [`tools-qwen.md`](tools-qwen.md) |
+
+### Regras do roteador
+
+1. **Identificar o LLM ativo** no início de cada sessão de trabalho
+2. **Carregar o arquivo `tools-{llm}.md`** correspondente
+3. **Usar apenas ferramentas listadas** no arquivo carregado
+4. **Se o LLM não for reconhecido**, usar `tools-kilo.md` como fallback padrão
+5. **Não referenciar ferramentas inexistentes** — cada LLM tem um subconjunto diferente de capacidades
+
+### Diferenças críticas entre LLMs
+
+| Capacidade | Kilo | Codex | Qwen |
+|---|---|---|---|
+| `todo_write` | ✅ | ❌ (usar markdown) | ✅ |
+| `ask_user_question` | ✅ | ❌ (perguntar em texto) | ✅ |
+| `agent` (subagentes) | ✅ | ❌ | ✅ |
+| `save_memory` | ✅ | ❌ | ✅ |
+| `skill` (invocar skills) | ❌ | ❌ | ✅ |
+| `grep_search` | ✅ | ✅ | ✅ |
+| `edit` | ✅ | ✅ | ✅ |
+| `run_shell_command` | ✅ | ✅ | ✅ |
+
+### Procedimento de inicialização
+
+```
+1. Detectar LLM → qual extensão está ativa no VS Code?
+2. Carregar tools-{llm}.md → ler ferramentas disponíveis
+3. Mapear etapa da skill → ferramentas correspondentes
+4. Executar com as ferramentas do LLM detectado
+```

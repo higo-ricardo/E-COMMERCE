@@ -116,9 +116,6 @@
             <button class="btn-add-cart" id="btnAddCart" disabled>
               <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
             </button>
-            <button class="btn-whatsapp" id="btnWA" title="Pedir via WhatsApp">
-              <i class="fab fa-whatsapp"></i>
-            </button>
           </div>
 
           <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)">
@@ -312,11 +309,7 @@ async function loadProduto() {
       qtyInput.value = Math.min(stock || 999, (parseInt(qtyInput.value) || 1) + 1)
     }
 
-    // ── WhatsApp ──────────────────────────────────────────────────────────
-    document.getElementById("btnWA").onclick = () => {
-      const msg = encodeURIComponent(`Olá! Tenho interesse no produto: ${p.name} - R$ ${(p.price||0).toFixed(2)}`)
-      window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${msg}`, "_blank")
-    }
+
 
     // ── Exibe o conteúdo ──────────────────────────────────────────────────
     loading.style.display = "none"
